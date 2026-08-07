@@ -30,7 +30,7 @@
     <a href="#top" class="nav__logo">ÉLEVER<span>·</span>BADMINTON</a>
     <nav class="nav__links" id="navLinks">
       <a href="#about">About</a>
-      <a href="#smash">Smash</a>
+      <a href="#quiz">Quiz</a>
       <a href="#programs">Programs</a>
       <a href="#team">Coaches</a>
       <a href="#news">News</a>
@@ -53,7 +53,7 @@
       <p class="hero__sub reveal" data-delay="240">To build. To raise. To bring something to a higher position. Élite coaching that turns first swings into championship dreams.</p>
       <div class="hero__actions reveal" data-delay="320">
         <a href="#programs" class="btn btn--primary magnetic">Explore Programs</a>
-        <a href="#smash" class="btn btn--ghost">Test Your Smash</a>
+        <a href="#quiz" class="btn btn--ghost">Find Your Twin</a>
       </div>
       <p class="hero__hint reveal" data-delay="420">↳ move your cursor — the shuttles react to you</p>
     </div>
@@ -89,22 +89,24 @@
     </div>
   </section>
 
-  <!-- ===== INTERACTIVE SMASH METER ===== -->
-  <section class="smash" id="smash">
+  <!-- ===== FIND YOUR BADMINTON TWIN (personality quiz) ===== -->
+  <section class="quiz" id="quiz">
     <div class="section-head">
       <span class="kicker reveal">02 — Interactive</span>
-      <h2 class="section-title reveal">How hard can <em>you</em> smash?</h2>
+      <h2 class="section-title reveal">Which pro is your <em>badminton twin</em>?</h2>
     </div>
-    <div class="smash__wrap reveal" data-delay="120">
-      <div class="smash__zone" id="smashZone">
-        <div class="smash__net"></div>
-        <p class="smash__prompt" id="smashLabel">Swipe / drag fast across the court</p>
-        <div class="smash__readout">
-          <span class="smash__val" id="smashVal">0</span>
-          <span class="smash__unit">km/h</span>
-        </div>
-        <div class="smash__bar"><div class="smash__fill" id="smashFill"></div></div>
-        <p class="smash__ref">Pro reference: the fastest recorded badminton smash is <strong>≈ 565 km/h</strong> — faster than an F1 car.</p>
+    <div class="quiz__wrap reveal" data-delay="120">
+      <div class="quiz__progress-wrap"><div class="quiz__progress" id="quizProgress"></div></div>
+
+      <div class="quiz__intro" id="quizIntro">
+        <p class="quiz__lead">Answer 5 quick questions about how you play &amp; think.<br>We'll match you to one of the world's top singles stars — including Singapore's own <strong>Loh Kean Yew</strong> &amp; <strong>Yeo Jia Min</strong>.</p>
+        <button class="btn btn--primary magnetic" id="quizStart">Start the quiz</button>
+        <p class="quiz__roster">An Se-young · Tai Tzu-ying · Akane Yamaguchi · Yeo Jia Min · Viktor Axelsen · Kunlavut Vitidsarn · Loh Kean Yew · Anders Antonsen</p>
+      </div>
+
+      <div class="quiz__stage" id="quizStage" style="display:none">
+        <div class="quiz__card" id="quizQ"></div>
+        <div class="quiz__card quiz__result" id="quizResult" style="display:none"></div>
       </div>
     </div>
   </section>
@@ -144,89 +146,72 @@
     <div class="section-head">
       <span class="kicker reveal">04 — Our People</span>
       <h2 class="section-title reveal">Meet the <em>coaches</em>.</h2>
+      <p class="team__hint reveal" data-delay="120">👆 tap a coach to flip &amp; see their court personality</p>
     </div>
 
     <h3 class="team__label reveal">Co-Founders</h3>
     <div class="team__grid team__grid--lead">
       <figure class="tcard reveal">
-        <div class="tcard__img"><img src="assets/img/team-loh-kean-hean.jpg" alt="Loh Kean Hean" loading="lazy"></div>
-        <figcaption><h4>Loh Kean Hean</h4><p>Co-Founder · Technical Director</p><span>BWF Level 1</span></figcaption>
+        <div class="tcard__inner">
+          <div class="tcard__front">
+            <div class="tcard__img"><img src="assets/img/team-loh-kean-hean.jpg" alt="Loh Kean Hean" loading="lazy"></div>
+            <figcaption><h4>Loh Kean Hean</h4><p>Co-Founder · Technical Director</p><span>BWF Level 1</span></figcaption>
+          </div>
+          <div class="tcard__back">
+            <span class="tcard__emoji">🧠</span>
+            <h4>The Architect</h4>
+            <p class="tcard__style">Builds champions from the fundamentals up — technical, precise, patient.</p>
+            <p class="tcard__quote">“Master the basics, and the game opens up.”</p>
+          </div>
+        </div>
       </figure>
       <figure class="tcard reveal" data-delay="120">
-        <div class="tcard__img"><img src="assets/img/team-eng-chin-an.jpg" alt="Eng Chin An" loading="lazy"></div>
-        <figcaption><h4>Eng Chin An</h4><p>Co-Founder</p><span>BWF Level 1</span></figcaption>
+        <div class="tcard__inner">
+          <div class="tcard__front">
+            <div class="tcard__img"><img src="assets/img/team-eng-chin-an.jpg" alt="Eng Chin An" loading="lazy"></div>
+            <figcaption><h4>Eng Chin An</h4><p>Co-Founder</p><span>BWF Level 1</span></figcaption>
+          </div>
+          <div class="tcard__back">
+            <span class="tcard__emoji">🔥</span>
+            <h4>The Visionary</h4>
+            <p class="tcard__style">Turns a shared love of the game into a community that lifts everyone higher.</p>
+            <p class="tcard__quote">“We rise by lifting others.”</p>
+          </div>
+        </div>
       </figure>
     </div>
 
     <h3 class="team__label reveal">Our Team</h3>
     <div class="team__grid">
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-ong-keng-yang.jpg" alt="Ong Keng Yang" loading="lazy"></div><figcaption><h4>Ong Keng Yang</h4><p>Performance Mgr · S&amp;C Coach</p></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-shawn-wong.jpg" alt="Shawn Wong" loading="lazy"></div><figcaption><h4>Shawn Wong</h4><p>Senior Coach</p><span>BWF Level 1</span></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-torance-jng.jpg" alt="Torance Jng" loading="lazy"></div><figcaption><h4>Torance Jng</h4><p>Development Coach</p><span>BWF Level 1</span></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-lim-su-qi.jpg" alt="Lim Su Qi" loading="lazy"></div><figcaption><h4>Lim Su Qi</h4><p>Development Coach</p><span>BWF Level 1</span></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-grace-tan.jpg" alt="Grace Tan" loading="lazy"></div><figcaption><h4>Grace Tan</h4><p>Development Coach</p><span>BWF Level 1</span></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-hassan.jpg" alt="Hassan" loading="lazy"></div><figcaption><h4>Hassan</h4><p>Development Coach</p><span>BWF Level 1</span></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-jaren-ong.jpg" alt="Jaren Ong" loading="lazy"></div><figcaption><h4>Jaren Ong</h4><p>Development Coach</p><span>BWF Level 1</span></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-uzair.png" alt="Uzair" loading="lazy"></div><figcaption><h4>Uzair</h4><p>Development Coach</p><span>BWF Level 1</span></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-elsa-lai.jpg" alt="Elsa Lai" loading="lazy"></div><figcaption><h4>Elsa Lai</h4><p>Development Coach</p></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-thong-kin-yu.jpg" alt="Thong Kin Yu" loading="lazy"></div><figcaption><h4>Thong Kin Yu</h4><p>Development Coach</p></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-ryan-lim.jpg" alt="Ryan Lim" loading="lazy"></div><figcaption><h4>Ryan Lim</h4><p>Assistant Coach</p></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-jaden-chiang.jpg" alt="Jaden Chiang" loading="lazy"></div><figcaption><h4>Jaden Chiang</h4><p>Assistant Coach</p></figcaption></figure>
+      <figure class="tcard reveal"><div class="tcard__inner"><div class="tcard__front"><div class="tcard__img"><img src="assets/img/team-ong-keng-yang.jpg" alt="Ong Keng Yang" loading="lazy"></div><figcaption><h4>Ong Keng Yang</h4><p>Performance Mgr · S&amp;C Coach</p></figcaption></div><div class="tcard__back"><span class="tcard__emoji">💪</span><h4>The Engine</h4><p class="tcard__style">Strength, speed &amp; stamina — builds the athletic base behind every big shot.</p><p class="tcard__quote">“Fitness wins the third game.”</p></div></div></figure>
+      <figure class="tcard reveal"><div class="tcard__inner"><div class="tcard__front"><div class="tcard__img"><img src="assets/img/team-shawn-wong.jpg" alt="Shawn Wong" loading="lazy"></div><figcaption><h4>Shawn Wong</h4><p>Senior Coach</p><span>BWF Level 1</span></figcaption></div><div class="tcard__back"><span class="tcard__emoji">🎯</span><h4>The Tactician</h4><p class="tcard__style">Reads the game two rallies ahead and drills razor-sharp shot selection.</p><p class="tcard__quote">“Play the smart shot, not the hard one.”</p></div></div></figure>
+      <figure class="tcard reveal"><div class="tcard__inner"><div class="tcard__front"><div class="tcard__img"><img src="assets/img/team-torance-jng.jpg" alt="Torance Jng" loading="lazy"></div><figcaption><h4>Torance Jng</h4><p>Development Coach</p><span>BWF Level 1</span></figcaption></div><div class="tcard__back"><span class="tcard__emoji">⚡</span><h4>The Sparkplug</h4><p class="tcard__style">High-energy sessions that make fast footwork feel like second nature.</p><p class="tcard__quote">“Light feet, quick wins.”</p></div></div></figure>
+      <figure class="tcard reveal"><div class="tcard__inner"><div class="tcard__front"><div class="tcard__img"><img src="assets/img/team-lim-su-qi.jpg" alt="Lim Su Qi" loading="lazy"></div><figcaption><h4>Lim Su Qi</h4><p>Development Coach</p><span>BWF Level 1</span></figcaption></div><div class="tcard__back"><span class="tcard__emoji">🪄</span><h4>The Magician</h4><p class="tcard__style">Loves the deceptive net game — disguise, touch and a wicked slice.</p><p class="tcard__quote">“Make them guess. Then win.”</p></div></div></figure>
+      <figure class="tcard reveal"><div class="tcard__inner"><div class="tcard__front"><div class="tcard__img"><img src="assets/img/team-grace-tan.jpg" alt="Grace Tan" loading="lazy"></div><figcaption><h4>Grace Tan</h4><p>Development Coach</p><span>BWF Level 1</span></figcaption></div><div class="tcard__back"><span class="tcard__emoji">🛡️</span><h4>The Wall</h4><p class="tcard__style">Turns nervous beginners into unshakeable defenders — one retrieve at a time.</p><p class="tcard__quote">“Get it back, every time.”</p></div></div></figure>
+      <figure class="tcard reveal"><div class="tcard__inner"><div class="tcard__front"><div class="tcard__img"><img src="assets/img/team-hassan.jpg" alt="Hassan" loading="lazy"></div><figcaption><h4>Hassan</h4><p>Development Coach</p><span>BWF Level 1</span></figcaption></div><div class="tcard__back"><span class="tcard__emoji">🚀</span><h4>The Powerhouse</h4><p class="tcard__style">If it can be smashed, he'll teach you to smash it — cleanly.</p><p class="tcard__quote">“Commit to the jump.”</p></div></div></figure>
+      <figure class="tcard reveal"><div class="tcard__inner"><div class="tcard__front"><div class="tcard__img"><img src="assets/img/team-jaren-ong.jpg" alt="Jaren Ong" loading="lazy"></div><figcaption><h4>Jaren Ong</h4><p>Development Coach</p><span>BWF Level 1</span></figcaption></div><div class="tcard__back"><span class="tcard__emoji">🧩</span><h4>The Problem-Solver</h4><p class="tcard__style">Breaks tricky techniques into simple, do-able steps for every learner.</p><p class="tcard__quote">“One fix at a time.”</p></div></div></figure>
+      <figure class="tcard reveal"><div class="tcard__inner"><div class="tcard__front"><div class="tcard__img"><img src="assets/img/team-uzair.png" alt="Uzair" loading="lazy"></div><figcaption><h4>Uzair</h4><p>Development Coach</p><span>BWF Level 1</span></figcaption></div><div class="tcard__back"><span class="tcard__emoji">🎉</span><h4>The Motivator</h4><p class="tcard__style">Makes every session fun — the kind of coach players actually look forward to.</p><p class="tcard__quote">“Love it, and you'll improve.”</p></div></div></figure>
+      <figure class="tcard reveal"><div class="tcard__inner"><div class="tcard__front"><div class="tcard__img"><img src="assets/img/team-elsa-lai.jpg" alt="Elsa Lai" loading="lazy"></div><figcaption><h4>Elsa Lai</h4><p>Development Coach</p></figcaption></div><div class="tcard__back"><span class="tcard__emoji">🌱</span><h4>The Nurturer</h4><p class="tcard__style">Patient and encouraging — perfect for first-ever swings.</p><p class="tcard__quote">“Everyone starts somewhere.”</p></div></div></figure>
+      <figure class="tcard reveal"><div class="tcard__inner"><div class="tcard__front"><div class="tcard__img"><img src="assets/img/team-thong-kin-yu.jpg" alt="Thong Kin Yu" loading="lazy"></div><figcaption><h4>Thong Kin Yu</h4><p>Development Coach</p></figcaption></div><div class="tcard__back"><span class="tcard__emoji">🎾</span><h4>The Rally King</h4><p class="tcard__style">Believes long, clean rallies are how real control is built.</p><p class="tcard__quote">“Consistency is a superpower.”</p></div></div></figure>
+      <figure class="tcard reveal"><div class="tcard__inner"><div class="tcard__front"><div class="tcard__img"><img src="assets/img/team-ryan-lim.jpg" alt="Ryan Lim" loading="lazy"></div><figcaption><h4>Ryan Lim</h4><p>Assistant Coach</p></figcaption></div><div class="tcard__back"><span class="tcard__emoji">🌟</span><h4>The Rising Star</h4><p class="tcard__style">Close in age to the juniors he coaches — and full of fresh ideas.</p><p class="tcard__quote">“Learn fast, play free.”</p></div></div></figure>
+      <figure class="tcard reveal"><div class="tcard__inner"><div class="tcard__front"><div class="tcard__img"><img src="assets/img/team-jaden-chiang.jpg" alt="Jaden Chiang" loading="lazy"></div><figcaption><h4>Jaden Chiang</h4><p>Assistant Coach</p></figcaption></div><div class="tcard__back"><span class="tcard__emoji">🤝</span><h4>The Team Player</h4><p class="tcard__style">Always in the corner cheering the next generation on.</p><p class="tcard__quote">“We win together.”</p></div></div></figure>
     </div>
   </section>
 
-  <!-- ===== NEWS TIMELINE (real 2026 BWF season) ===== -->
+  <!-- ===== NEWS / FULL 2026 SEASON ===== -->
   <section class="news" id="news">
     <div class="section-head">
       <span class="kicker reveal">05 — The 2026 Season</span>
-      <h2 class="section-title reveal">Weekly from the <em>world tour</em>.</h2>
-      <p class="news__hint reveal" data-delay="120">← drag the timeline →</p>
+      <h2 class="section-title reveal">Every stop on the <em>world tour</em>.</h2>
+      <p class="news__hint reveal" data-delay="120">The complete 2026 HSBC BWF World Tour — filter by status, results updated to 7 Aug 2026.</p>
+      <div class="news__filters reveal" data-delay="160" id="newsFilters">
+        <button class="news__filter is-active" data-filter="all">All</button>
+        <button class="news__filter" data-filter="done">Completed</button>
+        <button class="news__filter" data-filter="upcoming">Upcoming</button>
+      </div>
     </div>
-    <div class="news__track" id="newsTrack">
-      <article class="ncard reveal">
-        <span class="ncard__date">11–13 Jan 2026</span>
-        <span class="ncard__tag">Malaysia Open · Super 1000</span>
-        <h3>An &amp; Kunlavut open the season with Super 1000 crowns</h3>
-        <p>An Se-young completed a Malaysia Open three-peat in women's singles while Kunlavut Vitidsarn claimed his maiden Super 1000 title in men's singles. Kim Won-ho/Seo Seung-jae took men's doubles.</p>
-      </article>
-      <article class="ncard reveal">
-        <span class="ncard__date">Jan 2026</span>
-        <span class="ncard__tag">India Open · Super 750</span>
-        <h3>Lin Chun-yi surges past the field in New Delhi</h3>
-        <p>Chinese Taipei's Lin Chun-yi won men's singles as An Se-young added another women's singles title. Liang Weikeng/Wang Chang triumphed in men's doubles.</p>
-      </article>
-      <article class="ncard reveal">
-        <span class="ncard__date">3–8 Mar 2026</span>
-        <span class="ncard__tag">All England Open · Super 1000</span>
-        <h3>Lin Chun-yi &amp; Wang Zhiyi rule Birmingham</h3>
-        <p>At the sport's most historic tournament, Lin Chun-yi beat Lakshya Sen for the men's title while Wang Zhiyi edged An Se-young in the women's final.</p>
-      </article>
-      <article class="ncard reveal">
-        <span class="ncard__date">Jun 2026</span>
-        <span class="ncard__tag">Indonesia Open · Super 1000</span>
-        <h3>Victor Lai stuns Jakarta; An Se-young reigns again</h3>
-        <p>Victor Lai captured a breakout men's singles title in the Istora cauldron. Goh Sze Fei/Nur Izzuddin delighted the home crowd in men's doubles.</p>
-      </article>
-      <article class="ncard reveal">
-        <span class="ncard__date">14–19 Jul 2026</span>
-        <span class="ncard__tag">Japan Open · Super 750</span>
-        <h3>Fajar/Fikri seize Indonesia's first Super 750 of 2026</h3>
-        <p>Fajar Alfian/Muhammad Shohibul Fikri beat Kim Won-ho/Seo Seung-jae in Tokyo. PV Sindhu won women's singles and France's Christo Popov took the men's crown.</p>
-      </article>
-      <article class="ncard ncard--latest reveal">
-        <span class="ncard__date">21–26 Jul 2026 · Latest</span>
-        <span class="ncard__tag">China Open · Super 1000</span>
-        <h3>Chou Tien-chen, 36, becomes oldest Super 1000 champion</h3>
-        <p>Chou Tien-chen beat Toma Junior Popov to make history in Changzhou. Akane Yamaguchi downed Chen Yufei for the women's title; Liu Shengshu/Tan Ning defended their women's doubles crown.</p>
-      </article>
-      <article class="ncard ncard--next reveal">
-        <span class="ncard__date">17–23 Aug 2026 · Upcoming</span>
-        <span class="ncard__tag">World Championships · New Delhi</span>
-        <h3>The world's best chase the rainbow jersey</h3>
-        <p>The 2026 BWF World Championships head to New Delhi, where Akane Yamaguchi eyes back-to-back world titles. The battle for global supremacy begins 17 August.</p>
-      </article>
-    </div>
-    <p class="news__source reveal">Results sourced from BWF, Wikipedia &amp; wire reports (AFP/Xinhua). Updated 7 Aug 2026 · no images used.</p>
+    <div class="news__timeline" id="newsTimeline"></div>
+    <p class="news__source reveal">Full schedule &amp; results sourced from the BWF World Tour, Wikipedia &amp; wire reports (AFP/Xinhua). Completed events up to 7 Aug 2026 show verified singles/doubles champions where available; later events list date &amp; grade. No images used.</p>
   </section>
 
   <!-- ===== CTA / CONTACT ===== -->

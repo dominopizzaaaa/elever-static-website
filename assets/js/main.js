@@ -411,65 +411,260 @@
   }
 
   /* =====================================================================
-     7. INTERACTIVE "SMASH SPEED" METER
+     7. "FIND YOUR BADMINTON TWIN" PERSONALITY QUIZ
      ===================================================================== */
-  (function smashMeter() {
-    var zone = document.getElementById('smashZone');
-    if (!zone) return;
-    var fill = document.getElementById('smashFill');
-    var val = document.getElementById('smashVal');
-    var label = document.getElementById('smashLabel');
-    var lastX = null, lastT = null, peak = 0, decayTimer;
-    var WR = 565; // world record kmh (Tan Boon Heong exhibition ~493 official; keep aspirational)
+  (function twinQuiz() {
+    var root = document.getElementById('quiz');
+    if (!root) return;
 
-    function setSpeed(v) {
-      v = Math.min(v, WR);
-      peak = Math.max(peak, v);
-      var pct = Math.min(v / WR * 100, 100);
-      fill.style.width = pct + '%';
-      val.textContent = Math.round(v);
-      if (v > 480) label.textContent = 'WORLD-CLASS SMASH!';
-      else if (v > 300) label.textContent = 'Pro power!';
-      else if (v > 150) label.textContent = 'Nice swing!';
-      else label.textContent = 'Swipe / drag fast across the court';
+    // 8 real players (facts drawn from BWF/Wikipedia/coach profiles)
+    var PLAYERS = {
+      an: { name: 'An Se-young', flag: '🇰🇷', role: 'Women\u2019s Singles · World No. 1',
+        tag: 'The Relentless Counter-Puncher',
+        desc: 'Olympic & World champion who wins with suffocating consistency: she absorbs pace, extends rallies and flips defence into attack in a single shot. Ice-cold discipline, elite stamina, endless patience.' },
+      tai: { name: 'Tai Tzu-ying', flag: '🇹🇼', role: 'Women\u2019s Singles · Legend',
+        tag: 'The Court Artist',
+        desc: 'The most deceptive player of her generation \u2014 spontaneous, creative and impossible to read. She controls rallies with disguise and wristy magic rather than raw power. Pure improvisation.' },
+      akane: { name: 'Akane Yamaguchi', flag: '🇯🇵', role: 'Women\u2019s Singles · 3× World Champion',
+        tag: 'The Tireless Retriever',
+        desc: 'Proof that heart beats height. Bottomless defence, blistering footwork and a never-give-up spirit force opponents to hit "one more shot" \u2014 until they crack. Humble off court, ferocious on it.' },
+      yeo: { name: 'Yeo Jia Min', flag: '🇸🇬', role: 'Women\u2019s Singles · Singapore',
+        tag: 'The Quiet Giant-Killer',
+        desc: 'Singapore\u2019s under-the-radar star who has toppled Yamaguchi, Sindhu and other top-10 names. Humble, self-analytical and mentally tough \u2014 she rises without the spotlight and lets her racket talk.' },
+      axelsen: { name: 'Viktor Axelsen', flag: '🇩🇰', role: 'Men\u2019s Singles · 2× Olympic Champion',
+        tag: 'The Problem-Solver',
+        desc: 'The ultimate professional: methodical, disciplined and relentlessly self-improving. There was no problem on court he couldn\u2019t engineer a solution to \u2014 towering defence married to a devastating smash.' },
+      kunlavut: { name: 'Kunlavut Vitidsarn', flag: '🇹🇭', role: 'Men\u2019s Singles · World Champion',
+        tag: 'The Rally Chess-Master',
+        desc: 'A patient, tactical thinker with elite defence who pushes you back, opens the court and counter-attacks the instant you\u2019re out of position. Calm, deceptive at the net, endlessly adaptable.' },
+      loh: { name: 'Loh Kean Yew', flag: '🇸🇬', role: 'Men\u2019s Singles · Singapore, 2021 World Champ',
+        tag: 'The Fearless Attacker',
+        desc: 'Singapore\u2019s first world champion. Explosive speed, high-flying jump smashes and a huge fighting spirit \u2014 he chases every shuttle and turns defence into attack in a heartbeat. Fearless underdog energy.' },
+      antonsen: { name: 'Anders Antonsen', flag: '🇩🇰', role: 'Men\u2019s Singles · World Champion',
+        tag: 'The Tactical Craftsman',
+        desc: 'Wins with brain over brawn: sharp changes of tempo, deceptive strokes, a tight net game and iron mental toughness. Built brick-by-brick from Denmark\u2019s famous club system.' }
+    };
+
+    // 5 questions; each option adds weight to player keys
+    var QUESTIONS = [
+      { q: 'It\u2019s match point against you. What\u2019s your instinct?',
+        a: [
+          { t: 'Stay calm, extend the rally, wait for their mistake', w: { an: 2, kunlavut: 2, akane: 1 } },
+          { t: 'Go for a bold, unexpected winner', w: { tai: 2, loh: 2 } },
+          { t: 'Trust the plan I drilled for exactly this moment', w: { axelsen: 2, antonsen: 1 } },
+          { t: 'Dig in and out-run them \u2014 I never stop chasing', w: { akane: 2, yeo: 1 } }
+        ] },
+      { q: 'Pick your signature shot.',
+        a: [
+          { t: 'A thunderous jump smash', w: { loh: 2, axelsen: 2 } },
+          { t: 'A disguised drop that fools everyone', w: { tai: 2, antonsen: 1 } },
+          { t: 'A perfect defensive retrieve from nowhere', w: { akane: 2, an: 1 } },
+          { t: 'A sharp change of pace that opens the court', w: { kunlavut: 2, antonsen: 1 } }
+        ] },
+      { q: 'How do you train?',
+        a: [
+          { t: 'Rigid routine, strict diet, zero shortcuts', w: { an: 2, axelsen: 1 } },
+          { t: 'Experiment, improvise, keep it playful', w: { tai: 2 } },
+          { t: 'Grind the fundamentals until they\u2019re automatic', w: { akane: 2, antonsen: 1, axelsen: 1 } },
+          { t: 'Quietly fix my weaknesses after every session', w: { yeo: 2, kunlavut: 1 } }
+        ] },
+      { q: 'What\u2019s your mindset off the court?',
+        a: [
+          { t: 'Humble \u2014 I\u2019d rather fly under the radar', w: { yeo: 2, akane: 1 } },
+          { t: 'A relentless professional building an empire', w: { axelsen: 2 } },
+          { t: 'A fearless underdog with nothing to lose', w: { loh: 2 } },
+          { t: 'A calm strategist, always thinking two moves ahead', w: { kunlavut: 2, an: 1 } }
+        ] },
+      { q: 'Your ideal way to win a point?',
+        a: [
+          { t: 'Overwhelm them with power and speed', w: { loh: 2, axelsen: 1 } },
+          { t: 'Outsmart them with deception', w: { tai: 2, antonsen: 2 } },
+          { t: 'Outlast them until they break', w: { an: 2, akane: 2 } },
+          { t: 'Surprise everyone \u2014 nobody expected me', w: { yeo: 2, loh: 1 } }
+        ] }
+    ];
+
+    var scores = {}, current = 0;
+    var qWrap = document.getElementById('quizQ');
+    var progress = document.getElementById('quizProgress');
+    var result = document.getElementById('quizResult');
+    var stage = document.getElementById('quizStage');
+    var startBtn = document.getElementById('quizStart');
+    var intro = document.getElementById('quizIntro');
+
+    function reset() {
+      scores = {}; current = 0;
+      Object.keys(PLAYERS).forEach(function (k) { scores[k] = 0; });
     }
 
-    function move(x, y) {
-      var now = performance.now();
-      if (lastX !== null) {
-        var dt = now - lastT;
-        var dx = Math.abs(x - lastX);
-        if (dt > 0) {
-          var speed = (dx / dt) * 1000 / 6; // scaled to a fun kmh-ish number
-          setSpeed(speed);
-        }
-      }
-      lastX = x; lastT = now;
-      clearTimeout(decayTimer);
-      decayTimer = setTimeout(function () { lastX = null; }, 120);
+    function renderQuestion() {
+      var Q = QUESTIONS[current];
+      progress.style.width = ((current) / QUESTIONS.length * 100) + '%';
+      var html = '<p class="quiz__count">Question ' + (current + 1) + ' / ' + QUESTIONS.length + '</p>';
+      html += '<h3 class="quiz__q">' + Q.q + '</h3><div class="quiz__opts">';
+      Q.a.forEach(function (opt, i) {
+        html += '<button class="quiz__opt" data-i="' + i + '"><span>' + String.fromCharCode(65 + i) + '</span>' + opt.t + '</button>';
+      });
+      html += '</div>';
+      qWrap.innerHTML = html;
+      qWrap.classList.remove('fade'); void qWrap.offsetWidth; qWrap.classList.add('fade');
+      qWrap.querySelectorAll('.quiz__opt').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var w = Q.a[+btn.dataset.i].w;
+          Object.keys(w).forEach(function (k) { scores[k] += w[k]; });
+          current++;
+          if (current < QUESTIONS.length) renderQuestion();
+          else showResult();
+        });
+      });
     }
-    zone.addEventListener('mousemove', function (e) { move(e.clientX, e.clientY); });
-    zone.addEventListener('touchmove', function (e) {
-      var t = e.touches[0]; move(t.clientX, t.clientY);
-    }, { passive: true });
+
+    function showResult() {
+      progress.style.width = '100%';
+      var best = null, bestScore = -1;
+      Object.keys(scores).forEach(function (k) {
+        if (scores[k] > bestScore) { bestScore = scores[k]; best = k; }
+      });
+      var p = PLAYERS[best];
+      qWrap.style.display = 'none';
+      result.style.display = 'block';
+      result.innerHTML =
+        '<p class="quiz__count">Your badminton twin is\u2026</p>' +
+        '<div class="quiz__flag">' + p.flag + '</div>' +
+        '<h3 class="quiz__name">' + p.name + '</h3>' +
+        '<p class="quiz__role">' + p.role + '</p>' +
+        '<p class="quiz__playertag">\u201C' + p.tag + '\u201D</p>' +
+        '<p class="quiz__desc">' + p.desc + '</p>' +
+        '<button class="btn btn--ghost" id="quizAgain">Play again</button>';
+      result.classList.remove('fade'); void result.offsetWidth; result.classList.add('fade');
+      document.getElementById('quizAgain').addEventListener('click', function () {
+        result.style.display = 'none'; qWrap.style.display = 'block';
+        reset(); renderQuestion();
+      });
+    }
+
+    startBtn.addEventListener('click', function () {
+      intro.style.display = 'none';
+      stage.style.display = 'block';
+      reset(); renderQuestion();
+    });
   })();
 
   /* =====================================================================
-     8. DRAGGABLE NEWS TIMELINE
+     7b. COACH / FOUNDER FLIP CARDS (fun reveal)
      ===================================================================== */
-  (function dragScroll() {
-    var track = document.getElementById('newsTrack');
-    if (!track) return;
-    var down = false, startX, scrollStart;
-    track.addEventListener('mousedown', function (e) {
-      down = true; track.classList.add('dragging');
-      startX = e.pageX; scrollStart = track.scrollLeft;
+  (function coachFlip() {
+    document.querySelectorAll('.tcard').forEach(function (card) {
+      card.addEventListener('click', function () { card.classList.toggle('flipped'); });
     });
-    window.addEventListener('mouseup', function () { down = false; track.classList.remove('dragging'); });
-    track.addEventListener('mousemove', function (e) {
-      if (!down) return; e.preventDefault();
-      track.scrollLeft = scrollStart - (e.pageX - startX) * 1.4;
-    });
+  })();
+
+  /* =====================================================================
+     8. FULL 2026 SEASON — every tournament, grouped by month
+        status: 'done' (verified/played) or 'upcoming'
+        result: shown for events with confirmed champions
+     ===================================================================== */
+  (function seasonNews() {
+    var mount = document.getElementById('newsTimeline');
+    if (!mount) return;
+
+    var EVENTS = [
+      // ---- JANUARY ----
+      { m: 'January', date: '6–11 Jan', name: 'India Open', grade: 'Super 750', status: 'done',
+        result: 'MS Lin Chun-yi · WS An Se-young · MD Liang Weikeng/Wang Chang · WD Liu Shengshu/Tan Ning · XD Dechapol Puavaranukroh/Supissara Paewsampran.' },
+      { m: 'January', date: '11–13 Jan', name: 'Malaysia Open', grade: 'Super 1000', status: 'done', latest: false,
+        result: 'MS Kunlavut Vitidsarn (maiden Super 1000) · WS An Se-young (three-peat) · MD Kim Won-ho/Seo Seung-jae · WD Liu Shengshu/Tan Ning · XD Feng Yanzhe/Huang Dongping.' },
+      { m: 'January', date: '20–25 Jan', name: 'Indonesia Masters', grade: 'Super 500', status: 'done' },
+      { m: 'January', date: '27 Jan–1 Feb', name: 'Thailand Masters', grade: 'Super 300', status: 'done' },
+      // ---- FEBRUARY ----
+      { m: 'February', date: 'Feb', name: 'German Open', grade: 'Super 300', status: 'done' },
+      // ---- MARCH ----
+      { m: 'March', date: '3–8 Mar', name: 'All England Open', grade: 'Super 1000', status: 'done',
+        result: 'MS Lin Chun-yi (def. Lakshya Sen) · WS Wang Zhiyi (def. An Se-young) · XD Ye Hong-wei/Nicole Gonzales Chan.' },
+      { m: 'March', date: 'Mar', name: 'Swiss Open', grade: 'Super 300', status: 'done' },
+      { m: 'March', date: 'Mar', name: 'Ruichang China Masters', grade: 'Super 100', status: 'done' },
+      { m: 'March', date: 'Mar', name: 'Orléans Masters', grade: 'Super 300', status: 'done' },
+      // ---- MAY ----
+      { m: 'May', date: 'May', name: 'Thailand Open', grade: 'Super 500', status: 'done' },
+      { m: 'May', date: 'May', name: 'Baoji China Masters', grade: 'Super 100', status: 'done' },
+      { m: 'May', date: 'May', name: 'Malaysia Masters', grade: 'Super 500', status: 'done' },
+      { m: 'May', date: 'May–Jun', name: 'Singapore Open', grade: 'Super 750', status: 'done',
+        result: 'MS Alex Lanier · MD Satwiksairaj Rankireddy/Chirag Shetty. Loh Kean Yew reached his first home final.' },
+      // ---- JUNE ----
+      { m: 'June', date: 'Jun', name: 'Indonesia Open', grade: 'Super 1000', status: 'done',
+        result: 'MS Victor Lai · WS An Se-young · MD Goh Sze Fei/Nur Izzuddin · WD Yuki Fukushima/Mayu Matsumoto · XD Mathias Christiansen/Alexandra Bøje.' },
+      { m: 'June', date: 'Jun', name: 'Australian Open', grade: 'Super 500', status: 'done' },
+      { m: 'June', date: 'Jun', name: 'Macau Open', grade: 'Super 300', status: 'done' },
+      { m: 'June', date: 'Jun', name: 'U.S. Open', grade: 'Super 300', status: 'done' },
+      { m: 'June', date: 'Jun', name: 'Canada Open', grade: 'Super 300', status: 'done' },
+      // ---- JULY ----
+      { m: 'July', date: '14–19 Jul', name: 'Japan Open', grade: 'Super 750', status: 'done',
+        result: 'MS Christo Popov · WS PV Sindhu · MD Fajar Alfian/Muhammad Shohibul Fikri · WD Kim Hye Jeong/Kong Hee Yong · XD Feng Yanzhe/Huang Dongping.' },
+      { m: 'July', date: '21–26 Jul', name: 'China Open', grade: 'Super 1000', status: 'done', latest: true,
+        result: 'MS Chou Tien-chen — at 36, the oldest Super 1000 champion ever (def. Toma Junior Popov) · WS Akane Yamaguchi (def. Chen Yufei) · MD Fajar Alfian/Muhammad Shohibul Fikri · WD Liu Shengshu/Tan Ning (defended) · XD Guo Xinwa/Chen Fanghui.' },
+      { m: 'July', date: 'Jul', name: 'Taipei Open', grade: 'Super 300', status: 'done' },
+      // ---- AUGUST ----
+      { m: 'August', date: 'Aug', name: 'Korea Masters', grade: 'Super 300', status: 'upcoming' },
+      { m: 'August', date: '17–23 Aug', name: 'BWF World Championships', grade: 'New Delhi', status: 'upcoming',
+        result: 'The season\u2019s biggest prize. Akane Yamaguchi eyes back-to-back world titles; the field chases the rainbow jersey.' },
+      // ---- SEPTEMBER ----
+      { m: 'September', date: 'Sep', name: 'China Masters', grade: 'Super 750', status: 'upcoming' },
+      { m: 'September', date: 'Sep', name: 'Indonesia Masters Super 100 I', grade: 'Super 100', status: 'upcoming' },
+      { m: 'September', date: 'Sep', name: 'Vietnam Open', grade: 'Super 100', status: 'upcoming' },
+      // ---- OCTOBER ----
+      { m: 'October', date: 'Oct', name: 'Arctic Open', grade: 'Super 500', status: 'upcoming' },
+      { m: 'October', date: 'Oct', name: 'Denmark Open', grade: 'Super 750', status: 'upcoming' },
+      { m: 'October', date: 'Oct', name: 'Malaysia Super 100', grade: 'Super 100', status: 'upcoming' },
+      { m: 'October', date: 'Oct', name: 'French Open', grade: 'Super 750', status: 'upcoming' },
+      { m: 'October', date: 'Oct', name: 'Indonesia Masters Super 100 II', grade: 'Super 100', status: 'upcoming' },
+      { m: 'October', date: 'Oct', name: 'Hylo Open', grade: 'Super 500', status: 'upcoming' },
+      // ---- NOVEMBER ----
+      { m: 'November', date: 'Nov', name: 'Korea Open', grade: 'Super 500', status: 'upcoming' },
+      { m: 'November', date: 'Nov', name: 'Japan Masters', grade: 'Super 500', status: 'upcoming' },
+      { m: 'November', date: 'Nov', name: 'Kaohsiung Masters', grade: 'Super 100', status: 'upcoming' },
+      { m: 'November', date: 'Nov', name: 'Hong Kong Open', grade: 'Super 500', status: 'upcoming' },
+      { m: 'November', date: 'Nov', name: 'Syed Modi International', grade: 'Super 300', status: 'upcoming' },
+      // ---- DECEMBER ----
+      { m: 'December', date: 'Dec', name: 'Guwahati Masters', grade: 'Super 100', status: 'upcoming' },
+      { m: 'December', date: 'Dec', name: 'Odisha Masters', grade: 'Super 100', status: 'upcoming' },
+      { m: 'December', date: '9–13 Dec', name: 'BWF World Tour Finals', grade: 'Season finale', status: 'upcoming',
+        result: 'The top 8 in each discipline meet to close the 2026 season.' }
+    ];
+
+    function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+
+    function render(filter) {
+      var html = '', lastMonth = null;
+      EVENTS.forEach(function (ev) {
+        if (filter === 'done' && ev.status !== 'done') return;
+        if (filter === 'upcoming' && ev.status !== 'upcoming') return;
+        if (ev.m !== lastMonth) {
+          html += '<h3 class="news__month">' + ev.m + ' 2026</h3>';
+          lastMonth = ev.m;
+        }
+        var cls = 'ncard' + (ev.latest ? ' ncard--latest' : '') + (ev.status === 'upcoming' ? ' ncard--next' : '');
+        html += '<article class="' + cls + '">';
+        html += '<div class="ncard__head"><span class="ncard__date">' + ev.date + (ev.latest ? ' · Latest' : (ev.status === 'upcoming' ? ' · Upcoming' : '')) + '</span>';
+        html += '<span class="ncard__grade">' + esc(ev.grade) + '</span></div>';
+        html += '<h4 class="ncard__name">' + esc(ev.name) + '</h4>';
+        if (ev.result) html += '<p class="ncard__result">' + esc(ev.result) + '</p>';
+        else html += '<p class="ncard__result ncard__result--muted">' + (ev.status === 'upcoming' ? 'Scheduled — results to come.' : 'Completed. Champions per BWF records.') + '</p>';
+        html += '</article>';
+      });
+      mount.innerHTML = html;
+    }
+    render('all');
+
+    var filters = document.getElementById('newsFilters');
+    if (filters) {
+      filters.addEventListener('click', function (e) {
+        var btn = e.target.closest('.news__filter');
+        if (!btn) return;
+        filters.querySelectorAll('.news__filter').forEach(function (b) { b.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+        render(btn.dataset.filter);
+      });
+    }
   })();
 
 })();
