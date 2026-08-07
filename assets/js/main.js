@@ -417,70 +417,108 @@
     var root = document.getElementById('quiz');
     if (!root) return;
 
-    // 8 real players (facts drawn from BWF/Wikipedia/coach profiles)
+    // 27 real players — photos are freely licensed (Wikimedia Commons: CC-BY / CC-BY-SA / Public domain).
+    var IMG = 'assets/img/players/';
     var PLAYERS = {
-      an: { name: 'An Se-young', flag: '🇰🇷', role: 'Women\u2019s Singles · World No. 1',
-        tag: 'The Relentless Counter-Puncher',
+      an:       { name: 'An Se-young', flag: '🇰🇷', role: 'Women\u2019s Singles · World No. 1', tag: 'The Relentless Counter-Puncher', img: IMG + 'an-se-young.jpg', lic: 'CC BY-SA 2.0',
         desc: 'Olympic & World champion who wins with suffocating consistency: she absorbs pace, extends rallies and flips defence into attack in a single shot. Ice-cold discipline, elite stamina, endless patience.' },
-      tai: { name: 'Tai Tzu-ying', flag: '🇹🇼', role: 'Women\u2019s Singles · Legend',
-        tag: 'The Court Artist',
+      tai:      { name: 'Tai Tzu-ying', flag: '🇹🇼', role: 'Women\u2019s Singles · Legend', tag: 'The Court Artist', img: IMG + 'tai-tzu-ying.jpg', lic: 'CC BY 2.0',
         desc: 'The most deceptive player of her generation \u2014 spontaneous, creative and impossible to read. She controls rallies with disguise and wristy magic rather than raw power. Pure improvisation.' },
-      akane: { name: 'Akane Yamaguchi', flag: '🇯🇵', role: 'Women\u2019s Singles · 3× World Champion',
-        tag: 'The Tireless Retriever',
-        desc: 'Proof that heart beats height. Bottomless defence, blistering footwork and a never-give-up spirit force opponents to hit "one more shot" \u2014 until they crack. Humble off court, ferocious on it.' },
-      yeo: { name: 'Yeo Jia Min', flag: '🇸🇬', role: 'Women\u2019s Singles · Singapore',
-        tag: 'The Quiet Giant-Killer',
+      akane:    { name: 'Akane Yamaguchi', flag: '🇯🇵', role: 'Women\u2019s Singles · 3× World Champion', tag: 'The Tireless Retriever', img: IMG + 'akane-yamaguchi.jpg', lic: 'CC BY 3.0',
+        desc: 'Proof that heart beats height. Bottomless defence, blistering footwork and a never-give-up spirit force opponents to hit one more shot \u2014 until they crack. Humble off court, ferocious on it.' },
+      yeo:      { name: 'Yeo Jia Min', flag: '🇸🇬', role: 'Women\u2019s Singles · Singapore', tag: 'The Quiet Giant-Killer', img: IMG + 'yeo-jia-min.jpg', lic: 'CC BY-SA 4.0',
         desc: 'Singapore\u2019s under-the-radar star who has toppled Yamaguchi, Sindhu and other top-10 names. Humble, self-analytical and mentally tough \u2014 she rises without the spotlight and lets her racket talk.' },
-      axelsen: { name: 'Viktor Axelsen', flag: '🇩🇰', role: 'Men\u2019s Singles · 2× Olympic Champion',
-        tag: 'The Problem-Solver',
-        desc: 'The ultimate professional: methodical, disciplined and relentlessly self-improving. There was no problem on court he couldn\u2019t engineer a solution to \u2014 towering defence married to a devastating smash.' },
-      kunlavut: { name: 'Kunlavut Vitidsarn', flag: '🇹🇭', role: 'Men\u2019s Singles · World Champion',
-        tag: 'The Rally Chess-Master',
+      axelsen:  { name: 'Viktor Axelsen', flag: '🇩🇰', role: 'Men\u2019s Singles · 2× Olympic Champion', tag: 'The Problem-Solver', img: IMG + 'viktor-axelsen.jpg', lic: 'CC BY 4.0',
+        desc: 'The ultimate professional: methodical, disciplined and relentlessly self-improving. Towering defence married to a devastating smash \u2014 there\u2019s no problem on court he can\u2019t engineer a solution to.' },
+      kunlavut: { name: 'Kunlavut Vitidsarn', flag: '🇹🇭', role: 'Men\u2019s Singles · World Champion', tag: 'The Rally Chess-Master', img: IMG + 'kunlavut-vitidsarn.jpg', lic: 'CC BY 3.0',
         desc: 'A patient, tactical thinker with elite defence who pushes you back, opens the court and counter-attacks the instant you\u2019re out of position. Calm, deceptive at the net, endlessly adaptable.' },
-      loh: { name: 'Loh Kean Yew', flag: '🇸🇬', role: 'Men\u2019s Singles · Singapore, 2021 World Champ',
-        tag: 'The Fearless Attacker',
+      loh:      { name: 'Loh Kean Yew', flag: '🇸🇬', role: 'Men\u2019s Singles · Singapore, 2021 World Champ', tag: 'The Fearless Attacker', img: IMG + 'loh-kean-yew.jpg', lic: 'CC BY 4.0',
         desc: 'Singapore\u2019s first world champion. Explosive speed, high-flying jump smashes and a huge fighting spirit \u2014 he chases every shuttle and turns defence into attack in a heartbeat. Fearless underdog energy.' },
-      antonsen: { name: 'Anders Antonsen', flag: '🇩🇰', role: 'Men\u2019s Singles · World Champion',
-        tag: 'The Tactical Craftsman',
-        desc: 'Wins with brain over brawn: sharp changes of tempo, deceptive strokes, a tight net game and iron mental toughness. Built brick-by-brick from Denmark\u2019s famous club system.' }
+      antonsen: { name: 'Anders Antonsen', flag: '🇩🇰', role: 'Men\u2019s Singles · World Champion', tag: 'The Tactical Craftsman', img: IMG + 'anders-antonsen.jpg', lic: 'CC BY-SA 4.0',
+        desc: 'Wins with brain over brawn: sharp changes of tempo, deceptive strokes, a tight net game and iron mental toughness. Built brick-by-brick from Denmark\u2019s famous club system.' },
+      chou:     { name: 'Chou Tien-chen', flag: '🇹🇼', role: 'Men\u2019s Singles · Veteran', tag: 'The Ageless Warrior', img: IMG + 'chou-tien-chen.jpg', lic: 'Attribution',
+        desc: 'At 36 the oldest-ever Super 1000 champion. Ferociously fit, disciplined and durable \u2014 he out-lasts younger rivals through relentless conditioning and sheer will.' },
+      naraoka:  { name: 'Kodai Naraoka', flag: '🇯🇵', role: 'Men\u2019s Singles · Rising Star', tag: 'The Marathon Runner', img: IMG + 'kodai-naraoka.jpg', lic: 'CC BY-SA 4.0',
+        desc: 'A defensive powerhouse who thrives in brutal, lung-busting rallies. Turns matches into endurance tests and simply refuses to miss.' },
+      shi:      { name: 'Shi Yuqi', flag: '🇨🇳', role: 'Men\u2019s Singles · Former World No. 1', tag: 'The Complete Package', img: IMG + 'shi-yuqi.jpg', lic: 'CC BY 4.0',
+        desc: 'Smooth, balanced and technically flawless \u2014 strong in every phase, with the calm of a player who\u2019s solved the game. All-round excellence.' },
+      jonatan:  { name: 'Jonatan Christie', flag: '🇮🇩', role: 'Men\u2019s Singles · Asian Champion', tag: 'The Crowd-Pleaser', img: IMG + 'jonatan-christie.jpg', lic: 'CC BY 2.0',
+        desc: 'Athletic, charismatic and attack-minded \u2014 he feeds off the crowd and lights up an arena with explosive, entertaining badminton.' },
+      lakshya:  { name: 'Lakshya Sen', flag: '🇮🇳', role: 'Men\u2019s Singles · India', tag: 'The Fearless Youngster', img: IMG + 'lakshya-sen.jpg', lic: 'CC BY-SA 4.0',
+        desc: 'Fast, aggressive and unafraid of anyone\u2019s reputation. A gutsy shot-maker who plays his best badminton on the biggest stages.' },
+      chenyf:   { name: 'Chen Yufei', flag: '🇨🇳', role: 'Women\u2019s Singles · Olympic Champion', tag: 'The Ice Queen', img: IMG + 'chen-yufei.jpg', lic: 'CC BY-SA 4.0',
+        desc: 'Tokyo 2020 gold medallist with a controlled, weighty game and nerves of steel. She dictates rallies with placement and composure.' },
+      marin:    { name: 'Carolina Marín', flag: '🇪🇸', role: 'Women\u2019s Singles · Olympic Champion', tag: 'The Fierce Competitor', img: IMG + 'carolina-mar-n.jpg', lic: 'CC BY-SA 2.0',
+        desc: 'Europe\u2019s trailblazer \u2014 explosive, left-handed and famously fiery. Roars through rallies with relentless attacking intensity and passion.' },
+      sindhu:   { name: 'P. V. Sindhu', flag: '🇮🇳', role: 'Women\u2019s Singles · 2× Olympic Medallist', tag: 'The Big-Match Player', img: IMG + 'p-v-sindhu.jpg', lic: 'CC BY-SA 3.0',
+        desc: 'Tall, powerful and built for the occasion \u2014 a towering smash and a champion\u2019s temperament that peaks when the medals are on the line.' },
+      ratchanok:{ name: 'Ratchanok Intanon', flag: '🇹🇭', role: 'Women\u2019s Singles · Former World Champ', tag: 'The Silky Stylist', img: IMG + 'ratchanok-intanon.jpg', lic: 'CC BY 3.0',
+        desc: 'Elegant, wristy and wonderfully deceptive \u2014 she wins with touch, timing and clever angles rather than brute force.' },
+      wangzy:   { name: 'Wang Zhiyi', flag: '🇨🇳', role: 'Women\u2019s Singles · World No. 2', tag: 'The Steady Riser', img: IMG + 'wang-zhiyi.jpg', lic: 'CC BY-SA 4.0',
+        desc: 'Consistent, composed and quietly climbing to the top with solid all-court play and a cool head under pressure.' },
+      leezii:   { name: 'Lee Zii Jia', flag: '🇲🇾', role: 'Men\u2019s Singles · Malaysia', tag: 'The Independent Maverick', img: IMG + 'lee-zii-jia.jpg', lic: 'CC BY-SA 4.0',
+        desc: 'Flashy, powerful and fiercely his own person \u2014 he went independent to chase his dream his way, with a spectacular attacking game.' },
+      ginting:  { name: 'Anthony Ginting', flag: '🇮🇩', role: 'Men\u2019s Singles · Indonesia', tag: 'The Speed Demon', img: IMG + 'anthony-sinisuka-ginting.jpg', lic: 'CC BY 4.0',
+        desc: 'Lightning-fast footwork and a rapid-fire attacking style. He overwhelms opponents with sheer pace and quick hands.' },
+      gregoria: { name: 'Gregoria M. Tunjung', flag: '🇮🇩', role: 'Women\u2019s Singles · Olympic Medallist', tag: 'The Resilient Fighter', img: IMG + 'gregoria-mariska-tunjung.jpg', lic: 'Public domain',
+        desc: 'Battled through setbacks to a Paris 2024 bronze. Tenacious, improving and full of heart \u2014 she never stops believing.' },
+      lindan:   { name: 'Lin Dan', flag: '🇨🇳', role: 'Men\u2019s Singles · The G.O.A.T.', tag: 'The Super Dan', img: IMG + 'lin-dan.jpg', lic: 'CC BY-SA 4.0',
+        desc: 'Two-time Olympic champion and the most decorated men\u2019s singles player ever. Charismatic, dominant and box-office \u2014 a once-in-a-generation icon.' },
+      lcw:      { name: 'Lee Chong Wei', flag: '🇲🇾', role: 'Men\u2019s Singles · Legend', tag: 'The Eternal Contender', img: IMG + 'lee-chong-wei.jpg', lic: 'CC BY-SA 2.0',
+        desc: 'A record-breaking world No. 1 and Malaysia\u2019s hero \u2014 blistering speed and a fighter\u2019s heart that never gave up chasing gold.' },
+      okuhara:  { name: 'Nozomi Okuhara', flag: '🇯🇵', role: 'Women\u2019s Singles · World Champion', tag: 'The Iron Retriever', img: IMG + 'nozomi-okuhara.jpg', lic: 'CC BY 4.0',
+        desc: 'Small in stature, giant in defence. Famous for epic marathon rallies and a bottomless tank of stamina and grit.' },
+      momota:   { name: 'Kento Momota', flag: '🇯🇵', role: 'Men\u2019s Singles · 2× World Champion', tag: 'The Comeback King', img: IMG + 'kento-momota.png', lic: 'CC BY 3.0',
+        desc: 'A tactical genius with pinpoint control who fought back from adversity to reach world No. 1. Precision, patience and mental steel.' },
+      saina:    { name: 'Saina Nehwal', flag: '🇮🇳', role: 'Women\u2019s Singles · Trailblazer', tag: 'The Pioneer', img: IMG + 'saina-nehwal.jpg', lic: 'GODL-India',
+        desc: 'The player who put Indian women\u2019s badminton on the map \u2014 aggressive, determined and an inspiration to a whole generation.' },
+      tommy:    { name: 'Tommy Sugiarto', flag: '🇮🇩', role: 'Men\u2019s Singles · Indonesia', tag: 'The Crafty Veteran', img: IMG + 'tommy-sugiarto.jpg', lic: 'CC BY-SA 4.0',
+        desc: 'Experienced, clever and steady \u2014 he relies on smart placement, deception and years of ring-craft rather than raw power.' }
     };
 
-    // 5 questions; each option adds weight to player keys
+    // 6 questions; each option weights several player keys. Every player is reachable.
     var QUESTIONS = [
       { q: 'It\u2019s match point against you. What\u2019s your instinct?',
         a: [
-          { t: 'Stay calm, extend the rally, wait for their mistake', w: { an: 2, kunlavut: 2, akane: 1 } },
-          { t: 'Go for a bold, unexpected winner', w: { tai: 2, loh: 2 } },
-          { t: 'Trust the plan I drilled for exactly this moment', w: { axelsen: 2, antonsen: 1 } },
-          { t: 'Dig in and out-run them \u2014 I never stop chasing', w: { akane: 2, yeo: 1 } }
+          { t: 'Stay calm, extend the rally, wait for their mistake', w: { an: 2, kunlavut: 2, momota: 1, wangzy: 1 } },
+          { t: 'Go for a bold, unexpected winner', w: { tai: 2, loh: 2, leezii: 1 } },
+          { t: 'Trust the plan I drilled for exactly this moment', w: { axelsen: 2, momota: 1, shi: 1 } },
+          { t: 'Dig in and out-run them \u2014 I never stop chasing', w: { akane: 2, naraoka: 2, okuhara: 1 } }
         ] },
       { q: 'Pick your signature shot.',
         a: [
-          { t: 'A thunderous jump smash', w: { loh: 2, axelsen: 2 } },
-          { t: 'A disguised drop that fools everyone', w: { tai: 2, antonsen: 1 } },
-          { t: 'A perfect defensive retrieve from nowhere', w: { akane: 2, an: 1 } },
-          { t: 'A sharp change of pace that opens the court', w: { kunlavut: 2, antonsen: 1 } }
+          { t: 'A thunderous jump smash', w: { loh: 2, axelsen: 1, sindhu: 1, leezii: 1 } },
+          { t: 'A disguised drop that fools everyone', w: { tai: 2, ratchanok: 2, antonsen: 1, tommy: 1 } },
+          { t: 'A gets-everything defensive retrieve', w: { akane: 2, okuhara: 2, naraoka: 1 } },
+          { t: 'A blistering fast net-to-net exchange', w: { ginting: 2, jonatan: 1, lakshya: 1 } }
         ] },
       { q: 'How do you train?',
         a: [
-          { t: 'Rigid routine, strict diet, zero shortcuts', w: { an: 2, axelsen: 1 } },
-          { t: 'Experiment, improvise, keep it playful', w: { tai: 2 } },
-          { t: 'Grind the fundamentals until they\u2019re automatic', w: { akane: 2, antonsen: 1, axelsen: 1 } },
-          { t: 'Quietly fix my weaknesses after every session', w: { yeo: 2, kunlavut: 1 } }
+          { t: 'Rigid routine, strict diet, zero shortcuts', w: { an: 2, axelsen: 1, chou: 2 } },
+          { t: 'Experiment, improvise, keep it playful', w: { tai: 2, ratchanok: 1, lindan: 1 } },
+          { t: 'Grind fitness until my tank is bottomless', w: { naraoka: 2, okuhara: 2, chou: 1 } },
+          { t: 'Quietly fix my weaknesses, session by session', w: { yeo: 2, kunlavut: 1, wangzy: 1, shi: 1 } }
         ] },
-      { q: 'What\u2019s your mindset off the court?',
+      { q: 'What\u2019s your energy on court?',
         a: [
-          { t: 'Humble \u2014 I\u2019d rather fly under the radar', w: { yeo: 2, akane: 1 } },
-          { t: 'A relentless professional building an empire', w: { axelsen: 2 } },
-          { t: 'A fearless underdog with nothing to lose', w: { loh: 2 } },
-          { t: 'A calm strategist, always thinking two moves ahead', w: { kunlavut: 2, an: 1 } }
+          { t: 'Fiery \u2014 I roar, I fist-pump, I feed off emotion', w: { marin: 2, lindan: 1, jonatan: 1 } },
+          { t: 'Ice-cold and unreadable', w: { chenyf: 2, momota: 1, an: 1 } },
+          { t: 'Humble \u2014 I\u2019d rather fly under the radar', w: { yeo: 2, okuhara: 1, gregoria: 1, tommy: 1 } },
+          { t: 'A showman \u2014 I love entertaining the crowd', w: { lindan: 2, jonatan: 2, leezii: 1 } }
+        ] },
+      { q: 'What drives you the most?',
+        a: [
+          { t: 'Being a fearless underdog with nothing to lose', w: { loh: 2, lakshya: 2, gregoria: 1 } },
+          { t: 'Blazing a trail others will follow', w: { marin: 1, saina: 2, sindhu: 1, lcw: 1 } },
+          { t: 'Outlasting everyone through sheer fitness', w: { chou: 2, naraoka: 1, okuhara: 1 } },
+          { t: 'Perfecting a complete, all-round game', w: { shi: 2, axelsen: 1, wangzy: 1, kunlavut: 1 } }
         ] },
       { q: 'Your ideal way to win a point?',
         a: [
-          { t: 'Overwhelm them with power and speed', w: { loh: 2, axelsen: 1 } },
-          { t: 'Outsmart them with deception', w: { tai: 2, antonsen: 2 } },
-          { t: 'Outlast them until they break', w: { an: 2, akane: 2 } },
-          { t: 'Surprise everyone \u2014 nobody expected me', w: { yeo: 2, loh: 1 } }
+          { t: 'Overwhelm them with power and speed', w: { loh: 1, sindhu: 2, ginting: 2, leezii: 1 } },
+          { t: 'Outsmart them with deception and touch', w: { tai: 2, ratchanok: 1, tommy: 1, antonsen: 2 } },
+          { t: 'Outlast them until they break', w: { an: 1, akane: 2, naraoka: 1, okuhara: 1 } },
+          { t: 'Rise to the moment when it matters most', w: { sindhu: 1, lcw: 2, lindan: 1, saina: 1, momota: 1 } }
         ] }
     ];
 
@@ -521,21 +559,23 @@
 
     function showResult() {
       progress.style.width = '100%';
-      var best = null, bestScore = -1;
-      Object.keys(scores).forEach(function (k) {
-        if (scores[k] > bestScore) { bestScore = scores[k]; best = k; }
-      });
+      var bestScore = -1;
+      Object.keys(scores).forEach(function (k) { if (scores[k] > bestScore) bestScore = scores[k]; });
+      // collect everyone tied at the top, then pick one at random for variety
+      var top = Object.keys(scores).filter(function (k) { return scores[k] === bestScore; });
+      var best = top[Math.floor(Math.random() * top.length)];
       var p = PLAYERS[best];
       qWrap.style.display = 'none';
       result.style.display = 'block';
       result.innerHTML =
         '<p class="quiz__count">Your badminton twin is\u2026</p>' +
-        '<div class="quiz__flag">' + p.flag + '</div>' +
+        '<div class="quiz__photo"><img src="' + p.img + '" alt="' + p.name + '" loading="lazy"><span class="quiz__flagbadge">' + p.flag + '</span></div>' +
         '<h3 class="quiz__name">' + p.name + '</h3>' +
         '<p class="quiz__role">' + p.role + '</p>' +
         '<p class="quiz__playertag">\u201C' + p.tag + '\u201D</p>' +
         '<p class="quiz__desc">' + p.desc + '</p>' +
-        '<button class="btn btn--ghost" id="quizAgain">Play again</button>';
+        '<button class="btn btn--ghost" id="quizAgain">Play again</button>' +
+        '<p class="quiz__credit">Photo: Wikimedia Commons · ' + p.lic + '</p>';
       result.classList.remove('fade'); void result.offsetWidth; result.classList.add('fade');
       document.getElementById('quizAgain').addEventListener('click', function () {
         result.style.display = 'none'; qWrap.style.display = 'block';
