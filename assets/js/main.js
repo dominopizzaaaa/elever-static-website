@@ -673,18 +673,23 @@
 
     function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
 
-    function render(filter) {
-      var html = '', lastMonth = null;
-      EVENTS.forEach(function (ev) {
-        if (filter === 'done' && ev.status !== 'done') return;
-        if (filter === 'upcoming' && ev.status !== 'upcoming') return;
-        if (ev.m !== lastMonth) {
-          html += '<h3 class="news__month">' + ev.m + ' 2026</h3>';
-          lastMonth = ev.m;
-        }
+    var VISIBLE = 4;              // most-recent shown by default
+    var expanded = false;
+    var currentFilter = 'all';
+
+    function render() {
+      var done = EVENTS.filter(function (e) { return e.status === 'done'; }).reverse();   // most recent results first
+      var up = EVENTS.filter(function (e) { return e.status === 'upcoming'; });            // upcoming in date order
+      var list;
+      if (currentFilter === 'done') list = done;
+      else if (currentFilter === 'upcoming') list = up;
+      else list = done.concat(up);   // recent results first, then what's coming next
+      var shown = expanded ? list : list.slice(0, VISIBLE);
+      var html = '';
+      shown.forEach(function (ev) {
         var cls = 'ncard' + (ev.latest ? ' ncard--latest' : '') + (ev.status === 'upcoming' ? ' ncard--next' : '');
         html += '<article class="' + cls + '">';
-        html += '<div class="ncard__head"><span class="ncard__date">' + ev.date + (ev.latest ? ' · Latest' : (ev.status === 'upcoming' ? ' · Upcoming' : '')) + '</span>';
+        html += '<div class="ncard__head"><span class="ncard__date">' + ev.date + ' ' + ev.m.slice(0, 3) + ' 2026' + (ev.latest ? ' · Latest' : (ev.status === 'upcoming' ? ' · Upcoming' : '')) + '</span>';
         html += '<span class="ncard__grade">' + esc(ev.grade) + '</span></div>';
         html += '<h4 class="ncard__name">' + esc(ev.name) + '</h4>';
         if (ev.result) html += '<p class="ncard__result">' + esc(ev.result) + '</p>';
@@ -692,8 +697,23 @@
         html += '</article>';
       });
       mount.innerHTML = html;
+
+      var extra = list.length - VISIBLE;
+      if (toggleBtn) {
+        if (extra > 0) {
+          toggleBtn.style.display = '';
+          toggleBtn.textContent = expanded ? 'Show less' : ('Show all ' + list.length + ' tournaments');
+        } else {
+          toggleBtn.style.display = 'none';
+        }
+      }
     }
-    render('all');
+
+    var toggleBtn = document.getElementById('newsToggle');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', function () { expanded = !expanded; render(); });
+    }
+    render();
 
     var filters = document.getElementById('newsFilters');
     if (filters) {
@@ -702,7 +722,9 @@
         if (!btn) return;
         filters.querySelectorAll('.news__filter').forEach(function (b) { b.classList.remove('is-active'); });
         btn.classList.add('is-active');
-        render(btn.dataset.filter);
+        currentFilter = btn.dataset.filter;
+        expanded = false;
+        render();
       });
     }
   })();
