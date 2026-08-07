@@ -770,18 +770,39 @@
     function updateScore() { if (elYou) elYou.textContent = scoreYou; if (elCpu) elCpu.textContent = scoreCpu; if (elRally) elRally.textContent = rally; }
     function burst(x, y, c, n) { n = n || 18; for (var i = 0; i < n; i++) { var a = Math.random() * 6.28, s = 1 + Math.random() * 5; particles.push({ x: x, y: y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: 1, c: c }); } }
 
+    // Launch the shuttle from (x0,y0) so it arcs high over the net and lands near landX.
+    // Apex clearance scales with court height; vx solved from the true drag sum so it
+    // lands accurately at any screen size. Guarantees the bird clears the net.
+    function launchTo(x0, y0, landX, clearFrac) {
+      var g = BIRD_GRAV;
+      // apex sits a fraction of the net's height ABOVE the tape, so it always clears
+      var netH = GROUND - NET_TOP;
+      var apexY = NET_TOP - netH * (clearFrac || 0.45);
+      if (apexY > y0 - 40) apexY = y0 - 40;             // must actually rise from contact point
+      var riseH = Math.max(40, y0 - apexY);
+      var vUp = Math.sqrt(2 * g * riseH);
+      var tUp = vUp / g;
+      var tDown = Math.sqrt(2 * (GROUND - apexY) / g);
+      var totalT = Math.max(1, Math.round(tUp + tDown));
+      // horizontal distance a starting vx of 1 would cover under drag over totalT frames:
+      // sum_{t=0..totalT-1} DRAG^t = (1 - DRAG^totalT) / (1 - DRAG)
+      var reachPerVx = (1 - Math.pow(BIRD_DRAG, totalT)) / (1 - BIRD_DRAG);
+      var vx = (landX - x0) / reachPerVx;
+      return { vx: Math.max(-12, Math.min(12, vx)), vy: -vUp };
+    }
+
     function serveBird(byWho) {
-      rally = 0; updateScore(); setShot('—');
+      rally = 0; updateScore(); setShot('Serve');
       var fromLeft = byWho === 'you';
-      bird = {
-        x: fromLeft ? you.x + 20 : cpu.x - 20,
-        y: GROUND - 130,
-        vx: fromLeft ? 2.0 : -2.0,
-        vy: -4.6,
-        live: true, last: byWho, cool: 0
-      };
+      var x0 = fromLeft ? (NET_X - W * 0.20) : (NET_X + W * 0.20);
+      var y0 = GROUND - 60;
+      // land in the receiver's mid court (keeps a safe, high clearance over the net)
+      var landX = fromLeft ? (NET_X + W * 0.14 + Math.random() * W * 0.14)
+                           : (NET_X - W * 0.14 - Math.random() * W * 0.14);
+      var v = launchTo(x0, y0, landX, 0.9);
+      bird = { x: x0, y: y0, vx: v.vx, vy: v.vy, live: true, last: byWho, cool: 0 };
       state = 'play';
-      setMsg(byWho === 'you' ? 'Your serve! ← → move · ↑ / W jump · SPACE / ↓ swing.' : 'Opponent serves — move under the shuttle and swing!');
+      setMsg(byWho === 'you' ? 'Your serve is up! ← → move · ↑ / W jump · SPACE / ↓ swing.' : 'Opponent serves — get under the shuttle and swing!');
     }
 
     function startGame() {
@@ -861,24 +882,16 @@
       var high = bird.y < NET_TOP - 10;      // clearly above the net -> can attack down
 
       if (high && Math.abs(bird.x - NET_X) > W * 0.10) {
-        // SMASH: quick & angled downward, but floaty enough to read
-        bird.vx = dir * (5.2 + Math.random() * 1.2);
-        bird.vy = 1.6 + Math.random() * 0.8;
+        // SMASH: quick & angled downward into the far court (starts above the net so it clears)
+        bird.vx = dir * (4.6 + Math.random() * 1.4);
+        bird.vy = 1.4 + Math.random() * 0.8;
         setShot((who === 'you' ? 'You' : 'Dummy') + ': SMASH!');
         burst(tip.x, tip.y, '255,90,90', 26);
       } else {
-        // CLEAR / LIFT: high floaty arc that lands deep in the far court, over the net.
-        var landX = who === 'you' ? (W * 0.66 + Math.random() * W * 0.22) : (W * 0.12 + Math.random() * W * 0.22);
-        var g = BIRD_GRAV;
-        var apexY = Math.min(bird.y, NET_TOP) - (70 + Math.random() * 70);   // well above net
-        var riseH = Math.max(50, bird.y - apexY);
-        var vUp = Math.sqrt(2 * g * riseH);            // speed needed to rise riseH
-        var tUp = vUp / g;                             // frames to apex
-        var tDown = Math.sqrt(2 * (GROUND - apexY) / g);
-        var totalT = tUp + tDown;
-        bird.vy = -vUp;
-        bird.vx = (landX - bird.x) / totalT;
-        bird.vx = Math.max(-4.5, Math.min(4.5, bird.vx));
+        // CLEAR / LIFT: high floaty arc that reliably clears the net and lands deep in the far court.
+        var landX = who === 'you' ? (NET_X + W * 0.20 + Math.random() * W * 0.20) : (NET_X - W * 0.20 - Math.random() * W * 0.20);
+        var v = launchTo(bird.x, bird.y, landX, 0.4 + Math.random() * 0.25);
+        bird.vx = v.vx; bird.vy = v.vy;
         setShot((who === 'you' ? 'You' : 'Dummy') + ': Clear');
         burst(tip.x, tip.y, '150,220,255', 16);
       }
