@@ -13,26 +13,16 @@
 </head>
 <body>
 
-  <!-- ===== INTRO: SHUTTLECOCK SMASH ===== -->
+  <!-- ===== CINEMATIC INTRO ===== -->
   <div id="intro" class="intro">
-    <div class="intro__court"></div>
-    <div class="intro__flash"></div>
-    <svg class="shuttle" viewBox="0 0 120 200" aria-hidden="true">
-      <g class="shuttle__feathers">
-        <path d="M60 90 L20 10 L44 74 Z"/>
-        <path d="M60 90 L38 4 L52 78 Z"/>
-        <path d="M60 90 L60 0 L60 80 Z"/>
-        <path d="M60 90 L82 4 L68 78 Z"/>
-        <path d="M60 90 L100 10 L76 74 Z"/>
-      </g>
-      <ellipse class="shuttle__cork" cx="60" cy="120" rx="26" ry="30"/>
-      <ellipse class="shuttle__cork-hi" cx="52" cy="112" rx="8" ry="10"/>
-    </svg>
-    <div class="intro__word" id="introWord">
-      <span>É</span><span>L</span><span>E</span><span>V</span><span>E</span><span>R</span>
+    <canvas id="introCanvas" class="intro__canvas"></canvas>
+    <div class="intro__center">
+      <div class="intro__word" id="introWord">
+        <span>É</span><span>L</span><span>E</span><span>V</span><span>E</span><span>R</span>
+      </div>
+      <div class="intro__tag" id="introTag">B A D M I N T O N</div>
     </div>
-    <div class="intro__tag">B A D M I N T O N</div>
-    <button class="intro__skip" id="skipIntro">Skip &rsaquo;</button>
+    <button class="intro__skip" id="skipIntro">Skip Intro &rsaquo;</button>
   </div>
 
   <!-- ===== NAV ===== -->
@@ -40,10 +30,11 @@
     <a href="#top" class="nav__logo">ÉLEVER<span>·</span>BADMINTON</a>
     <nav class="nav__links" id="navLinks">
       <a href="#about">About</a>
+      <a href="#smash">Smash</a>
       <a href="#programs">Programs</a>
       <a href="#team">Coaches</a>
       <a href="#news">News</a>
-      <a href="#contact" class="nav__cta">Join Us</a>
+      <a href="#contact" class="nav__cta magnetic">Join Us</a>
     </nav>
     <button class="nav__burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
   </header>
@@ -52,64 +43,95 @@
   <section class="hero" id="top">
     <div class="hero__bg" style="background-image:url('assets/img/hero-action.jpg')"></div>
     <div class="hero__overlay"></div>
+    <canvas id="heroCanvas" class="hero__canvas"></canvas>
     <div class="hero__content">
       <p class="hero__eyebrow reveal">Singapore · Badminton Excellence</p>
       <h1 class="hero__title">
-        <span class="reveal">ELEVATE</span>
-        <span class="reveal hero__title--accent">YOUR GAME</span>
+        <span class="line reveal"><i>E</i><i>L</i><i>E</i><i>V</i><i>A</i><i>T</i><i>E</i></span>
+        <span class="line line--accent reveal" data-delay="120"><i>Y</i><i>O</i><i>U</i><i>R</i>&nbsp;<i>G</i><i>A</i><i>M</i><i>E</i></span>
       </h1>
-      <p class="hero__sub reveal">To build. To raise. To bring something to a higher position. Élite coaching that turns first swings into championship dreams.</p>
-      <div class="hero__actions reveal">
-        <a href="#programs" class="btn btn--primary">Explore Programs</a>
-        <a href="#contact" class="btn btn--ghost">Start Training</a>
+      <p class="hero__sub reveal" data-delay="240">To build. To raise. To bring something to a higher position. Élite coaching that turns first swings into championship dreams.</p>
+      <div class="hero__actions reveal" data-delay="320">
+        <a href="#programs" class="btn btn--primary magnetic">Explore Programs</a>
+        <a href="#smash" class="btn btn--ghost">Test Your Smash</a>
       </div>
+      <p class="hero__hint reveal" data-delay="420">↳ move your cursor — the shuttles react to you</p>
     </div>
     <div class="hero__scroll"><span></span>Scroll</div>
     <div class="hero__stats">
       <div class="stat reveal"><b data-count="15">0</b><small>Expert Coaches</small></div>
-      <div class="stat reveal"><b data-count="4">0</b><small>Program Pillars</small></div>
-      <div class="stat reveal"><b data-count="100">0</b><small>% Passion</small></div>
+      <div class="stat reveal" data-delay="120"><b data-count="4">0</b><small>Program Pillars</small></div>
+      <div class="stat reveal" data-delay="240"><b data-count="100">0</b><small>% Passion</small></div>
     </div>
   </section>
+
+  <!-- ===== MARQUEE ===== -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <span>CAMPS ·</span><span>CLASSES ·</span><span>CLINICS ·</span><span>CARNIVALS ·</span>
+      <span>ÉLEVATE ·</span><span>CAMPS ·</span><span>CLASSES ·</span><span>CLINICS ·</span>
+      <span>CARNIVALS ·</span><span>ÉLEVATE ·</span>
+    </div>
+  </div>
 
   <!-- ===== ABOUT ===== -->
   <section class="about" id="about">
     <div class="section-head">
-      <span class="kicker">01 — About Élever</span>
-      <h2 class="section-title">More than a sport.<br><em>A pathway to greatness.</em></h2>
+      <span class="kicker reveal">01 — About Élever</span>
+      <h2 class="section-title reveal">More than a sport.<br><em>A pathway to greatness.</em></h2>
     </div>
     <div class="about__grid">
       <p class="about__lead reveal">
         <strong>Élever</strong> <span class="about__def">(verb)</span> — to build or raise; bring something to a higher position.
       </p>
-      <p class="reveal">Excellence is a journey — and at Élever Badminton it follows a meticulously structured pathway built on progressive pillars. From your very first swing to elite-level competition, our coaches provide the expert mentorship and supportive community every athlete needs to build confidence and master the game.</p>
-      <p class="reveal">We believe every player deserves world-class guidance, wherever they are in their journey. That belief drives everything we do — on and off the court.</p>
+      <p class="reveal" data-delay="120">Excellence is a journey — and at Élever Badminton it follows a meticulously structured pathway built on progressive pillars. From your very first swing to elite-level competition, our coaches provide the expert mentorship and supportive community every athlete needs to build confidence and master the game.</p>
+      <p class="reveal" data-delay="200">We believe every player deserves world-class guidance, wherever they are in their journey. That belief drives everything we do — on and off the court.</p>
+    </div>
+  </section>
+
+  <!-- ===== INTERACTIVE SMASH METER ===== -->
+  <section class="smash" id="smash">
+    <div class="section-head">
+      <span class="kicker reveal">02 — Interactive</span>
+      <h2 class="section-title reveal">How hard can <em>you</em> smash?</h2>
+    </div>
+    <div class="smash__wrap reveal" data-delay="120">
+      <div class="smash__zone" id="smashZone">
+        <div class="smash__net"></div>
+        <p class="smash__prompt" id="smashLabel">Swipe / drag fast across the court</p>
+        <div class="smash__readout">
+          <span class="smash__val" id="smashVal">0</span>
+          <span class="smash__unit">km/h</span>
+        </div>
+        <div class="smash__bar"><div class="smash__fill" id="smashFill"></div></div>
+        <p class="smash__ref">Pro reference: the fastest recorded badminton smash is <strong>≈ 565 km/h</strong> — faster than an F1 car.</p>
+      </div>
     </div>
   </section>
 
   <!-- ===== PROGRAMS ===== -->
   <section class="programs" id="programs">
     <div class="section-head">
-      <span class="kicker">02 — What We Do</span>
-      <h2 class="section-title">Four ways to <em>rise</em>.</h2>
+      <span class="kicker reveal">03 — What We Do</span>
+      <h2 class="section-title reveal">Four ways to <em>rise</em>.</h2>
     </div>
     <div class="programs__grid">
-      <article class="pcard reveal">
+      <article class="pcard tilt reveal">
         <span class="pcard__num">01</span>
         <h3>Camps</h3>
         <p>Our Holiday Exploration Camps turn every school break into a badminton adventure. Game-based learning for players with little to no experience — building foundations and physical development while leaving them eager to keep playing.</p>
       </article>
-      <article class="pcard reveal">
+      <article class="pcard tilt reveal" data-delay="100">
         <span class="pcard__num">02</span>
         <h3>Classes</h3>
         <p>A structured pathway built on four progressive pillars. From your very first swing to elite competition, our classes provide expert mentorship and a supportive community to build confidence and master the game.</p>
       </article>
-      <article class="pcard reveal">
+      <article class="pcard tilt reveal" data-delay="200">
         <span class="pcard__num">03</span>
         <h3>Clinics</h3>
         <p>Dynamic, community-driven training experiences — specialised, short-term workshops. Players dive deep into mechanics, footwork and strategy in a high-energy, immersive environment tailored to specific age groups and every skill level.</p>
       </article>
-      <article class="pcard reveal">
+      <article class="pcard tilt reveal" data-delay="300">
         <span class="pcard__num">04</span>
         <h3>Carnivals</h3>
         <p>Community outreach combining clinics, fun games and community activities. By bringing the sport into selected communities, we make badminton accessible to all — celebrating health, connection and the joy of play.</p>
@@ -120,23 +142,23 @@
   <!-- ===== TEAM ===== -->
   <section class="team" id="team">
     <div class="section-head">
-      <span class="kicker">03 — Our People</span>
-      <h2 class="section-title">Meet the <em>coaches</em>.</h2>
+      <span class="kicker reveal">04 — Our People</span>
+      <h2 class="section-title reveal">Meet the <em>coaches</em>.</h2>
     </div>
 
-    <h3 class="team__label">Co-Founders</h3>
+    <h3 class="team__label reveal">Co-Founders</h3>
     <div class="team__grid team__grid--lead">
       <figure class="tcard reveal">
         <div class="tcard__img"><img src="assets/img/team-loh-kean-hean.jpg" alt="Loh Kean Hean" loading="lazy"></div>
         <figcaption><h4>Loh Kean Hean</h4><p>Co-Founder · Technical Director</p><span>BWF Level 1</span></figcaption>
       </figure>
-      <figure class="tcard reveal">
+      <figure class="tcard reveal" data-delay="120">
         <div class="tcard__img"><img src="assets/img/team-eng-chin-an.jpg" alt="Eng Chin An" loading="lazy"></div>
         <figcaption><h4>Eng Chin An</h4><p>Co-Founder</p><span>BWF Level 1</span></figcaption>
       </figure>
     </div>
 
-    <h3 class="team__label">Our Team</h3>
+    <h3 class="team__label reveal">Our Team</h3>
     <div class="team__grid">
       <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-ong-keng-yang.jpg" alt="Ong Keng Yang" loading="lazy"></div><figcaption><h4>Ong Keng Yang</h4><p>Performance Mgr · S&amp;C Coach</p></figcaption></figure>
       <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-shawn-wong.jpg" alt="Shawn Wong" loading="lazy"></div><figcaption><h4>Shawn Wong</h4><p>Senior Coach</p><span>BWF Level 1</span></figcaption></figure>
@@ -153,36 +175,67 @@
     </div>
   </section>
 
-  <!-- ===== NEWS ===== -->
+  <!-- ===== NEWS TIMELINE (real 2026 BWF season) ===== -->
   <section class="news" id="news">
     <div class="section-head">
-      <span class="kicker">04 — Latest</span>
-      <h2 class="section-title">From the <em>court</em>.</h2>
+      <span class="kicker reveal">05 — The 2026 Season</span>
+      <h2 class="section-title reveal">Weekly from the <em>world tour</em>.</h2>
+      <p class="news__hint reveal" data-delay="120">← drag the timeline →</p>
     </div>
-    <div class="news__grid">
-      <a class="ncard reveal" href="https://www.eleverbadminton.com/news/bronze-builds-belief-for-para-badminton-athlete-lim" target="_blank" rel="noopener">
-        <div class="ncard__meta"><span>Jeremiah Ong</span><span>30 Jan 2026</span></div>
-        <h3>Bronze Builds Belief for Para Badminton Athlete Lim</h3>
-        <p>The national para badminton player returned from Nakhon Ratchasima with a joint men's singles SH6 bronze and valuable lessons against ASEAN's best.</p>
-        <span class="ncard__link">Read more &rarr;</span>
-      </a>
-      <a class="ncard reveal" href="https://www.eleverbadminton.com/news/an-completes-malaysia-open-three-peat-as-kunlavut-claims-maiden-super-1000-title" target="_blank" rel="noopener">
-        <div class="ncard__meta"><span>Jeremiah Ong</span><span>13 Jan 2026</span></div>
-        <h3>An completes Malaysia Open three-peat as Kunlavut claims maiden Super 1000 title</h3>
-        <p>An Se-young reaffirmed her status as the player to beat in women's singles, while Kunlavut Vitidsarn lifted his first Super 1000 crown.</p>
-        <span class="ncard__link">Read more &rarr;</span>
-      </a>
+    <div class="news__track" id="newsTrack">
+      <article class="ncard reveal">
+        <span class="ncard__date">11–13 Jan 2026</span>
+        <span class="ncard__tag">Malaysia Open · Super 1000</span>
+        <h3>An &amp; Kunlavut open the season with Super 1000 crowns</h3>
+        <p>An Se-young completed a Malaysia Open three-peat in women's singles while Kunlavut Vitidsarn claimed his maiden Super 1000 title in men's singles. Kim Won-ho/Seo Seung-jae took men's doubles.</p>
+      </article>
+      <article class="ncard reveal">
+        <span class="ncard__date">Jan 2026</span>
+        <span class="ncard__tag">India Open · Super 750</span>
+        <h3>Lin Chun-yi surges past the field in New Delhi</h3>
+        <p>Chinese Taipei's Lin Chun-yi won men's singles as An Se-young added another women's singles title. Liang Weikeng/Wang Chang triumphed in men's doubles.</p>
+      </article>
+      <article class="ncard reveal">
+        <span class="ncard__date">3–8 Mar 2026</span>
+        <span class="ncard__tag">All England Open · Super 1000</span>
+        <h3>Lin Chun-yi &amp; Wang Zhiyi rule Birmingham</h3>
+        <p>At the sport's most historic tournament, Lin Chun-yi beat Lakshya Sen for the men's title while Wang Zhiyi edged An Se-young in the women's final.</p>
+      </article>
+      <article class="ncard reveal">
+        <span class="ncard__date">Jun 2026</span>
+        <span class="ncard__tag">Indonesia Open · Super 1000</span>
+        <h3>Victor Lai stuns Jakarta; An Se-young reigns again</h3>
+        <p>Victor Lai captured a breakout men's singles title in the Istora cauldron. Goh Sze Fei/Nur Izzuddin delighted the home crowd in men's doubles.</p>
+      </article>
+      <article class="ncard reveal">
+        <span class="ncard__date">14–19 Jul 2026</span>
+        <span class="ncard__tag">Japan Open · Super 750</span>
+        <h3>Fajar/Fikri seize Indonesia's first Super 750 of 2026</h3>
+        <p>Fajar Alfian/Muhammad Shohibul Fikri beat Kim Won-ho/Seo Seung-jae in Tokyo. PV Sindhu won women's singles and France's Christo Popov took the men's crown.</p>
+      </article>
+      <article class="ncard ncard--latest reveal">
+        <span class="ncard__date">21–26 Jul 2026 · Latest</span>
+        <span class="ncard__tag">China Open · Super 1000</span>
+        <h3>Chou Tien-chen, 36, becomes oldest Super 1000 champion</h3>
+        <p>Chou Tien-chen beat Toma Junior Popov to make history in Changzhou. Akane Yamaguchi downed Chen Yufei for the women's title; Liu Shengshu/Tan Ning defended their women's doubles crown.</p>
+      </article>
+      <article class="ncard ncard--next reveal">
+        <span class="ncard__date">17–23 Aug 2026 · Upcoming</span>
+        <span class="ncard__tag">World Championships · New Delhi</span>
+        <h3>The world's best chase the rainbow jersey</h3>
+        <p>The 2026 BWF World Championships head to New Delhi, where Akane Yamaguchi eyes back-to-back world titles. The battle for global supremacy begins 17 August.</p>
+      </article>
     </div>
-    <div class="news__all reveal"><a href="https://www.eleverbadminton.com/news" target="_blank" rel="noopener" class="btn btn--ghost">All news</a></div>
+    <p class="news__source reveal">Results sourced from BWF, Wikipedia &amp; wire reports (AFP/Xinhua). Updated 7 Aug 2026 · no images used.</p>
   </section>
 
   <!-- ===== CTA / CONTACT ===== -->
   <section class="cta" id="contact">
     <div class="cta__inner">
       <h2 class="reveal">Ready to <em>elevate</em>?</h2>
-      <p class="reveal">Whether it's your first swing or your next title — there's a place for you at Élever Badminton.</p>
-      <div class="cta__actions reveal">
-        <a href="https://www.eleverbadminton.com/" target="_blank" rel="noopener" class="btn btn--primary">Enquire Now</a>
+      <p class="reveal" data-delay="120">Whether it's your first swing or your next title — there's a place for you at Élever Badminton.</p>
+      <div class="cta__actions reveal" data-delay="200">
+        <a href="https://www.eleverbadminton.com/" target="_blank" rel="noopener" class="btn btn--primary magnetic">Enquire Now</a>
         <a href="mailto:hello@eleverbadminton.com" class="btn btn--ghost">Email Us</a>
       </div>
     </div>
