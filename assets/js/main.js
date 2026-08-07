@@ -747,6 +747,10 @@
        Screen pixels used directly; ground line near the bottom. =========== */
     var GROUND, NET_X, NET_TOP, GRAV = 0.42, PLAYER_W = 26, RACKET = 66;
     var TARGET = 7;
+    // shuttle feel: high-drag / floaty (like the classic stick badminton games)
+    var BIRD_GRAV = 0.10;      // gentle fall
+    var BIRD_DRAG = 0.988;     // strong air drag so it slows & floats
+    var BIRD_R = 7;            // small shuttle
 
     var you, cpu, bird, particles = [], keys = {};
     var state = 'idle';    // idle | play | point | over
@@ -771,9 +775,9 @@
       var fromLeft = byWho === 'you';
       bird = {
         x: fromLeft ? you.x + 20 : cpu.x - 20,
-        y: GROUND - 120,
-        vx: fromLeft ? 3.2 : -3.2,
-        vy: -6.5,
+        y: GROUND - 130,
+        vx: fromLeft ? 2.0 : -2.0,
+        vy: -4.6,
         live: true, last: byWho, cool: 0
       };
       state = 'play';
@@ -844,38 +848,37 @@
     }
 
     function tryHit(p, who) {
-      if (!bird || !bird.live || p.swing <= 0 || bird.cool > 0) return;
+      if (!bird || !bird.live || p.swing <= 0) return;
+      if (bird.last === who) return;         // you can't hit your own shot twice — opponent must touch it first
       // shuttle must be on the striker's own side (can't reach across the net)
       if (who === 'you' && bird.x > NET_X - 4) return;
       if (who === 'cpu' && bird.x < NET_X + 4) return;
       var tip = racketTip(p);
       var dx = bird.x - tip.x, dy = bird.y - tip.y;
-      if (dx * dx + dy * dy > 58 * 58) return;
+      if (dx * dx + dy * dy > 60 * 60) return;
 
       var dir = who === 'you' ? 1 : -1;
       var high = bird.y < NET_TOP - 10;      // clearly above the net -> can attack down
 
       if (high && Math.abs(bird.x - NET_X) > W * 0.10) {
-        // SMASH: fast & downward, but still starts from above the net so it clears
-        bird.vx = dir * (9 + Math.random() * 2);
-        bird.vy = 2.6 + Math.random() * 1.2;
+        // SMASH: quick & angled downward, but floaty enough to read
+        bird.vx = dir * (5.2 + Math.random() * 1.2);
+        bird.vy = 1.6 + Math.random() * 0.8;
         setShot((who === 'you' ? 'You' : 'Dummy') + ': SMASH!');
         burst(tip.x, tip.y, '255,90,90', 26);
       } else {
-        // CLEAR / LIFT: aim to land deep in the far court, guaranteed to arc over the net.
-        var landX = who === 'you' ? (W * 0.70 + Math.random() * W * 0.20) : (W * 0.10 + Math.random() * W * 0.20);
-        var g = GRAV * 0.35;
-        // choose an apex height well above the net
-        var apexY = Math.min(bird.y, NET_TOP) - (60 + Math.random() * 60);
-        var riseH = Math.max(40, bird.y - apexY);
+        // CLEAR / LIFT: high floaty arc that lands deep in the far court, over the net.
+        var landX = who === 'you' ? (W * 0.66 + Math.random() * W * 0.22) : (W * 0.12 + Math.random() * W * 0.22);
+        var g = BIRD_GRAV;
+        var apexY = Math.min(bird.y, NET_TOP) - (70 + Math.random() * 70);   // well above net
+        var riseH = Math.max(50, bird.y - apexY);
         var vUp = Math.sqrt(2 * g * riseH);            // speed needed to rise riseH
         var tUp = vUp / g;                             // frames to apex
         var tDown = Math.sqrt(2 * (GROUND - apexY) / g);
         var totalT = tUp + tDown;
         bird.vy = -vUp;
         bird.vx = (landX - bird.x) / totalT;
-        // keep horizontal speed sane
-        bird.vx = Math.max(-8, Math.min(8, bird.vx));
+        bird.vx = Math.max(-4.5, Math.min(4.5, bird.vx));
         setShot((who === 'you' ? 'You' : 'Dummy') + ': Clear');
         burst(tip.x, tip.y, '150,220,255', 16);
       }
@@ -890,7 +893,8 @@
       if (keys['arrowleft'] || keys['a']) mv -= 1;
       if (keys['arrowright'] || keys['d']) mv += 1;
       if (mv === 0 && you._touchX != null) mv = (you._touchX - you.x) > 6 ? 1 : ((you._touchX - you.x) < -6 ? -1 : 0);
-      you.x += mv * 4.6; if (mv) you.facing = mv > 0 ? 1 : -1;
+      you.x += mv * 4.6;
+      you.facing = 1;                                                 // always face the net (front)
       you.x = Math.max(PLAYER_W, Math.min(NET_X - PLAYER_W, you.x));   // stay on your side
       if (keys['arrowup'] || keys['w']) doJump(you);
       if (keys[' '] || keys['arrowdown'] || keys['s']) doSwing(you);
@@ -904,14 +908,18 @@
 
       // ----- shuttle -----
       if (bird && bird.live) {
-        bird.vy += GRAV * 0.35; bird.x += bird.vx; bird.y += bird.vy; if (bird.cool > 0) bird.cool--;
+        bird.vy += BIRD_GRAV; bird.vx *= BIRD_DRAG; bird.vy *= BIRD_DRAG;
+        bird.x += bird.vx; bird.y += bird.vy; if (bird.cool > 0) bird.cool--;
         // net: block low crossings
         if (bird.x > NET_X - 6 && bird.x < NET_X + 6 && bird.y > NET_TOP) {
           bird.vx *= -0.3; bird.x += bird.vx * 2;
           awardPoint(bird.last === 'you' ? 'cpu' : 'you', (bird.last === 'you' ? 'you' : 'dummy') + ' hit the net');
         }
-        // walls (out to the sides)
-        if (bird.x < 6 || bird.x > W - 6) awardPoint(bird.last === 'you' ? 'cpu' : 'you', 'shuttle went out');
+        // side walls: shuttle bounces back in (arena style, no side-out)
+        if (bird.x < BIRD_R + 2) { bird.x = BIRD_R + 2; bird.vx = Math.abs(bird.vx) * 0.7; }
+        if (bird.x > W - BIRD_R - 2) { bird.x = W - BIRD_R - 2; bird.vx = -Math.abs(bird.vx) * 0.7; }
+        // ceiling
+        if (bird.y < BIRD_R + 2) { bird.y = BIRD_R + 2; bird.vy = Math.abs(bird.vy) * 0.5; }
         // floor
         if (bird.y >= GROUND) {
           bird.y = GROUND;
@@ -937,9 +945,14 @@
       var target = W * 0.75;
       var comingToCpu = (bird.x > NET_X) || (bird.vx > 0);
       if (comingToCpu) {
-        // predict landing x on the CPU side
+        // predict landing x on the CPU side (uses the same floaty physics)
         var x = bird.x, y = bird.y, vx = bird.vx, vy = bird.vy, g = 0;
-        while (y < GROUND && g < 260) { vy += GRAV * 0.35; x += vx; y += vy; g++; }
+        while (y < GROUND && g < 400) {
+          vy += BIRD_GRAV; vx *= BIRD_DRAG; vy *= BIRD_DRAG; x += vx; y += vy;
+          if (x < BIRD_R + 2) { x = BIRD_R + 2; vx = Math.abs(vx) * 0.7; }
+          if (x > W - BIRD_R - 2) { x = W - BIRD_R - 2; vx = -Math.abs(vx) * 0.7; }
+          g++;
+        }
         target = Math.max(NET_X + PLAYER_W + 10, Math.min(W - PLAYER_W, x));
       }
       var d = target - cpu.x;
@@ -948,17 +961,18 @@
       cpu.facing = -1;
 
       if (!comingToCpu || bird.x < NET_X) return;   // nothing to do until it's on our side
+      if (bird.last === 'cpu') return;              // already returned it; wait for the player
 
       var overhead = bird.y < NET_TOP - 10;          // high enough to smash
-      var nearX = Math.abs(bird.x - cpu.x) < 46;     // lined up horizontally
+      var nearX = Math.abs(bird.x - cpu.x) < 44;     // lined up horizontally
       var racketY = cpu.y - 60;                      // approx racket height when standing
 
       // jump to reach a high shuttle that's close
       if (overhead && Math.abs(bird.x - cpu.x) < 80 && cpu.onGround) doJump(cpu);
 
       // swing when the shuttle is within the racket's reach (so the hit actually connects & clears)
-      var reachable = nearX && bird.y > racketY - 70 && bird.y < GROUND - 8;
-      if (reachable && bird.cool === 0 && cpu.swing <= 0) doSwing(cpu);
+      var reachable = nearX && bird.y > racketY - 80 && bird.y < GROUND - 6;
+      if (reachable && cpu.swing <= 0) doSwing(cpu);
     }
 
     /* ---------- drawing ---------- */
@@ -1001,11 +1015,11 @@
     function drawBird() {
       if (!bird) return;
       var sx = bird.x, sy = bird.y;
-      ctx.fillStyle = 'rgba(0,0,0,.28)'; ctx.beginPath(); ctx.ellipse(sx, GROUND, 11, 4, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(0,0,0,.28)'; ctx.beginPath(); ctx.ellipse(sx, GROUND, 8, 3, 0, 0, Math.PI * 2); ctx.fill();
       var sp = Math.hypot(bird.vx, bird.vy);
-      if (sp > 8) { ctx.strokeStyle = 'rgba(255,120,90,.4)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(sx - bird.vx * 3, sy - bird.vy * 3); ctx.lineTo(sx, sy); ctx.stroke(); }
+      if (sp > 5) { ctx.strokeStyle = 'rgba(255,120,90,.35)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(sx - bird.vx * 3, sy - bird.vy * 3); ctx.lineTo(sx, sy); ctx.stroke(); }
       var ang = Math.atan2(bird.vy, bird.vx) + Math.PI / 2;
-      drawShuttle(ctx, sx, sy, 0.7, ang);
+      drawShuttle(ctx, sx, sy, 0.42, ang);
     }
 
     function draw() {
