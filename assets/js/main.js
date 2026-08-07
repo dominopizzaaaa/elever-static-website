@@ -842,17 +842,26 @@
       if (e.key === ' ' || e.key === 'Spacebar' || e.key.indexOf('Arrow') === 0) e.preventDefault();
     });
     document.addEventListener('keyup', function (e) { keys[e.key.toLowerCase()] = false; });
-    // touch: left half moves toward tap; tap always swings; swipe up jumps
-    canvas.addEventListener('touchstart', function (e) {
-      if (state === 'idle') return;
-      var t = e.touches[0], r = canvas.getBoundingClientRect(), tx = t.clientX - r.left, ty = t.clientY - r.top;
-      you._touchX = tx;
-      if (ty < r.height * 0.5) doJump(you);
-      doSwing(you);
-      e.preventDefault();
-    }, { passive: false });
-    canvas.addEventListener('touchmove', function (e) { var t = e.touches[0], r = canvas.getBoundingClientRect(); you._touchX = t.clientX - r.left; e.preventDefault(); }, { passive: false });
-    canvas.addEventListener('touchend', function () { if (you) you._touchX = null; });
+    // --- Mobile: on-screen control buttons (Left / Right / Jump / Swing) ---
+    // Held state so movement buttons work like keys.
+    var touch = { left: false, right: false };
+    function bindHold(el, on, off) {
+      if (!el) return;
+      var down = function (e) { e.preventDefault(); on(); };
+      var up = function (e) { e.preventDefault(); if (off) off(); };
+      el.addEventListener('touchstart', down, { passive: false });
+      el.addEventListener('touchend', up, { passive: false });
+      el.addEventListener('touchcancel', up, { passive: false });
+      el.addEventListener('mousedown', down);
+      el.addEventListener('mouseup', up);
+      el.addEventListener('mouseleave', up);
+    }
+    bindHold(document.getElementById('padLeft'), function () { touch.left = true; }, function () { touch.left = false; });
+    bindHold(document.getElementById('padRight'), function () { touch.right = true; }, function () { touch.right = false; });
+    bindHold(document.getElementById('padJump'), function () { if (armed()) doJump(you); });
+    bindHold(document.getElementById('padSwing'), function () { if (armed()) doSwing(you); });
+    // tapping the court also swings (quick, forgiving)
+    canvas.addEventListener('touchstart', function (e) { if (armed()) { doSwing(you); e.preventDefault(); } }, { passive: false });
     if (elStart) elStart.addEventListener('click', startGame);
 
     function doJump(p) { if (p.onGround) { p.vy = -11.5; p.onGround = false; } }
@@ -888,9 +897,9 @@
         setShot((who === 'you' ? 'You' : 'Dummy') + ': SMASH!');
         burst(tip.x, tip.y, '255,90,90', 26);
       } else {
-        // CLEAR / LIFT: high floaty arc that reliably clears the net and lands deep in the far court.
-        var landX = who === 'you' ? (NET_X + W * 0.20 + Math.random() * W * 0.20) : (NET_X - W * 0.20 - Math.random() * W * 0.20);
-        var v = launchTo(bird.x, bird.y, landX, 0.4 + Math.random() * 0.25);
+        // CLEAR / LIFT: a high, floaty arc that sails deep toward the far baseline.
+        var landX = who === 'you' ? (NET_X + W * 0.34 + Math.random() * W * 0.13) : (NET_X - W * 0.34 - Math.random() * W * 0.13);
+        var v = launchTo(bird.x, bird.y, landX, 1.05 + Math.random() * 0.35);
         bird.vx = v.vx; bird.vy = v.vy;
         setShot((who === 'you' ? 'You' : 'Dummy') + ': Clear');
         burst(tip.x, tip.y, '150,220,255', 16);
@@ -903,9 +912,8 @@
     function update() {
       // ----- YOU -----
       var mv = 0;
-      if (keys['arrowleft'] || keys['a']) mv -= 1;
-      if (keys['arrowright'] || keys['d']) mv += 1;
-      if (mv === 0 && you._touchX != null) mv = (you._touchX - you.x) > 6 ? 1 : ((you._touchX - you.x) < -6 ? -1 : 0);
+      if (keys['arrowleft'] || keys['a'] || touch.left) mv -= 1;
+      if (keys['arrowright'] || keys['d'] || touch.right) mv += 1;
       you.x += mv * 4.6;
       you.facing = 1;                                                 // always face the net (front)
       you.x = Math.max(PLAYER_W, Math.min(NET_X - PLAYER_W, you.x));   // stay on your side

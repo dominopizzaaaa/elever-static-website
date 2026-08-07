@@ -199,7 +199,7 @@
     <div class="section-head">
       <span class="kicker reveal">06 — Game On</span>
       <h2 class="section-title reveal">Play a <em>rally</em>.</h2>
-      <p class="play__hint reveal" data-delay="120">A classic-style stick badminton match vs the AI. <strong>Move</strong> ← → (or A/D), <strong>jump</strong> ↑ (or W), <strong>swing</strong> Space / ↓. Jump into a high shuttle to <strong>smash</strong> it down; hit low ones to loft them over the net. First to 7 points wins. On mobile: tap to swing, tap the top half to jump, drag to move.</p>
+      <p class="play__hint reveal" data-delay="120">A classic-style stick badminton match vs the AI. <span class="play__desktopHint"><strong>Move</strong> ← → (or A/D), <strong>jump</strong> ↑ (or W), <strong>swing</strong> Space / ↓.</span><span class="play__mobileHint">Use the on-screen buttons below to move, jump &amp; swing.</span> Jump into a high shuttle to <strong>smash</strong> it down; loft low ones over the net. First to 7 wins.</p>
     </div>
     <div class="play__wrap reveal" data-delay="160">
       <div class="play__scoreboard">
@@ -212,10 +212,20 @@
         <button class="btn btn--primary magnetic play__start" id="gameStart">Enter Game</button>
         <div class="play__shot" id="gameShot">—</div>
       </div>
-      <div class="play__legend">
+      <div class="play__legend play__desktopHint">
         <span class="play__key">← →<small>Move</small></span>
         <span class="play__key">↑ / W<small>Jump</small></span>
         <span class="play__key">Space / ↓<small>Swing</small></span>
+      </div>
+      <div class="play__pad" aria-hidden="true">
+        <div class="play__pad-move">
+          <button class="play__pad-btn" id="padLeft">‹</button>
+          <button class="play__pad-btn" id="padRight">›</button>
+        </div>
+        <div class="play__pad-act">
+          <button class="play__pad-btn play__pad-jump" id="padJump">Jump</button>
+          <button class="play__pad-btn play__pad-swing" id="padSwing">Swing</button>
+        </div>
       </div>
       <p class="play__msg" id="gameMsg">Press Start. Move under the shuttle, jump and swing to hit it back.</p>
     </div>
