@@ -738,240 +738,258 @@
     var elMsg = document.getElementById('gameMsg');
     var elRally = document.getElementById('gameRally');
     var elShot = document.getElementById('gameShot');
-    var shotBtns = document.querySelectorAll('.play__btn');
 
     function size() { W = canvas.clientWidth; H = canvas.clientHeight; canvas.width = W * DPR; canvas.height = H * DPR; ctx.setTransform(DPR, 0, 0, DPR, 0, 0); }
 
-    /* ---------- layout (side view) ---------- */
-    function floorY() { return H * 0.82; }
-    var YOU_X = 0.16, CPU_X = 0.84, NET_X = 0.5;
-    function sx(fx) { return W * fx; }
+    /* ================= real-time side-view physics =================
+       Original implementation (own code/art/physics) in the classic
+       "move + jump + swing" stick badminton style.
+       Screen pixels used directly; ground line near the bottom. =========== */
+    var GROUND, NET_X, NET_TOP, GRAV = 0.42, PLAYER_W = 26, RACKET = 66;
+    var TARGET = 7;
 
-    /* ---------- state ---------- */
-    // phases: idle | toYou | yourTurn | toCpu | cpuHit | point | over
-    var phase = 'idle';
-    var scoreYou = 0, scoreCpu = 0, rally = 0, TARGET = 11;
-    var flightT = 0, flightDur = 60, from = { x: YOU_X, y: 0 }, to = { x: CPU_X, y: 0 }, apex = 0.5;
-    var timer = 0, WINDOW = 0;          // your reaction window (frames) during yourTurn
-    var quality = 0;                    // 0..1 how good your last shot was
-    var youAnim = 0, cpuAnim = 0, particles = [];
-    var incoming = 'clear';             // what shot is coming to you (for smash-defence feel)
+    var you, cpu, bird, particles = [], keys = {};
+    var state = 'idle';    // idle | play | point | over
+    var scoreYou = 0, scoreCpu = 0, rally = 0, server = 'you', pointTimer = 0;
+
+    function layout() {
+      GROUND = H * 0.86; NET_X = W * 0.5; NET_TOP = GROUND - H * 0.32;
+    }
+
+    function resetPositions() {
+      you = { x: W * 0.25, y: GROUND, vy: 0, onGround: true, swing: 0, facing: 1 };
+      cpu = { x: W * 0.75, y: GROUND, vy: 0, onGround: true, swing: 0, facing: -1, think: 0, aim: W * 0.75 };
+    }
 
     function setMsg(t) { if (elMsg) elMsg.textContent = t; }
     function setShot(t) { if (elShot) elShot.textContent = t; }
     function updateScore() { if (elYou) elYou.textContent = scoreYou; if (elCpu) elCpu.textContent = scoreCpu; if (elRally) elRally.textContent = rally; }
-    function burst(x, y, c, n) { n = n || 20; for (var i = 0; i < n; i++) { var a = Math.random() * 6.28, s = 1 + Math.random() * 5; particles.push({ x: x, y: y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: 1, c: c }); } }
-    function shotColor(t) { return ({ clear: '150,220,255', drop: '198,255,46', smash: '255,90,90' })[t] || '255,255,255'; }
-    function shotLabel(t) { return ({ clear: 'Clear', drop: 'Drop', smash: 'SMASH!' })[t] || t; }
+    function burst(x, y, c, n) { n = n || 18; for (var i = 0; i < n; i++) { var a = Math.random() * 6.28, s = 1 + Math.random() * 5; particles.push({ x: x, y: y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: 1, c: c }); } }
 
-    /* ---------- flight helpers ---------- */
-    function startFlight(fx, fy, tx, ty, ap, dur) { from = { x: fx, y: fy }; to = { x: tx, y: ty }; apex = ap; flightDur = dur; flightT = 0; }
-    function shuttleXY() {
-      var t = flightDur ? flightT / flightDur : 1; if (t > 1) t = 1;
-      var x = from.x + (to.x - from.x) * t;
-      var base = from.y + (to.y - from.y) * t;
-      var arc = apex * 4 * t * (1 - t);       // 0..apex..0
-      return { x: x, y: base + arc, t: t };
+    function serveBird(byWho) {
+      rally = 0; updateScore(); setShot('—');
+      var fromLeft = byWho === 'you';
+      bird = {
+        x: fromLeft ? you.x + 20 : cpu.x - 20,
+        y: GROUND - 120,
+        vx: fromLeft ? 3.2 : -3.2,
+        vy: -6.5,
+        live: true, last: byWho, cool: 0
+      };
+      state = 'play';
+      setMsg(byWho === 'you' ? 'Your serve! ← → move · ↑ / W jump · SPACE / ↓ swing.' : 'Opponent serves — move under the shuttle and swing!');
     }
 
-    /* ---------- game flow ---------- */
     function startGame() {
-      scoreYou = 0; scoreCpu = 0; rally = 0; updateScore();
+      scoreYou = 0; scoreCpu = 0; updateScore(); server = 'you';
       elStart.style.display = 'none';
-      serveToYou(true);
+      layout(); resetPositions();
+      serveBird('you');
     }
 
-    // shuttle drops to you so you can serve/return
-    function serveToYou(isServe) {
-      phase = 'toYou'; setShot('—');
-      // comes from CPU side (or a toss on serve) down to you
-      startFlight(isServe ? YOU_X + 0.06 : CPU_X, 0.55, YOU_X, 0.0, 0.35, isServe ? 46 : 52);
-      setMsg(isServe ? 'Your serve! When it drops in, tap Clear, Drop or Smash.' : 'Return it! Tap a shot.');
-    }
-
-    function beginYourTurn() {
-      phase = 'yourTurn';
-      timer = 0; WINDOW = 70;            // generous window so it's never confusing
-      enableShots(true);
-      setMsg('YOUR SHOT — pick Clear, Drop or Smash! (green bar = perfect timing)');
-    }
-
-    function youHit(type) {
-      if (phase !== 'yourTurn') return;
-      enableShots(false);
-      youAnim = 14;
-      // timing quality: sweet spot in the middle third of the window
-      var p = timer / WINDOW;                    // 0..1 through window
-      quality = 1 - Math.min(1, Math.abs(p - 0.5) * 2);   // 1 at centre, 0 at edges
-      var xy = shuttleXY();
-      burst(sx(xy.x), floorY() - xy.y * H * 0.62, shotColor(type), type === 'smash' ? 30 : 16);
-      setShot('You: ' + shotLabel(type) + (quality > 0.7 ? '  ✦ perfect' : ''));
-      rally++; updateScore();
-      // send it to the CPU with an arc that depends on shot type
-      var ap = type === 'smash' ? 0.12 : (type === 'drop' ? 0.28 : 0.55);
-      var dur = type === 'smash' ? 34 : (type === 'drop' ? 52 : 60);
-      startFlight(YOU_X, 0.0, type === 'drop' ? NET_X + 0.12 : CPU_X, 0.0, ap, dur);
-      phase = 'toCpu';
-      // stash how hard this is for the CPU to return
-      window.__lastYou = { type: type, quality: quality };
-    }
-
-    function cpuTurn() {
-      cpuAnim = 14;
-      var info = window.__lastYou || { type: 'clear', quality: 0.5 };
-      // chance the CPU FAILS to return depends on your shot + timing
-      var missChance = 0.06;
-      if (info.type === 'smash') missChance = 0.34 + info.quality * 0.30;   // perfect smash ~0.6+
-      else if (info.type === 'drop') missChance = 0.22 + info.quality * 0.20;
-      else missChance = 0.05 + info.quality * 0.05;
-      if (Math.random() < missChance) {
-        burst(sx(CPU_X), floorY(), '198,255,46', 26);
-        setMsg('The dummy can\u2019t reach your ' + shotLabel(info.type).replace('!', '') + '!');
-        return pointTo('you');
-      }
-      // CPU returns with its own shot
-      var r = Math.random();
-      var ctype = r < 0.2 ? 'smash' : (r < 0.5 ? 'drop' : 'clear');
-      setShot('Dummy: ' + shotLabel(ctype));
-      cpuAnim = 14;
-      var ap = ctype === 'smash' ? 0.12 : (ctype === 'drop' ? 0.28 : 0.5);
-      var dur = ctype === 'smash' ? 34 : (ctype === 'drop' ? 52 : 58);
-      incoming = ctype;
-      startFlight(CPU_X, 0.0, ctype === 'drop' ? NET_X - 0.12 : YOU_X, 0.0, ap, dur);
-      phase = 'toYou2';
-      setMsg('Dummy plays a ' + shotLabel(ctype).replace('!', '') + ' — get ready to hit!');
-    }
-
-    function youMissed() { burst(sx(YOU_X), floorY(), '255,90,90', 22); pointTo('cpu'); }
-
-    function pointTo(who) {
-      phase = 'point';
-      if (who === 'you') { scoreYou++; setMsg('Point to YOU! ' + scoreYou + '\u2013' + scoreCpu); }
-      else { scoreCpu++; setMsg('Point to the dummy. ' + scoreYou + '\u2013' + scoreCpu); }
-      updateScore(); enableShots(false);
-      var over = scoreYou >= TARGET || scoreCpu >= TARGET;
-      setTimeout(function () {
-        if (over) {
-          phase = 'idle'; elStart.style.display = ''; elStart.textContent = 'Play again';
+    function awardPoint(who, reason) {
+      if (state === 'point') return;
+      state = 'point'; pointTimer = 90;
+      if (who === 'you') scoreYou++; else scoreCpu++;
+      server = who;
+      updateScore();
+      burst(bird ? bird.x : W / 2, bird ? bird.y : GROUND, who === 'you' ? '198,255,46' : '255,90,90', 26);
+      setMsg((who === 'you' ? 'Point YOU' : 'Point Dummy') + ' — ' + reason + '.  ' + scoreYou + '\u2013' + scoreCpu);
+      if (bird) bird.live = false;
+      if (scoreYou >= TARGET || scoreCpu >= TARGET) {
+        state = 'over';
+        setTimeout(function () {
+          elStart.style.display = ''; elStart.textContent = 'Play again';
           setMsg(scoreYou > scoreCpu ? 'GAME! You win ' + scoreYou + '\u2013' + scoreCpu + ' \uD83C\uDFC6' : 'Dummy wins ' + scoreCpu + '\u2013' + scoreYou + '. Play again!');
-        } else { rally = 0; updateScore(); serveToYou(who === 'you'); }
-      }, 1500);
+          state = 'idle';
+        }, 1200);
+      }
     }
 
     /* ---------- input ---------- */
-    function enableShots(on) { shotBtns.forEach(function (b) { b.classList.toggle('is-live', on); }); }
-    shotBtns.forEach(function (b) { b.addEventListener('click', function () { youHit(b.dataset.shot); }); });
     document.addEventListener('keydown', function (e) {
-      if (phase !== 'yourTurn') return;
-      if (e.key === '1' || e.key === 'ArrowUp') youHit('clear');
-      else if (e.key === '2' || e.key === 'ArrowDown') youHit('drop');
-      else if (e.key === '3' || e.key === ' ') { youHit('smash'); e.preventDefault(); }
+      keys[e.key.toLowerCase()] = true;
+      if ((e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') && state === 'play') e.preventDefault();
     });
+    document.addEventListener('keyup', function (e) { keys[e.key.toLowerCase()] = false; });
+    // touch: left half moves toward tap; tap always swings; swipe up jumps
+    canvas.addEventListener('touchstart', function (e) {
+      if (state === 'idle') return;
+      var t = e.touches[0], r = canvas.getBoundingClientRect(), tx = t.clientX - r.left, ty = t.clientY - r.top;
+      you._touchX = tx;
+      if (ty < r.height * 0.5) doJump(you);
+      doSwing(you);
+      e.preventDefault();
+    }, { passive: false });
+    canvas.addEventListener('touchmove', function (e) { var t = e.touches[0], r = canvas.getBoundingClientRect(); you._touchX = t.clientX - r.left; e.preventDefault(); }, { passive: false });
+    canvas.addEventListener('touchend', function () { if (you) you._touchX = null; });
     if (elStart) elStart.addEventListener('click', startGame);
+
+    function doJump(p) { if (p.onGround) { p.vy = -11.5; p.onGround = false; } }
+    function doSwing(p) { if (p.swing <= 0) p.swing = 16; }
+
+    /* ---------- shuttle hit ---------- */
+    function racketTip(p) {
+      // tip is up-and-in-front during a swing
+      var prog = p.swing > 0 ? (16 - p.swing) / 16 : 0;         // 0..1
+      var ang = -1.15 + prog * 1.9;                             // sweeps overhead to front
+      var hx = p.x + Math.cos(ang) * RACKET * p.facing * 0.6 + RACKET * 0.2 * p.facing;
+      var hy = (p.y - 60) - Math.sin(ang) * RACKET * 0.85;
+      return { x: hx, y: hy, prog: prog };
+    }
+
+    function tryHit(p, who) {
+      if (!bird || !bird.live || p.swing <= 0 || bird.cool > 0) return;
+      var tip = racketTip(p);
+      var dx = bird.x - tip.x, dy = bird.y - tip.y;
+      if (dx * dx + dy * dy < 52 * 52) {
+        // hit! decide power & angle from contact height (higher = smash)
+        var high = bird.y < GROUND - H * 0.30;
+        var toRight = who === 'you';
+        var dir = toRight ? 1 : -1;
+        if (high) { // SMASH — fast, downward, deep
+          bird.vx = dir * (7.5 + Math.random() * 2); bird.vy = 3.2 + Math.random() * 1.5;
+          setShot((who === 'you' ? 'You' : 'Dummy') + ': SMASH!'); burst(tip.x, tip.y, '255,90,90', 26);
+        } else { // clear/lift — arcs over
+          var lift = -9 - Math.random() * 2.5;
+          bird.vx = dir * (4 + Math.random() * 2); bird.vy = lift;
+          setShot((who === 'you' ? 'You' : 'Dummy') + ': Clear'); burst(tip.x, tip.y, '150,220,255', 16);
+        }
+        bird.last = who; bird.cool = 12; rally++; updateScore();
+        p.swing = Math.min(p.swing, 8);
+      }
+    }
 
     /* ---------- update ---------- */
     function update() {
-      if (youAnim > 0) youAnim--; if (cpuAnim > 0) cpuAnim--;
-      for (var i = particles.length - 1; i >= 0; i--) { var p = particles[i]; p.x += p.vx; p.y += p.vy; p.vy += 0.16; p.life -= 0.03; if (p.life <= 0) particles.splice(i, 1); }
+      // ----- YOU -----
+      var mv = 0;
+      if (keys['arrowleft'] || keys['a']) mv -= 1;
+      if (keys['arrowright'] || keys['d']) mv += 1;
+      if (mv === 0 && you._touchX != null) mv = (you._touchX - you.x) > 6 ? 1 : ((you._touchX - you.x) < -6 ? -1 : 0);
+      you.x += mv * 4.6; if (mv) you.facing = mv > 0 ? 1 : -1;
+      you.x = Math.max(PLAYER_W, Math.min(NET_X - PLAYER_W, you.x));   // stay on your side
+      if (keys['arrowup'] || keys['w']) doJump(you);
+      if (keys[' '] || keys['arrowdown'] || keys['s']) doSwing(you);
+      physicsPlayer(you);
+      if (state === 'play') tryHit(you, 'you');
 
-      if (phase === 'toYou' || phase === 'toYou2') {
-        flightT++;
-        if (flightT >= flightDur) beginYourTurn();
-      } else if (phase === 'yourTurn') {
-        timer++;
-        if (timer > WINDOW) { setMsg('Too slow — you missed it!'); youMissed(); }
-      } else if (phase === 'toCpu') {
-        flightT++;
-        if (flightT >= flightDur) cpuTurn();
+      // ----- CPU (fair, readable AI) -----
+      cpuAI();
+      physicsPlayer(cpu);
+      if (state === 'play') tryHit(cpu, 'cpu');
+
+      // ----- shuttle -----
+      if (bird && bird.live) {
+        bird.vy += GRAV * 0.35; bird.x += bird.vx; bird.y += bird.vy; if (bird.cool > 0) bird.cool--;
+        // net: block low crossings
+        if (bird.x > NET_X - 6 && bird.x < NET_X + 6 && bird.y > NET_TOP) {
+          bird.vx *= -0.3; bird.x += bird.vx * 2;
+          awardPoint(bird.last === 'you' ? 'cpu' : 'you', (bird.last === 'you' ? 'you' : 'dummy') + ' hit the net');
+        }
+        // walls (out to the sides)
+        if (bird.x < 6 || bird.x > W - 6) awardPoint(bird.last === 'you' ? 'cpu' : 'you', 'shuttle went out');
+        // floor
+        if (bird.y >= GROUND) {
+          bird.y = GROUND;
+          if (bird.x < NET_X) awardPoint('cpu', 'shuttle landed on your side');
+          else awardPoint('you', 'shuttle landed on the dummy\u2019s side');
+        }
       }
+
+      // decay swings & particles
+      if (you.swing > 0) you.swing--; if (cpu.swing > 0) cpu.swing--;
+      for (var i = particles.length - 1; i >= 0; i--) { var pt = particles[i]; pt.x += pt.vx; pt.y += pt.vy; pt.vy += 0.3; pt.life -= 0.03; if (pt.life <= 0) particles.splice(i, 1); }
+
+      if (state === 'point') { if (--pointTimer <= 0) { resetPositions(); serveBird(server); } }
+    }
+
+    function physicsPlayer(p) {
+      if (!p.onGround) { p.vy += GRAV; p.y += p.vy; if (p.y >= GROUND) { p.y = GROUND; p.vy = 0; p.onGround = true; } }
+    }
+
+    function cpuAI() {
+      // move toward where the shuttle will be on its side; jump & swing when close
+      if (!bird || !bird.live) { cpu.x += (W * 0.75 - cpu.x) * 0.05; return; }
+      var target = W * 0.75;
+      if (bird.vx > 0 || bird.x > NET_X) {         // shuttle heading to / on CPU side
+        // simple landing prediction
+        var x = bird.x, y = bird.y, vx = bird.vx, vy = bird.vy, g = 0;
+        while (y < GROUND && g < 200) { vy += GRAV * 0.35; x += vx; y += vy; g++; }
+        target = Math.max(NET_X + PLAYER_W, Math.min(W - PLAYER_W, x));
+      }
+      var d = target - cpu.x;
+      cpu.x += Math.max(-4.2, Math.min(4.2, d * 0.12));
+      cpu.x = Math.max(NET_X + PLAYER_W, Math.min(W - PLAYER_W, cpu.x));
+      cpu.facing = -1;
+      // jump for high shuttles near it
+      if (bird.x > NET_X && bird.y < GROUND - H * 0.24 && Math.abs(bird.x - cpu.x) < 90 && cpu.onGround) doJump(cpu);
+      // swing when the shuttle is within striking range
+      if (bird.x > NET_X - 30 && Math.abs(bird.x - cpu.x) < 70 && bird.cool === 0) { if (Math.random() < 0.6) doSwing(cpu); }
     }
 
     /* ---------- drawing ---------- */
     function drawCourt() {
       var bg = ctx.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#0a1220'); bg.addColorStop(1, '#0e1a28');
       ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-      var fy = floorY();
-      var fg = ctx.createLinearGradient(0, fy, 0, H); fg.addColorStop(0, '#1c455c'); fg.addColorStop(1, '#123246');
-      ctx.fillStyle = fg; ctx.fillRect(0, fy, W, H - fy);
-      ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.moveTo(W * 0.04, fy); ctx.lineTo(W * 0.96, fy); ctx.stroke();
+      var fg = ctx.createLinearGradient(0, GROUND, 0, H); fg.addColorStop(0, '#1c455c'); fg.addColorStop(1, '#123246');
+      ctx.fillStyle = fg; ctx.fillRect(0, GROUND, W, H - GROUND);
+      ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(W * 0.03, GROUND); ctx.lineTo(W * 0.97, GROUND); ctx.stroke();
       // net
-      var nx = sx(NET_X), ntop = fy - H * 0.20;
       ctx.strokeStyle = 'rgba(255,255,255,.4)'; ctx.lineWidth = 1;
-      for (var yy = ntop; yy < fy; yy += 7) { ctx.beginPath(); ctx.moveTo(nx - 9, yy); ctx.lineTo(nx + 9, yy); ctx.stroke(); }
-      ctx.fillStyle = '#fff'; ctx.fillRect(nx - 10, ntop - 3, 20, 4);
-      ctx.fillStyle = '#cfd8e2'; ctx.fillRect(nx - 12, ntop - 4, 3, fy - ntop + 6); ctx.fillRect(nx + 9, ntop - 4, 3, fy - ntop + 6);
+      for (var y = NET_TOP; y < GROUND; y += 8) { ctx.beginPath(); ctx.moveTo(NET_X - 10, y); ctx.lineTo(NET_X + 10, y); ctx.stroke(); }
+      ctx.fillStyle = '#fff'; ctx.fillRect(NET_X - 11, NET_TOP - 3, 22, 4);
+      ctx.fillStyle = '#cfd8e2'; ctx.fillRect(NET_X - 13, NET_TOP - 4, 3, GROUND - NET_TOP + 6); ctx.fillRect(NET_X + 10, NET_TOP - 4, 3, GROUND - NET_TOP + 6);
     }
 
-    function drawFigure(fx, color, anim, faceRight, highlight) {
-      var x = sx(fx), y = floorY();
-      ctx.save(); ctx.translate(x, y);
-      if (highlight) {   // pulsing ring when it's your shot
-        var pr = 34 + Math.sin(Date.now() / 120) * 5;
-        ctx.strokeStyle = 'rgba(198,255,46,.9)'; ctx.lineWidth = 3;
-        ctx.beginPath(); ctx.arc(0, -34, pr, 0, Math.PI * 2); ctx.stroke();
-      }
+    function drawStick(p, color) {
+      ctx.save(); ctx.translate(p.x, p.y);
       ctx.fillStyle = 'rgba(0,0,0,.3)'; ctx.beginPath(); ctx.ellipse(0, 2, 16, 5, 0, 0, Math.PI * 2); ctx.fill();
-      var swing = anim > 0 ? (14 - anim) / 14 : 0, lean = faceRight ? 1 : -1;
       ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 4; ctx.lineCap = 'round';
-      ctx.beginPath(); ctx.moveTo(-2, -20); ctx.lineTo(-8, 0); ctx.moveTo(2, -20); ctx.lineTo(8, 0); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(0, -20); ctx.lineTo(0, -44); ctx.stroke();
-      ctx.beginPath(); ctx.arc(0, -52, 7, 0, Math.PI * 2); ctx.fill();
-      var armAng = (-0.5 - swing * 1.6) * lean, ax = Math.sin(armAng) * 18 * lean, ay = -42 - Math.cos(armAng) * 18;
-      ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(0, -40); ctx.lineTo(ax, ay); ctx.stroke();
-      ctx.lineWidth = 2.5; ctx.beginPath(); ctx.ellipse(ax + lean * 4, ay - 6, 7, 10, lean * 0.6, 0, Math.PI * 2); ctx.stroke();
+      var crouch = p.onGround ? 0 : -4;
+      // legs
+      ctx.beginPath(); ctx.moveTo(-2, -22 + crouch); ctx.lineTo(-9, 0); ctx.moveTo(2, -22 + crouch); ctx.lineTo(9, 0); ctx.stroke();
+      // torso
+      ctx.beginPath(); ctx.moveTo(0, -22 + crouch); ctx.lineTo(0, -50 + crouch); ctx.stroke();
+      // head
+      ctx.beginPath(); ctx.arc(0, -58 + crouch, 8, 0, Math.PI * 2); ctx.fill();
+      // racket arm
+      var prog = p.swing > 0 ? (16 - p.swing) / 16 : 0;
+      var ang = -1.15 + prog * 1.9;
+      var ex = Math.cos(ang) * RACKET * p.facing * 0.6 + RACKET * 0.2 * p.facing;
+      var ey = -60 + crouch - Math.sin(ang) * RACKET * 0.55;
+      ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(0, -46 + crouch); ctx.lineTo(ex, ey); ctx.stroke();
+      // racket head at tip
+      ctx.lineWidth = 2.5; ctx.beginPath(); ctx.ellipse(ex + p.facing * 6, ey - 4, 8, 12, p.facing * (ang), 0, Math.PI * 2); ctx.stroke();
       ctx.restore();
     }
 
-    function drawShuttleFlying() {
-      var moving = (phase === 'toYou' || phase === 'toYou2' || phase === 'toCpu');
-      var xy;
-      if (moving) xy = shuttleXY();
-      else if (phase === 'yourTurn') xy = { x: YOU_X, y: 0.02 };   // resting at your racket
-      else return;
-      var scx = sx(xy.x), scy = floorY() - xy.y * H * 0.62 - 44;
-      // shadow
-      ctx.fillStyle = 'rgba(0,0,0,' + Math.max(0.06, 0.3 - xy.y * 0.5) + ')';
-      ctx.beginPath(); ctx.ellipse(scx, floorY(), 12, 4, 0, 0, Math.PI * 2); ctx.fill();
-      var ang = (to.x < from.x ? -0.5 : 0.5);
-      drawShuttle(ctx, scx, scy, 0.75, Math.PI + ang);
+    function drawBird() {
+      if (!bird) return;
+      var sx = bird.x, sy = bird.y;
+      ctx.fillStyle = 'rgba(0,0,0,.28)'; ctx.beginPath(); ctx.ellipse(sx, GROUND, 11, 4, 0, 0, Math.PI * 2); ctx.fill();
+      var sp = Math.hypot(bird.vx, bird.vy);
+      if (sp > 8) { ctx.strokeStyle = 'rgba(255,120,90,.4)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(sx - bird.vx * 3, sy - bird.vy * 3); ctx.lineTo(sx, sy); ctx.stroke(); }
+      var ang = Math.atan2(bird.vy, bird.vx) + Math.PI / 2;
+      drawShuttle(ctx, sx, sy, 0.7, ang);
     }
-
-    function drawTimingBar() {
-      if (phase !== 'yourTurn') return;
-      var p = timer / WINDOW;
-      var bw = W * 0.5, bx = W * 0.25, by = H * 0.12, bh = 14;
-      ctx.fillStyle = 'rgba(255,255,255,.12)'; roundRect(bx, by, bw, bh, 7); ctx.fill();
-      // green sweet-spot zone (middle third)
-      ctx.fillStyle = 'rgba(198,255,46,.35)'; ctx.fillRect(bx + bw * 0.35, by, bw * 0.30, bh);
-      // moving marker
-      ctx.fillStyle = '#fff'; ctx.fillRect(bx + bw * Math.min(p, 1) - 2, by - 3, 4, bh + 6);
-      ctx.fillStyle = 'rgba(255,255,255,.7)'; ctx.font = '600 12px Sora, sans-serif'; ctx.textAlign = 'center';
-      ctx.fillText('TAP A SHOT — aim for the green', W * 0.5, by - 8);
-      ctx.textAlign = 'start';
-    }
-    function roundRect(x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
 
     function draw() {
       ctx.clearRect(0, 0, W, H);
       drawCourt();
-      var youHi = (phase === 'yourTurn');
-      drawFigure(YOU_X, '#c6ff2e', youAnim, true, youHi);
-      drawFigure(CPU_X, '#8fd0ff', cpuAnim, false, false);
-      drawShuttleFlying();
-      drawTimingBar();
+      if (you) drawStick(you, '#c6ff2e');
+      if (cpu) drawStick(cpu, '#8fd0ff');
+      if (state === 'play' || state === 'point') drawBird();
       for (var i = 0; i < particles.length; i++) { var pt = particles[i]; ctx.globalAlpha = pt.life; ctx.fillStyle = 'rgba(' + pt.c + ',' + pt.life + ')'; ctx.beginPath(); ctx.arc(pt.x, pt.y, 2 + pt.life * 2.5, 0, Math.PI * 2); ctx.fill(); }
       ctx.globalAlpha = 1;
     }
 
-    function loop() {
-      if (phase !== 'idle' && phase !== 'point' && phase !== 'over') update();
-      else if (phase === 'point') { for (var i = particles.length - 1; i >= 0; i--) { var p = particles[i]; p.x += p.vx; p.y += p.vy; p.vy += 0.16; p.life -= 0.03; if (p.life <= 0) particles.splice(i, 1); } }
-      draw(); requestAnimationFrame(loop);
-    }
+    function loop() { if (state !== 'idle') update(); draw(); requestAnimationFrame(loop); }
 
-    size(); window.addEventListener('resize', size);
-    setMsg('Press Start. The shuttle comes to you — tap Clear, Drop or Smash to hit it back.');
+    size(); layout(); resetPositions();
+    window.addEventListener('resize', function () { size(); layout(); if (state === 'idle') resetPositions(); });
+    setMsg('Press Start. ← → move · ↑ jump · SPACE swing. Jump into high shuttles to SMASH. First to 7!');
     loop();
   })();
 
