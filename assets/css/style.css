@@ -176,31 +176,22 @@ em{font-style:normal;color:var(--accent)}
 .pcard h3{font-family:'Anton',sans-serif;font-size:2rem;text-transform:uppercase;margin:.4rem 0 .9rem;letter-spacing:.5px}
 .pcard p{color:#a2acba;font-size:.98rem}
 
-/* ===================== TEAM (FLIP CARDS) ===================== */
+/* ===================== TEAM ===================== */
 .team{padding:8rem 0;background:linear-gradient(180deg,var(--bg),var(--bg-2))}
-.team__hint{color:var(--muted);letter-spacing:.05em;font-size:.8rem;margin-top:1rem}
 .team__label{max-width:1200px;margin:2.5rem auto 1.6rem;padding:0 6vw;font-size:.85rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent-2);font-weight:600}
 .team__grid{max-width:1200px;margin:0 auto;padding:0 6vw;display:grid;gap:1.2rem;grid-template-columns:repeat(4,1fr)}
 .team__grid--lead{grid-template-columns:repeat(2,1fr);max-width:760px}
-.tcard{perspective:1200px;border:0;background:none;aspect-ratio:4/5}
-.team__grid--lead .tcard{aspect-ratio:1/1}
-.tcard__inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .7s var(--ease);border-radius:18px}
-.tcard.flipped .tcard__inner{transform:rotateY(180deg)}
-.tcard__front,.tcard__back{position:absolute;inset:0;border-radius:18px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1px solid var(--line);background:var(--panel)}
-.tcard__front{display:block}
-.tcard__img{position:absolute;inset:0;overflow:hidden}
-.tcard__img::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,13,18,.95) 0%,rgba(10,13,18,.75) 18%,transparent 42%)}
-.tcard__img img{width:100%;height:100%;object-fit:cover;object-position:top center;transition:transform .7s var(--ease),filter .7s;filter:grayscale(.2)}
-.tcard:hover .tcard__img img{transform:scale(1.05);filter:grayscale(0)}
-.tcard__front figcaption{position:absolute;left:0;right:0;bottom:0;padding:.9rem 1rem 1rem;z-index:1}
-.tcard__front h4{font-size:1.02rem;font-weight:700;text-shadow:0 1px 6px rgba(0,0,0,.6)}
-.tcard__front figcaption p{color:#cfd7e2;font-size:.78rem;margin-top:.12rem;text-shadow:0 1px 6px rgba(0,0,0,.6)}
-.tcard__front span{display:inline-block;margin-top:.45rem;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);background:rgba(10,13,18,.55);border:1px solid rgba(198,255,46,.35);padding:.14rem .5rem;border-radius:100px}
-.tcard__back{transform:rotateY(180deg);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.4rem 1.3rem;background:radial-gradient(120% 120% at 50% 0,rgba(198,255,46,.1),transparent 60%),var(--panel);border-color:rgba(198,255,46,.35)}
-.tcard__emoji{font-size:2.2rem;line-height:1;margin-bottom:.6rem}
-.tcard__back h4{font-family:'Anton',sans-serif;font-size:1.4rem;text-transform:uppercase;color:var(--accent);letter-spacing:.03em;margin-bottom:.6rem}
-.tcard__style{color:#c3ccd8;font-size:.85rem;line-height:1.45;margin-bottom:.8rem}
-.tcard__quote{color:var(--muted);font-size:.82rem;font-style:italic}
+.tcard{border-radius:18px;overflow:hidden;background:var(--panel);border:1px solid var(--line);transition:transform .5s var(--ease),border-color .5s}
+.tcard:hover{transform:translateY(-6px);border-color:rgba(198,255,46,.4)}
+.tcard__img{aspect-ratio:4/5;overflow:hidden;position:relative}
+.tcard__img::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,var(--panel),transparent 45%)}
+.tcard__img img{width:100%;height:100%;object-fit:cover;object-position:top center;transition:transform .7s var(--ease),filter .7s;filter:grayscale(.25)}
+.tcard:hover .tcard__img img{transform:scale(1.06);filter:grayscale(0)}
+.tcard figcaption{padding:1rem 1.1rem 1.3rem}
+.tcard h4{font-size:1.05rem;font-weight:700}
+.tcard figcaption p{color:var(--muted);font-size:.82rem;margin-top:.15rem}
+.tcard span{display:inline-block;margin-top:.5rem;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(198,255,46,.3);padding:.15rem .55rem;border-radius:100px}
+.team__grid--lead .tcard__img{aspect-ratio:1/1}
 
 /* ===================== NEWS — FULL SEASON ===================== */
 .news{padding:8rem 0;background:var(--bg-2)}
@@ -225,6 +216,26 @@ em{font-style:normal;color:var(--accent)}
 .ncard--next{border-style:dashed;opacity:.92}
 .news__more{text-align:center;margin-top:2rem}
 .news__source{max-width:1200px;margin:2rem auto 0;padding:0 6vw;color:#5c6675;font-size:.78rem;line-height:1.5}
+
+/* ===================== PLAY — RALLY GAME ===================== */
+.play{padding:8rem 0;background:linear-gradient(180deg,var(--bg-2),var(--bg))}
+.play__hint{color:var(--muted);font-size:.95rem;margin-top:1rem;max-width:560px}
+.play__wrap{max-width:760px;margin:0 auto;padding:0 6vw}
+.play__scoreboard{display:flex;align-items:stretch;gap:.8rem;margin-bottom:1rem}
+.play__score{flex:1;display:flex;align-items:center;gap:.8rem;padding:.9rem 1.3rem;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.play__score--cpu{justify-content:flex-end}
+.play__score b{font-family:'Anton',sans-serif;font-size:2.4rem;line-height:1}
+.play__score--you b{color:var(--accent)}
+.play__score--cpu b{color:#8fd0ff}
+.play__label{font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.play__rally{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.5rem 1.2rem;border:1px solid var(--line);border-radius:14px;background:radial-gradient(120% 120% at 50% 0,rgba(198,255,46,.08),transparent),var(--panel)}
+.play__rally span{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.play__rally b{font-family:'Anton',sans-serif;font-size:1.6rem;color:var(--accent-2);line-height:1}
+.play__court{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);aspect-ratio:3/4;max-height:70vh;margin:0 auto}
+.play__court canvas{display:block;width:100%;height:100%}
+@media (hover:hover) and (pointer:fine){ .play__court canvas{cursor:none} }
+.play__start{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2}
+.play__msg{text-align:center;margin-top:1.1rem;color:#c3ccd8;font-size:.95rem;min-height:1.4em;letter-spacing:.01em}
 
 /* ===================== CTA ===================== */
 .cta{padding:8rem 6vw;text-align:center;background:radial-gradient(120% 140% at 50% 0,rgba(198,255,46,.08),transparent 55%),var(--bg)}

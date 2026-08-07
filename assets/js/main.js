@@ -591,15 +591,6 @@
   })();
 
   /* =====================================================================
-     7b. COACH / FOUNDER FLIP CARDS (fun reveal)
-     ===================================================================== */
-  (function coachFlip() {
-    document.querySelectorAll('.tcard').forEach(function (card) {
-      card.addEventListener('click', function () { card.classList.toggle('flipped'); });
-    });
-  })();
-
-  /* =====================================================================
      8. FULL 2026 SEASON — every tournament, grouped by month
         status: 'done' (verified/played) or 'upcoming'
         result: shown for events with confirmed champions
@@ -727,6 +718,295 @@
         render();
       });
     }
+  })();
+
+  /* =====================================================================
+     9. INTERACTIVE BADMINTON RALLY — play a point vs a dummy opponent
+        Perspective court, cursor-controlled racket, projectile shuttle
+        with height (scale + shadow), AI opponent, particles, scoreboard.
+     ===================================================================== */
+  (function rallyGame() {
+    var canvas = document.getElementById('gameCanvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var DPR = Math.min(window.devicePixelRatio || 1, 2);
+    var W = 0, H = 0;
+
+    var elStart = document.getElementById('gameStart');
+    var elYou = document.getElementById('scoreYou');
+    var elCpu = document.getElementById('scoreCpu');
+    var elMsg = document.getElementById('gameMsg');
+    var elRally = document.getElementById('gameRally');
+
+    function size() {
+      W = canvas.clientWidth; H = canvas.clientHeight;
+      canvas.width = W * DPR; canvas.height = H * DPR;
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    }
+
+    // --- court geometry (perspective trapezoid) ---
+    // y=0..1 maps far baseline (top) -> near baseline (bottom)
+    function courtX(nx, depth) {
+      // nx: -1..1 across court; depth 0(top/far)..1(bottom/near)
+      var topHalf = W * 0.20, botHalf = W * 0.46;
+      var half = topHalf + (botHalf - topHalf) * depth;
+      return W * 0.5 + nx * half;
+    }
+    function courtY(depth) {
+      var topY = H * 0.16, botY = H * 0.98;
+      return topY + (botY - topY) * depth;
+    }
+    function depthScale(depth) { return 0.45 + depth * 0.85; } // shuttle size by court position
+
+    // --- game state ---
+    var state = 'idle';   // idle | serving | rally | point
+    var scoreYou = 0, scoreCpu = 0, rally = 0;
+    var mouseNX = 0;      // player paddle position -1..1
+    var player = { nx: 0 };
+    var cpu = { nx: 0, targetNX: 0 };
+
+    // shuttle: pos in court space nx (-1..1), depth (0..1), height h (0..1 arc), plus velocities
+    var s = null;
+    function newShuttle(fromCpu) {
+      s = {
+        nx: fromCpu ? (Math.random() * 0.8 - 0.4) : player.nx,
+        depth: fromCpu ? 0.08 : 0.92,
+        vnx: 0, vd: 0,
+        h: 0.02, vh: 0,
+        owner: fromCpu ? 'cpu' : 'you',   // who last hit / is travelling from
+        toward: fromCpu ? 'you' : 'cpu',
+        active: false
+      };
+    }
+
+    var particles = [];
+    function burst(x, y, color) {
+      for (var i = 0; i < 26; i++) {
+        var a = Math.random() * Math.PI * 2, sp = 1 + Math.random() * 5;
+        particles.push({ x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 1, c: color });
+      }
+    }
+
+    function setMsg(t) { if (elMsg) elMsg.textContent = t; }
+    function updateScore() {
+      if (elYou) elYou.textContent = scoreYou;
+      if (elCpu) elCpu.textContent = scoreCpu;
+      if (elRally) elRally.textContent = rally;
+    }
+
+    // start a serve: shuttle lofted from player toward cpu
+    function serve() {
+      newShuttle(false);
+      s.active = true;
+      s.toward = 'cpu';
+      s.vd = -0.010;            // travelling to far side (depth decreasing)
+      s.vnx = (Math.random() - 0.5) * 0.006;
+      s.vh = 0.045;             // pop up
+      rally = 0; updateScore();
+      state = 'rally';
+      setMsg('Rally on! Move your cursor to return the shuttle.');
+    }
+
+    function startGame() {
+      scoreYou = 0; scoreCpu = 0; updateScore();
+      elStart.style.display = 'none';
+      state = 'serving';
+      setMsg('Serving\u2026');
+      setTimeout(serve, 600);
+    }
+
+    function pointTo(who) {
+      state = 'point';
+      s && (s.active = false);
+      if (who === 'you') { scoreYou++; setMsg('You win the rally! \uD83C\uDFF8'); }
+      else { scoreCpu++; setMsg('Opponent takes it. Keep going!'); }
+      updateScore();
+      var over = (scoreYou >= 7 || scoreCpu >= 7);
+      setTimeout(function () {
+        if (over) {
+          state = 'idle';
+          elStart.style.display = '';
+          elStart.textContent = 'Play again';
+          setMsg(scoreYou > scoreCpu ? 'Game! You beat the dummy \uD83C\uDFC6' : 'Game over — the dummy wins this time.');
+        } else {
+          state = 'serving'; setMsg('Next rally\u2026');
+          setTimeout(serve, 500);
+        }
+      }, 1200);
+    }
+
+    // --- input ---
+    function onMove(clientX) {
+      var r = canvas.getBoundingClientRect();
+      var rel = (clientX - r.left) / r.width;          // 0..1
+      mouseNX = Math.max(-1, Math.min(1, (rel - 0.5) * 2.1));
+    }
+    canvas.addEventListener('mousemove', function (e) { onMove(e.clientX); });
+    canvas.addEventListener('touchmove', function (e) { if (e.touches[0]) { onMove(e.touches[0].clientX); e.preventDefault(); } }, { passive: false });
+    if (elStart) elStart.addEventListener('click', startGame);
+
+    // --- physics + AI ---
+    function update() {
+      // smooth player paddle
+      player.nx += (mouseNX - player.nx) * 0.35;
+
+      if (s && s.active) {
+        s.depth += s.vd;
+        s.nx += s.vnx;
+        s.h += s.vh; s.vh -= 0.0022;    // gravity on the visual arc
+        if (s.h < 0) s.h = 0;
+        // bounce shuttle off side lines a touch
+        if (s.nx > 1.05) { s.nx = 1.05; s.vnx *= -0.5; }
+        if (s.nx < -1.05) { s.nx = -1.05; s.vnx *= -0.5; }
+
+        // --- reached CPU side (far) ---
+        if (s.toward === 'cpu' && s.depth <= 0.10) {
+          // CPU attempts return if close enough to its paddle
+          var miss = Math.abs(s.nx - cpu.nx) > 0.55 || Math.random() < 0.06;
+          if (miss) { burst(courtX(s.nx, 0.10), courtY(0.10), '198,255,46'); pointTo('you'); }
+          else {
+            rally++; updateScore();
+            burst(courtX(s.nx, 0.10), courtY(0.10), '255,255,255');
+            s.toward = 'you'; s.vd = 0.009 + Math.min(rally, 12) * 0.0004; // returns faster as rally builds
+            // aim somewhere on player's court, occasionally to a corner
+            var aim = (Math.random() - 0.5) * 1.7;
+            s.vnx = (aim - s.nx) * 0.010;
+            s.vh = 0.05; s.h = 0.15;
+          }
+        }
+        // --- reached YOU side (near) ---
+        if (s.toward === 'you' && s.depth >= 0.90) {
+          var hit = Math.abs(s.nx - player.nx) < 0.42;
+          if (hit) {
+            rally++; updateScore();
+            burst(courtX(s.nx, 0.92), courtY(0.92), '198,255,46');
+            s.toward = 'cpu'; s.vd = -(0.010 + Math.min(rally, 12) * 0.0004);
+            var aimC = (Math.random() - 0.5) * 1.6;
+            s.vnx = (aimC - s.nx) * 0.010;
+            s.vh = 0.055; s.h = 0.15;
+          } else if (s.depth >= 0.99) {
+            burst(courtX(s.nx, 0.99), courtY(0.99), '255,90,90'); pointTo('cpu');
+          }
+        }
+      }
+
+      // CPU tracks the shuttle when it's coming toward it
+      var cpuTarget = 0;
+      if (s && s.active && s.toward === 'cpu') cpuTarget = s.nx * 0.9;
+      else cpuTarget *= 0.9;
+      cpu.nx += (cpuTarget - cpu.nx) * 0.06;   // deliberately imperfect -> "dummy"
+
+      // particles
+      for (var i = particles.length - 1; i >= 0; i--) {
+        var p = particles[i];
+        p.x += p.vx; p.y += p.vy; p.vy += 0.15; p.life -= 0.03;
+        if (p.life <= 0) particles.splice(i, 1);
+      }
+    }
+
+    // --- drawing ---
+    function drawCourt() {
+      // floor
+      ctx.fillStyle = '#0c1420';
+      ctx.fillRect(0, 0, W, H);
+      // court surface (trapezoid)
+      ctx.beginPath();
+      ctx.moveTo(courtX(-1, 0), courtY(0));
+      ctx.lineTo(courtX(1, 0), courtY(0));
+      ctx.lineTo(courtX(1, 1), courtY(1));
+      ctx.lineTo(courtX(-1, 1), courtY(1));
+      ctx.closePath();
+      var g = ctx.createLinearGradient(0, courtY(0), 0, courtY(1));
+      g.addColorStop(0, '#16324a'); g.addColorStop(1, '#1d4763');
+      ctx.fillStyle = g; ctx.fill();
+
+      ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 2;
+      // outer boundary
+      ctx.stroke();
+      // side tramlines
+      [-0.78, 0.78].forEach(function (nx) {
+        ctx.beginPath(); ctx.moveTo(courtX(nx, 0), courtY(0)); ctx.lineTo(courtX(nx, 1), courtY(1)); ctx.stroke();
+      });
+      // centre line each half
+      ctx.beginPath(); ctx.moveTo(courtX(0, 0), courtY(0)); ctx.lineTo(courtX(0, 0.5), courtY(0.5)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(courtX(0, 0.5), courtY(0.5)); ctx.lineTo(courtX(0, 1), courtY(1)); ctx.stroke();
+      // service lines
+      [0.30, 0.68].forEach(function (d) {
+        ctx.beginPath(); ctx.moveTo(courtX(-1, d), courtY(d)); ctx.lineTo(courtX(1, d), courtY(d)); ctx.stroke();
+      });
+
+      // NET at mid-court (depth 0.5)
+      var ny = courtY(0.5);
+      var nlx = courtX(-1.05, 0.5), nrx = courtX(1.05, 0.5);
+      ctx.fillStyle = 'rgba(255,255,255,.10)';
+      ctx.fillRect(nlx, ny - 34, nrx - nlx, 34);
+      ctx.strokeStyle = 'rgba(255,255,255,.5)';
+      ctx.lineWidth = 1;
+      for (var x = nlx; x < nrx; x += 7) { ctx.beginPath(); ctx.moveTo(x, ny - 34); ctx.lineTo(x, ny); ctx.stroke(); }
+      ctx.fillStyle = '#fff'; ctx.fillRect(nlx, ny - 36, nrx - nlx, 3);        // top tape
+      // posts
+      ctx.fillStyle = '#d6dee8';
+      ctx.fillRect(nlx - 3, ny - 40, 5, 42); ctx.fillRect(nrx - 2, ny - 40, 5, 42);
+    }
+
+    function drawPaddle(nx, depth, isPlayer) {
+      var x = courtX(nx, depth), y = courtY(depth);
+      var sc = depthScale(depth);
+      ctx.save(); ctx.translate(x, y); ctx.scale(sc, sc);
+      // shadow
+      ctx.fillStyle = 'rgba(0,0,0,.3)'; ctx.beginPath(); ctx.ellipse(0, 6, 26, 8, 0, 0, Math.PI * 2); ctx.fill();
+      // racket head
+      ctx.strokeStyle = isPlayer ? '#c6ff2e' : '#8fd0ff'; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.ellipse(0, -20, 20, 26, 0, 0, Math.PI * 2); ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,255,255,.25)'; ctx.lineWidth = 1;
+      for (var i = -2; i <= 2; i++) { ctx.beginPath(); ctx.moveTo(i * 7, -44); ctx.lineTo(i * 7, 4); ctx.stroke(); }
+      // handle
+      ctx.strokeStyle = isPlayer ? '#c6ff2e' : '#8fd0ff'; ctx.lineWidth = 5; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(0, 4); ctx.lineTo(0, 30); ctx.stroke();
+      ctx.restore();
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      drawCourt();
+
+      // opponent (far)
+      drawPaddle(cpu.nx, 0.06, false);
+
+      if (s && (s.active || state === 'point')) {
+        var sx = courtX(s.nx, s.depth);
+        var groundY = courtY(s.depth);
+        var lift = s.h * H * 0.5;              // visual height off the floor
+        var sy = groundY - lift;
+        var sc = depthScale(s.depth) * (0.9 + s.h * 0.5);
+        // shadow on the floor
+        ctx.fillStyle = 'rgba(0,0,0,' + (0.35 - s.h * 0.2) + ')';
+        ctx.beginPath(); ctx.ellipse(sx, groundY, 16 * depthScale(s.depth), 5 * depthScale(s.depth), 0, 0, Math.PI * 2); ctx.fill();
+        // shuttle (reuse global helper), angle points along travel
+        var ang = s.toward === 'cpu' ? Math.PI : 0;
+        ang += s.vnx * 12;
+        drawShuttle(ctx, sx, sy, sc * 0.5, ang);
+      }
+
+      // player (near)
+      drawPaddle(player.nx, 0.94, true);
+
+      // particles
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+        ctx.globalAlpha = p.life; ctx.fillStyle = 'rgba(' + p.c + ',' + p.life + ')';
+        ctx.beginPath(); ctx.arc(p.x, p.y, 2 + p.life * 2, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function loop() { if (state !== 'idle') update(); draw(); requestAnimationFrame(loop); }
+
+    size(); window.addEventListener('resize', size);
+    setMsg('Press Start, then move your cursor to hit. First to 7 wins.');
+    // idle demo: gentle shuttle bobbing removed for clarity; just draw court
+    newShuttle(true); s.active = false;
+    loop();
   })();
 
 })();
