@@ -740,327 +740,238 @@
     var elShot = document.getElementById('gameShot');
     var shotBtns = document.querySelectorAll('.play__btn');
 
-    function size() {
-      W = canvas.clientWidth; H = canvas.clientHeight;
-      canvas.width = W * DPR; canvas.height = H * DPR;
-      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    }
+    function size() { W = canvas.clientWidth; H = canvas.clientHeight; canvas.width = W * DPR; canvas.height = H * DPR; ctx.setTransform(DPR, 0, 0, DPR, 0, 0); }
 
-    /* =========================================================
-       SIDE-VIEW physics court (like Badminton League / whatifs.fun):
-       world units: x 0..1 across the court (you left, CPU right),
-       y 0 (floor) .. 1 (ceiling). Net at x=0.5. Real gravity arc.
-       ========================================================= */
-    var NET_X = 0.5, NET_H = 0.32;         // net height (world y)
-    var GRAV = 0.00135, DRAG = 0.999;
-    // your reachable x-band and CPU's
-    var YOU_MIN = 0.02, YOU_MAX = 0.46, CPU_MIN = 0.54, CPU_MAX = 0.98;
+    /* ---------- layout (side view) ---------- */
+    function floorY() { return H * 0.82; }
+    var YOU_X = 0.16, CPU_X = 0.84, NET_X = 0.5;
+    function sx(fx) { return W * fx; }
 
-    function px(x) { return W * (0.06 + x * 0.88); }         // world x -> screen x
-    function py(y) { return H * (0.92 - y * 0.80); }          // world y -> screen y (0 floor near bottom)
-    var FLOOR_Y = 0;
-
-    /* ---- state ---- */
-    var state = 'idle';       // idle | rally | point
-    var scoreYou = 0, scoreCpu = 0, rally = 0, TARGET = 21;
-    var you = { x: 0.24, vx: 0, anim: 0, lunge: 0 };
-    var cpu = { x: 0.76, vx: 0, anim: 0, lunge: 0, react: 0.10 };
-    var shuttle = null;        // {x,y,vx,vy,owner}
-    var lastHit = null;        // 'you' | 'cpu' (who hit it last)
-    var nextShot = 'clear';    // player's selected shot
-    var keys = {};
-    var particles = [];
+    /* ---------- state ---------- */
+    // phases: idle | toYou | yourTurn | toCpu | cpuHit | point | over
+    var phase = 'idle';
+    var scoreYou = 0, scoreCpu = 0, rally = 0, TARGET = 11;
+    var flightT = 0, flightDur = 60, from = { x: YOU_X, y: 0 }, to = { x: CPU_X, y: 0 }, apex = 0.5;
+    var timer = 0, WINDOW = 0;          // your reaction window (frames) during yourTurn
+    var quality = 0;                    // 0..1 how good your last shot was
+    var youAnim = 0, cpuAnim = 0, particles = [];
+    var incoming = 'clear';             // what shot is coming to you (for smash-defence feel)
 
     function setMsg(t) { if (elMsg) elMsg.textContent = t; }
     function setShot(t) { if (elShot) elShot.textContent = t; }
     function updateScore() { if (elYou) elYou.textContent = scoreYou; if (elCpu) elCpu.textContent = scoreCpu; if (elRally) elRally.textContent = rally; }
+    function burst(x, y, c, n) { n = n || 20; for (var i = 0; i < n; i++) { var a = Math.random() * 6.28, s = 1 + Math.random() * 5; particles.push({ x: x, y: y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: 1, c: c }); } }
+    function shotColor(t) { return ({ clear: '150,220,255', drop: '198,255,46', smash: '255,90,90' })[t] || '255,255,255'; }
+    function shotLabel(t) { return ({ clear: 'Clear', drop: 'Drop', smash: 'SMASH!' })[t] || t; }
 
-    function burst(x, y, color, n) {
-      n = n || 22;
-      for (var i = 0; i < n; i++) { var a = Math.random() * Math.PI * 2, sp = 1 + Math.random() * 5; particles.push({ x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 1, c: color }); }
+    /* ---------- flight helpers ---------- */
+    function startFlight(fx, fy, tx, ty, ap, dur) { from = { x: fx, y: fy }; to = { x: tx, y: ty }; apex = ap; flightDur = dur; flightT = 0; }
+    function shuttleXY() {
+      var t = flightDur ? flightT / flightDur : 1; if (t > 1) t = 1;
+      var x = from.x + (to.x - from.x) * t;
+      var base = from.y + (to.y - from.y) * t;
+      var arc = apex * 4 * t * (1 - t);       // 0..apex..0
+      return { x: x, y: base + arc, t: t };
     }
 
-    /* ---- serving ---- */
-    function serve(byYou) {
-      rally = 0; updateScore(); setShot('—');
-      if (byYou) {
-        shuttle = { x: you.x + 0.02, y: 0.28, vx: 0.006, vy: 0.012, owner: 'you' };
-        lastHit = 'you'; setMsg('Your serve — the shuttle is in play. Get under it!');
-      } else {
-        shuttle = { x: cpu.x - 0.02, y: 0.28, vx: -0.006, vy: 0.012, owner: 'cpu' };
-        lastHit = 'cpu'; setMsg('Opponent serves — move under the shuttle and pick your shot.');
-      }
-      state = 'rally';
-    }
-
+    /* ---------- game flow ---------- */
     function startGame() {
-      scoreYou = 0; scoreCpu = 0; updateScore();
+      scoreYou = 0; scoreCpu = 0; rally = 0; updateScore();
       elStart.style.display = 'none';
-      you.x = 0.24; cpu.x = 0.76;
-      setTimeout(function () { serve(true); }, 400);
+      serveToYou(true);
     }
 
-    function pointTo(who, reason) {
-      if (state === 'point') return;
-      state = 'point';
-      if (who === 'you') scoreYou++; else scoreCpu++;
-      setMsg((who === 'you' ? 'Point YOU' : 'Point Dummy') + ' — ' + reason + '.');
-      updateScore();
+    // shuttle drops to you so you can serve/return
+    function serveToYou(isServe) {
+      phase = 'toYou'; setShot('—');
+      // comes from CPU side (or a toss on serve) down to you
+      startFlight(isServe ? YOU_X + 0.06 : CPU_X, 0.55, YOU_X, 0.0, 0.35, isServe ? 46 : 52);
+      setMsg(isServe ? 'Your serve! When it drops in, tap Clear, Drop or Smash.' : 'Return it! Tap a shot.');
+    }
+
+    function beginYourTurn() {
+      phase = 'yourTurn';
+      timer = 0; WINDOW = 70;            // generous window so it's never confusing
+      enableShots(true);
+      setMsg('YOUR SHOT — pick Clear, Drop or Smash! (green bar = perfect timing)');
+    }
+
+    function youHit(type) {
+      if (phase !== 'yourTurn') return;
+      enableShots(false);
+      youAnim = 14;
+      // timing quality: sweet spot in the middle third of the window
+      var p = timer / WINDOW;                    // 0..1 through window
+      quality = 1 - Math.min(1, Math.abs(p - 0.5) * 2);   // 1 at centre, 0 at edges
+      var xy = shuttleXY();
+      burst(sx(xy.x), floorY() - xy.y * H * 0.62, shotColor(type), type === 'smash' ? 30 : 16);
+      setShot('You: ' + shotLabel(type) + (quality > 0.7 ? '  ✦ perfect' : ''));
+      rally++; updateScore();
+      // send it to the CPU with an arc that depends on shot type
+      var ap = type === 'smash' ? 0.12 : (type === 'drop' ? 0.28 : 0.55);
+      var dur = type === 'smash' ? 34 : (type === 'drop' ? 52 : 60);
+      startFlight(YOU_X, 0.0, type === 'drop' ? NET_X + 0.12 : CPU_X, 0.0, ap, dur);
+      phase = 'toCpu';
+      // stash how hard this is for the CPU to return
+      window.__lastYou = { type: type, quality: quality };
+    }
+
+    function cpuTurn() {
+      cpuAnim = 14;
+      var info = window.__lastYou || { type: 'clear', quality: 0.5 };
+      // chance the CPU FAILS to return depends on your shot + timing
+      var missChance = 0.06;
+      if (info.type === 'smash') missChance = 0.34 + info.quality * 0.30;   // perfect smash ~0.6+
+      else if (info.type === 'drop') missChance = 0.22 + info.quality * 0.20;
+      else missChance = 0.05 + info.quality * 0.05;
+      if (Math.random() < missChance) {
+        burst(sx(CPU_X), floorY(), '198,255,46', 26);
+        setMsg('The dummy can\u2019t reach your ' + shotLabel(info.type).replace('!', '') + '!');
+        return pointTo('you');
+      }
+      // CPU returns with its own shot
+      var r = Math.random();
+      var ctype = r < 0.2 ? 'smash' : (r < 0.5 ? 'drop' : 'clear');
+      setShot('Dummy: ' + shotLabel(ctype));
+      cpuAnim = 14;
+      var ap = ctype === 'smash' ? 0.12 : (ctype === 'drop' ? 0.28 : 0.5);
+      var dur = ctype === 'smash' ? 34 : (ctype === 'drop' ? 52 : 58);
+      incoming = ctype;
+      startFlight(CPU_X, 0.0, ctype === 'drop' ? NET_X - 0.12 : YOU_X, 0.0, ap, dur);
+      phase = 'toYou2';
+      setMsg('Dummy plays a ' + shotLabel(ctype).replace('!', '') + ' — get ready to hit!');
+    }
+
+    function youMissed() { burst(sx(YOU_X), floorY(), '255,90,90', 22); pointTo('cpu'); }
+
+    function pointTo(who) {
+      phase = 'point';
+      if (who === 'you') { scoreYou++; setMsg('Point to YOU! ' + scoreYou + '\u2013' + scoreCpu); }
+      else { scoreCpu++; setMsg('Point to the dummy. ' + scoreYou + '\u2013' + scoreCpu); }
+      updateScore(); enableShots(false);
       var over = scoreYou >= TARGET || scoreCpu >= TARGET;
       setTimeout(function () {
         if (over) {
-          state = 'idle'; elStart.style.display = ''; elStart.textContent = 'Play again';
+          phase = 'idle'; elStart.style.display = ''; elStart.textContent = 'Play again';
           setMsg(scoreYou > scoreCpu ? 'GAME! You win ' + scoreYou + '\u2013' + scoreCpu + ' \uD83C\uDFC6' : 'Dummy wins ' + scoreCpu + '\u2013' + scoreYou + '. Play again!');
-        } else { serve(who === 'you'); }   // winner serves
-      }, 1300);
+        } else { rally = 0; updateScore(); serveToYou(who === 'you'); }
+      }, 1500);
     }
 
-    /* ---- shot generator: produce shuttle velocity for a given shot ---- */
-    // dir = +1 (toward CPU/right) or -1 (toward you/left)
-    function applyShot(type, dir, contactY, targetX) {
-      var s = shuttle;
-      // horizontal distance to cover to the target
-      var dx = (targetX - s.x);
-      var t, vy;
-      if (type === 'smash') {
-        // fast, steep, downward — needs contactY high
-        t = 26 + Math.random() * 6;
-        s.vx = dx / t * 1.15; s.vy = -0.010;   // driven downward quickly
-        burst(px(s.x), py(s.y), '255,90,90', 30);
-      } else if (type === 'drop') {
-        t = 46;
-        s.vx = dx / t; s.vy = GRAV * t * 0.42;  // just clears net then falls
-      } else if (type === 'net') {
-        t = 40; s.vx = dx / t * 0.8; s.vy = GRAV * t * 0.5;
-      } else if (type === 'drive') {
-        t = 30; s.vx = dx / t * 1.05; s.vy = GRAV * t * 0.5;
-      } else { // clear / lift : high, deep
-        t = 62; s.vx = dx / t; s.vy = GRAV * t * 0.95 + 0.006;
-      }
-      s.vx = Math.abs(s.vx) * dir;
-      // ensure it goes over the net: give lift if needed
-      if (type !== 'smash') s.vy = Math.max(s.vy, 0.006);
-      s.owner = dir > 0 ? 'you' : 'cpu';
-    }
-
-    /* ---- choose a shot for the AI given the shuttle height ---- */
-    function cpuChooseShot(contactY) {
-      var r = Math.random();
-      if (contactY > NET_H + 0.22) return r < 0.4 ? 'smash' : (r < 0.7 ? 'clear' : 'drop');
-      if (contactY > NET_H) return r < 0.5 ? 'drop' : 'drive';
-      return r < 0.6 ? 'clear' : 'net';   // low: mostly lift to stay safe
-    }
-
-    /* ---- input ---- */
+    /* ---------- input ---------- */
+    function enableShots(on) { shotBtns.forEach(function (b) { b.classList.toggle('is-live', on); }); }
+    shotBtns.forEach(function (b) { b.addEventListener('click', function () { youHit(b.dataset.shot); }); });
     document.addEventListener('keydown', function (e) {
-      keys[e.key] = true;
-      if (state !== 'rally') return;
-      if (e.key === 'ArrowUp') { nextShot = 'clear'; highlight('clear'); }
-      else if (e.key === 'ArrowDown') { nextShot = 'drop'; highlight('drop'); }
-      else if (e.key === ' ') { nextShot = 'smash'; highlight('smash'); e.preventDefault(); }
-      else if (e.key.toLowerCase() === 'n') { nextShot = 'net'; highlight('net'); }
-    });
-    document.addEventListener('keyup', function (e) { keys[e.key] = false; });
-
-    // pointer moves the player toward cursor x
-    var pointerX = null;
-    function onPointer(clientX) { var r = canvas.getBoundingClientRect(); pointerX = (clientX - r.left) / r.width; }
-    canvas.addEventListener('mousemove', function (e) { onPointer(e.clientX); });
-    canvas.addEventListener('touchmove', function (e) { if (e.touches[0]) { onPointer(e.touches[0].clientX); e.preventDefault(); } }, { passive: false });
-    canvas.addEventListener('mouseleave', function () { pointerX = null; });
-
-    function highlight(type) {
-      shotBtns.forEach(function (b) { b.classList.toggle('is-sel', b.dataset.shot === type); });
-    }
-    shotBtns.forEach(function (b) {
-      b.addEventListener('click', function () { nextShot = b.dataset.shot; highlight(nextShot); });
+      if (phase !== 'yourTurn') return;
+      if (e.key === '1' || e.key === 'ArrowUp') youHit('clear');
+      else if (e.key === '2' || e.key === 'ArrowDown') youHit('drop');
+      else if (e.key === '3' || e.key === ' ') { youHit('smash'); e.preventDefault(); }
     });
     if (elStart) elStart.addEventListener('click', startGame);
 
-    /* ---- physics update ---- */
-    function reach(pl, s) {
-      // can this player hit the shuttle now? within x-range & shuttle at/under racket height
-      return Math.abs(s.x - pl.x) < 0.075 && s.y < 0.62 && s.y > FLOOR_Y - 0.01;
-    }
-
+    /* ---------- update ---------- */
     function update() {
-      // --- player movement ---
-      var move = 0;
-      if (keys['ArrowLeft'] || keys['a']) move -= 1;
-      if (keys['ArrowRight'] || keys['d']) move += 1;
-      if (move !== 0) you.vx += move * 0.0016;
-      else if (pointerX != null) {
-        var tx = YOU_MIN + pointerX * (YOU_MAX - YOU_MIN) * 1.9;   // map pointer to your half
-        you.vx += (Math.max(YOU_MIN, Math.min(YOU_MAX, tx)) - you.x) * 0.06;
-      }
-      you.vx *= 0.82; you.x += you.vx;
-      you.x = Math.max(YOU_MIN, Math.min(YOU_MAX, you.x));
-      if (you.anim > 0) you.anim -= 1;
-
-      // --- CPU AI movement: predict landing x, glide there ---
-      var aimX = cpu.x;
-      if (shuttle && shuttle.owner === 'you') {
-        // predict where shuttle crosses CPU reach height
-        aimX = predictLandingX(cpu.react);
-        aimX = Math.max(CPU_MIN, Math.min(CPU_MAX, aimX));
-      } else { aimX = 0.76; }
-      cpu.vx += (aimX - cpu.x) * 0.03; cpu.vx *= 0.85; cpu.x += cpu.vx;
-      cpu.x = Math.max(CPU_MIN, Math.min(CPU_MAX, cpu.x));
-      if (cpu.anim > 0) cpu.anim -= 1;
-
-      // --- shuttle physics ---
-      if (shuttle) {
-        var s = shuttle;
-        s.vy -= GRAV; s.vx *= DRAG; s.x += s.vx; s.y += s.vy;
-
-        // net collision: if crossing net area below net height -> fault to hitter
-        if (s.x > NET_X - 0.006 && s.x < NET_X + 0.006 && s.y < NET_H) {
-          burst(px(NET_X), py(NET_H), '255,90,90');
-          pointTo(lastHit === 'you' ? 'cpu' : 'you', (lastHit === 'you' ? 'you' : 'dummy') + ' hit into the net'); shuttle = null; return;
-        }
-
-        // hit detection — YOU
-        if (s.owner === 'cpu' && s.x <= YOU_MAX + 0.03 && reach(you, s)) {
-          rally++; updateScore(); you.anim = 12;
-          var type = nextShot;
-          if (type === 'smash' && s.y < NET_H + 0.12) type = 'drive'; // can't smash a low shuttle
-          var tgt = pickPlayerTarget(type);
-          applyShot(type, +1, s.y, tgt); lastHit = 'you';
-          setShot('You: ' + label(type)); burst(px(s.x), py(s.y), shotColor(type), type === 'smash' ? 30 : 16);
-        }
-        // hit detection — CPU
-        if (s.owner === 'you' && s.x >= CPU_MIN - 0.03 && reach(cpu, s)) {
-          rally++; updateScore(); cpu.anim = 12;
-          var ct = cpuChooseShot(s.y);
-          var ctgt = pickCpuTarget(ct);
-          applyShot(ct, -1, s.y, ctgt); lastHit = 'cpu';
-          setShot('Dummy: ' + label(ct)); burst(px(s.x), py(s.y), shotColor(ct), ct === 'smash' ? 30 : 16);
-        }
-
-        // landing on floor
-        if (s.y <= FLOOR_Y) {
-          s.y = FLOOR_Y;
-          var inLeft = s.x < NET_X, inCourt = s.x > 0.03 && s.x < 0.97;
-          burst(px(s.x), py(0), '255,255,255', 14);
-          if (!inCourt) { pointTo(lastHit === 'you' ? 'cpu' : 'you', 'shuttle landed out'); }
-          else if (inLeft) { pointTo('cpu', 'shuttle landed in your court'); }
-          else { pointTo('you', 'shuttle landed in the dummy\u2019s court'); }
-          shuttle = null; return;
-        }
-        // flew off the back without landing (safety)
-        if (s.x < -0.05 || s.x > 1.05) { pointTo(lastHit === 'you' ? 'cpu' : 'you', 'shuttle went out'); shuttle = null; return; }
-      }
-
+      if (youAnim > 0) youAnim--; if (cpuAnim > 0) cpuAnim--;
       for (var i = particles.length - 1; i >= 0; i--) { var p = particles[i]; p.x += p.vx; p.y += p.vy; p.vy += 0.16; p.life -= 0.03; if (p.life <= 0) particles.splice(i, 1); }
+
+      if (phase === 'toYou' || phase === 'toYou2') {
+        flightT++;
+        if (flightT >= flightDur) beginYourTurn();
+      } else if (phase === 'yourTurn') {
+        timer++;
+        if (timer > WINDOW) { setMsg('Too slow — you missed it!'); youMissed(); }
+      } else if (phase === 'toCpu') {
+        flightT++;
+        if (flightT >= flightDur) cpuTurn();
+      }
     }
 
-    // predict where the shuttle will reach CPU-reachable height, add reaction error
-    function predictLandingX(err) {
-      var s = shuttle; if (!s) return cpu.x;
-      var x = s.x, y = s.y, vx = s.vx, vy = s.vy, guard = 0;
-      while (y > 0.35 && x < 1.05 && guard < 400) { vy -= GRAV; vx *= DRAG; x += vx; y += vy; guard++; }
-      return x + (Math.random() - 0.5) * err;
-    }
-
-    function pickPlayerTarget(type) {
-      if (type === 'drop' || type === 'net') return CPU_MIN + 0.04 + Math.random() * 0.08;  // short, just over net
-      if (type === 'smash' || type === 'drive') return CPU_MIN + 0.10 + Math.random() * 0.30;
-      return CPU_MAX - 0.04 - Math.random() * 0.10;                                          // clear: deep
-    }
-    function pickCpuTarget(type) {
-      // aim away from you when possible
-      var deep = YOU_MIN + 0.02 + Math.random() * 0.06;
-      var shortT = NET_X - 0.06 - Math.random() * 0.08;
-      var openSide = you.x > 0.24 ? YOU_MIN + 0.03 : YOU_MAX - 0.03;
-      if (type === 'drop' || type === 'net') return shortT;
-      if (type === 'smash' || type === 'drive') return openSide;
-      return deep;
-    }
-    function label(t) { return ({ clear: 'Clear', drop: 'Drop', net: 'Net', smash: 'SMASH!', drive: 'Drive' })[t] || t; }
-    function shotColor(t) { return ({ clear: '150,220,255', drop: '198,255,46', net: '198,255,46', smash: '255,90,90', drive: '255,180,60' })[t] || '255,255,255'; }
-
-    /* ---- drawing (side view) ---- */
+    /* ---------- drawing ---------- */
     function drawCourt() {
-      // background
-      var bg = ctx.createLinearGradient(0, 0, 0, H);
-      bg.addColorStop(0, '#0a1220'); bg.addColorStop(1, '#0e1a28');
+      var bg = ctx.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#0a1220'); bg.addColorStop(1, '#0e1a28');
       ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-
-      // floor slab with perspective shading
-      var floorY = py(0);
-      var fg = ctx.createLinearGradient(0, floorY - 10, 0, H);
-      fg.addColorStop(0, '#1c455c'); fg.addColorStop(1, '#123246');
-      ctx.fillStyle = fg; ctx.fillRect(0, floorY, W, H - floorY);
-      // court baseline lines
+      var fy = floorY();
+      var fg = ctx.createLinearGradient(0, fy, 0, H); fg.addColorStop(0, '#1c455c'); fg.addColorStop(1, '#123246');
+      ctx.fillStyle = fg; ctx.fillRect(0, fy, W, H - fy);
       ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.moveTo(px(0.03), floorY); ctx.lineTo(px(0.97), floorY); ctx.stroke();
-      ctx.strokeStyle = 'rgba(255,255,255,.25)';
-      [0.03, 0.28, 0.97, 0.72].forEach(function (x) { ctx.beginPath(); ctx.moveTo(px(x), floorY); ctx.lineTo(px(x), floorY + 10); ctx.stroke(); });
-
-      // NET
-      var nx = px(NET_X), ntop = py(NET_H);
-      ctx.fillStyle = 'rgba(255,255,255,.10)'; ctx.fillRect(nx - 2, ntop, 4, floorY - ntop);
+      ctx.beginPath(); ctx.moveTo(W * 0.04, fy); ctx.lineTo(W * 0.96, fy); ctx.stroke();
+      // net
+      var nx = sx(NET_X), ntop = fy - H * 0.20;
       ctx.strokeStyle = 'rgba(255,255,255,.4)'; ctx.lineWidth = 1;
-      for (var yy = ntop; yy < floorY; yy += 7) { ctx.beginPath(); ctx.moveTo(nx - 9, yy); ctx.lineTo(nx + 9, yy); ctx.stroke(); }
+      for (var yy = ntop; yy < fy; yy += 7) { ctx.beginPath(); ctx.moveTo(nx - 9, yy); ctx.lineTo(nx + 9, yy); ctx.stroke(); }
       ctx.fillStyle = '#fff'; ctx.fillRect(nx - 10, ntop - 3, 20, 4);
-      ctx.fillStyle = '#cfd8e2'; ctx.fillRect(nx - 12, ntop - 4, 3, floorY - ntop + 6); ctx.fillRect(nx + 9, ntop - 4, 3, floorY - ntop + 6);
+      ctx.fillStyle = '#cfd8e2'; ctx.fillRect(nx - 12, ntop - 4, 3, fy - ntop + 6); ctx.fillRect(nx + 9, ntop - 4, 3, fy - ntop + 6);
     }
 
-    function drawFigure(cx, cyFloor, color, anim, faceRight) {
-      var y = cyFloor;
-      ctx.save(); ctx.translate(cx, y);
-      // shadow
+    function drawFigure(fx, color, anim, faceRight, highlight) {
+      var x = sx(fx), y = floorY();
+      ctx.save(); ctx.translate(x, y);
+      if (highlight) {   // pulsing ring when it's your shot
+        var pr = 34 + Math.sin(Date.now() / 120) * 5;
+        ctx.strokeStyle = 'rgba(198,255,46,.9)'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.arc(0, -34, pr, 0, Math.PI * 2); ctx.stroke();
+      }
       ctx.fillStyle = 'rgba(0,0,0,.3)'; ctx.beginPath(); ctx.ellipse(0, 2, 16, 5, 0, 0, Math.PI * 2); ctx.fill();
-      var swing = anim > 0 ? (12 - anim) / 12 : 0;                 // 0..1 swing progress
-      var lean = faceRight ? 1 : -1;
+      var swing = anim > 0 ? (14 - anim) / 14 : 0, lean = faceRight ? 1 : -1;
       ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 4; ctx.lineCap = 'round';
-      // legs
       ctx.beginPath(); ctx.moveTo(-2, -20); ctx.lineTo(-8, 0); ctx.moveTo(2, -20); ctx.lineTo(8, 0); ctx.stroke();
-      // torso
       ctx.beginPath(); ctx.moveTo(0, -20); ctx.lineTo(0, -44); ctx.stroke();
-      // head
       ctx.beginPath(); ctx.arc(0, -52, 7, 0, Math.PI * 2); ctx.fill();
-      // arm + racket, swings up when hitting
-      var armAng = (-0.6 - swing * 1.4) * lean;
-      var ax = Math.sin(armAng) * 18 * lean, ay = -40 - Math.cos(armAng) * 18;
+      var armAng = (-0.5 - swing * 1.6) * lean, ax = Math.sin(armAng) * 18 * lean, ay = -42 - Math.cos(armAng) * 18;
       ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(0, -40); ctx.lineTo(ax, ay); ctx.stroke();
       ctx.lineWidth = 2.5; ctx.beginPath(); ctx.ellipse(ax + lean * 4, ay - 6, 7, 10, lean * 0.6, 0, Math.PI * 2); ctx.stroke();
       ctx.restore();
     }
 
-    function drawShuttleWorld() {
-      if (!shuttle) return;
-      var sx = px(shuttle.x), sy = py(shuttle.y);
-      // shadow on floor
-      var floorY = py(0);
-      ctx.fillStyle = 'rgba(0,0,0,' + Math.max(0.06, 0.3 - shuttle.y * 0.4) + ')';
-      ctx.beginPath(); ctx.ellipse(sx, floorY, 12, 4, 0, 0, Math.PI * 2); ctx.fill();
-      // speed trail for fast shots
-      var speed = Math.hypot(shuttle.vx, shuttle.vy);
-      if (speed > 0.012) {
-        ctx.strokeStyle = 'rgba(255,120,90,.4)'; ctx.lineWidth = 3;
-        ctx.beginPath(); ctx.moveTo(px(shuttle.x - shuttle.vx * 4), py(shuttle.y - shuttle.vy * 4)); ctx.lineTo(sx, sy); ctx.stroke();
-      }
-      var ang = Math.atan2(shuttle.vy * -1, shuttle.vx) + Math.PI / 2;
-      drawShuttle(ctx, sx, sy, 0.7, ang + Math.PI);
+    function drawShuttleFlying() {
+      var moving = (phase === 'toYou' || phase === 'toYou2' || phase === 'toCpu');
+      var xy;
+      if (moving) xy = shuttleXY();
+      else if (phase === 'yourTurn') xy = { x: YOU_X, y: 0.02 };   // resting at your racket
+      else return;
+      var scx = sx(xy.x), scy = floorY() - xy.y * H * 0.62 - 44;
+      // shadow
+      ctx.fillStyle = 'rgba(0,0,0,' + Math.max(0.06, 0.3 - xy.y * 0.5) + ')';
+      ctx.beginPath(); ctx.ellipse(scx, floorY(), 12, 4, 0, 0, Math.PI * 2); ctx.fill();
+      var ang = (to.x < from.x ? -0.5 : 0.5);
+      drawShuttle(ctx, scx, scy, 0.75, Math.PI + ang);
     }
+
+    function drawTimingBar() {
+      if (phase !== 'yourTurn') return;
+      var p = timer / WINDOW;
+      var bw = W * 0.5, bx = W * 0.25, by = H * 0.12, bh = 14;
+      ctx.fillStyle = 'rgba(255,255,255,.12)'; roundRect(bx, by, bw, bh, 7); ctx.fill();
+      // green sweet-spot zone (middle third)
+      ctx.fillStyle = 'rgba(198,255,46,.35)'; ctx.fillRect(bx + bw * 0.35, by, bw * 0.30, bh);
+      // moving marker
+      ctx.fillStyle = '#fff'; ctx.fillRect(bx + bw * Math.min(p, 1) - 2, by - 3, 4, bh + 6);
+      ctx.fillStyle = 'rgba(255,255,255,.7)'; ctx.font = '600 12px Sora, sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('TAP A SHOT — aim for the green', W * 0.5, by - 8);
+      ctx.textAlign = 'start';
+    }
+    function roundRect(x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
 
     function draw() {
       ctx.clearRect(0, 0, W, H);
       drawCourt();
-      var floorY = py(0);
-      drawFigure(px(you.x), floorY, '#c6ff2e', you.anim, true);
-      drawFigure(px(cpu.x), floorY, '#8fd0ff', cpu.anim, false);
-      drawShuttleWorld();
-      for (var i = 0; i < particles.length; i++) { var p = particles[i]; ctx.globalAlpha = p.life; ctx.fillStyle = 'rgba(' + p.c + ',' + p.life + ')'; ctx.beginPath(); ctx.arc(p.x, p.y, 2 + p.life * 2.5, 0, Math.PI * 2); ctx.fill(); }
+      var youHi = (phase === 'yourTurn');
+      drawFigure(YOU_X, '#c6ff2e', youAnim, true, youHi);
+      drawFigure(CPU_X, '#8fd0ff', cpuAnim, false, false);
+      drawShuttleFlying();
+      drawTimingBar();
+      for (var i = 0; i < particles.length; i++) { var pt = particles[i]; ctx.globalAlpha = pt.life; ctx.fillStyle = 'rgba(' + pt.c + ',' + pt.life + ')'; ctx.beginPath(); ctx.arc(pt.x, pt.y, 2 + pt.life * 2.5, 0, Math.PI * 2); ctx.fill(); }
       ctx.globalAlpha = 1;
     }
 
-    function loop() { if (state === 'rally') update(); draw(); requestAnimationFrame(loop); }
+    function loop() {
+      if (phase !== 'idle' && phase !== 'point' && phase !== 'over') update();
+      else if (phase === 'point') { for (var i = particles.length - 1; i >= 0; i--) { var p = particles[i]; p.x += p.vx; p.y += p.vy; p.vy += 0.16; p.life -= 0.03; if (p.life <= 0) particles.splice(i, 1); } }
+      draw(); requestAnimationFrame(loop);
+    }
 
     size(); window.addEventListener('resize', size);
-    highlight('clear');
-    setMsg('Press Start. Move under the shuttle, then pick Clear / Drop / Smash / Net.');
+    setMsg('Press Start. The shuttle comes to you — tap Clear, Drop or Smash to hit it back.');
     loop();
   })();
 
