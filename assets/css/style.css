@@ -220,7 +220,7 @@ em{font-style:normal;color:var(--accent)}
 /* ===================== PLAY — RALLY GAME ===================== */
 .play{padding:8rem 0;background:linear-gradient(180deg,var(--bg-2),var(--bg))}
 .play__hint{color:var(--muted);font-size:.95rem;margin-top:1rem;max-width:560px}
-.play__wrap{max-width:760px;margin:0 auto;padding:0 6vw}
+.play__wrap{max-width:900px;margin:0 auto;padding:0 6vw}
 .play__scoreboard{display:flex;align-items:stretch;gap:.8rem;margin-bottom:1rem}
 .play__score{flex:1;display:flex;align-items:center;gap:.8rem;padding:.9rem 1.3rem;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
 .play__score--cpu{justify-content:flex-end}
@@ -231,11 +231,19 @@ em{font-style:normal;color:var(--accent)}
 .play__rally{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.5rem 1.2rem;border:1px solid var(--line);border-radius:14px;background:radial-gradient(120% 120% at 50% 0,rgba(198,255,46,.08),transparent),var(--panel)}
 .play__rally span{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
 .play__rally b{font-family:'Anton',sans-serif;font-size:1.6rem;color:var(--accent-2);line-height:1}
-.play__court{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);aspect-ratio:3/4;max-height:70vh;margin:0 auto}
+.play__court{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);aspect-ratio:16/10;margin:0 auto}
 .play__court canvas{display:block;width:100%;height:100%}
 @media (hover:hover) and (pointer:fine){ .play__court canvas{cursor:none} }
 .play__start{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2}
 .play__shot{position:absolute;top:.7rem;left:.7rem;z-index:2;font-family:'Anton',sans-serif;font-size:.9rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:rgba(7,10,14,.6);border:1px solid rgba(198,255,46,.35);padding:.3rem .7rem;border-radius:100px;pointer-events:none}
+.play__controls{display:flex;gap:.6rem;margin-top:1rem;flex-wrap:wrap}
+.play__btn{flex:1;min-width:110px;display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.8rem 1rem;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-family:inherit;font-weight:600;font-size:.95rem;transition:border-color .25s,background .25s,transform .2s var(--ease)}
+.play__btn small{color:var(--muted);font-size:.72rem;font-weight:500}
+.play__btn:hover{transform:translateY(-2px);border-color:var(--accent-2)}
+.play__btn.is-sel{border-color:var(--accent);background:rgba(198,255,46,.12);color:var(--accent)}
+.play__btn.is-sel small{color:var(--accent)}
+.play__btn--smash.is-sel{border-color:#ff5a5a;background:rgba(255,90,90,.14);color:#ff8a8a}
+.play__btn--smash.is-sel small{color:#ff8a8a}
 .play__msg{text-align:center;margin-top:1.1rem;color:#c3ccd8;font-size:.95rem;min-height:1.4em;letter-spacing:.01em}
 
 /* ===================== CTA ===================== */

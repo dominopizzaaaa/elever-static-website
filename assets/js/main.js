@@ -738,6 +738,7 @@
     var elMsg = document.getElementById('gameMsg');
     var elRally = document.getElementById('gameRally');
     var elShot = document.getElementById('gameShot');
+    var shotBtns = document.querySelectorAll('.play__btn');
 
     function size() {
       W = canvas.clientWidth; H = canvas.clientHeight;
@@ -745,284 +746,321 @@
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     }
 
-    /* ---- court geometry (perspective) : depth 0 = far/CPU, 1 = near/you ---- */
-    function courtX(nx, depth) {
-      var topHalf = W * 0.19, botHalf = W * 0.47;
-      var half = topHalf + (botHalf - topHalf) * depth;
-      return W * 0.5 + nx * half;
-    }
-    function courtY(depth) { return H * 0.15 + (H * 0.985 - H * 0.15) * depth; }
-    function depthScale(d) { return 0.42 + d * 0.9; }
-    var NET_D = 0.5;
-    // playable court in depth: far baseline ~0.06 .. near baseline ~0.95
-    var FAR_BASE = 0.06, NEAR_BASE = 0.95;
+    /* =========================================================
+       SIDE-VIEW physics court (like Badminton League / whatifs.fun):
+       world units: x 0..1 across the court (you left, CPU right),
+       y 0 (floor) .. 1 (ceiling). Net at x=0.5. Real gravity arc.
+       ========================================================= */
+    var NET_X = 0.5, NET_H = 0.32;         // net height (world y)
+    var GRAV = 0.00135, DRAG = 0.999;
+    // your reachable x-band and CPU's
+    var YOU_MIN = 0.02, YOU_MAX = 0.46, CPU_MIN = 0.54, CPU_MAX = 0.98;
 
-    /* ---- shot presets: apex(height 0..1), dur(frames), aimDepth ---- */
-    var SHOTS = {
-      serve: { apex: 0.85, dur: 78, color: '255,255,255' },
-      clear: { apex: 0.95, dur: 74, color: '150,220,255' },
-      drop:  { apex: 0.32, dur: 60, color: '198,255,46' },
-      net:   { apex: 0.14, dur: 46, color: '198,255,46' },
-      smash: { apex: 0.10, dur: 34, color: '255,90,90' },
-      drive: { apex: 0.30, dur: 40, color: '255,180,60' },
-      lift:  { apex: 0.98, dur: 80, color: '150,220,255' }
-    };
-    var SHOT_LABEL = { serve: 'Serve', clear: 'Clear', drop: 'Drop', net: 'Net shot', smash: 'SMASH!', drive: 'Drive', lift: 'Lift' };
+    function px(x) { return W * (0.06 + x * 0.88); }         // world x -> screen x
+    function py(y) { return H * (0.92 - y * 0.80); }          // world y -> screen y (0 floor near bottom)
+    var FLOOR_Y = 0;
 
     /* ---- state ---- */
-    var state = 'idle';       // idle | serving | rally | point
-    var scoreYou = 0, scoreCpu = 0, rally = 0;
-    var TARGET = 11;
-    var player = { nx: 0 };
-    var cpu = { nx: 0 };
-    var mouseNX = 0, prevMouseNX = 0, swingPower = 0;
-
-    // shuttle described as a flight between two points over t=0..1
-    var s = null;
-    function flight(fromNX, fromD, toNX, toD, shot, toward) {
-      s = {
-        fromNX: fromNX, fromD: fromD, toNX: toNX, toD: toD,
-        apex: shot.apex, dur: shot.dur, color: shot.color,
-        t: 0, toward: toward, hitReady: false, active: true, shot: shot
-      };
-    }
-    function shuttlePos() {
-      var t = s.t;
-      var nx = s.fromNX + (s.toNX - s.fromNX) * t;
-      var d = s.fromD + (s.toD - s.fromD) * t;
-      var h = s.apex * 4 * t * (1 - t);        // parabola, 0 at ends, apex at t=.5
-      // near the striking ends keep a little height so contact looks natural
-      return { nx: nx, d: d, h: h };
-    }
-
+    var state = 'idle';       // idle | rally | point
+    var scoreYou = 0, scoreCpu = 0, rally = 0, TARGET = 21;
+    var you = { x: 0.24, vx: 0, anim: 0, lunge: 0 };
+    var cpu = { x: 0.76, vx: 0, anim: 0, lunge: 0, react: 0.10 };
+    var shuttle = null;        // {x,y,vx,vy,owner}
+    var lastHit = null;        // 'you' | 'cpu' (who hit it last)
+    var nextShot = 'clear';    // player's selected shot
+    var keys = {};
     var particles = [];
-    function burst(x, y, color, n) {
-      n = n || 24;
-      for (var i = 0; i < n; i++) {
-        var a = Math.random() * Math.PI * 2, sp = 1 + Math.random() * 6;
-        particles.push({ x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 1, c: color });
-      }
-    }
 
     function setMsg(t) { if (elMsg) elMsg.textContent = t; }
     function setShot(t) { if (elShot) elShot.textContent = t; }
-    function updateScore() {
-      if (elYou) elYou.textContent = scoreYou;
-      if (elCpu) elCpu.textContent = scoreCpu;
-      if (elRally) elRally.textContent = rally;
+    function updateScore() { if (elYou) elYou.textContent = scoreYou; if (elCpu) elCpu.textContent = scoreCpu; if (elRally) elRally.textContent = rally; }
+
+    function burst(x, y, color, n) {
+      n = n || 22;
+      for (var i = 0; i < n; i++) { var a = Math.random() * Math.PI * 2, sp = 1 + Math.random() * 5; particles.push({ x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 1, c: color }); }
     }
 
-    function serve() {
+    /* ---- serving ---- */
+    function serve(byYou) {
       rally = 0; updateScore(); setShot('—');
-      // you serve high to the far court
-      flight(player.nx, NEAR_BASE, (Math.random() - 0.5) * 1.2, FAR_BASE + 0.06, SHOTS.serve, 'cpu');
+      if (byYou) {
+        shuttle = { x: you.x + 0.02, y: 0.28, vx: 0.006, vy: 0.012, owner: 'you' };
+        lastHit = 'you'; setMsg('Your serve — the shuttle is in play. Get under it!');
+      } else {
+        shuttle = { x: cpu.x - 0.02, y: 0.28, vx: -0.006, vy: 0.012, owner: 'cpu' };
+        lastHit = 'cpu'; setMsg('Opponent serves — move under the shuttle and pick your shot.');
+      }
       state = 'rally';
-      setMsg('Your serve is up! Slide under the shuttle and swing.');
     }
 
     function startGame() {
       scoreYou = 0; scoreCpu = 0; updateScore();
       elStart.style.display = 'none';
-      state = 'serving'; setMsg('Serving\u2026');
-      setTimeout(serve, 500);
+      you.x = 0.24; cpu.x = 0.76;
+      setTimeout(function () { serve(true); }, 400);
     }
 
     function pointTo(who, reason) {
       if (state === 'point') return;
       state = 'point';
-      if (s) s.active = false;
-      if (who === 'you') { scoreYou++; setMsg('Point to YOU — ' + reason + ' \uD83C\uDFF8'); }
-      else { scoreCpu++; setMsg('Point to the dummy — ' + reason + '.'); }
+      if (who === 'you') scoreYou++; else scoreCpu++;
+      setMsg((who === 'you' ? 'Point YOU' : 'Point Dummy') + ' — ' + reason + '.');
       updateScore();
-      var over = (scoreYou >= TARGET || scoreCpu >= TARGET);
+      var over = scoreYou >= TARGET || scoreCpu >= TARGET;
       setTimeout(function () {
         if (over) {
           state = 'idle'; elStart.style.display = ''; elStart.textContent = 'Play again';
-          setMsg(scoreYou > scoreCpu ? 'GAME! You beat the dummy ' + scoreYou + '\u2013' + scoreCpu + ' \uD83C\uDFC6' : 'Game over — dummy wins ' + scoreCpu + '\u2013' + scoreYou + '. Try again!');
-        } else { state = 'serving'; setMsg('Next rally\u2026'); setTimeout(serve, 500); }
-      }, 1400);
+          setMsg(scoreYou > scoreCpu ? 'GAME! You win ' + scoreYou + '\u2013' + scoreCpu + ' \uD83C\uDFC6' : 'Dummy wins ' + scoreCpu + '\u2013' + scoreYou + '. Play again!');
+        } else { serve(who === 'you'); }   // winner serves
+      }, 1300);
     }
 
-    /* ---- input & swing tracking ---- */
-    function onMove(clientX) {
-      var r = canvas.getBoundingClientRect();
-      var rel = (clientX - r.left) / r.width;
-      mouseNX = Math.max(-1, Math.min(1, (rel - 0.5) * 2.15));
+    /* ---- shot generator: produce shuttle velocity for a given shot ---- */
+    // dir = +1 (toward CPU/right) or -1 (toward you/left)
+    function applyShot(type, dir, contactY, targetX) {
+      var s = shuttle;
+      // horizontal distance to cover to the target
+      var dx = (targetX - s.x);
+      var t, vy;
+      if (type === 'smash') {
+        // fast, steep, downward — needs contactY high
+        t = 26 + Math.random() * 6;
+        s.vx = dx / t * 1.15; s.vy = -0.010;   // driven downward quickly
+        burst(px(s.x), py(s.y), '255,90,90', 30);
+      } else if (type === 'drop') {
+        t = 46;
+        s.vx = dx / t; s.vy = GRAV * t * 0.42;  // just clears net then falls
+      } else if (type === 'net') {
+        t = 40; s.vx = dx / t * 0.8; s.vy = GRAV * t * 0.5;
+      } else if (type === 'drive') {
+        t = 30; s.vx = dx / t * 1.05; s.vy = GRAV * t * 0.5;
+      } else { // clear / lift : high, deep
+        t = 62; s.vx = dx / t; s.vy = GRAV * t * 0.95 + 0.006;
+      }
+      s.vx = Math.abs(s.vx) * dir;
+      // ensure it goes over the net: give lift if needed
+      if (type !== 'smash') s.vy = Math.max(s.vy, 0.006);
+      s.owner = dir > 0 ? 'you' : 'cpu';
     }
-    canvas.addEventListener('mousemove', function (e) { onMove(e.clientX); });
-    canvas.addEventListener('touchmove', function (e) { if (e.touches[0]) { onMove(e.touches[0].clientX); e.preventDefault(); } }, { passive: false });
+
+    /* ---- choose a shot for the AI given the shuttle height ---- */
+    function cpuChooseShot(contactY) {
+      var r = Math.random();
+      if (contactY > NET_H + 0.22) return r < 0.4 ? 'smash' : (r < 0.7 ? 'clear' : 'drop');
+      if (contactY > NET_H) return r < 0.5 ? 'drop' : 'drive';
+      return r < 0.6 ? 'clear' : 'net';   // low: mostly lift to stay safe
+    }
+
+    /* ---- input ---- */
+    document.addEventListener('keydown', function (e) {
+      keys[e.key] = true;
+      if (state !== 'rally') return;
+      if (e.key === 'ArrowUp') { nextShot = 'clear'; highlight('clear'); }
+      else if (e.key === 'ArrowDown') { nextShot = 'drop'; highlight('drop'); }
+      else if (e.key === ' ') { nextShot = 'smash'; highlight('smash'); e.preventDefault(); }
+      else if (e.key.toLowerCase() === 'n') { nextShot = 'net'; highlight('net'); }
+    });
+    document.addEventListener('keyup', function (e) { keys[e.key] = false; });
+
+    // pointer moves the player toward cursor x
+    var pointerX = null;
+    function onPointer(clientX) { var r = canvas.getBoundingClientRect(); pointerX = (clientX - r.left) / r.width; }
+    canvas.addEventListener('mousemove', function (e) { onPointer(e.clientX); });
+    canvas.addEventListener('touchmove', function (e) { if (e.touches[0]) { onPointer(e.touches[0].clientX); e.preventDefault(); } }, { passive: false });
+    canvas.addEventListener('mouseleave', function () { pointerX = null; });
+
+    function highlight(type) {
+      shotBtns.forEach(function (b) { b.classList.toggle('is-sel', b.dataset.shot === type); });
+    }
+    shotBtns.forEach(function (b) {
+      b.addEventListener('click', function () { nextShot = b.dataset.shot; highlight(nextShot); });
+    });
     if (elStart) elStart.addEventListener('click', startGame);
 
-    /* ---- decide player's shot from swing power + contact height ---- */
-    function playerShot(contactH, incomingShot) {
-      var fast = swingPower > 0.055;
-      var medium = swingPower > 0.022;
-      // returning a smash → instinctive lift/block
-      if (incomingShot === SHOTS.smash && !fast) return 'lift';
-      if (contactH > 0.55) return fast ? 'smash' : 'clear';           // high shuttle overhead
-      if (contactH > 0.30) return fast ? 'drive' : 'drop';            // mid
-      return fast ? 'drive' : (Math.random() < 0.5 ? 'net' : 'lift'); // low / at the net
+    /* ---- physics update ---- */
+    function reach(pl, s) {
+      // can this player hit the shuttle now? within x-range & shuttle at/under racket height
+      return Math.abs(s.x - pl.x) < 0.075 && s.y < 0.62 && s.y > FLOOR_Y - 0.01;
     }
-
-    /* ---- AI shot selection ---- */
-    function cpuShot(contactH) {
-      var r = Math.random();
-      if (contactH > 0.55) { return r < 0.30 ? 'smash' : (r < 0.65 ? 'clear' : 'drop'); }
-      if (contactH > 0.3) { return r < 0.5 ? 'drop' : 'drive'; }
-      return r < 0.5 ? 'lift' : 'net';
-    }
-
-    function landsIn(nx, d) { return Math.abs(nx) <= 1.0 && d >= FAR_BASE - 0.02 && d <= NEAR_BASE + 0.03; }
 
     function update() {
-      // paddle follow + swing power (how fast the cursor is moving)
-      prevMouseNX = player.nx;
-      player.nx += (mouseNX - player.nx) * 0.4;
-      swingPower = swingPower * 0.6 + Math.abs(player.nx - prevMouseNX) * 0.4;
+      // --- player movement ---
+      var move = 0;
+      if (keys['ArrowLeft'] || keys['a']) move -= 1;
+      if (keys['ArrowRight'] || keys['d']) move += 1;
+      if (move !== 0) you.vx += move * 0.0016;
+      else if (pointerX != null) {
+        var tx = YOU_MIN + pointerX * (YOU_MAX - YOU_MIN) * 1.9;   // map pointer to your half
+        you.vx += (Math.max(YOU_MIN, Math.min(YOU_MAX, tx)) - you.x) * 0.06;
+      }
+      you.vx *= 0.82; you.x += you.vx;
+      you.x = Math.max(YOU_MIN, Math.min(YOU_MAX, you.x));
+      if (you.anim > 0) you.anim -= 1;
 
-      if (s && s.active) {
-        s.t += 1 / s.dur;
-        var pos = shuttlePos();
+      // --- CPU AI movement: predict landing x, glide there ---
+      var aimX = cpu.x;
+      if (shuttle && shuttle.owner === 'you') {
+        // predict where shuttle crosses CPU reach height
+        aimX = predictLandingX(cpu.react);
+        aimX = Math.max(CPU_MIN, Math.min(CPU_MAX, aimX));
+      } else { aimX = 0.76; }
+      cpu.vx += (aimX - cpu.x) * 0.03; cpu.vx *= 0.85; cpu.x += cpu.vx;
+      cpu.x = Math.max(CPU_MIN, Math.min(CPU_MAX, cpu.x));
+      if (cpu.anim > 0) cpu.anim -= 1;
 
-        // ---------- shuttle arrives at CPU end ----------
-        if (s.toward === 'cpu' && s.t >= 1) {
-          if (!landsIn(s.toNX, s.toD)) { pointTo('you', 'shuttle landed out / into net'); return; }
-          // CPU must be near the landing column to return it
-          var reach = 0.5 + (s.shot === SHOTS.smash ? -0.14 : 0.1);   // smashes are harder
-          var canGet = Math.abs(s.toNX - cpu.nx) < reach && Math.random() > (s.shot === SHOTS.smash ? 0.28 : 0.06);
-          if (!canGet) { burst(courtX(s.toNX, FAR_BASE), courtY(FAR_BASE), SHOTS.clear.color); pointTo('you', 'winner past the dummy'); return; }
-          rally++; updateScore();
-          burst(courtX(s.toNX, FAR_BASE), courtY(FAR_BASE), '255,255,255', 16);
-          var ch = s.apex;                                            // approx contact height = shot apex it arrived with
-          var st = cpuShot(ch);
-          var aim = (Math.random() - 0.5) * 1.7;
-          var toD = (st === 'net' || st === 'drop') ? NET_D + 0.18 + Math.random() * 0.12 : NEAR_BASE - Math.random() * 0.12;
-          flight(cpu.nx, FAR_BASE, aim, toD, SHOTS[st], 'you');
-          setShot('Dummy: ' + SHOT_LABEL[st]);
+      // --- shuttle physics ---
+      if (shuttle) {
+        var s = shuttle;
+        s.vy -= GRAV; s.vx *= DRAG; s.x += s.vx; s.y += s.vy;
+
+        // net collision: if crossing net area below net height -> fault to hitter
+        if (s.x > NET_X - 0.006 && s.x < NET_X + 0.006 && s.y < NET_H) {
+          burst(px(NET_X), py(NET_H), '255,90,90');
+          pointTo(lastHit === 'you' ? 'cpu' : 'you', (lastHit === 'you' ? 'you' : 'dummy') + ' hit into the net'); shuttle = null; return;
         }
 
-        // ---------- shuttle arrives at YOUR end ----------
-        if (s.toward === 'you' && s.t >= 1) {
-          if (!landsIn(s.toNX, s.toD)) { pointTo('you', 'dummy hit it out'); return; }
-          var reachY = 0.46;
-          var contactH = s.apex;                                      // height it comes in at
-          var incoming = s.shot;
-          if (Math.abs(s.toNX - player.nx) < reachY) {
-            rally++; updateScore();
-            var st2 = playerShot(contactH, incoming);
-            var shot = SHOTS[st2];
-            burst(courtX(s.toNX, NEAR_BASE), courtY(NEAR_BASE), shot.color, st2 === 'smash' ? 34 : 20);
-            // aim: smash goes deep & angled, drop/net go short, clear deep
-            var aim2, toD2;
-            if (st2 === 'drop' || st2 === 'net') { toD2 = NET_D - 0.16 - Math.random() * 0.12; aim2 = player.nx * 0.6 + (Math.random() - 0.5) * 0.5; }
-            else if (st2 === 'smash' || st2 === 'drive') { toD2 = FAR_BASE + 0.04 + Math.random() * 0.22; aim2 = player.nx * 0.4 + (Math.random() - 0.5) * 1.3; }
-            else { toD2 = FAR_BASE + 0.02 + Math.random() * 0.10; aim2 = (Math.random() - 0.5) * 1.4; } // clear/lift deep
-            flight(player.nx, NEAR_BASE, aim2, toD2, shot, 'cpu');
-            setShot('You: ' + SHOT_LABEL[st2]);
-          } else {
-            burst(courtX(s.toNX, NEAR_BASE), courtY(NEAR_BASE), '255,90,90'); pointTo('cpu', 'you couldn\u2019t reach it'); return;
-          }
+        // hit detection — YOU
+        if (s.owner === 'cpu' && s.x <= YOU_MAX + 0.03 && reach(you, s)) {
+          rally++; updateScore(); you.anim = 12;
+          var type = nextShot;
+          if (type === 'smash' && s.y < NET_H + 0.12) type = 'drive'; // can't smash a low shuttle
+          var tgt = pickPlayerTarget(type);
+          applyShot(type, +1, s.y, tgt); lastHit = 'you';
+          setShot('You: ' + label(type)); burst(px(s.x), py(s.y), shotColor(type), type === 'smash' ? 30 : 16);
         }
+        // hit detection — CPU
+        if (s.owner === 'you' && s.x >= CPU_MIN - 0.03 && reach(cpu, s)) {
+          rally++; updateScore(); cpu.anim = 12;
+          var ct = cpuChooseShot(s.y);
+          var ctgt = pickCpuTarget(ct);
+          applyShot(ct, -1, s.y, ctgt); lastHit = 'cpu';
+          setShot('Dummy: ' + label(ct)); burst(px(s.x), py(s.y), shotColor(ct), ct === 'smash' ? 30 : 16);
+        }
+
+        // landing on floor
+        if (s.y <= FLOOR_Y) {
+          s.y = FLOOR_Y;
+          var inLeft = s.x < NET_X, inCourt = s.x > 0.03 && s.x < 0.97;
+          burst(px(s.x), py(0), '255,255,255', 14);
+          if (!inCourt) { pointTo(lastHit === 'you' ? 'cpu' : 'you', 'shuttle landed out'); }
+          else if (inLeft) { pointTo('cpu', 'shuttle landed in your court'); }
+          else { pointTo('you', 'shuttle landed in the dummy\u2019s court'); }
+          shuttle = null; return;
+        }
+        // flew off the back without landing (safety)
+        if (s.x < -0.05 || s.x > 1.05) { pointTo(lastHit === 'you' ? 'cpu' : 'you', 'shuttle went out'); shuttle = null; return; }
       }
 
-      // CPU movement: glide toward predicted landing nx when shuttle heads its way
-      var cpuTarget = cpu.nx * 0.92;
-      if (s && s.active && s.toward === 'cpu') cpuTarget = s.toNX * (0.7 + Math.min(rally, 10) * 0.02);
-      cpu.nx += (cpuTarget - cpu.nx) * 0.08;
-
-      for (var i = particles.length - 1; i >= 0; i--) {
-        var p = particles[i]; p.x += p.vx; p.y += p.vy; p.vy += 0.15; p.life -= 0.03;
-        if (p.life <= 0) particles.splice(i, 1);
-      }
+      for (var i = particles.length - 1; i >= 0; i--) { var p = particles[i]; p.x += p.vx; p.y += p.vy; p.vy += 0.16; p.life -= 0.03; if (p.life <= 0) particles.splice(i, 1); }
     }
 
-    /* ---- drawing ---- */
-    function line(nx1, d1, nx2, d2) { ctx.beginPath(); ctx.moveTo(courtX(nx1, d1), courtY(d1)); ctx.lineTo(courtX(nx2, d2), courtY(d2)); ctx.stroke(); }
+    // predict where the shuttle will reach CPU-reachable height, add reaction error
+    function predictLandingX(err) {
+      var s = shuttle; if (!s) return cpu.x;
+      var x = s.x, y = s.y, vx = s.vx, vy = s.vy, guard = 0;
+      while (y > 0.35 && x < 1.05 && guard < 400) { vy -= GRAV; vx *= DRAG; x += vx; y += vy; guard++; }
+      return x + (Math.random() - 0.5) * err;
+    }
 
+    function pickPlayerTarget(type) {
+      if (type === 'drop' || type === 'net') return CPU_MIN + 0.04 + Math.random() * 0.08;  // short, just over net
+      if (type === 'smash' || type === 'drive') return CPU_MIN + 0.10 + Math.random() * 0.30;
+      return CPU_MAX - 0.04 - Math.random() * 0.10;                                          // clear: deep
+    }
+    function pickCpuTarget(type) {
+      // aim away from you when possible
+      var deep = YOU_MIN + 0.02 + Math.random() * 0.06;
+      var shortT = NET_X - 0.06 - Math.random() * 0.08;
+      var openSide = you.x > 0.24 ? YOU_MIN + 0.03 : YOU_MAX - 0.03;
+      if (type === 'drop' || type === 'net') return shortT;
+      if (type === 'smash' || type === 'drive') return openSide;
+      return deep;
+    }
+    function label(t) { return ({ clear: 'Clear', drop: 'Drop', net: 'Net', smash: 'SMASH!', drive: 'Drive' })[t] || t; }
+    function shotColor(t) { return ({ clear: '150,220,255', drop: '198,255,46', net: '198,255,46', smash: '255,90,90', drive: '255,180,60' })[t] || '255,255,255'; }
+
+    /* ---- drawing (side view) ---- */
     function drawCourt() {
-      ctx.fillStyle = '#0b1119'; ctx.fillRect(0, 0, W, H);
-      // surface
-      ctx.beginPath();
-      ctx.moveTo(courtX(-1, 0), courtY(0)); ctx.lineTo(courtX(1, 0), courtY(0));
-      ctx.lineTo(courtX(1, 1), courtY(1)); ctx.lineTo(courtX(-1, 1), courtY(1)); ctx.closePath();
-      var g = ctx.createLinearGradient(0, courtY(0), 0, courtY(1));
-      g.addColorStop(0, '#15304a'); g.addColorStop(.5, '#1a3f5c'); g.addColorStop(1, '#20506f');
-      ctx.fillStyle = g; ctx.fill();
+      // background
+      var bg = ctx.createLinearGradient(0, 0, 0, H);
+      bg.addColorStop(0, '#0a1220'); bg.addColorStop(1, '#0e1a28');
+      ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
 
+      // floor slab with perspective shading
+      var floorY = py(0);
+      var fg = ctx.createLinearGradient(0, floorY - 10, 0, H);
+      fg.addColorStop(0, '#1c455c'); fg.addColorStop(1, '#123246');
+      ctx.fillStyle = fg; ctx.fillRect(0, floorY, W, H - floorY);
+      // court baseline lines
       ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 2;
-      line(-1, 0, 1, 0); line(-1, 1, 1, 1);            // baselines
-      line(-1, 0, -1, 1); line(1, 0, 1, 1);            // side lines
-      line(-0.78, 0, -0.78, 1); line(0.78, 0, 0.78, 1); // doubles tramlines
-      line(0, 0, 0, NET_D - 0.02); line(0, NET_D + 0.02, 0, 1); // centre
-      line(-1, 0.30, 1, 0.30); line(-1, 0.70, 1, 0.70);        // service lines
+      ctx.beginPath(); ctx.moveTo(px(0.03), floorY); ctx.lineTo(px(0.97), floorY); ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,255,255,.25)';
+      [0.03, 0.28, 0.97, 0.72].forEach(function (x) { ctx.beginPath(); ctx.moveTo(px(x), floorY); ctx.lineTo(px(x), floorY + 10); ctx.stroke(); });
 
       // NET
-      var ny = courtY(NET_D), nlx = courtX(-1.06, NET_D), nrx = courtX(1.06, NET_D);
-      var netTop = ny - Math.max(26, H * 0.06);
-      ctx.fillStyle = 'rgba(255,255,255,.08)'; ctx.fillRect(nlx, netTop, nrx - nlx, ny - netTop);
-      ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = 1;
-      for (var x = nlx; x < nrx; x += 6) { ctx.beginPath(); ctx.moveTo(x, netTop); ctx.lineTo(x, ny); ctx.stroke(); }
-      for (var yy = netTop; yy < ny; yy += 6) { ctx.beginPath(); ctx.moveTo(nlx, yy); ctx.lineTo(nrx, yy); ctx.stroke(); }
-      ctx.fillStyle = '#fff'; ctx.fillRect(nlx, netTop - 3, nrx - nlx, 4);
-      ctx.fillStyle = '#cfd8e2'; ctx.fillRect(nlx - 3, netTop - 6, 5, ny - netTop + 8); ctx.fillRect(nrx - 2, netTop - 6, 5, ny - netTop + 8);
+      var nx = px(NET_X), ntop = py(NET_H);
+      ctx.fillStyle = 'rgba(255,255,255,.10)'; ctx.fillRect(nx - 2, ntop, 4, floorY - ntop);
+      ctx.strokeStyle = 'rgba(255,255,255,.4)'; ctx.lineWidth = 1;
+      for (var yy = ntop; yy < floorY; yy += 7) { ctx.beginPath(); ctx.moveTo(nx - 9, yy); ctx.lineTo(nx + 9, yy); ctx.stroke(); }
+      ctx.fillStyle = '#fff'; ctx.fillRect(nx - 10, ntop - 3, 20, 4);
+      ctx.fillStyle = '#cfd8e2'; ctx.fillRect(nx - 12, ntop - 4, 3, floorY - ntop + 6); ctx.fillRect(nx + 9, ntop - 4, 3, floorY - ntop + 6);
     }
 
-    function drawPlayer(nx, depth, isYou) {
-      var x = courtX(nx, depth), y = courtY(depth), sc = depthScale(depth);
-      ctx.save(); ctx.translate(x, y); ctx.scale(sc, sc);
-      ctx.fillStyle = 'rgba(0,0,0,.32)'; ctx.beginPath(); ctx.ellipse(0, 4, 22, 7, 0, 0, Math.PI * 2); ctx.fill();
-      var body = isYou ? '#c6ff2e' : '#8fd0ff';
-      // simple silhouette
-      ctx.fillStyle = body;
-      ctx.beginPath(); ctx.arc(0, -46, 7, 0, Math.PI * 2); ctx.fill();               // head
-      ctx.fillRect(-6, -40, 12, 26);                                                // torso
-      ctx.strokeStyle = body; ctx.lineWidth = 4; ctx.lineCap = 'round';
-      ctx.beginPath(); ctx.moveTo(-4, -14); ctx.lineTo(-9, 6); ctx.moveTo(4, -14); ctx.lineTo(9, 6); ctx.stroke(); // legs
-      // racket arm
-      ctx.beginPath(); ctx.moveTo(5, -34); ctx.lineTo(20, -50); ctx.stroke();
-      ctx.strokeStyle = body; ctx.lineWidth = 2.5;
-      ctx.beginPath(); ctx.ellipse(24, -56, 8, 11, -0.5, 0, Math.PI * 2); ctx.stroke();
+    function drawFigure(cx, cyFloor, color, anim, faceRight) {
+      var y = cyFloor;
+      ctx.save(); ctx.translate(cx, y);
+      // shadow
+      ctx.fillStyle = 'rgba(0,0,0,.3)'; ctx.beginPath(); ctx.ellipse(0, 2, 16, 5, 0, 0, Math.PI * 2); ctx.fill();
+      var swing = anim > 0 ? (12 - anim) / 12 : 0;                 // 0..1 swing progress
+      var lean = faceRight ? 1 : -1;
+      ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 4; ctx.lineCap = 'round';
+      // legs
+      ctx.beginPath(); ctx.moveTo(-2, -20); ctx.lineTo(-8, 0); ctx.moveTo(2, -20); ctx.lineTo(8, 0); ctx.stroke();
+      // torso
+      ctx.beginPath(); ctx.moveTo(0, -20); ctx.lineTo(0, -44); ctx.stroke();
+      // head
+      ctx.beginPath(); ctx.arc(0, -52, 7, 0, Math.PI * 2); ctx.fill();
+      // arm + racket, swings up when hitting
+      var armAng = (-0.6 - swing * 1.4) * lean;
+      var ax = Math.sin(armAng) * 18 * lean, ay = -40 - Math.cos(armAng) * 18;
+      ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(0, -40); ctx.lineTo(ax, ay); ctx.stroke();
+      ctx.lineWidth = 2.5; ctx.beginPath(); ctx.ellipse(ax + lean * 4, ay - 6, 7, 10, lean * 0.6, 0, Math.PI * 2); ctx.stroke();
       ctx.restore();
+    }
+
+    function drawShuttleWorld() {
+      if (!shuttle) return;
+      var sx = px(shuttle.x), sy = py(shuttle.y);
+      // shadow on floor
+      var floorY = py(0);
+      ctx.fillStyle = 'rgba(0,0,0,' + Math.max(0.06, 0.3 - shuttle.y * 0.4) + ')';
+      ctx.beginPath(); ctx.ellipse(sx, floorY, 12, 4, 0, 0, Math.PI * 2); ctx.fill();
+      // speed trail for fast shots
+      var speed = Math.hypot(shuttle.vx, shuttle.vy);
+      if (speed > 0.012) {
+        ctx.strokeStyle = 'rgba(255,120,90,.4)'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(px(shuttle.x - shuttle.vx * 4), py(shuttle.y - shuttle.vy * 4)); ctx.lineTo(sx, sy); ctx.stroke();
+      }
+      var ang = Math.atan2(shuttle.vy * -1, shuttle.vx) + Math.PI / 2;
+      drawShuttle(ctx, sx, sy, 0.7, ang + Math.PI);
     }
 
     function draw() {
       ctx.clearRect(0, 0, W, H);
       drawCourt();
-      drawPlayer(cpu.nx, FAR_BASE - 0.02, false);
-
-      if (s && s.active) {
-        var pos = shuttlePos();
-        var sx = courtX(pos.nx, pos.d), groundY = courtY(pos.d);
-        var lift = pos.h * H * 0.6, sy = groundY - lift;
-        var sc = depthScale(pos.d) * (0.85 + pos.h * 0.6);
-        ctx.fillStyle = 'rgba(0,0,0,' + Math.max(0.05, 0.34 - pos.h * 0.22) + ')';
-        ctx.beginPath(); ctx.ellipse(sx, groundY, 15 * depthScale(pos.d), 5 * depthScale(pos.d), 0, 0, Math.PI * 2); ctx.fill();
-        // motion trail for fast shots
-        if (s.shot === SHOTS.smash || s.shot === SHOTS.drive) {
-          ctx.strokeStyle = 'rgba(' + s.color + ',.35)'; ctx.lineWidth = 3;
-          var pt = Math.max(0, s.t - 0.06);
-          var pnx = s.fromNX + (s.toNX - s.fromNX) * pt, pd = s.fromD + (s.toD - s.fromD) * pt;
-          var ph = s.apex * 4 * pt * (1 - pt);
-          ctx.beginPath(); ctx.moveTo(courtX(pnx, pd), courtY(pd) - ph * H * 0.6); ctx.lineTo(sx, sy); ctx.stroke();
-        }
-        var ang = (s.toward === 'cpu' ? Math.PI : 0) + (s.toNX - s.fromNX) * 0.6;
-        drawShuttle(ctx, sx, sy, sc * 0.5, ang);
-      }
-
-      drawPlayer(player.nx, NEAR_BASE, true);
-
-      for (var i = 0; i < particles.length; i++) {
-        var p = particles[i];
-        ctx.globalAlpha = p.life; ctx.fillStyle = 'rgba(' + p.c + ',' + p.life + ')';
-        ctx.beginPath(); ctx.arc(p.x, p.y, 2 + p.life * 2.5, 0, Math.PI * 2); ctx.fill();
-      }
+      var floorY = py(0);
+      drawFigure(px(you.x), floorY, '#c6ff2e', you.anim, true);
+      drawFigure(px(cpu.x), floorY, '#8fd0ff', cpu.anim, false);
+      drawShuttleWorld();
+      for (var i = 0; i < particles.length; i++) { var p = particles[i]; ctx.globalAlpha = p.life; ctx.fillStyle = 'rgba(' + p.c + ',' + p.life + ')'; ctx.beginPath(); ctx.arc(p.x, p.y, 2 + p.life * 2.5, 0, Math.PI * 2); ctx.fill(); }
       ctx.globalAlpha = 1;
     }
 
     function loop() { if (state === 'rally') update(); draw(); requestAnimationFrame(loop); }
 
     size(); window.addEventListener('resize', size);
-    setMsg('Press Start. Slide under the shuttle; swing fast for a smash, gently for a drop.');
+    highlight('clear');
+    setMsg('Press Start. Move under the shuttle, then pick Clear / Drop / Smash / Net.');
     loop();
   })();
 
