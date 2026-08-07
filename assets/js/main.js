@@ -783,6 +783,7 @@
     function startGame() {
       scoreYou = 0; scoreCpu = 0; updateScore(); server = 'you';
       elStart.style.display = 'none';
+      if (elStart.blur) elStart.blur();        // so Space doesn't re-trigger the button
       layout(); resetPositions();
       serveBird('you');
     }
@@ -807,9 +808,13 @@
     }
 
     /* ---------- input ---------- */
+    // only capture keys when the game is active (armed) so the page still scrolls normally otherwise
+    function armed() { return state === 'play' || state === 'point'; }
     document.addEventListener('keydown', function (e) {
+      if (!armed()) return;
       keys[e.key.toLowerCase()] = true;
-      if ((e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') && state === 'play') e.preventDefault();
+      // stop Space / arrows from scrolling the page while playing
+      if (e.key === ' ' || e.key === 'Spacebar' || e.key.indexOf('Arrow') === 0) e.preventDefault();
     });
     document.addEventListener('keyup', function (e) { keys[e.key.toLowerCase()] = false; });
     // touch: left half moves toward tap; tap always swings; swipe up jumps
@@ -840,24 +845,42 @@
 
     function tryHit(p, who) {
       if (!bird || !bird.live || p.swing <= 0 || bird.cool > 0) return;
+      // shuttle must be on the striker's own side (can't reach across the net)
+      if (who === 'you' && bird.x > NET_X - 4) return;
+      if (who === 'cpu' && bird.x < NET_X + 4) return;
       var tip = racketTip(p);
       var dx = bird.x - tip.x, dy = bird.y - tip.y;
-      if (dx * dx + dy * dy < 52 * 52) {
-        // hit! decide power & angle from contact height (higher = smash)
-        var high = bird.y < GROUND - H * 0.30;
-        var toRight = who === 'you';
-        var dir = toRight ? 1 : -1;
-        if (high) { // SMASH — fast, downward, deep
-          bird.vx = dir * (7.5 + Math.random() * 2); bird.vy = 3.2 + Math.random() * 1.5;
-          setShot((who === 'you' ? 'You' : 'Dummy') + ': SMASH!'); burst(tip.x, tip.y, '255,90,90', 26);
-        } else { // clear/lift — arcs over
-          var lift = -9 - Math.random() * 2.5;
-          bird.vx = dir * (4 + Math.random() * 2); bird.vy = lift;
-          setShot((who === 'you' ? 'You' : 'Dummy') + ': Clear'); burst(tip.x, tip.y, '150,220,255', 16);
-        }
-        bird.last = who; bird.cool = 12; rally++; updateScore();
-        p.swing = Math.min(p.swing, 8);
+      if (dx * dx + dy * dy > 58 * 58) return;
+
+      var dir = who === 'you' ? 1 : -1;
+      var high = bird.y < NET_TOP - 10;      // clearly above the net -> can attack down
+
+      if (high && Math.abs(bird.x - NET_X) > W * 0.10) {
+        // SMASH: fast & downward, but still starts from above the net so it clears
+        bird.vx = dir * (9 + Math.random() * 2);
+        bird.vy = 2.6 + Math.random() * 1.2;
+        setShot((who === 'you' ? 'You' : 'Dummy') + ': SMASH!');
+        burst(tip.x, tip.y, '255,90,90', 26);
+      } else {
+        // CLEAR / LIFT: aim to land deep in the far court, guaranteed to arc over the net.
+        var landX = who === 'you' ? (W * 0.70 + Math.random() * W * 0.20) : (W * 0.10 + Math.random() * W * 0.20);
+        var g = GRAV * 0.35;
+        // choose an apex height well above the net
+        var apexY = Math.min(bird.y, NET_TOP) - (60 + Math.random() * 60);
+        var riseH = Math.max(40, bird.y - apexY);
+        var vUp = Math.sqrt(2 * g * riseH);            // speed needed to rise riseH
+        var tUp = vUp / g;                             // frames to apex
+        var tDown = Math.sqrt(2 * (GROUND - apexY) / g);
+        var totalT = tUp + tDown;
+        bird.vy = -vUp;
+        bird.vx = (landX - bird.x) / totalT;
+        // keep horizontal speed sane
+        bird.vx = Math.max(-8, Math.min(8, bird.vx));
+        setShot((who === 'you' ? 'You' : 'Dummy') + ': Clear');
+        burst(tip.x, tip.y, '150,220,255', 16);
       }
+      bird.last = who; bird.cool = 14; rally++; updateScore();
+      p.swing = Math.min(p.swing, 8);
     }
 
     /* ---------- update ---------- */
@@ -912,20 +935,30 @@
       // move toward where the shuttle will be on its side; jump & swing when close
       if (!bird || !bird.live) { cpu.x += (W * 0.75 - cpu.x) * 0.05; return; }
       var target = W * 0.75;
-      if (bird.vx > 0 || bird.x > NET_X) {         // shuttle heading to / on CPU side
-        // simple landing prediction
+      var comingToCpu = (bird.x > NET_X) || (bird.vx > 0);
+      if (comingToCpu) {
+        // predict landing x on the CPU side
         var x = bird.x, y = bird.y, vx = bird.vx, vy = bird.vy, g = 0;
-        while (y < GROUND && g < 200) { vy += GRAV * 0.35; x += vx; y += vy; g++; }
-        target = Math.max(NET_X + PLAYER_W, Math.min(W - PLAYER_W, x));
+        while (y < GROUND && g < 260) { vy += GRAV * 0.35; x += vx; y += vy; g++; }
+        target = Math.max(NET_X + PLAYER_W + 10, Math.min(W - PLAYER_W, x));
       }
       var d = target - cpu.x;
-      cpu.x += Math.max(-4.2, Math.min(4.2, d * 0.12));
+      cpu.x += Math.max(-4.4, Math.min(4.4, d * 0.14));
       cpu.x = Math.max(NET_X + PLAYER_W, Math.min(W - PLAYER_W, cpu.x));
       cpu.facing = -1;
-      // jump for high shuttles near it
-      if (bird.x > NET_X && bird.y < GROUND - H * 0.24 && Math.abs(bird.x - cpu.x) < 90 && cpu.onGround) doJump(cpu);
-      // swing when the shuttle is within striking range
-      if (bird.x > NET_X - 30 && Math.abs(bird.x - cpu.x) < 70 && bird.cool === 0) { if (Math.random() < 0.6) doSwing(cpu); }
+
+      if (!comingToCpu || bird.x < NET_X) return;   // nothing to do until it's on our side
+
+      var overhead = bird.y < NET_TOP - 10;          // high enough to smash
+      var nearX = Math.abs(bird.x - cpu.x) < 46;     // lined up horizontally
+      var racketY = cpu.y - 60;                      // approx racket height when standing
+
+      // jump to reach a high shuttle that's close
+      if (overhead && Math.abs(bird.x - cpu.x) < 80 && cpu.onGround) doJump(cpu);
+
+      // swing when the shuttle is within the racket's reach (so the hit actually connects & clears)
+      var reachable = nearX && bird.y > racketY - 70 && bird.y < GROUND - 8;
+      if (reachable && bird.cool === 0 && cpu.swing <= 0) doSwing(cpu);
     }
 
     /* ---------- drawing ---------- */
