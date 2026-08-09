@@ -585,7 +585,7 @@
       Q.a.forEach(function (optText, i) {
         var names = OPTION_ICON_NAMES[current] || [];
         var mark = ICONS[names[i]] || ICONS.target;
-        html += '<button class="quiz__opt" data-i="' + i + '"><span class="quiz__opt-icon quiz__opt-icon--' + i + '" aria-hidden="true">' + mark + '</span><span class="quiz__opt-text">' + optText + '</span></button>';
+        html += '<button class="quiz__opt quiz__opt--' + i + '" data-i="' + i + '"><span class="quiz__opt-icon" aria-hidden="true">' + mark + '</span><span class="quiz__opt-text">' + optText + '</span></button>';
       });
       html += '</div>';
       qWrap.innerHTML = html;

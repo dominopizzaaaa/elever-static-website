@@ -243,22 +243,26 @@ em{font-style:normal;color:var(--accent)}   /* highlight — brand blue, never i
 .quiz__count{display:inline-block;color:var(--accent);background:var(--accent-soft);letter-spacing:.1em;text-transform:uppercase;font-size:.78rem;font-weight:800;margin-bottom:1.1rem;padding:.4rem 1rem;border-radius:100px;box-shadow:inset 0 0 0 2px rgba(33,81,209,.14);transform:rotate(-2deg)}
 .quiz__q{font-family:'Montserrat',sans-serif;font-weight:800;font-size:clamp(1.4rem,3.2vw,2.2rem);line-height:1.22;letter-spacing:-.01em;margin-bottom:1.6rem}
 .quiz__opts{display:grid;gap:.9rem}
-/* option = a tappable sticker card with a playful emoji badge (no exam A/B/C/D) */
-.quiz__opt{display:flex;align-items:center;gap:.9rem;text-align:left;width:100%;padding:.9rem 1.05rem;border:2.5px solid rgba(33,81,209,.14);border-radius:20px;background:#fff;color:var(--ink);font-family:inherit;font-weight:600;font-size:1.02rem;box-shadow:0 4px 0 rgba(33,81,209,.08);transition:transform .25s var(--ease-bounce),border-color .25s,background .25s,box-shadow .25s}
-.quiz__opt-icon{flex:none;width:48px;height:48px;display:grid;place-items:center;border-radius:15px;box-shadow:0 5px 12px -4px rgba(13,28,66,.3),inset 0 0 0 2px rgba(255,255,255,.75);transition:transform .3s var(--ease-bounce)}
-.quiz__opt-icon svg{width:27px;height:27px;display:block}
-/* four bright, distinct sticker colours by option position */
-.quiz__opt-icon--0{background:#e7edff;color:var(--accent)}
-.quiz__opt-icon--1{background:#ffe6ef;color:#e5487a}
-.quiz__opt-icon--2{background:#d7f6ee;color:#0d9488}
-.quiz__opt-icon--3{background:#fff0d6;color:#d97706}
+/* option = a collectible "sticker card": colour-themed per answer, glossy emblem chip */
+.quiz__opt{position:relative;display:flex;align-items:center;gap:1rem;text-align:left;width:100%;padding:.85rem 1.05rem;border:2.5px solid var(--optline,rgba(33,81,209,.14));border-radius:20px;background:var(--optbg,#fff);color:var(--ink);font-family:inherit;font-weight:700;font-size:1.02rem;box-shadow:0 5px 0 var(--optsh,rgba(33,81,209,.1));transition:transform .25s var(--ease-bounce),border-color .25s,box-shadow .25s}
+.quiz__opt--0{--c:#2151d1;--cl:#5b86ff;--optbg:linear-gradient(180deg,#fff,#eef2ff);--optline:rgba(33,81,209,.22);--optsh:rgba(33,81,209,.18)}
+.quiz__opt--1{--c:#e5487a;--cl:#ff7fa6;--optbg:linear-gradient(180deg,#fff,#fff0f5);--optline:rgba(229,72,122,.24);--optsh:rgba(229,72,122,.18)}
+.quiz__opt--2{--c:#0d9488;--cl:#35c7b4;--optbg:linear-gradient(180deg,#fff,#eefbf8);--optline:rgba(13,148,136,.24);--optsh:rgba(13,148,136,.18)}
+.quiz__opt--3{--c:#e08a0b;--cl:#ffb43e;--optbg:linear-gradient(180deg,#fff,#fff8ec);--optline:rgba(224,138,11,.26);--optsh:rgba(224,138,11,.2)}
+/* glossy emblem chip — bold white icon knocked out of a colour-gradient sticker */
+.quiz__opt-icon{position:relative;flex:none;width:54px;height:54px;display:grid;place-items:center;border-radius:16px;overflow:hidden;
+  background:linear-gradient(145deg,var(--cl),var(--c));
+  box-shadow:0 8px 16px -6px var(--c),inset 0 2px 3px rgba(255,255,255,.55),inset 0 -4px 6px rgba(0,0,0,.2);
+  transition:transform .3s var(--ease-bounce)}
+.quiz__opt-icon::after{content:'';position:absolute;top:-45%;left:-25%;width:95%;height:95%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.6),transparent);transform:rotate(-20deg);pointer-events:none}
+.quiz__opt-icon svg{position:relative;width:30px;height:30px;display:block;color:#fff;stroke-width:2;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
 .quiz__opt-text{flex:1}
 .quiz__opt:nth-child(1) .quiz__opt-icon{transform:rotate(-6deg)}
 .quiz__opt:nth-child(2) .quiz__opt-icon{transform:rotate(5deg)}
 .quiz__opt:nth-child(3) .quiz__opt-icon{transform:rotate(-4deg)}
 .quiz__opt:nth-child(4) .quiz__opt-icon{transform:rotate(6deg)}
-.quiz__opt:hover{border-color:var(--accent);background:var(--accent-soft);transform:translateY(-3px) rotate(-.5deg);box-shadow:0 14px 24px -12px rgba(33,81,209,.5)}
-.quiz__opt:hover .quiz__opt-icon{transform:scale(1.16) rotate(-8deg)}
+.quiz__opt:hover{border-color:var(--c);transform:translateY(-3px) rotate(-.5deg);box-shadow:0 15px 26px -12px var(--c)}
+.quiz__opt:hover .quiz__opt-icon{transform:scale(1.14) rotate(-8deg)}
 .quiz__opt:active{transform:translateY(0) scale(.99)}
 
 /* result — celebratory */
