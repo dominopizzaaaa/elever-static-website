@@ -461,6 +461,17 @@
       [ { loh: 1, sindhu: 2, ginting: 2, leezii: 1 }, { tai: 2, ratchanok: 1, tommy: 1, antonsen: 2 }, { an: 1, akane: 2, naraoka: 1, okuhara: 1 }, { sindhu: 1, lcw: 2, lindan: 1, saina: 1, momota: 1 } ]
     ];
 
+    // A playful emoji "sticker" for each option (parallel to the questions),
+    // so the answers feel like a fun quiz rather than an A/B/C/D exam.
+    var OPTION_ICONS = [
+      ['🧘', '🎯', '🧠', '🏃'],
+      ['💥', '🎭', '🛡️', '⚡'],
+      ['⏰', '🎨', '🔋', '🔧'],
+      ['🔥', '❄️', '🤫', '🤩'],
+      ['🥊', '🚩', '⏳', '🧩'],
+      ['💪', '🪄', '🪨', '🏆']
+    ];
+
     var I18N = window.I18N;
     function lang() { return I18N ? I18N.lang() : 'en'; }
     function players() { return (I18N && I18N.data.players[lang()]) || I18N.data.players.en; }
@@ -498,7 +509,8 @@
       var html = '<p class="quiz__count">' + I18N.t('quiz.count', { n: current + 1, total: QS.length }) + '</p>';
       html += '<h3 class="quiz__q">' + Q.q + '</h3><div class="quiz__opts">';
       Q.a.forEach(function (optText, i) {
-        html += '<button class="quiz__opt" data-i="' + i + '"><span aria-hidden="true">' + String.fromCharCode(65 + i) + '</span>' + optText + '</button>';
+        var ic = (OPTION_ICONS[current] && OPTION_ICONS[current][i]) || '🏸';
+        html += '<button class="quiz__opt" data-i="' + i + '"><span class="quiz__opt-emoji" aria-hidden="true">' + ic + '</span><span class="quiz__opt-text">' + optText + '</span></button>';
       });
       html += '</div>';
       qWrap.innerHTML = html;
@@ -524,6 +536,39 @@
         lastResult = top[Math.floor(Math.random() * top.length)];
       }
       renderResult();
+      quizConfetti();     // celebrate the reveal (only on completion, not on language re-render)
+    }
+
+    // Lightweight confetti burst contained inside the result card.
+    function quizConfetti() {
+      if (reduce || !result) return;
+      var layer = document.createElement('div');
+      layer.className = 'quiz__confetti-layer';
+      result.appendChild(layer);
+      var fall = result.offsetHeight + 40;
+      var colors = ['#2151D1', '#7ea2f2', '#ff7a9c', '#ffd166', '#00c2a8'];
+      var emojis = ['🏸', '✨', '🎉', '⭐', '💫'];
+      for (var i = 0; i < 46; i++) {
+        var bit = document.createElement('span');
+        bit.className = 'quiz__confetti';
+        if (Math.random() < 0.28) {
+          bit.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          bit.style.fontSize = (12 + Math.random() * 12) + 'px';
+        } else {
+          bit.style.background = colors[Math.floor(Math.random() * colors.length)];
+          bit.style.width = (6 + Math.random() * 6) + 'px';
+          bit.style.height = (9 + Math.random() * 8) + 'px';
+        }
+        var dur = 1.7 + Math.random() * 1.7, delay = Math.random() * 0.35;
+        bit.style.left = (Math.random() * 100) + '%';
+        bit.style.setProperty('--dx', ((Math.random() * 2 - 1) * 90) + 'px');
+        bit.style.setProperty('--fall', fall + 'px');
+        bit.style.setProperty('--rot', ((Math.random() * 2 - 1) * 540) + 'deg');
+        bit.style.animationDuration = dur + 's';
+        bit.style.animationDelay = delay + 's';
+        layer.appendChild(bit);
+      }
+      setTimeout(function () { if (layer.parentNode) layer.parentNode.removeChild(layer); }, 4200);
     }
 
     function renderResult() {
