@@ -109,7 +109,7 @@
           x: px, y: py,
           vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 2,
           life: 1, size: 1 + Math.random() * 3,
-          hue: Math.random() < 0.6 ? '198,255,46' : '255,255,255'
+          hue: Math.random() < 0.6 ? '33,81,209' : '255,255,255'
         });
       }
     }
@@ -122,7 +122,7 @@
       ctx.save();
       ctx.globalAlpha = 0.12;
       for (var i = 0; i < 6; i++) {
-        ctx.strokeStyle = '#c6ff2e';
+        ctx.strokeStyle = '#2151D1';
         ctx.lineWidth = 1;
         var yy = cy() + Math.sin(e / 600 + i) * 4 + (i - 3) * 40;
         ctx.beginPath(); ctx.moveTo(0, yy); ctx.lineTo(W, yy + 20); ctx.stroke();
@@ -179,7 +179,7 @@
         var tr = trail[k]; tr.life -= 0.04;
         if (tr.life <= 0) { trail.splice(k, 1); continue; }
         ctx.globalAlpha = tr.life * 0.5;
-        ctx.fillStyle = '#c6ff2e';
+        ctx.fillStyle = '#2151D1';
         ctx.beginPath(); ctx.arc(tr.x, tr.y, tr.life * 6, 0, Math.PI * 2); ctx.fill();
       }
       ctx.globalAlpha = 1;
@@ -219,7 +219,7 @@
       ctx.beginPath(); ctx.moveTo(-30, -70 + i * 11); ctx.lineTo(30, -70 + i * 11); ctx.stroke();
     }
     // shaft + grip
-    ctx.strokeStyle = 'rgba(198,255,46,.9)'; ctx.lineWidth = 7; ctx.lineCap = 'round';
+    ctx.strokeStyle = 'rgba(33,81,209,.9)'; ctx.lineWidth = 7; ctx.lineCap = 'round';
     ctx.beginPath(); ctx.moveTo(0, -24); ctx.lineTo(0, 70); ctx.stroke();
     ctx.restore();
   }
@@ -820,7 +820,7 @@
       if (who === 'you') scoreYou++; else scoreCpu++;
       server = who;
       updateScore();
-      burst(bird ? bird.x : W / 2, bird ? bird.y : GROUND, who === 'you' ? '198,255,46' : '255,90,90', 26);
+      burst(bird ? bird.x : W / 2, bird ? bird.y : GROUND, who === 'you' ? '33,81,209' : '255,90,90', 26);
       setMsg((who === 'you' ? T('play.pointYou') : T('play.pointCpu')) + ' — ' + reason + '.  ' + scoreYou + '\u2013' + scoreCpu);
       if (bird) bird.live = false;
       if (scoreYou >= TARGET || scoreCpu >= TARGET) {
@@ -1047,7 +1047,7 @@
     function draw() {
       ctx.clearRect(0, 0, W, H);
       drawCourt();
-      if (you) drawStick(you, '#c6ff2e');
+      if (you) drawStick(you, '#5b86ff');
       if (cpu) drawStick(cpu, '#8fd0ff');
       if (state === 'play' || state === 'point') drawBird();
       for (var i = 0; i < particles.length; i++) { var pt = particles[i]; ctx.globalAlpha = pt.life; ctx.fillStyle = 'rgba(' + pt.c + ',' + pt.life + ')'; ctx.beginPath(); ctx.arc(pt.x, pt.y, 2 + pt.life * 2.5, 0, Math.PI * 2); ctx.fill(); }
@@ -1074,20 +1074,21 @@
     if (!hub) return;
 
     // id: stable key used to look up translated name/area/meta in I18N.data.venues.
-    // type: 'private' | 'activesg' | 'club'
+    // type: 'private' | 'activesg' | 'club' | 'elever'
+    // elever: true on any venue where Élever runs regular classes (cross-cutting).
     // book: direct booking URL where publicly available; otherwise omitted.
     // The English name/area/meta below are the fallback / default-language values.
     var VENUES = [
       // ---------- PRIVATE HALLS ----------
-      { id: 'wyse', name: 'Wyse Active Hub', area: 'Jurong East', type: 'private', addr: '1 Venture Avenue, #03-01, Perennial Business City, S608521', meta: 'Air-conditioned · 32 courts (SG\u2019s largest)', book: 'https://wyseactive.rezerv.co/' },
-      { id: 'fernvale', name: 'Fernvale Village', area: 'Sengkang', type: 'private', addr: '61 Fernvale Link, S799956', meta: 'Air-conditioned · badminton & pickleball', book: 'https://booking.fernvalevillage.com/' },
+      { id: 'wyse', name: 'Wyse Active Hub', area: 'Jurong East', type: 'private', addr: '1 Venture Avenue, #03-01, Perennial Business City, S608521', meta: 'Air-conditioned · 32 courts (SG\u2019s largest)', book: 'https://wyseactive.rezerv.co/', elever: true },
+      { id: 'fernvale', name: 'Fernvale Village', area: 'Sengkang', type: 'private', addr: '61 Fernvale Link, S799956', meta: 'Air-conditioned · badminton & pickleball', book: 'https://booking.fernvalevillage.com/', elever: true },
       { id: 'arina', name: 'The Sports Arina @ Jalan Kayu', area: 'Sengkang West', type: 'private', addr: '28 Fernvale Road, S799951', meta: 'Air-conditioned · multi-sport hub', book: 'https://thesportsarina.com/' },
-      { id: 'sbhsims', name: 'Singapore Badminton Hall (SBH @ Sims)', area: 'Geylang', type: 'private', addr: '1 Lorong 23 Geylang, S388352', meta: '16 courts + VIP · Tel 6744 4111' },
-      { id: 'sbhexpo', name: 'SBH East Coast @ Expo', area: 'Changi', type: 'private', addr: 'Singapore Expo, Carpark J, Changi South Ave 1, S486150', meta: 'SG\u2019s largest private hall · 22+ courts' },
+      { id: 'sbhsims', name: 'Singapore Badminton Hall (SBH @ Sims)', area: 'Geylang', type: 'private', addr: '1 Lorong 23 Geylang, S388352', meta: '16 courts + VIP · Tel 6744 4111', elever: true },
+      { id: 'sbhexpo', name: 'SBH East Coast @ Expo', area: 'Changi', type: 'private', addr: 'Singapore Expo, Carpark J, Changi South Ave 1, S486150', meta: 'SG\u2019s largest private hall · 22+ courts', elever: true },
       { id: 'obapasirris', name: 'OBA Arena @ Pasir Ris', area: 'Pasir Ris', type: 'private', addr: '3A Pasir Ris Drive 6, S519422', meta: 'Academy-operated arena', book: 'https://www.optimumbadmintonacademy.com/' },
       { id: 'obapunggol', name: 'OBA Arena @ Punggol', area: 'Punggol', type: 'private', addr: '11 Northshore Drive, S828670', meta: 'Covered arena', book: 'https://www.optimumbadmintonacademy.com/' },
       { id: 'citysprouts', name: 'City Sprouts @ Bedok', area: 'Bedok', type: 'private', addr: '200 Bedok North Avenue 1', meta: 'Community hub · courts by XY Badminton', book: 'https://xyacademy.rezerv.co/' },
-      { id: 'kff', name: 'KFF Badminton Arena / Singapore Badminton Stadium', area: 'Geylang', type: 'private', addr: '100 Guillemard Road, S399718', meta: 'Historic SBA venue · 12 courts (reopened 2025)' },
+      { id: 'kff', name: 'KFF Badminton Arena / Singapore Badminton Stadium', area: 'Geylang', type: 'private', addr: '100 Guillemard Road, S399718', meta: 'Historic SBA venue · 12 courts (reopened 2025)', elever: true },
       { id: 'smash', name: 'Smash Arena', area: 'Joo Koon', type: 'private', addr: '511 Upper Jurong Road, D\u2019Arena, Blk B L2, S638366', meta: '9 doubles + 1 single · Taraflex flooring', book: 'https://booking.smasharena.sg/' },
       { id: 'cereza', name: 'Cereza Sports Hall', area: 'Eunos', type: 'private', addr: '3 Chin Cheng Avenue, S429401', meta: '~4 courts · rubber-mat flooring' },
       { id: 'kovan', name: 'Kovan Sports Centre', area: 'Hougang', type: 'private', addr: '60 Hougang Street 21, S538738', meta: 'Indoor courts' },
@@ -1120,7 +1121,17 @@
       // ---------- COUNTRY / SOCIAL CLUBS (members) ----------
       { id: 'csc', name: 'Chinese Swimming Club', area: 'Katong', type: 'club', addr: '21 Amber Road, S439870', meta: 'Members only · est. 1909' },
       { id: 'ssc', name: 'Singapore Swimming Club', area: 'Tanjong Rhu', type: 'club', addr: '45 Tanjong Rhu Road, S436899', meta: 'Members only · est. 1894' },
-      { id: 'warren', name: 'Warren Golf & Country Club', area: 'Dover', type: 'club', addr: '23 Folkestone Road, S139599', meta: 'Members only · Tel 6778 0127' }
+      { id: 'warren', name: 'Warren Golf & Country Club', area: 'Dover', type: 'club', addr: '23 Folkestone Road, S139599', meta: 'Members only · Tel 6778 0127' },
+
+      // ---------- ÉLEVER REGULAR CLASS VENUES (schools & community clubs) ----------
+      // Where Élever runs its regular coaching classes. Marked elever:true so they
+      // surface under the "Élever classes" filter. The public halls listed above
+      // that Élever also teaches at carry the same flag inline on their own entry.
+      { id: 'acsbarker', name: 'Anglo-Chinese School (Barker Road)', area: 'Newton', type: 'elever', addr: '60 Barker Road, S309919', meta: 'Élever class venue · school hall', elever: true },
+      { id: 'bidadari', name: 'Bidadari Community Club', area: 'Bidadari', type: 'elever', addr: 'Bidadari Park Drive, Singapore', meta: 'Élever class venue · community club', elever: true },
+      { id: 'cantonment', name: 'Cantonment Primary School', area: 'Tanjong Pagar', type: 'elever', addr: '1 Cantonment Close, Singapore', meta: 'Élever class venue · school hall', elever: true },
+      { id: 'northvista', name: 'North Vista Primary School', area: 'Sengkang', type: 'elever', addr: 'Rivervale Drive, Sengkang, Singapore', meta: 'Élever class venue · school hall', elever: true },
+      { id: 'scgs', name: "Singapore Chinese Girls' School", area: 'Bukit Timah', type: 'elever', addr: '190 Dunearn Road, S299521', meta: 'Élever class venue · school hall', elever: true }
     ];
 
     var ACTIVESG_BOOK = 'https://activesg.gov.sg/facility-bookings/activities/YLONatwvqJfikKOmB5N9U/venues';
@@ -1159,7 +1170,10 @@
     function render() {
       // Search matches both English and translated name/area so it works in any language.
       var list = VENUES.filter(function (v) {
-        if (currentType !== 'all' && v.type !== currentType) return false;
+        // "Élever classes" is a cross-cutting flag (a hall can be both a private
+        // venue and an Élever class venue), so it filters on v.elever, not v.type.
+        if (currentType === 'elever') { if (!v.elever) return false; }
+        else if (currentType !== 'all' && v.type !== currentType) return false;
         if (query) {
           var l = loc(v);
           var hay = (v.name + ' ' + v.area + ' ' + v.addr + ' ' + l.name + ' ' + l.area).toLowerCase();
@@ -1184,7 +1198,10 @@
         return '<article class="hcard">' +
           '<div class="hcard__head">' +
             '<h3 class="hcard__name">' + esc(l.name) + '</h3>' +
-            '<span class="hcard__tag hcard__tag--' + v.type + '">' + T('tag.' + v.type) + '</span>' +
+            '<div class="hcard__tags">' +
+              '<span class="hcard__tag hcard__tag--' + v.type + '">' + T('tag.' + v.type) + '</span>' +
+              (v.elever && v.type !== 'elever' ? '<span class="hcard__tag hcard__tag--elever">' + T('tag.elever') + '</span>' : '') +
+            '</div>' +
           '</div>' +
           '<p class="hcard__area">' + esc(l.area) + '</p>' +
           '<p class="hcard__addr">' + esc(v.addr) + '</p>' +

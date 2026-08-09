@@ -80,6 +80,7 @@
       'hub.searchLabel': 'Find a venue',
       'hub.searchPh': 'Search by name or area, e.g. Tampines',
       'hub.filterAll': 'All venues',
+      'hub.filterElever': 'Élever classes',
       'hub.filterPrivate': 'Private halls',
       'hub.filterActivesg': 'ActiveSG (public)',
       'hub.filterClub': 'Country clubs',
@@ -92,7 +93,7 @@
       'hub.mapAria': 'Open {name} in Google Maps (opens in a new tab)',
       'hub.bookAria': 'Book {name} (opens in a new tab)',
       'hub.note': 'Addresses are compiled from Google Maps and the official SportSG facilities dataset. ActiveSG public halls can also be booked in the MyActiveSG app. Community Club (CC) courts are booked on <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a>. Spotted a mistake or a missing hall? <a href="mailto:hello@eleverbadminton.com?subject=SG%20Badminton%20Hub%20—%20hall%20update">Tell us</a>.',
-      'tag.private': 'Private', 'tag.activesg': 'ActiveSG', 'tag.club': 'Club',
+      'tag.private': 'Private', 'tag.activesg': 'ActiveSG', 'tag.club': 'Club', 'tag.elever': 'Élever',
 
       'book.privateTitle': 'Private halls',
       'book.privateBody': 'Air-conditioned courts you rent by the hour, usually through each hall\u2019s own website or app. Best for a guaranteed slot with no balloting. Prices vary — roughly <strong>S$20–40 per hour</strong> per court.',
@@ -227,6 +228,7 @@
       'hub.searchLabel': '查找场馆',
       'hub.searchPh': '按名称或地区搜索，例如：淡滨尼',
       'hub.filterAll': '全部场馆',
+      'hub.filterElever': 'Élever 课程场地',
       'hub.filterPrivate': '私人球馆',
       'hub.filterActivesg': 'ActiveSG（公共）',
       'hub.filterClub': '乡村俱乐部',
@@ -239,7 +241,7 @@
       'hub.mapAria': '在 Google 地图中打开 {name}（在新标签页打开）',
       'hub.bookAria': '预订 {name}（在新标签页打开）',
       'hub.note': '地址整理自 Google 地图与新加坡体育理事会（SportSG）官方场馆数据。ActiveSG 公共球馆也可在 MyActiveSG 应用中预订。民众俱乐部（CC）球场可在 <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a> 预订。发现错误或遗漏的球馆？<a href="mailto:hello@eleverbadminton.com?subject=SG%20Badminton%20Hub%20—%20hall%20update">告诉我们</a>。',
-      'tag.private': '私人', 'tag.activesg': 'ActiveSG', 'tag.club': '俱乐部',
+      'tag.private': '私人', 'tag.activesg': 'ActiveSG', 'tag.club': '俱乐部', 'tag.elever': 'Élever',
 
       'book.privateTitle': '私人球馆',
       'book.privateBody': '按小时租用的冷气球场，通常通过各球馆自己的网站或应用预订。适合想要确定场地、无需抽签的情况。价格不一 — 每片场地大约<strong>每小时 20–40 新元</strong>。',
@@ -509,7 +511,12 @@
         evans: { name: 'MOE（Evans）体育馆', area: '武吉知马' },
         csc: { name: '中华游泳会', area: '加东', meta: '仅限会员 · 始于 1909 年' },
         ssc: { name: '新加坡游泳会', area: '丹戎禺', meta: '仅限会员 · 始于 1894 年' },
-        warren: { name: 'Warren 高尔夫乡村俱乐部', area: '多佛', meta: '仅限会员 · 电话 6778 0127' }
+        warren: { name: 'Warren 高尔夫乡村俱乐部', area: '多佛', meta: '仅限会员 · 电话 6778 0127' },
+        acsbarker: { name: '英华学校（巴克路）', area: '纽顿', meta: 'Élever 常规课程场地 · 学校球馆' },
+        bidadari: { name: '碧达达利民众俱乐部', area: '碧达达利', meta: 'Élever 常规课程场地 · 民众俱乐部' },
+        cantonment: { area: '丹戎巴葛', meta: 'Élever 常规课程场地 · 学校球馆' },
+        northvista: { area: '盛港', meta: 'Élever 常规课程场地 · 学校球馆' },
+        scgs: { area: '武吉知马', meta: 'Élever 常规课程场地 · 学校球馆' }
       }
     }
   };

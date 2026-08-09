@@ -4,9 +4,10 @@ A high-end static website concept for [Élever Badminton](https://www.eleverbadm
 
 Single-page experience featuring:
 - A cinematic **shuttlecock smash** intro animation
-- Scroll-reveal sections (About, Programs, Coaches, News)
+- Scroll-reveal sections (About, Programs, Coaches, SG Hub, News)
 - Animated hero with Ken Burns background & stat counters
-- Fully responsive, dark premium aesthetic with an electric-lime accent
+- **SG Badminton Hub** — searchable venue directory with an **Élever classes** filter for the halls & schools where Élever runs regular classes
+- Fully responsive, on-brand aesthetic in Élever's **blue (#2151D1) / white / black** with **Montserrat** throughout
 - Real photography & content sourced (with permission) from the official site
 
 ## Structure
