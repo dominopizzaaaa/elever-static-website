@@ -944,6 +944,7 @@
       var aboveTape = NET_TOP - bird.y;        // > 0 when the shuttle is above the net tape
       var SMASH_OK = netH * 0.16;              // contact must be this far above the tape to smash cleanly
       var label = (who === 'you' ? T('play.you') : T('play.cpu'));
+      bird.smashByYou = false;   // reset each hit; set true only for a genuine player smash below
 
       if (aboveTape > SMASH_OK) {
         // ---- SMASH (contact comfortably above the net) ----
@@ -961,6 +962,8 @@
         if (bird.vy < 0.5) bird.vy = 0.5;                    // keep a real smash descending
         setShot(label + ': ' + T('play.shotSmash'));
         burst(tip.x, tip.y, '255,90,90', 28);
+        // The computer only digs out ~half of the player's smashes: roll it now.
+        if (who === 'you') { bird.smashByYou = true; bird.cpuCanReturn = (Math.random() < 0.5); }
       } else if (aboveTape > 0) {
         // ---- SMASH TOO LOW ----
         // The shuttle isn't high enough to angle down safely, so the attempted smash
@@ -1038,6 +1041,9 @@
     function cpuAI() {
       // move toward where the shuttle will be on its side; jump & swing when close
       if (!bird || !bird.live) { cpu.x += (W * 0.75 - cpu.x) * 0.05; return; }
+      // The player's smash is too fast to dig out every time — on the ~half rolled
+      // unreturnable, the computer can't get there, so it doesn't chase or swing.
+      if (bird.smashByYou && bird.cpuCanReturn === false) return;
       var target = W * 0.75;
       var comingToCpu = (bird.x > NET_X) || (bird.vx > 0);
       if (comingToCpu) {
