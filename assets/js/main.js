@@ -537,7 +537,11 @@
         '<p class="quiz__role">' + p.role + '</p>' +
         '<p class="quiz__playertag">\u201C' + p.tag + '\u201D</p>' +
         '<p class="quiz__desc">' + p.desc + '</p>' +
-        '<button class="btn btn--ghost" id="quizAgain">' + I18N.t('quiz.again') + '</button>' +
+        '<p class="quiz__rr">' + I18N.t('quiz.rrPrompt') + '</p>' +
+        '<div class="quiz__result-actions">' +
+          '<a class="btn btn--primary magnetic" href="https://racketratings.net/" target="_blank" rel="noopener">' + I18N.t('quiz.rrCta') + '</a>' +
+          '<button class="btn btn--ghost" id="quizAgain">' + I18N.t('quiz.again') + '</button>' +
+        '</div>' +
         '<p class="quiz__credit">' + I18N.t('quiz.credit', { lic: p.lic }) + '</p>';
       result.classList.remove('fade'); void result.offsetWidth; result.classList.add('fade');
       document.getElementById('quizAgain').addEventListener('click', function () {
