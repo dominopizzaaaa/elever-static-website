@@ -503,47 +503,61 @@
       [ { loh: 1, sindhu: 2, ginting: 2, leezii: 1 }, { tai: 2, ratchanok: 1, tommy: 1, antonsen: 2 }, { an: 1, akane: 2, naraoka: 1, okuhara: 1 }, { sindhu: 1, lcw: 2, lindan: 1, saina: 1, momota: 1 } ]
     ];
 
-    // Clean line-art icons (self-contained SVG, inherit the badge colour), each
-    // picked to actually match its answer — a big step up from generic emoji.
-    function svgIcon(inner, filled) {
-      return '<svg viewBox="0 0 24 24" ' +
-        (filled ? 'fill="currentColor" stroke="none"'
-                : 'fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"') +
-        ' aria-hidden="true">' + inner + '</svg>';
+    // Little stick-figure mascots — one per answer, each posed to act out the
+    // choice. Drawn in white so they knock out of the colour-gradient chip.
+    function fig(inner) {
+      return '<svg viewBox="0 0 40 42" fill="none" stroke="currentColor" stroke-width="2.6" ' +
+        'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + inner + '</svg>';
     }
+    var HEAD = function (x, y) { return '<circle cx="' + x + '" cy="' + y + '" r="4" fill="currentColor" stroke="none"/>'; };
     var ICONS = {
-      shield:    svgIcon('<path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z"/>'),
-      target:    svgIcon('<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/>'),
-      clipboard: svgIcon('<rect x="6" y="4" width="12" height="16" rx="2"/><path d="M9 4V3a3 3 0 0 1 6 0v1"/><path d="M9 12.5l2 2 4-4"/>'),
-      pulse:     svgIcon('<path d="M2 12h4l3 8 4-16 3 8h6"/>'),
-      dumbbell:  svgIcon('<path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10"/>'),
-      mask:      svgIcon('<path d="M4 6c5-2 11-2 16 0 0 8-3.5 12-8 12S4 14 4 6Z"/><circle cx="9.5" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="14.5" cy="11" r="1" fill="currentColor" stroke="none"/><path d="M9.5 15c1.2 1 3.8 1 5 0"/>'),
-      wall:      svgIcon('<rect x="3" y="5" width="18" height="14" rx="1"/><path d="M3 10h18M3 15h18M9 5v5M15 5v5M9 15v4M15 15v4"/>'),
-      bolt:      svgIcon('<path d="M13 2 4 14h6l-1 8 9-12h-6z"/>', true),
-      alarm:     svgIcon('<circle cx="12" cy="13" r="7"/><path d="M12 10v3l2 1.5"/><path d="M5 4 2.5 6.5M19 4l2.5 2.5"/>'),
-      palette:   svgIcon('<path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-1 2-2s.6-2 2-2h1.5A2.5 2.5 0 0 0 20 14.5C20 8 16.4 3 12 3Z"/><circle cx="8" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="8" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="11" r="1" fill="currentColor" stroke="none"/>'),
-      battery:   svgIcon('<rect x="2" y="8" width="17" height="9" rx="2"/><path d="M22 11.5v2"/><path d="M6 11.5v3M9.5 11.5v3M13 11.5v3"/>'),
-      gear:      svgIcon('<circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.2 5.2l2.1 2.1M16.7 16.7l2.1 2.1M18.8 5.2l-2.1 2.1M7.3 16.7l-2.1 2.1"/>'),
-      flame:     svgIcon('<path d="M12 2c1 4 5 5 5 9a5 5 0 0 1-10 0c0-1.6.6-2.8 1.5-3.7C8.7 9 9 10.2 10 10.7 10 8 11 4.6 12 2Z"/>', true),
-      snowflake: svgIcon('<path d="M12 2v20M4 7l16 10M20 7 4 17M12 6l2-1.5M12 6l-2-1.5M12 18l2 1.5M12 18l-2 1.5"/>'),
-      eyeoff:    svgIcon('<path d="M2 12s4-6.5 10-6.5c1.7 0 3.1.4 4.4 1M22 12s-4 6.5-10 6.5c-1.7 0-3.1-.4-4.4-1"/><circle cx="12" cy="12" r="2.5"/><path d="M3 3 21 21"/>'),
-      mic:       svgIcon('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6"/>'),
-      rocket:    svgIcon('<path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2M9.5 11.5A11 11 0 0 1 18 3c2 0 3 1 3 3a11 11 0 0 1-8.5 8.5l-1.5 1.5-3-3z"/><circle cx="14.5" cy="8.5" r="1.4"/>'),
-      flag:      svgIcon('<path d="M5 21V3M5 4h11l-2 3.5L16 11H5"/>'),
-      hourglass: svgIcon('<path d="M6 3h12M6 21h12M8 3c0 4.5 4 5.5 4 9s-4 4.5-4 9M16 3c0 4.5-4 5.5-4 9s4 4.5 4 9"/>'),
-      grid:      svgIcon('<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>'),
-      wand:      svgIcon('<path d="M4 20 13 11"/><path d="M17 3l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1z"/>'),
-      mountain:  svgIcon('<path d="M3 20 9 8l4 6 2-3 6 9z"/><path d="m9 8 1.6 3"/>'),
-      trophy:    svgIcon('<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6.5H5.6A1.5 1.5 0 0 0 7 9.6M16 6.5h2.4A1.5 1.5 0 0 1 15 9.6"/><path d="M12 13v3M10 16h4l.8 4H9.2z"/>')
+      // athletic ready stance (bent knees, arms up)
+      ready:   fig(HEAD(20, 8) + '<path d="M20 12v9M20 21l-5 6v9M20 21l5 6v9M20 15l-5 4M20 15l5 4"/>'),
+      // jump smash — airborne, racket overhead
+      smash:   fig(HEAD(17, 10) + '<path d="M17 14v8M17 22l-4 7M17 22l5 6M17 17l-6 3M17 17l7-7M24 10l5-5"/><circle cx="30" cy="4" r="2.6"/>'),
+      // arms crossed, locked-in focus
+      focus:   fig(HEAD(20, 8) + '<path d="M20 12v10M20 22l-4 15M20 22l4 15M13 16l14 5M27 16l-13 5"/>'),
+      // sprinting to chase every shot
+      run:     fig(HEAD(23, 8) + '<path d="M22 12l-3 8M19 20l-6 5M19 20l7 5-2 8M20 15l7 1M20 15l-6 5"/>'),
+      // crouched, sneaky fake
+      sneaky:  fig(HEAD(16, 12) + '<path d="M16 16l3 8M19 24l-5 5M19 24l6 4M16 18l-5 1M16 18l5-3 3 2"/>'),
+      // full-stretch diving save
+      dive:    fig(HEAD(9, 15) + '<path d="M12 17l16 6M28 23l6-2M28 23l2 6M16 18l-3 8M22 20l7-5"/><circle cx="31" cy="12" r="2.4"/>'),
+      // reaching forward for a quick net shot
+      net:     fig(HEAD(13, 9) + '<path d="M14 13l1 9M15 22l-4 14M15 22l5 13M14 16l14-2M14 16l-4 5"/><circle cx="30" cy="13.5" r="2.4"/>'),
+      // grooving a repeat drill (motion arc)
+      drill:   fig(HEAD(18, 9) + '<path d="M18 13v9M18 22l-4 14M18 22l4 14M18 16l6-4M24 12l5-3"/><circle cx="31" cy="7.5" r="2.3"/><path d="M9 11q-2 4 0 8" stroke-dasharray="1.5 3"/>'),
+      // playful, juggling for fun
+      playful: fig(HEAD(20, 9) + '<path d="M20 13v9M20 22l-6 6M20 22l6 6M20 15l-6-3M20 15l6-3"/><circle cx="12" cy="9" r="1.8" fill="currentColor" stroke="none"/><circle cx="28" cy="9" r="1.8" fill="currentColor" stroke="none"/>'),
+      // flexing — pure fitness
+      fitness: fig(HEAD(20, 10) + '<path d="M20 14v9M20 23l-5 13M20 23l5 13M20 16l-5-2-2 3M20 16l5-2 2 3"/>'),
+      // adjusting the racket — fixing weak spots
+      tune:    fig(HEAD(15, 10) + '<path d="M15 14l3 8M18 22l-5 4M18 22l6 3v6M15 17l9 3"/><circle cx="27" cy="21" r="2.4"/>'),
+      // arms-up victory / fired up
+      celeb:   fig(HEAD(20, 10) + '<path d="M20 14v9M20 23l-5 13M20 23l5 13M20 16l-6-6M20 16l6-6"/>'),
+      // calm, relaxed and composed
+      calm:    fig(HEAD(20, 9) + '<path d="M20 13v11M20 24l-4 13M20 24l4 13M20 16l-4 8M20 16l4 8"/>'),
+      // low-key, hands behind head
+      chill:   fig(HEAD(20, 10) + '<path d="M20 14v10M20 24l-4 13M20 24l4 13M20 16l-6-3 2 5M20 16l6-3-2 5"/>'),
+      // showman, arms wide to the crowd
+      show:    fig(HEAD(20, 9) + '<path d="M20 13v10M20 23l-5 14M20 23l5 14M20 15l-9-1M20 15l9-1"/>'),
+      // boxing guard — underdog fighter
+      fighter: fig(HEAD(19, 10) + '<path d="M19 14v8M19 22l-4 15M19 22l5 14M19 16l-4-2M19 16l5-1"/><circle cx="14" cy="13" r="2" fill="currentColor" stroke="none"/><circle cx="24" cy="14" r="2" fill="currentColor" stroke="none"/>'),
+      // planting a flag — trailblazer
+      flag:    fig(HEAD(15, 11) + '<path d="M15 15v8M15 23l-4 14M15 23l4 14M15 17l-5 4M15 17l11-8M26 4v13M26 5l7 2-7 3"/>'),
+      // hunched, grinding it out to outlast
+      endure:  fig(HEAD(20, 12) + '<path d="M20 16l-2 8M18 24l-3 13M18 24l4 13M18 19l-5 6M18 19l7 6"/>'),
+      // star pose — solid all-round
+      allround:fig(HEAD(20, 8) + '<path d="M20 12v8M20 20l-6 17M20 20l6 17M20 14l-9-3M20 14l9-3"/>')
     };
-    // Which icon fits each option (parallel to the localized questions).
+    // Which mascot acts out each option (parallel to the localized questions).
     var OPTION_ICON_NAMES = [
-      ['shield', 'target', 'clipboard', 'pulse'],
-      ['dumbbell', 'mask', 'wall', 'bolt'],
-      ['alarm', 'palette', 'battery', 'gear'],
-      ['flame', 'snowflake', 'eyeoff', 'mic'],
-      ['rocket', 'flag', 'hourglass', 'grid'],
-      ['dumbbell', 'wand', 'mountain', 'trophy']
+      ['ready', 'smash', 'focus', 'run'],
+      ['smash', 'sneaky', 'dive', 'net'],
+      ['drill', 'playful', 'fitness', 'tune'],
+      ['celeb', 'calm', 'chill', 'show'],
+      ['fighter', 'flag', 'endure', 'allround'],
+      ['smash', 'sneaky', 'endure', 'celeb']
     ];
 
     var I18N = window.I18N;
@@ -657,17 +671,84 @@
         '<p class="quiz__role">' + p.role + '</p>' +
         '<p class="quiz__playertag">\u201C' + p.tag + '\u201D</p>' +
         '<p class="quiz__desc">' + p.desc + '</p>' +
-        '<p class="quiz__rr">' + I18N.t('quiz.rrPrompt') + '</p>' +
         '<div class="quiz__result-actions">' +
-          '<a class="btn btn--primary magnetic" href="https://racketratings.net/" target="_blank" rel="noopener">' + I18N.t('quiz.rrCta') + '</a>' +
+          '<button class="btn btn--share magnetic" id="quizShare"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;margin-right:.4em"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5 15.4 17.5M15.4 6.5 8.6 10.5"/></svg>' + I18N.t('quiz.share') + '</button>' +
           '<button class="btn btn--ghost" id="quizAgain">' + I18N.t('quiz.again') + '</button>' +
         '</div>' +
+        '<p class="quiz__rr">' + I18N.t('quiz.rrPrompt') + '</p>' +
+        '<a class="btn btn--primary magnetic quiz__rrbtn" href="https://racketratings.net/" target="_blank" rel="noopener">' + I18N.t('quiz.rrCta') + '</a>' +
         '<p class="quiz__credit">' + I18N.t('quiz.credit', { lic: p.lic }) + '</p>';
       result.classList.remove('fade'); void result.offsetWidth; result.classList.add('fade');
       document.getElementById('quizAgain').addEventListener('click', function () {
         result.style.display = 'none'; qWrap.style.display = 'block';
         lastResult = null; reset(); renderQuestion();
       });
+      var shareBtn = document.getElementById('quizShare');
+      if (shareBtn) shareBtn.addEventListener('click', shareResult);
+    }
+
+    // Fit a bold line to a max width by shrinking the font.
+    function fitFont(g, text, maxW, startPx, weight) {
+      var px = startPx;
+      do { g.font = weight + ' ' + px + 'px Montserrat, Arial, sans-serif'; px -= 4; }
+      while (g.measureText(text).width > maxW && px > 30);
+    }
+
+    // Build a shareable 9:16 image of the result (great for IG / TikTok stories).
+    function shareResult() {
+      var p = player(lastResult);
+      var srcImg = result.querySelector('.quiz__photo img');
+      var W = 1080, H = 1920, cx = W / 2;
+      var c = document.createElement('canvas'); c.width = W; c.height = H;
+      var g = c.getContext('2d');
+      var bg = g.createLinearGradient(0, 0, 0, H);
+      bg.addColorStop(0, '#0a1330'); bg.addColorStop(0.55, '#132a6b'); bg.addColorStop(1, '#2151d1');
+      g.fillStyle = bg; g.fillRect(0, 0, W, H);
+      var glow = g.createRadialGradient(cx, 660, 40, cx, 660, 680);
+      glow.addColorStop(0, 'rgba(126,162,242,.4)'); glow.addColorStop(1, 'rgba(126,162,242,0)');
+      g.fillStyle = glow; g.fillRect(0, 0, W, H);
+      g.textAlign = 'center';
+      g.fillStyle = '#aecbff'; g.font = '700 42px Montserrat, Arial, sans-serif';
+      g.fillText((I18N.t('quiz.resultLead') || 'MY BADMINTON TWIN').toUpperCase(), cx, 300);
+      // circular photo
+      var cy = 660, r = 300;
+      g.save(); g.beginPath(); g.arc(cx, cy, r, 0, Math.PI * 2); g.clip();
+      if (srcImg && srcImg.complete && srcImg.naturalWidth) {
+        var iw = srcImg.naturalWidth, ih = srcImg.naturalHeight, s = Math.max(2 * r / iw, 2 * r / ih);
+        var dw = iw * s, dh = ih * s;
+        g.drawImage(srcImg, cx - dw / 2, cy - r, dw, dh);   // top-aligned cover
+      } else { g.fillStyle = '#26314f'; g.fillRect(cx - r, cy - r, 2 * r, 2 * r); }
+      g.restore();
+      g.lineWidth = 16; g.strokeStyle = '#ffffff'; g.beginPath(); g.arc(cx, cy, r, 0, Math.PI * 2); g.stroke();
+      g.lineWidth = 6; g.strokeStyle = '#7ea2f2'; g.beginPath(); g.arc(cx, cy, r + 12, 0, Math.PI * 2); g.stroke();
+      if (p.flag) { g.font = '120px Arial'; g.fillText(p.flag, cx + r * 0.72, cy + r * 0.86); }
+      // name + tag + role
+      var name = (p.name || '').toUpperCase();
+      g.fillStyle = '#ffffff'; fitFont(g, name, W - 150, 96, '900'); g.fillText(name, cx, 1160);
+      g.fillStyle = '#d6e0f2'; g.font = '600 48px Montserrat, Arial, sans-serif';
+      g.fillText('“' + (p.tag || '') + '”', cx, 1240);
+      g.fillStyle = '#9fb0c9'; g.font = '500 36px Montserrat, Arial, sans-serif';
+      g.fillText(p.role || '', cx, 1300);
+      // footer brand + CTA
+      g.fillStyle = '#ffffff'; g.font = '800 50px Montserrat, Arial, sans-serif';
+      g.fillText('ÉLEVER · BADMINTON', cx, 1720);
+      g.fillStyle = '#aecbff'; g.font = '500 38px Montserrat, Arial, sans-serif';
+      g.fillText("What's your badminton twin? · eleverbadminton.com", cx, 1786);
+      c.toBlob(function (blob) {
+        if (!blob) return;
+        var fname = 'my-badminton-twin.png';
+        try {
+          var file = new File([blob], fname, { type: 'image/png' });
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            navigator.share({ files: [file], title: 'My badminton twin', text: 'I got ' + p.name + ' as my badminton twin! 🏸' }).catch(function () {});
+            return;
+          }
+        } catch (e) {}
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a'); a.href = url; a.download = fname;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+      }, 'image/png');
     }
 
     startBtn.addEventListener('click', function () {
