@@ -1061,4 +1061,151 @@
     loop();
   })();
 
+  /* =====================================================================
+     10. SG BADMINTON HUB — venue directory, booking guide, groups
+         Tabs + searchable / filterable directory of Singapore halls.
+         Addresses from Google Maps & the official SportSG dataset.
+     ===================================================================== */
+  (function sgHub() {
+    var hub = document.getElementById('hub');
+    if (!hub) return;
+
+    // type: 'private' | 'activesg' | 'club'
+    // book: direct booking URL where publicly available; otherwise omitted.
+    var VENUES = [
+      // ---------- PRIVATE HALLS ----------
+      { name: 'Wyse Active Hub', area: 'Jurong East', type: 'private', addr: '1 Venture Avenue, #03-01, Perennial Business City, S608521', meta: 'Air-conditioned · 32 courts (SG\u2019s largest)', book: 'https://wyseactive.rezerv.co/' },
+      { name: 'Fernvale Village', area: 'Sengkang', type: 'private', addr: '61 Fernvale Link, S799956', meta: 'Air-conditioned · badminton & pickleball', book: 'https://booking.fernvalevillage.com/' },
+      { name: 'The Sports Arina @ Jalan Kayu', area: 'Sengkang West', type: 'private', addr: '28 Fernvale Road, S799951', meta: 'Air-conditioned · multi-sport hub', book: 'https://thesportsarina.com/' },
+      { name: 'Singapore Badminton Hall (SBH @ Sims)', area: 'Geylang', type: 'private', addr: '1 Lorong 23 Geylang, S388352', meta: '16 courts + VIP · Tel 6744 4111' },
+      { name: 'SBH East Coast @ Expo', area: 'Changi', type: 'private', addr: 'Singapore Expo, Carpark J, Changi South Ave 1, S486150', meta: 'SG\u2019s largest private hall · 22+ courts' },
+      { name: 'OBA Arena @ Pasir Ris', area: 'Pasir Ris', type: 'private', addr: '3A Pasir Ris Drive 6, S519422', meta: 'Academy-operated arena', book: 'https://www.optimumbadmintonacademy.com/' },
+      { name: 'OBA Arena @ Punggol', area: 'Punggol', type: 'private', addr: '11 Northshore Drive, S828670', meta: 'Covered arena', book: 'https://www.optimumbadmintonacademy.com/' },
+      { name: 'City Sprouts @ Bedok', area: 'Bedok', type: 'private', addr: '200 Bedok North Avenue 1', meta: 'Community hub · courts by XY Badminton', book: 'https://xyacademy.rezerv.co/' },
+      { name: 'KFF Badminton Arena / Singapore Badminton Stadium', area: 'Geylang', type: 'private', addr: '100 Guillemard Road, S399718', meta: 'Historic SBA venue · 12 courts (reopened 2025)' },
+      { name: 'Smash Arena', area: 'Joo Koon', type: 'private', addr: '511 Upper Jurong Road, D\u2019Arena, Blk B L2, S638366', meta: '9 doubles + 1 single · Taraflex flooring', book: 'https://booking.smasharena.sg/' },
+      { name: 'Cereza Sports Hall', area: 'Eunos', type: 'private', addr: '3 Chin Cheng Avenue, S429401', meta: '~4 courts · rubber-mat flooring' },
+      { name: 'Kovan Sports Centre', area: 'Hougang', type: 'private', addr: '60 Hougang Street 21, S538738', meta: 'Indoor courts' },
+
+      // ---------- ACTIVESG PUBLIC SPORT CENTRES ----------
+      { name: 'OCBC Arena', area: 'Kallang', type: 'activesg', addr: '5 Stadium Drive, S397631 (Singapore Sports Hub)', meta: 'Air-conditioned arena', book: 'https://www.sportshub.com.sg/' },
+      { name: 'Our Tampines Hub — Tampines Sport Centre', area: 'Tampines', type: 'activesg', addr: '1 Tampines Walk, S528523', meta: 'Flagship ActiveSG hall · ~20 courts' },
+      { name: 'Bishan Sport Centre', area: 'Bishan', type: 'activesg', addr: '5 Bishan Street 14, S579783' },
+      { name: 'Bukit Canberra Sport Centre', area: 'Sembawang', type: 'activesg', addr: '21 Canberra Link, S756973' },
+      { name: 'Bukit Gombak Sport Centre', area: 'Bukit Batok', type: 'activesg', addr: '810 Bukit Batok West Ave 5, S659088' },
+      { name: 'Choa Chu Kang Sport Centre', area: 'Choa Chu Kang', type: 'activesg', addr: '1 Choa Chu Kang Street 53, S689236' },
+      { name: 'Clementi Sport Centre', area: 'Clementi', type: 'activesg', addr: '518 Clementi Avenue 3, S129907' },
+      { name: 'Delta Sport Centre', area: 'Tiong Bahru', type: 'activesg', addr: '900 Tiong Bahru Road, S158790' },
+      { name: 'Heartbeat @ Bedok Sport Centre', area: 'Bedok', type: 'activesg', addr: '11 Bedok North Street 1, S469662' },
+      { name: 'Hougang Sport Centre', area: 'Hougang', type: 'activesg', addr: '93 Hougang Avenue 4, S538832' },
+      { name: 'Jurong East Sport Centre', area: 'Jurong East', type: 'activesg', addr: '21 Jurong East Street 31, S609517' },
+      { name: 'Jurong West Sport Centre', area: 'Jurong West', type: 'activesg', addr: '20 Jurong West Street 93, S648965' },
+      { name: 'Pasir Ris Sport Centre', area: 'Pasir Ris', type: 'activesg', addr: '120 Pasir Ris Central, S519640' },
+      { name: 'Queenstown Sport Centre', area: 'Queenstown', type: 'activesg', addr: '473 Stirling Road, S148948' },
+      { name: 'Sengkang Sport Centre', area: 'Sengkang', type: 'activesg', addr: '57 Anchorvale Road, S544964' },
+      { name: 'Senja-Cashew Sport Centre', area: 'Bukit Panjang', type: 'activesg', addr: '101 Bukit Panjang Road, S679910' },
+      { name: 'Serangoon Sport Centre', area: 'Serangoon', type: 'activesg', addr: '35 Yio Chu Kang Road, S545552' },
+      { name: 'St. Wilfred Sport Centre', area: 'Kallang', type: 'activesg', addr: '3 St. Wilfred Road, S327920' },
+      { name: 'Toa Payoh Sport Centre', area: 'Toa Payoh', type: 'activesg', addr: '301 Lorong 6 Toa Payoh, S319392' },
+      { name: 'Woodlands Sport Centre', area: 'Woodlands', type: 'activesg', addr: '1 Woodlands Street 13, S738597' },
+      { name: 'Yio Chu Kang Sport Centre', area: 'Ang Mo Kio', type: 'activesg', addr: '200 Ang Mo Kio Avenue 9, S569770' },
+      { name: 'Yishun Sport Centre', area: 'Yishun', type: 'activesg', addr: '101 Yishun Avenue 1, S769130' },
+      { name: 'MOE (Evans) Sport Hall', area: 'Bukit Timah', type: 'activesg', addr: '21 Evans Road, S259366' },
+
+      // ---------- COUNTRY / SOCIAL CLUBS (members) ----------
+      { name: 'Chinese Swimming Club', area: 'Katong', type: 'club', addr: '21 Amber Road, S439870', meta: 'Members only · est. 1909' },
+      { name: 'Singapore Swimming Club', area: 'Tanjong Rhu', type: 'club', addr: '45 Tanjong Rhu Road, S436899', meta: 'Members only · est. 1894' },
+      { name: 'Warren Golf & Country Club', area: 'Dover', type: 'club', addr: '23 Folkestone Road, S139599', meta: 'Members only · Tel 6778 0127' }
+    ];
+
+    var ACTIVESG_BOOK = 'https://activesg.gov.sg/facility-bookings/activities/YLONatwvqJfikKOmB5N9U/venues';
+    var TYPE_LABEL = { private: 'Private', activesg: 'ActiveSG', club: 'Club' };
+
+    var grid = document.getElementById('hallGrid');
+    var countEl = document.getElementById('hallCount');
+    var searchEl = document.getElementById('hallSearch');
+    var filtersEl = document.getElementById('hallFilters');
+    var tabsEl = document.getElementById('hubTabs');
+    var panels = hub.querySelectorAll('.hub__panel');
+
+    var currentType = 'all';
+    var query = '';
+
+    function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+    function mapsUrl(v) {
+      return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(v.name + ' ' + v.addr.replace(/,?\s*S\d{6}.*/, '') + ' Singapore');
+    }
+
+    function render() {
+      var list = VENUES.filter(function (v) {
+        if (currentType !== 'all' && v.type !== currentType) return false;
+        if (query) {
+          var hay = (v.name + ' ' + v.area + ' ' + v.addr).toLowerCase();
+          if (hay.indexOf(query) === -1) return false;
+        }
+        return true;
+      });
+
+      if (countEl) countEl.textContent = list.length + (list.length === 1 ? ' venue' : ' venues');
+
+      if (!list.length) {
+        grid.innerHTML = '<p class="hub__empty">No venues match — try a different search or filter.</p>';
+        return;
+      }
+
+      grid.innerHTML = list.map(function (v) {
+        var book = v.book || (v.type === 'activesg' ? ACTIVESG_BOOK : '');
+        var bookLabel = v.type === 'activesg' ? 'Book on ActiveSG' : 'Book';
+        var actions = '<a class="hcard__link" href="' + mapsUrl(v) + '" target="_blank" rel="noopener">Map \u2197</a>';
+        if (book) actions += '<a class="hcard__link hcard__link--book" href="' + book + '" target="_blank" rel="noopener">' + bookLabel + ' \u2197</a>';
+        return '<article class="hcard">' +
+          '<div class="hcard__head">' +
+            '<h3 class="hcard__name">' + esc(v.name) + '</h3>' +
+            '<span class="hcard__tag hcard__tag--' + v.type + '">' + TYPE_LABEL[v.type] + '</span>' +
+          '</div>' +
+          '<p class="hcard__area">' + esc(v.area) + '</p>' +
+          '<p class="hcard__addr">' + esc(v.addr) + '</p>' +
+          (v.meta ? '<p class="hcard__meta">' + esc(v.meta) + '</p>' : '') +
+          '<div class="hcard__actions">' + actions + '</div>' +
+        '</article>';
+      }).join('');
+    }
+
+    // filters
+    if (filtersEl) {
+      filtersEl.addEventListener('click', function (e) {
+        var btn = e.target.closest('.hub__filter');
+        if (!btn) return;
+        filtersEl.querySelectorAll('.hub__filter').forEach(function (b) { b.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+        currentType = btn.dataset.type;
+        render();
+      });
+    }
+    // search
+    if (searchEl) {
+      searchEl.addEventListener('input', function () { query = searchEl.value.trim().toLowerCase(); render(); });
+    }
+
+    // tabs
+    function activateTab(name) {
+      tabsEl.querySelectorAll('.hub__tab').forEach(function (b) { b.classList.toggle('is-active', b.dataset.tab === name); });
+      panels.forEach(function (p) { p.classList.toggle('is-active', p.dataset.panel === name); });
+    }
+    if (tabsEl) {
+      tabsEl.addEventListener('click', function (e) {
+        var btn = e.target.closest('.hub__tab');
+        if (btn) activateTab(btn.dataset.tab);
+      });
+    }
+    // inline "go to Where to Play" links inside the How-to-Book panel
+    hub.addEventListener('click', function (e) {
+      var link = e.target.closest('.hub__inline-link');
+      if (link && link.dataset.goto) activateTab(link.dataset.goto);
+    });
+
+    render();
+  })();
+
 })();
