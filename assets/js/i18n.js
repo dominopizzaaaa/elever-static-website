@@ -384,18 +384,18 @@
     // ---- quiz questions & options (arrays parallel to QUESTIONS in main.js) ----
     quiz: {
       en: [
-        { q: 'It\u2019s match point against you. What\u2019s your instinct?',
-          a: ['Stay calm, extend the rally, wait for their mistake', 'Go for a bold, unexpected winner', 'Trust the plan I drilled for exactly this moment', 'Dig in and out-run them — I never stop chasing'] },
-        { q: 'Pick your signature shot.',
-          a: ['A thunderous jump smash', 'A disguised drop that fools everyone', 'A gets-everything defensive retrieve', 'A blistering fast net-to-net exchange'] },
+        { q: 'It\u2019s match point and the pressure is on. What\u2019s your gut reaction?',
+          a: ['Keep it steady and wait for them to mess up', 'Go for a risky winner — high risk, high reward', 'Stick to the plan I\u2019ve practised a hundred times', 'Chase down every single shot until they crack'] },
+        { q: 'Pick your go-to shot.',
+          a: ['A massive jump smash', 'A sneaky fake that sends them the wrong way', 'An impossible save no one thought I\u2019d reach', 'Super-fast hands in a net battle'] },
         { q: 'How do you train?',
-          a: ['Rigid routine, strict diet, zero shortcuts', 'Experiment, improvise, keep it playful', 'Grind fitness until my tank is bottomless', 'Quietly fix my weaknesses, session by session'] },
-        { q: 'What\u2019s your energy on court?',
-          a: ['Fiery — I roar, I fist-pump, I feed off emotion', 'Ice-cold and unreadable', 'Humble — I\u2019d rather fly under the radar', 'A showman — I love entertaining the crowd'] },
-        { q: 'What drives you the most?',
-          a: ['Being a fearless underdog with nothing to lose', 'Blazing a trail others will follow', 'Outlasting everyone through sheer fitness', 'Perfecting a complete, all-round game'] },
-        { q: 'Your ideal way to win a point?',
-          a: ['Overwhelm them with power and speed', 'Outsmart them with deception and touch', 'Outlast them until they break', 'Rise to the moment when it matters most'] }
+          a: ['Same strict routine every day, no shortcuts', 'Mess around, try new things, keep it fun', 'Pure fitness grind so I never run out of energy', 'Quietly fix my weak spots, one session at a time'] },
+        { q: 'What are you like on court?',
+          a: ['Loud and fired up — I show my emotions', 'Calm, quiet and hard to read', 'Low-key — I let my racket do the talking', 'A bit of a showoff — I love hyping the crowd'] },
+        { q: 'What motivates you the most?',
+          a: ['Being the underdog with nothing to lose', 'Being the first — someone others look up to', 'Outlasting everyone when they\u2019re exhausted', 'Being solid at every part of the game'] },
+        { q: 'Your favourite way to win a point?',
+          a: ['Overpower them with pace and power', 'Outsmart them with tricks and soft touches', 'Wear them down until they give up', 'Turn it on when it matters most'] }
       ],
       zh: [
         { q: '比分来到你的赛点（对手领先）。你的直觉是？',
