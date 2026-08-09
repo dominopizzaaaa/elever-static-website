@@ -22,23 +22,31 @@
       </div>
       <div class="intro__tag" id="introTag">B A D M I N T O N</div>
     </div>
-    <button class="intro__skip" id="skipIntro">Skip Intro &rsaquo;</button>
+    <button class="intro__skip" id="skipIntro"><span data-i18n="intro.skip"></span>Skip intro</span> &rsaquo;</button>
   </div>
+
+  <!-- ===== SKIP LINK (a11y) ===== -->
+  <a href="#top" class="skip-link" data-i18n="a11y.skip">Skip to main content</a>
 
   <!-- ===== NAV ===== -->
   <header class="nav" id="nav">
-    <a href="#top" class="nav__logo">ÉLEVER<span>·</span>BADMINTON</a>
-    <nav class="nav__links" id="navLinks">
-      <a href="#about">About</a>
-      <a href="#quiz">Quiz</a>
-      <a href="#programs">Programs</a>
-      <a href="#team">Coaches</a>
-      <a href="#hub">SG Hub</a>
-      <a href="#news">News</a>
-      <a href="#play">Play</a>
-      <a href="#contact" class="nav__cta magnetic">Join Us</a>
+    <a href="#top" class="nav__logo" aria-label="Élever Badminton — home">ÉLEVER<span aria-hidden="true">·</span>BADMINTON</a>
+    <nav class="nav__links" id="navLinks" aria-label="Primary">
+      <a href="#about" data-i18n="nav.about">About</a>
+      <a href="#quiz" data-i18n="nav.quiz">Quiz</a>
+      <a href="#programs" data-i18n="nav.programs">Programs</a>
+      <a href="#team" data-i18n="nav.team">Coaches</a>
+      <a href="#hub" data-i18n="nav.hub">SG Hub</a>
+      <a href="#news" data-i18n="nav.news">News</a>
+      <a href="#play" data-i18n="nav.play">Play</a>
+      <a href="#contact" class="nav__cta magnetic" data-i18n="nav.join">Join Us</a>
+      <div class="lang" role="group" aria-label="Language / 语言">
+        <button class="lang__btn is-active" id="langEn" data-lang="en" lang="en" aria-pressed="true">EN</button>
+        <span class="lang__sep" aria-hidden="true">/</span>
+        <button class="lang__btn" id="langZh" data-lang="zh" lang="zh" aria-pressed="false">中文</button>
+      </div>
     </nav>
-    <button class="nav__burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    <button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span></span></button>
   </header>
 
   <!-- ===== HERO ===== -->
@@ -47,23 +55,23 @@
     <div class="hero__overlay"></div>
     <canvas id="heroCanvas" class="hero__canvas"></canvas>
     <div class="hero__content">
-      <p class="hero__eyebrow reveal">Singapore · Badminton Excellence</p>
+      <p class="hero__eyebrow reveal" data-i18n="hero.eyebrow">Singapore · Badminton Excellence</p>
       <h1 class="hero__title">
         <span class="line reveal"><i>E</i><i>L</i><i>E</i><i>V</i><i>A</i><i>T</i><i>E</i></span>
         <span class="line line--accent reveal" data-delay="120"><i>Y</i><i>O</i><i>U</i><i>R</i>&nbsp;<i>G</i><i>A</i><i>M</i><i>E</i></span>
       </h1>
-      <p class="hero__sub reveal" data-delay="240">To build. To raise. To bring something to a higher position. Élite coaching that turns first swings into championship dreams.</p>
+      <p class="hero__sub reveal" data-delay="240" data-i18n="hero.sub">To build. To raise. To bring something to a higher position. Élite coaching that turns first swings into championship dreams.</p>
       <div class="hero__actions reveal" data-delay="320">
-        <a href="#programs" class="btn btn--primary magnetic">Explore Programs</a>
-        <a href="#quiz" class="btn btn--ghost">Find Your Twin</a>
+        <a href="#programs" class="btn btn--primary magnetic" data-i18n="hero.ctaPrograms">Explore programs</a>
+        <a href="#quiz" class="btn btn--ghost" data-i18n="hero.ctaQuiz">Find your twin</a>
       </div>
-      <p class="hero__hint reveal" data-delay="420">↳ move your cursor — the shuttles react to you</p>
+      <p class="hero__hint reveal" data-delay="420" data-i18n="hero.hint">↳ Move your cursor — the shuttles react to you</p>
     </div>
-    <div class="hero__scroll"><span></span>Scroll</div>
+    <div class="hero__scroll" aria-hidden="true"><span></span><span data-i18n="hero.scroll">Scroll</span></div>
     <div class="hero__stats">
-      <div class="stat reveal"><b data-count="15">0</b><small>Expert Coaches</small></div>
-      <div class="stat reveal" data-delay="120"><b data-count="4">0</b><small>Program Pillars</small></div>
-      <div class="stat reveal" data-delay="240"><b data-count="100">0</b><small>% Passion</small></div>
+      <div class="stat reveal"><b data-count="15">0</b><small data-i18n="hero.stat1">Expert coaches</small></div>
+      <div class="stat reveal" data-delay="120"><b data-count="4">0</b><small data-i18n="hero.stat2">Program pillars</small></div>
+      <div class="stat reveal" data-delay="240"><b data-count="100">0</b><small data-i18n="hero.stat3">% Passion</small></div>
     </div>
   </section>
 
@@ -77,285 +85,287 @@
   </div>
 
   <!-- ===== ABOUT ===== -->
-  <section class="about" id="about">
+  <section class="about" id="about" aria-labelledby="aboutTitle">
     <div class="section-head">
-      <span class="kicker reveal">01 — About Élever</span>
-      <h2 class="section-title reveal">More than a sport.<br><em>A pathway to greatness.</em></h2>
+      <span class="kicker reveal" data-i18n="about.kicker">01 — About Élever</span>
+      <h2 class="section-title reveal" id="aboutTitle" data-i18n-html="about.title">More than a sport.<br><em>A pathway to greatness.</em></h2>
     </div>
     <div class="about__grid">
-      <p class="about__lead reveal">
+      <p class="about__lead reveal" data-i18n-html="about.lead">
         <strong>Élever</strong> <span class="about__def">(verb)</span> — to build or raise; bring something to a higher position.
       </p>
-      <p class="reveal" data-delay="120">Excellence is a journey — and at Élever Badminton it follows a meticulously structured pathway built on progressive pillars. From your very first swing to elite-level competition, our coaches provide the expert mentorship and supportive community every athlete needs to build confidence and master the game.</p>
-      <p class="reveal" data-delay="200">We believe every player deserves world-class guidance, wherever they are in their journey. That belief drives everything we do — on and off the court.</p>
+      <p class="reveal" data-delay="120" data-i18n="about.p1">Excellence is a journey — and at Élever Badminton it follows a meticulously structured pathway built on progressive pillars. From your very first swing to elite-level competition, our coaches provide the expert mentorship and supportive community every athlete needs to build confidence and master the game.</p>
+      <p class="reveal" data-delay="200" data-i18n="about.p2">We believe every player deserves world-class guidance, wherever they are in their journey. That belief drives everything we do — on and off the court.</p>
     </div>
   </section>
 
   <!-- ===== FIND YOUR BADMINTON TWIN (personality quiz) ===== -->
-  <section class="quiz" id="quiz">
+  <section class="quiz" id="quiz" aria-labelledby="quizTitle">
     <div class="section-head">
-      <span class="kicker reveal">02 — Interactive</span>
-      <h2 class="section-title reveal">Which pro is your <em>badminton twin</em>?</h2>
+      <span class="kicker reveal" data-i18n="quiz.kicker">02 — Interactive</span>
+      <h2 class="section-title reveal" id="quizTitle" data-i18n-html="quiz.title">Which pro is your <em>badminton twin</em>?</h2>
     </div>
     <div class="quiz__wrap reveal" data-delay="120">
-      <div class="quiz__progress-wrap"><div class="quiz__progress" id="quizProgress"></div></div>
+      <div class="quiz__progress-wrap" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="quizProgressBar"><div class="quiz__progress" id="quizProgress"></div></div>
 
       <div class="quiz__intro" id="quizIntro">
-        <p class="quiz__lead">Answer 6 quick questions about how you play &amp; think.<br>We'll reveal which of the world's badminton stars is your on-court twin — with their photo. <strong>No peeking</strong> — there are 27 possible matches, and yours is a surprise.</p>
-        <button class="btn btn--primary magnetic" id="quizStart">Start the quiz</button>
+        <p class="quiz__lead" data-i18n-html="quiz.lead">Answer 6 quick questions about how you play &amp; think.<br>We'll reveal which of the world's badminton stars is your on-court twin — with their photo. <strong>No peeking</strong> — there are 27 possible matches, and yours is a surprise.</p>
+        <button class="btn btn--primary magnetic" id="quizStart" data-i18n="quiz.start">Start the quiz</button>
       </div>
 
       <div class="quiz__stage" id="quizStage" style="display:none">
-        <div class="quiz__card" id="quizQ"></div>
-        <div class="quiz__card quiz__result" id="quizResult" style="display:none"></div>
+        <div class="quiz__card" id="quizQ" aria-live="polite"></div>
+        <div class="quiz__card quiz__result" id="quizResult" style="display:none" aria-live="polite"></div>
       </div>
     </div>
   </section>
 
   <!-- ===== PROGRAMS ===== -->
-  <section class="programs" id="programs">
+  <section class="programs" id="programs" aria-labelledby="programsTitle">
     <div class="section-head">
-      <span class="kicker reveal">03 — What We Do</span>
-      <h2 class="section-title reveal">Four ways to <em>rise</em>.</h2>
+      <span class="kicker reveal" data-i18n="programs.kicker">03 — What We Do</span>
+      <h2 class="section-title reveal" id="programsTitle" data-i18n-html="programs.title">Four ways to <em>rise</em>.</h2>
     </div>
     <div class="programs__grid">
       <article class="pcard tilt reveal">
-        <span class="pcard__num">01</span>
-        <h3>Camps</h3>
-        <p>Our Holiday Exploration Camps turn every school break into a badminton adventure. Game-based learning for players with little to no experience — building foundations and physical development while leaving them eager to keep playing.</p>
+        <span class="pcard__num" aria-hidden="true">01</span>
+        <h3 data-i18n="programs.campsTitle">Camps</h3>
+        <p data-i18n="programs.campsBody">Our holiday exploration camps turn every school break into a badminton adventure. Game-based learning for players with little to no experience — building strong foundations and physical development while keeping them eager to play more.</p>
       </article>
       <article class="pcard tilt reveal" data-delay="100">
-        <span class="pcard__num">02</span>
-        <h3>Classes</h3>
-        <p>A structured pathway built on four progressive pillars. From your very first swing to elite competition, our classes provide expert mentorship and a supportive community to build confidence and master the game.</p>
+        <span class="pcard__num" aria-hidden="true">02</span>
+        <h3 data-i18n="programs.classesTitle">Classes</h3>
+        <p data-i18n="programs.classesBody">A structured pathway built on four progressive pillars. From your very first swing to elite competition, our classes provide expert mentorship and a supportive community to build confidence and master the game.</p>
       </article>
       <article class="pcard tilt reveal" data-delay="200">
-        <span class="pcard__num">03</span>
-        <h3>Clinics</h3>
-        <p>Dynamic, community-driven training experiences — specialised, short-term workshops. Players dive deep into mechanics, footwork and strategy in a high-energy, immersive environment tailored to specific age groups and every skill level.</p>
+        <span class="pcard__num" aria-hidden="true">03</span>
+        <h3 data-i18n="programs.clinicsTitle">Clinics</h3>
+        <p data-i18n="programs.clinicsBody">Dynamic, community-driven training — specialised, short-term workshops. Players dive deep into technique, footwork and strategy in a high-energy environment tailored to specific age groups and every skill level.</p>
       </article>
       <article class="pcard tilt reveal" data-delay="300">
-        <span class="pcard__num">04</span>
-        <h3>Carnivals</h3>
-        <p>Community outreach combining clinics, fun games and community activities. By bringing the sport into selected communities, we make badminton accessible to all — celebrating health, connection and the joy of play.</p>
+        <span class="pcard__num" aria-hidden="true">04</span>
+        <h3 data-i18n="programs.carnivalsTitle">Carnivals</h3>
+        <p data-i18n="programs.carnivalsBody">Community outreach that combines clinics, fun games and activities. By bringing the sport into local communities, we make badminton accessible to everyone — celebrating health, connection and the joy of play.</p>
       </article>
     </div>
   </section>
 
   <!-- ===== TEAM ===== -->
-  <section class="team" id="team">
+  <section class="team" id="team" aria-labelledby="teamTitle">
     <div class="section-head">
-      <span class="kicker reveal">04 — Our People</span>
-      <h2 class="section-title reveal">Meet the <em>coaches</em>.</h2>
+      <span class="kicker reveal" data-i18n="team.kicker">04 — Our People</span>
+      <h2 class="section-title reveal" id="teamTitle" data-i18n-html="team.title">Meet the <em>coaches</em>.</h2>
     </div>
 
-    <h3 class="team__label reveal">Co-Founders</h3>
+    <h3 class="team__label reveal" data-i18n="team.founders">Co-Founders</h3>
     <div class="team__grid team__grid--lead">
       <figure class="tcard reveal">
         <div class="tcard__img"><img src="assets/img/team-loh-kean-hean.jpg" alt="Loh Kean Hean" loading="lazy"></div>
-        <figcaption><h4>Loh Kean Hean</h4><p>Co-Founder · Technical Director</p><span>BWF Level 1</span></figcaption>
+        <figcaption><h4>Loh Kean Hean</h4><p data-i18n="role.cofounderTech">Co-Founder · Technical Director</p><span data-i18n="role.bwf1">BWF Level 1</span></figcaption>
       </figure>
       <figure class="tcard reveal" data-delay="120">
         <div class="tcard__img"><img src="assets/img/team-eng-chin-an.jpg" alt="Eng Chin An" loading="lazy"></div>
-        <figcaption><h4>Eng Chin An</h4><p>Co-Founder</p><span>BWF Level 1</span></figcaption>
+        <figcaption><h4>Eng Chin An</h4><p data-i18n="role.cofounder">Co-Founder</p><span data-i18n="role.bwf1">BWF Level 1</span></figcaption>
       </figure>
     </div>
 
-    <h3 class="team__label reveal">Our Team</h3>
+    <h3 class="team__label reveal" data-i18n="team.team">Our Team</h3>
     <div class="team__grid">
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-ong-keng-yang.jpg" alt="Ong Keng Yang" loading="lazy"></div><figcaption><h4>Ong Keng Yang</h4><p>Performance Mgr · S&amp;C Coach</p></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-shawn-wong.jpg" alt="Shawn Wong" loading="lazy"></div><figcaption><h4>Shawn Wong</h4><p>Senior Coach</p><span>BWF Level 1</span></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-torance-jng.jpg" alt="Torance Jng" loading="lazy"></div><figcaption><h4>Torance Jng</h4><p>Development Coach</p><span>BWF Level 1</span></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-lim-su-qi.jpg" alt="Lim Su Qi" loading="lazy"></div><figcaption><h4>Lim Su Qi</h4><p>Development Coach</p><span>BWF Level 1</span></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-grace-tan.jpg" alt="Grace Tan" loading="lazy"></div><figcaption><h4>Grace Tan</h4><p>Development Coach</p><span>BWF Level 1</span></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-hassan.jpg" alt="Hassan" loading="lazy"></div><figcaption><h4>Hassan</h4><p>Development Coach</p><span>BWF Level 1</span></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-jaren-ong.jpg" alt="Jaren Ong" loading="lazy"></div><figcaption><h4>Jaren Ong</h4><p>Development Coach</p><span>BWF Level 1</span></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-uzair.png" alt="Uzair" loading="lazy"></div><figcaption><h4>Uzair</h4><p>Development Coach</p><span>BWF Level 1</span></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-elsa-lai.jpg" alt="Elsa Lai" loading="lazy"></div><figcaption><h4>Elsa Lai</h4><p>Development Coach</p></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-thong-kin-yu.jpg" alt="Thong Kin Yu" loading="lazy"></div><figcaption><h4>Thong Kin Yu</h4><p>Development Coach</p></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-ryan-lim.jpg" alt="Ryan Lim" loading="lazy"></div><figcaption><h4>Ryan Lim</h4><p>Assistant Coach</p></figcaption></figure>
-      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-jaden-chiang.jpg" alt="Jaden Chiang" loading="lazy"></div><figcaption><h4>Jaden Chiang</h4><p>Assistant Coach</p></figcaption></figure>
+      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-ong-keng-yang.jpg" alt="Ong Keng Yang" loading="lazy"></div><figcaption><h4>Ong Keng Yang</h4><p data-i18n="role.performance">Performance Mgr · S&amp;C Coach</p></figcaption></figure>
+      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-shawn-wong.jpg" alt="Shawn Wong" loading="lazy"></div><figcaption><h4>Shawn Wong</h4><p data-i18n="role.senior">Senior Coach</p><span data-i18n="role.bwf1">BWF Level 1</span></figcaption></figure>
+      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-torance-jng.jpg" alt="Torance Jng" loading="lazy"></div><figcaption><h4>Torance Jng</h4><p data-i18n="role.development">Development Coach</p><span data-i18n="role.bwf1">BWF Level 1</span></figcaption></figure>
+      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-lim-su-qi.jpg" alt="Lim Su Qi" loading="lazy"></div><figcaption><h4>Lim Su Qi</h4><p data-i18n="role.development">Development Coach</p><span data-i18n="role.bwf1">BWF Level 1</span></figcaption></figure>
+      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-grace-tan.jpg" alt="Grace Tan" loading="lazy"></div><figcaption><h4>Grace Tan</h4><p data-i18n="role.development">Development Coach</p><span data-i18n="role.bwf1">BWF Level 1</span></figcaption></figure>
+      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-hassan.jpg" alt="Hassan" loading="lazy"></div><figcaption><h4>Hassan</h4><p data-i18n="role.development">Development Coach</p><span data-i18n="role.bwf1">BWF Level 1</span></figcaption></figure>
+      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-jaren-ong.jpg" alt="Jaren Ong" loading="lazy"></div><figcaption><h4>Jaren Ong</h4><p data-i18n="role.development">Development Coach</p><span data-i18n="role.bwf1">BWF Level 1</span></figcaption></figure>
+      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-uzair.png" alt="Uzair" loading="lazy"></div><figcaption><h4>Uzair</h4><p data-i18n="role.development">Development Coach</p><span data-i18n="role.bwf1">BWF Level 1</span></figcaption></figure>
+      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-elsa-lai.jpg" alt="Elsa Lai" loading="lazy"></div><figcaption><h4>Elsa Lai</h4><p data-i18n="role.development">Development Coach</p></figcaption></figure>
+      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-thong-kin-yu.jpg" alt="Thong Kin Yu" loading="lazy"></div><figcaption><h4>Thong Kin Yu</h4><p data-i18n="role.development">Development Coach</p></figcaption></figure>
+      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-ryan-lim.jpg" alt="Ryan Lim" loading="lazy"></div><figcaption><h4>Ryan Lim</h4><p data-i18n="role.assistant">Assistant Coach</p></figcaption></figure>
+      <figure class="tcard reveal"><div class="tcard__img"><img src="assets/img/team-jaden-chiang.jpg" alt="Jaden Chiang" loading="lazy"></div><figcaption><h4>Jaden Chiang</h4><p data-i18n="role.assistant">Assistant Coach</p></figcaption></figure>
     </div>
   </section>
 
   <!-- ===== SG BADMINTON HUB ===== -->
-  <section class="hub" id="hub">
+  <section class="hub" id="hub" aria-labelledby="hubTitle">
     <div class="section-head">
-      <span class="kicker reveal">05 — Singapore Badminton Hub</span>
-      <h2 class="section-title reveal">Everything <em>badminton</em>, one place.</h2>
-      <p class="hub__hint reveal" data-delay="120">There's no single place to find where to play in Singapore — so we built one. Browse every hall, learn how to book a court, and find a group to hit with. <strong>Not just an academy — the home of badminton in SG.</strong></p>
+      <span class="kicker reveal" data-i18n="hub.kicker">05 — Singapore Badminton Hub</span>
+      <h2 class="section-title reveal" id="hubTitle" data-i18n-html="hub.title">Everything <em>badminton</em>, one place.</h2>
+      <p class="hub__hint reveal" data-delay="120" data-i18n-html="hub.hint">There's nowhere in Singapore to find every place to play — so we built it. Browse the halls, learn how to book a court, and find people to hit with. <strong>Not just an academy — the home of badminton in Singapore.</strong></p>
     </div>
 
     <!-- HUB TABS -->
-    <div class="hub__tabs reveal" data-delay="140" id="hubTabs">
-      <button class="hub__tab is-active" data-tab="halls">Where to Play</button>
-      <button class="hub__tab" data-tab="book">How to Book</button>
-      <button class="hub__tab" data-tab="groups">Groups &amp; Ratings</button>
+    <div class="hub__tabs reveal" data-delay="140" id="hubTabs" role="tablist" aria-label="Singapore Badminton Hub sections">
+      <button class="hub__tab is-active" data-tab="halls" role="tab" id="tab-halls" aria-selected="true" aria-controls="panel-halls" data-i18n="hub.tabHalls">Where to play</button>
+      <button class="hub__tab" data-tab="book" role="tab" id="tab-book" aria-selected="false" aria-controls="panel-book" tabindex="-1" data-i18n="hub.tabBook">How to book</button>
+      <button class="hub__tab" data-tab="groups" role="tab" id="tab-groups" aria-selected="false" aria-controls="panel-groups" tabindex="-1" data-i18n="hub.tabGroups">Groups &amp; ratings</button>
     </div>
 
     <!-- ===== PANEL: HALLS ===== -->
-    <div class="hub__panel is-active" data-panel="halls">
+    <div class="hub__panel is-active" data-panel="halls" id="panel-halls" role="tabpanel" aria-labelledby="tab-halls" tabindex="0">
       <div class="hub__controls reveal">
         <div class="hub__search">
-          <input type="search" id="hallSearch" placeholder="Search by name or area…" aria-label="Search badminton venues" />
+          <label class="hub__search-label" for="hallSearch" data-i18n="hub.searchLabel">Find a venue</label>
+          <input type="search" id="hallSearch" placeholder="Search by name or area, e.g. Tampines" aria-describedby="hallCount" />
         </div>
-        <div class="hub__filters" id="hallFilters">
-          <button class="hub__filter is-active" data-type="all">All</button>
-          <button class="hub__filter" data-type="private">Private halls</button>
-          <button class="hub__filter" data-type="activesg">ActiveSG</button>
-          <button class="hub__filter" data-type="club">Country clubs</button>
+        <div class="hub__filters" id="hallFilters" role="group" aria-label="Filter venues by type">
+          <button class="hub__filter is-active" data-type="all" aria-pressed="true" data-i18n="hub.filterAll">All venues</button>
+          <button class="hub__filter" data-type="private" aria-pressed="false" data-i18n="hub.filterPrivate">Private halls</button>
+          <button class="hub__filter" data-type="activesg" aria-pressed="false" data-i18n="hub.filterActivesg">ActiveSG (public)</button>
+          <button class="hub__filter" data-type="club" aria-pressed="false" data-i18n="hub.filterClub">Country clubs</button>
         </div>
       </div>
-      <p class="hub__count" id="hallCount"></p>
+      <p class="hub__count" id="hallCount" aria-live="polite"></p>
       <div class="hub__grid" id="hallGrid"></div>
-      <p class="hub__note reveal">Addresses compiled from Google Maps &amp; the official SportSG facilities dataset. ActiveSG public halls are also bookable via the MyActiveSG app. Community Club (CC) courts can be booked at <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a>. Spot an error or a missing hall? <a href="mailto:hello@eleverbadminton.com?subject=SG%20Badminton%20Hub%20—%20hall%20update">Let us know</a>.</p>
+      <p class="hub__note reveal" data-i18n-html="hub.note">Addresses are compiled from Google Maps and the official SportSG facilities dataset. ActiveSG public halls can also be booked in the MyActiveSG app. Community Club (CC) courts are booked on <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a>. Spotted a mistake or a missing hall? <a href="mailto:hello@eleverbadminton.com?subject=SG%20Badminton%20Hub%20—%20hall%20update">Tell us</a>.</p>
     </div>
 
     <!-- ===== PANEL: HOW TO BOOK ===== -->
-    <div class="hub__panel" data-panel="book">
+    <div class="hub__panel" data-panel="book" id="panel-book" role="tabpanel" aria-labelledby="tab-book" tabindex="0" hidden>
       <div class="hub__book">
         <article class="bcard reveal">
-          <span class="bcard__num">01</span>
-          <h3>Private halls</h3>
-          <p>Air-conditioned courts you rent by the hour, usually through each hall's own booking site or app. Great for a guaranteed slot with no balloting. Prices vary — expect roughly <strong>S$20–40/hr</strong> per court.</p>
+          <span class="bcard__num" aria-hidden="true">01</span>
+          <h3 data-i18n="book.privateTitle">Private halls</h3>
+          <p data-i18n-html="book.privateBody">Air-conditioned courts you rent by the hour, usually through each hall's own website or app. Best for a guaranteed slot with no balloting. Prices vary — roughly <strong>S$20–40 per hour</strong> per court.</p>
           <ul class="bcard__list">
-            <li>Pick a hall from the <button class="hub__inline-link" data-goto="halls">Where to Play</button> tab.</li>
-            <li>Open its booking link and choose a date &amp; time.</li>
-            <li>Pay online to confirm — done.</li>
+            <li data-i18n-html="book.privateStep1">Pick a hall on the <button class="hub__inline-link" data-goto="halls" type="button">Where to play</button> tab.</li>
+            <li data-i18n="book.privateStep2">Open its booking link and choose a date and time.</li>
+            <li data-i18n="book.privateStep3">Pay online to confirm — you're set.</li>
           </ul>
         </article>
         <article class="bcard reveal" data-delay="100">
-          <span class="bcard__num">02</span>
-          <h3>ActiveSG public halls</h3>
-          <p>The cheapest way to play — from about <strong>S$3.50–7.40/hr</strong>. Book on <a href="https://activesg.gov.sg/facility-bookings/activities/YLONatwvqJfikKOmB5N9U/venues" target="_blank" rel="noopener">activesg.gov.sg</a> or the MyActiveSG app.</p>
+          <span class="bcard__num" aria-hidden="true">02</span>
+          <h3 data-i18n="book.activesgTitle">ActiveSG public halls</h3>
+          <p data-i18n-html="book.activesgBody">The most affordable way to play — from about <strong>S$3.50–7.40 per hour</strong>. Book at <a href="https://activesg.gov.sg/facility-bookings/activities/YLONatwvqJfikKOmB5N9U/venues" target="_blank" rel="noopener">activesg.gov.sg</a> or in the MyActiveSG app.</p>
           <ul class="bcard__list">
-            <li>Log in with <strong>Singpass</strong> → Book a Facility → Badminton.</li>
-            <li>Search by postal code or venue; each slot is 1 hour (max 2/day).</li>
-            <li><strong>Peak</strong> (weekday after 6pm, weekends &amp; PH) is <strong>balloted</strong> — the window opens ~14 days ahead. <strong>Off-peak</strong> is first-come, released ~13 days ahead at 12pm.</li>
+            <li data-i18n-html="book.activesgStep1">Log in with <strong>Singpass</strong>, then choose Book a Facility → Badminton.</li>
+            <li data-i18n="book.activesgStep2">Search by postal code or venue. Each slot is 1 hour (up to 2 per day).</li>
+            <li data-i18n-html="book.activesgStep3"><strong>Peak</strong> hours (weekdays after 6pm, weekends and public holidays) use a <strong>ballot</strong> that opens about 14 days ahead. <strong>Off-peak</strong> is first-come, released about 13 days ahead at 12pm.</li>
           </ul>
         </article>
         <article class="bcard reveal" data-delay="200">
-          <span class="bcard__num">03</span>
-          <h3>Community Club (CC) courts</h3>
-          <p>Run by the People's Association across the island. Prices vary per CC, roughly <strong>S$5–7/hr</strong>. Book at <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a>.</p>
+          <span class="bcard__num" aria-hidden="true">03</span>
+          <h3 data-i18n="book.ccTitle">Community Club (CC) courts</h3>
+          <p data-i18n-html="book.ccBody">Run by the People's Association across the island. Prices vary by CC, roughly <strong>S$5–7 per hour</strong>. Book on <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a>.</p>
           <ul class="bcard__list">
-            <li>Log in with <strong>Singpass</strong> → Facilities → Book a Facility.</li>
-            <li>Choose Badminton Court, region, date &amp; time.</li>
-            <li>New slots open <strong>daily at 10pm</strong>, up to <strong>15 days</strong> in advance.</li>
+            <li data-i18n-html="book.ccStep1">Log in with <strong>Singpass</strong>, then choose Facilities → Book a Facility.</li>
+            <li data-i18n="book.ccStep2">Select Badminton Court, then your region, date and time.</li>
+            <li data-i18n-html="book.ccStep3">New slots open <strong>daily at 10pm</strong>, up to <strong>15 days</strong> ahead.</li>
           </ul>
         </article>
       </div>
     </div>
 
     <!-- ===== PANEL: GROUPS & RATINGS ===== -->
-    <div class="hub__panel" data-panel="groups">
+    <div class="hub__panel" data-panel="groups" id="panel-groups" role="tabpanel" aria-labelledby="tab-groups" tabindex="0" hidden>
       <div class="hub__groups">
         <article class="gcard gcard--feature reveal">
-          <span class="gcard__eyebrow">Find your level</span>
-          <h3>Racket Ratings</h3>
-          <p>Not sure how good you actually are — or who to play with? <strong>Racket Ratings</strong> gives Singapore players a rating and helps you find recreational sessions, kakis and games near your level.</p>
-          <a href="https://www.racketratings.com/" target="_blank" rel="noopener" class="btn btn--primary magnetic">Visit Racket Ratings</a>
+          <span class="gcard__eyebrow" data-i18n="groups.featureEyebrow">Find your level</span>
+          <h3 data-i18n="groups.featureTitle">Racket Ratings</h3>
+          <p data-i18n-html="groups.featureBody">Not sure how good you are — or who to play with? <strong>Racket Ratings</strong> gives Singapore players a skill rating and helps you find casual sessions, kakis and games near your level.</p>
+          <a href="https://www.racketratings.com/" target="_blank" rel="noopener" class="btn btn--primary magnetic" data-i18n="groups.featureCta">Visit Racket Ratings</a>
         </article>
         <article class="gcard reveal" data-delay="100">
-          <h3>Casual &amp; recreational play</h3>
-          <p>Most social games form up on community platforms. Search these for a session near you and your level:</p>
+          <h3 data-i18n="groups.casualTitle">Casual &amp; social play</h3>
+          <p data-i18n="groups.casualBody">Most social games form up on community platforms. Try these to find a session near you and at your level:</p>
           <ul class="gcard__list">
-            <li><a href="https://www.racketratings.com/" target="_blank" rel="noopener">Racket Ratings</a> — rated players &amp; sessions</li>
-            <li><a href="https://www.meetup.com/find/?keywords=badminton&location=sg--Singapore" target="_blank" rel="noopener">Meetup — Singapore badminton</a></li>
-            <li>Facebook &amp; Telegram "kaki" groups (search "badminton Singapore")</li>
-            <li>Your neighbourhood CC — many run drop-in social sessions</li>
+            <li data-i18n-html="groups.casualLink1"><a href="https://www.racketratings.com/" target="_blank" rel="noopener">Racket Ratings</a> — rated players and sessions</li>
+            <li data-i18n-html="groups.casualLink2"><a href="https://www.meetup.com/find/?keywords=badminton&location=sg--Singapore" target="_blank" rel="noopener">Meetup — Singapore badminton</a></li>
+            <li data-i18n="groups.casualLink3">Facebook and Telegram “kaki” groups (search “badminton Singapore”)</li>
+            <li data-i18n="groups.casualLink4">Your neighbourhood CC — many run drop-in social sessions</li>
           </ul>
         </article>
         <article class="gcard reveal" data-delay="200">
-          <h3>Want structured coaching?</h3>
-          <p>If you'd rather level up with a coach, that's exactly what we do. From first swing to competition, Élever's camps, classes &amp; clinics have a place for you.</p>
-          <a href="#programs" class="btn btn--ghost">See our programs</a>
+          <h3 data-i18n="groups.coachTitle">Prefer structured coaching?</h3>
+          <p data-i18n="groups.coachBody">If you'd rather improve with a coach, that's exactly what we do. From your first swing to competition, Élever's camps, classes and clinics have a place for you.</p>
+          <a href="#programs" class="btn btn--ghost" data-i18n="groups.coachCta">See our programs</a>
         </article>
       </div>
     </div>
   </section>
 
   <!-- ===== NEWS / FULL 2026 SEASON ===== -->
-  <section class="news" id="news">
+  <section class="news" id="news" aria-labelledby="newsTitle">
     <div class="section-head">
-      <span class="kicker reveal">06 — The 2026 Season</span>
-      <h2 class="section-title reveal">Every stop on the <em>world tour</em>.</h2>
-      <p class="news__hint reveal" data-delay="120">The 4 most recent results from the 2026 HSBC BWF World Tour — hit “show all” for the full season. Updated 7 Aug 2026.</p>
-      <div class="news__filters reveal" data-delay="160" id="newsFilters">
-        <button class="news__filter is-active" data-filter="all">All</button>
-        <button class="news__filter" data-filter="done">Completed</button>
-        <button class="news__filter" data-filter="upcoming">Upcoming</button>
+      <span class="kicker reveal" data-i18n="news.kicker">06 — The 2026 Season</span>
+      <h2 class="section-title reveal" id="newsTitle" data-i18n-html="news.title">Every stop on the <em>world tour</em>.</h2>
+      <p class="news__hint reveal" data-delay="120" data-i18n="news.hint">The four most recent results from the 2026 HSBC BWF World Tour. Select “Show all” for the full season. Updated 7 Aug 2026.</p>
+      <div class="news__filters reveal" data-delay="160" id="newsFilters" role="group" aria-label="Filter tournaments">
+        <button class="news__filter is-active" data-filter="all" aria-pressed="true" data-i18n="news.filterAll">All</button>
+        <button class="news__filter" data-filter="done" aria-pressed="false" data-i18n="news.filterDone">Completed</button>
+        <button class="news__filter" data-filter="upcoming" aria-pressed="false" data-i18n="news.filterUpcoming">Upcoming</button>
       </div>
     </div>
-    <div class="news__timeline" id="newsTimeline"></div>
-    <div class="news__more"><button class="btn btn--ghost" id="newsToggle">Show all tournaments</button></div>
-    <p class="news__source reveal">Full schedule &amp; results sourced from the BWF World Tour, Wikipedia &amp; wire reports (AFP/Xinhua). Completed events up to 7 Aug 2026 show verified singles/doubles champions where available; later events list date &amp; grade. No images used.</p>
+    <div class="news__timeline" id="newsTimeline" aria-live="polite"></div>
+    <div class="news__more"><button class="btn btn--ghost" id="newsToggle" aria-expanded="false" data-i18n="news.showAll">Show all tournaments</button></div>
+    <p class="news__source reveal" data-i18n="news.source">Full schedule and results sourced from the BWF World Tour, Wikipedia and wire reports (AFP/Xinhua). Completed events up to 7 Aug 2026 show verified singles and doubles champions where available; later events list date and grade. No images used.</p>
   </section>
 
   <!-- ===== INTERACTIVE RALLY GAME ===== -->
-  <section class="play" id="play">
+  <section class="play" id="play" aria-labelledby="playTitle">
     <div class="section-head">
-      <span class="kicker reveal">07 — Game On</span>
-      <h2 class="section-title reveal">Play a <em>rally</em>.</h2>
-      <p class="play__hint reveal" data-delay="120">A classic-style stick badminton match vs the AI. <span class="play__desktopHint"><strong>Move</strong> ← → (or A/D), <strong>jump</strong> ↑ (or W), <strong>swing</strong> Space / ↓.</span><span class="play__mobileHint">Use the on-screen buttons below to move, jump &amp; swing.</span> Jump into a high shuttle to <strong>smash</strong> it down; loft low ones over the net. First to 7 wins.</p>
+      <span class="kicker reveal" data-i18n="play.kicker">07 — Game On</span>
+      <h2 class="section-title reveal" id="playTitle" data-i18n-html="play.title">Play a <em>rally</em>.</h2>
+      <p class="play__hint reveal" data-delay="120"><span class="play__desktopHint" data-i18n-html="play.hintDesktop">A classic stick-badminton match against the computer. <strong>Move</strong> with ← → (or A/D), <strong>jump</strong> with ↑ (or W), <strong>swing</strong> with Space or ↓. Jump into a high shuttle to <strong>smash</strong> it down; lift low ones over the net. First to 7 points wins.</span><span class="play__mobileHint" data-i18n-html="play.hintMobile">A classic stick-badminton match against the computer. Use the on-screen buttons below to move, jump and swing. Jump into a high shuttle to <strong>smash</strong> it down; lift low ones over the net. First to 7 points wins.</span></p>
     </div>
     <div class="play__wrap reveal" data-delay="160">
       <div class="play__scoreboard">
-        <div class="play__score play__score--you"><span class="play__label">You</span><b id="scoreYou">0</b></div>
-        <div class="play__rally"><span>Rally</span><b id="gameRally">0</b></div>
-        <div class="play__score play__score--cpu"><b id="scoreCpu">0</b><span class="play__label">Dummy</span></div>
+        <div class="play__score play__score--you"><span class="play__label" data-i18n="play.you">You</span><b id="scoreYou">0</b></div>
+        <div class="play__rally"><span data-i18n="play.rally">Rally</span><b id="gameRally">0</b></div>
+        <div class="play__score play__score--cpu"><b id="scoreCpu">0</b><span class="play__label" data-i18n="play.cpu">Computer</span></div>
       </div>
       <div class="play__court">
         <canvas id="gameCanvas"></canvas>
-        <button class="btn btn--primary magnetic play__start" id="gameStart">Enter Game</button>
-        <div class="play__shot" id="gameShot">—</div>
+        <button class="btn btn--primary magnetic play__start" id="gameStart" data-i18n="play.start">Start game</button>
+        <div class="play__shot" id="gameShot" aria-hidden="true">—</div>
       </div>
       <div class="play__legend play__desktopHint">
-        <span class="play__key">← →<small>Move</small></span>
-        <span class="play__key">↑ / W<small>Jump</small></span>
-        <span class="play__key">Space / ↓<small>Swing</small></span>
+        <span class="play__key">← →<small data-i18n="play.move">Move</small></span>
+        <span class="play__key">↑ / W<small data-i18n="play.jump">Jump</small></span>
+        <span class="play__key">Space / ↓<small data-i18n="play.swing">Swing</small></span>
       </div>
-      <div class="play__pad" aria-hidden="true">
+      <div class="play__pad">
         <div class="play__pad-move">
-          <button class="play__pad-btn" id="padLeft">‹</button>
-          <button class="play__pad-btn" id="padRight">›</button>
+          <button class="play__pad-btn" id="padLeft" aria-label="Move left">‹</button>
+          <button class="play__pad-btn" id="padRight" aria-label="Move right">›</button>
         </div>
         <div class="play__pad-act">
-          <button class="play__pad-btn play__pad-jump" id="padJump">Jump</button>
-          <button class="play__pad-btn play__pad-swing" id="padSwing">Swing</button>
+          <button class="play__pad-btn play__pad-jump" id="padJump" data-i18n="play.jump" aria-label="Jump">Jump</button>
+          <button class="play__pad-btn play__pad-swing" id="padSwing" data-i18n="play.swing" aria-label="Swing">Swing</button>
         </div>
       </div>
-      <p class="play__msg" id="gameMsg">Press Start. Move under the shuttle, jump and swing to hit it back.</p>
+      <p class="play__msg" id="gameMsg" aria-live="polite" data-i18n="play.msgStart">Select Start. Move under the shuttle, then jump and swing to hit it back.</p>
     </div>
   </section>
 
   <!-- ===== CTA / CONTACT ===== -->
-  <section class="cta" id="contact">
+  <section class="cta" id="contact" aria-labelledby="ctaTitle">
     <div class="cta__inner">
-      <h2 class="reveal">Ready to <em>elevate</em>?</h2>
-      <p class="reveal" data-delay="120">Whether it's your first swing or your next title — there's a place for you at Élever Badminton.</p>
+      <h2 class="reveal" id="ctaTitle" data-i18n-html="cta.title">Ready to <em>elevate</em>?</h2>
+      <p class="reveal" data-delay="120" data-i18n="cta.body">Whether it's your first swing or your next title, there's a place for you at Élever Badminton.</p>
       <div class="cta__actions reveal" data-delay="200">
-        <a href="https://www.eleverbadminton.com/" target="_blank" rel="noopener" class="btn btn--primary magnetic">Enquire Now</a>
-        <a href="mailto:hello@eleverbadminton.com" class="btn btn--ghost">Email Us</a>
+        <a href="https://www.eleverbadminton.com/" target="_blank" rel="noopener" class="btn btn--primary magnetic" data-i18n="cta.enquire">Enquire now</a>
+        <a href="mailto:hello@eleverbadminton.com" class="btn btn--ghost" data-i18n="cta.email">Email us</a>
       </div>
     </div>
   </section>
 
   <!-- ===== FOOTER ===== -->
   <footer class="footer">
-    <div class="footer__brand">ÉLEVER<span>·</span>BADMINTON</div>
-    <p class="footer__tag">To build. To raise. To rise higher.</p>
-    <div class="footer__links">
-      <a href="#about">About</a>
-      <a href="#programs">Programs</a>
-      <a href="#team">Coaches</a>
-      <a href="#hub">SG Hub</a>
-      <a href="#news">News</a>
-      <a href="https://www.eleverbadminton.com/" target="_blank" rel="noopener">Official site</a>
-    </div>
-    <p class="footer__note">Concept redesign · Built for Élever Badminton. Photography © Élever Badminton.</p>
+    <div class="footer__brand">ÉLEVER<span aria-hidden="true">·</span>BADMINTON</div>
+    <p class="footer__tag" data-i18n="footer.tag">To build. To raise. To rise higher.</p>
+    <nav class="footer__links" aria-label="Footer">
+      <a href="#about" data-i18n="nav.about">About</a>
+      <a href="#programs" data-i18n="nav.programs">Programs</a>
+      <a href="#team" data-i18n="nav.team">Coaches</a>
+      <a href="#hub" data-i18n="nav.hub">SG Hub</a>
+      <a href="#news" data-i18n="nav.news">News</a>
+      <a href="https://www.eleverbadminton.com/" target="_blank" rel="noopener" data-i18n="footer.official">Official site</a>
+    </nav>
+    <p class="footer__note" data-i18n="footer.note">Concept redesign · Built for Élever Badminton. Photography © Élever Badminton.</p>
   </footer>
 
+  <script src="assets/js/i18n.js"></script>
   <script src="assets/js/main.js"></script>
 </body>
 </html>

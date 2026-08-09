@@ -417,176 +417,145 @@
     var root = document.getElementById('quiz');
     if (!root) return;
 
-    // 27 real players — photos are freely licensed (Wikimedia Commons: CC-BY / CC-BY-SA / Public domain).
     var IMG = 'assets/img/players/';
-    var PLAYERS = {
-      an:       { name: 'An Se-young', flag: '🇰🇷', role: 'Women\u2019s Singles · World No. 1', tag: 'The Relentless Counter-Puncher', img: IMG + 'an-se-young.jpg', lic: 'CC BY-SA 2.0',
-        desc: 'Olympic & World champion who wins with suffocating consistency: she absorbs pace, extends rallies and flips defence into attack in a single shot. Ice-cold discipline, elite stamina, endless patience.' },
-      tai:      { name: 'Tai Tzu-ying', flag: '🇹🇼', role: 'Women\u2019s Singles · Legend', tag: 'The Court Artist', img: IMG + 'tai-tzu-ying.jpg', lic: 'CC BY 2.0',
-        desc: 'The most deceptive player of her generation \u2014 spontaneous, creative and impossible to read. She controls rallies with disguise and wristy magic rather than raw power. Pure improvisation.' },
-      akane:    { name: 'Akane Yamaguchi', flag: '🇯🇵', role: 'Women\u2019s Singles · 3× World Champion', tag: 'The Tireless Retriever', img: IMG + 'akane-yamaguchi.jpg', lic: 'CC BY 3.0',
-        desc: 'Proof that heart beats height. Bottomless defence, blistering footwork and a never-give-up spirit force opponents to hit one more shot \u2014 until they crack. Humble off court, ferocious on it.' },
-      yeo:      { name: 'Yeo Jia Min', flag: '🇸🇬', role: 'Women\u2019s Singles · Singapore', tag: 'The Quiet Giant-Killer', img: IMG + 'yeo-jia-min.jpg', lic: 'CC BY-SA 4.0',
-        desc: 'Singapore\u2019s under-the-radar star who has toppled Yamaguchi, Sindhu and other top-10 names. Humble, self-analytical and mentally tough \u2014 she rises without the spotlight and lets her racket talk.' },
-      axelsen:  { name: 'Viktor Axelsen', flag: '🇩🇰', role: 'Men\u2019s Singles · 2× Olympic Champion', tag: 'The Problem-Solver', img: IMG + 'viktor-axelsen.jpg', lic: 'CC BY 4.0',
-        desc: 'The ultimate professional: methodical, disciplined and relentlessly self-improving. Towering defence married to a devastating smash \u2014 there\u2019s no problem on court he can\u2019t engineer a solution to.' },
-      kunlavut: { name: 'Kunlavut Vitidsarn', flag: '🇹🇭', role: 'Men\u2019s Singles · World Champion', tag: 'The Rally Chess-Master', img: IMG + 'kunlavut-vitidsarn.jpg', lic: 'CC BY 3.0',
-        desc: 'A patient, tactical thinker with elite defence who pushes you back, opens the court and counter-attacks the instant you\u2019re out of position. Calm, deceptive at the net, endlessly adaptable.' },
-      loh:      { name: 'Loh Kean Yew', flag: '🇸🇬', role: 'Men\u2019s Singles · Singapore, 2021 World Champ', tag: 'The Fearless Attacker', img: IMG + 'loh-kean-yew.jpg', lic: 'CC BY 4.0',
-        desc: 'Singapore\u2019s first world champion. Explosive speed, high-flying jump smashes and a huge fighting spirit \u2014 he chases every shuttle and turns defence into attack in a heartbeat. Fearless underdog energy.' },
-      antonsen: { name: 'Anders Antonsen', flag: '🇩🇰', role: 'Men\u2019s Singles · World Champion', tag: 'The Tactical Craftsman', img: IMG + 'anders-antonsen.jpg', lic: 'CC BY-SA 4.0',
-        desc: 'Wins with brain over brawn: sharp changes of tempo, deceptive strokes, a tight net game and iron mental toughness. Built brick-by-brick from Denmark\u2019s famous club system.' },
-      chou:     { name: 'Chou Tien-chen', flag: '🇹🇼', role: 'Men\u2019s Singles · Veteran', tag: 'The Ageless Warrior', img: IMG + 'chou-tien-chen.jpg', lic: 'Attribution',
-        desc: 'At 36 the oldest-ever Super 1000 champion. Ferociously fit, disciplined and durable \u2014 he out-lasts younger rivals through relentless conditioning and sheer will.' },
-      naraoka:  { name: 'Kodai Naraoka', flag: '🇯🇵', role: 'Men\u2019s Singles · Rising Star', tag: 'The Marathon Runner', img: IMG + 'kodai-naraoka.jpg', lic: 'CC BY-SA 4.0',
-        desc: 'A defensive powerhouse who thrives in brutal, lung-busting rallies. Turns matches into endurance tests and simply refuses to miss.' },
-      shi:      { name: 'Shi Yuqi', flag: '🇨🇳', role: 'Men\u2019s Singles · Former World No. 1', tag: 'The Complete Package', img: IMG + 'shi-yuqi.jpg', lic: 'CC BY 4.0',
-        desc: 'Smooth, balanced and technically flawless \u2014 strong in every phase, with the calm of a player who\u2019s solved the game. All-round excellence.' },
-      jonatan:  { name: 'Jonatan Christie', flag: '🇮🇩', role: 'Men\u2019s Singles · Asian Champion', tag: 'The Crowd-Pleaser', img: IMG + 'jonatan-christie.jpg', lic: 'CC BY 2.0',
-        desc: 'Athletic, charismatic and attack-minded \u2014 he feeds off the crowd and lights up an arena with explosive, entertaining badminton.' },
-      lakshya:  { name: 'Lakshya Sen', flag: '🇮🇳', role: 'Men\u2019s Singles · India', tag: 'The Fearless Youngster', img: IMG + 'lakshya-sen.jpg', lic: 'CC BY-SA 4.0',
-        desc: 'Fast, aggressive and unafraid of anyone\u2019s reputation. A gutsy shot-maker who plays his best badminton on the biggest stages.' },
-      chenyf:   { name: 'Chen Yufei', flag: '🇨🇳', role: 'Women\u2019s Singles · Olympic Champion', tag: 'The Ice Queen', img: IMG + 'chen-yufei.jpg', lic: 'CC BY-SA 4.0',
-        desc: 'Tokyo 2020 gold medallist with a controlled, weighty game and nerves of steel. She dictates rallies with placement and composure.' },
-      marin:    { name: 'Carolina Marín', flag: '🇪🇸', role: 'Women\u2019s Singles · Olympic Champion', tag: 'The Fierce Competitor', img: IMG + 'carolina-mar-n.jpg', lic: 'CC BY-SA 2.0',
-        desc: 'Europe\u2019s trailblazer \u2014 explosive, left-handed and famously fiery. Roars through rallies with relentless attacking intensity and passion.' },
-      sindhu:   { name: 'P. V. Sindhu', flag: '🇮🇳', role: 'Women\u2019s Singles · 2× Olympic Medallist', tag: 'The Big-Match Player', img: IMG + 'p-v-sindhu.jpg', lic: 'CC BY-SA 3.0',
-        desc: 'Tall, powerful and built for the occasion \u2014 a towering smash and a champion\u2019s temperament that peaks when the medals are on the line.' },
-      ratchanok:{ name: 'Ratchanok Intanon', flag: '🇹🇭', role: 'Women\u2019s Singles · Former World Champ', tag: 'The Silky Stylist', img: IMG + 'ratchanok-intanon.jpg', lic: 'CC BY 3.0',
-        desc: 'Elegant, wristy and wonderfully deceptive \u2014 she wins with touch, timing and clever angles rather than brute force.' },
-      wangzy:   { name: 'Wang Zhiyi', flag: '🇨🇳', role: 'Women\u2019s Singles · World No. 2', tag: 'The Steady Riser', img: IMG + 'wang-zhiyi.jpg', lic: 'CC BY-SA 4.0',
-        desc: 'Consistent, composed and quietly climbing to the top with solid all-court play and a cool head under pressure.' },
-      leezii:   { name: 'Lee Zii Jia', flag: '🇲🇾', role: 'Men\u2019s Singles · Malaysia', tag: 'The Independent Maverick', img: IMG + 'lee-zii-jia.jpg', lic: 'CC BY-SA 4.0',
-        desc: 'Flashy, powerful and fiercely his own person \u2014 he went independent to chase his dream his way, with a spectacular attacking game.' },
-      ginting:  { name: 'Anthony Ginting', flag: '🇮🇩', role: 'Men\u2019s Singles · Indonesia', tag: 'The Speed Demon', img: IMG + 'anthony-sinisuka-ginting.jpg', lic: 'CC BY 4.0',
-        desc: 'Lightning-fast footwork and a rapid-fire attacking style. He overwhelms opponents with sheer pace and quick hands.' },
-      gregoria: { name: 'Gregoria M. Tunjung', flag: '🇮🇩', role: 'Women\u2019s Singles · Olympic Medallist', tag: 'The Resilient Fighter', img: IMG + 'gregoria-mariska-tunjung.jpg', lic: 'Public domain',
-        desc: 'Battled through setbacks to a Paris 2024 bronze. Tenacious, improving and full of heart \u2014 she never stops believing.' },
-      lindan:   { name: 'Lin Dan', flag: '🇨🇳', role: 'Men\u2019s Singles · The G.O.A.T.', tag: 'The Super Dan', img: IMG + 'lin-dan.jpg', lic: 'CC BY-SA 4.0',
-        desc: 'Two-time Olympic champion and the most decorated men\u2019s singles player ever. Charismatic, dominant and box-office \u2014 a once-in-a-generation icon.' },
-      lcw:      { name: 'Lee Chong Wei', flag: '🇲🇾', role: 'Men\u2019s Singles · Legend', tag: 'The Eternal Contender', img: IMG + 'lee-chong-wei.jpg', lic: 'CC BY-SA 2.0',
-        desc: 'A record-breaking world No. 1 and Malaysia\u2019s hero \u2014 blistering speed and a fighter\u2019s heart that never gave up chasing gold.' },
-      okuhara:  { name: 'Nozomi Okuhara', flag: '🇯🇵', role: 'Women\u2019s Singles · World Champion', tag: 'The Iron Retriever', img: IMG + 'nozomi-okuhara.jpg', lic: 'CC BY 4.0',
-        desc: 'Small in stature, giant in defence. Famous for epic marathon rallies and a bottomless tank of stamina and grit.' },
-      momota:   { name: 'Kento Momota', flag: '🇯🇵', role: 'Men\u2019s Singles · 2× World Champion', tag: 'The Comeback King', img: IMG + 'kento-momota.png', lic: 'CC BY 3.0',
-        desc: 'A tactical genius with pinpoint control who fought back from adversity to reach world No. 1. Precision, patience and mental steel.' },
-      saina:    { name: 'Saina Nehwal', flag: '🇮🇳', role: 'Women\u2019s Singles · Trailblazer', tag: 'The Pioneer', img: IMG + 'saina-nehwal.jpg', lic: 'GODL-India',
-        desc: 'The player who put Indian women\u2019s badminton on the map \u2014 aggressive, determined and an inspiration to a whole generation.' },
-      tommy:    { name: 'Tommy Sugiarto', flag: '🇮🇩', role: 'Men\u2019s Singles · Indonesia', tag: 'The Crafty Veteran', img: IMG + 'tommy-sugiarto.jpg', lic: 'CC BY-SA 4.0',
-        desc: 'Experienced, clever and steady \u2014 he relies on smart placement, deception and years of ring-craft rather than raw power.' }
+    // Language-independent data: image path, flag, licence, and the option
+    // weight maps. All display text (name/role/tag/desc, questions, options)
+    // comes from window.I18N so the quiz can switch language live.
+    var PLAYER_META = {
+      an:       { img: IMG + 'an-se-young.jpg', flag: '🇰🇷', lic: 'CC BY-SA 2.0' },
+      tai:      { img: IMG + 'tai-tzu-ying.jpg', flag: '🇹🇼', lic: 'CC BY 2.0' },
+      akane:    { img: IMG + 'akane-yamaguchi.jpg', flag: '🇯🇵', lic: 'CC BY 3.0' },
+      yeo:      { img: IMG + 'yeo-jia-min.jpg', flag: '🇸🇬', lic: 'CC BY-SA 4.0' },
+      axelsen:  { img: IMG + 'viktor-axelsen.jpg', flag: '🇩🇰', lic: 'CC BY 4.0' },
+      kunlavut: { img: IMG + 'kunlavut-vitidsarn.jpg', flag: '🇹🇭', lic: 'CC BY 3.0' },
+      loh:      { img: IMG + 'loh-kean-yew.jpg', flag: '🇸🇬', lic: 'CC BY 4.0' },
+      antonsen: { img: IMG + 'anders-antonsen.jpg', flag: '🇩🇰', lic: 'CC BY-SA 4.0' },
+      chou:     { img: IMG + 'chou-tien-chen.jpg', flag: '🇹🇼', lic: 'Attribution' },
+      naraoka:  { img: IMG + 'kodai-naraoka.jpg', flag: '🇯🇵', lic: 'CC BY-SA 4.0' },
+      shi:      { img: IMG + 'shi-yuqi.jpg', flag: '🇨🇳', lic: 'CC BY 4.0' },
+      jonatan:  { img: IMG + 'jonatan-christie.jpg', flag: '🇮🇩', lic: 'CC BY 2.0' },
+      lakshya:  { img: IMG + 'lakshya-sen.jpg', flag: '🇮🇳', lic: 'CC BY-SA 4.0' },
+      chenyf:   { img: IMG + 'chen-yufei.jpg', flag: '🇨🇳', lic: 'CC BY-SA 4.0' },
+      marin:    { img: IMG + 'carolina-mar-n.jpg', flag: '🇪🇸', lic: 'CC BY-SA 2.0' },
+      sindhu:   { img: IMG + 'p-v-sindhu.jpg', flag: '🇮🇳', lic: 'CC BY-SA 3.0' },
+      ratchanok:{ img: IMG + 'ratchanok-intanon.jpg', flag: '🇹🇭', lic: 'CC BY 3.0' },
+      wangzy:   { img: IMG + 'wang-zhiyi.jpg', flag: '🇨🇳', lic: 'CC BY-SA 4.0' },
+      leezii:   { img: IMG + 'lee-zii-jia.jpg', flag: '🇲🇾', lic: 'CC BY-SA 4.0' },
+      ginting:  { img: IMG + 'anthony-sinisuka-ginting.jpg', flag: '🇮🇩', lic: 'CC BY 4.0' },
+      gregoria: { img: IMG + 'gregoria-mariska-tunjung.jpg', flag: '🇮🇩', lic: 'Public domain' },
+      lindan:   { img: IMG + 'lin-dan.jpg', flag: '🇨🇳', lic: 'CC BY-SA 4.0' },
+      lcw:      { img: IMG + 'lee-chong-wei.jpg', flag: '🇲🇾', lic: 'CC BY-SA 2.0' },
+      okuhara:  { img: IMG + 'nozomi-okuhara.jpg', flag: '🇯🇵', lic: 'CC BY 4.0' },
+      momota:   { img: IMG + 'kento-momota.png', flag: '🇯🇵', lic: 'CC BY 3.0' },
+      saina:    { img: IMG + 'saina-nehwal.jpg', flag: '🇮🇳', lic: 'GODL-India' },
+      tommy:    { img: IMG + 'tommy-sugiarto.jpg', flag: '🇮🇩', lic: 'CC BY-SA 4.0' }
     };
 
-    // 6 questions; each option weights several player keys. Every player is reachable.
-    var QUESTIONS = [
-      { q: 'It\u2019s match point against you. What\u2019s your instinct?',
-        a: [
-          { t: 'Stay calm, extend the rally, wait for their mistake', w: { an: 2, kunlavut: 2, momota: 1, wangzy: 1 } },
-          { t: 'Go for a bold, unexpected winner', w: { tai: 2, loh: 2, leezii: 1 } },
-          { t: 'Trust the plan I drilled for exactly this moment', w: { axelsen: 2, momota: 1, shi: 1 } },
-          { t: 'Dig in and out-run them \u2014 I never stop chasing', w: { akane: 2, naraoka: 2, okuhara: 1 } }
-        ] },
-      { q: 'Pick your signature shot.',
-        a: [
-          { t: 'A thunderous jump smash', w: { loh: 2, axelsen: 1, sindhu: 1, leezii: 1 } },
-          { t: 'A disguised drop that fools everyone', w: { tai: 2, ratchanok: 2, antonsen: 1, tommy: 1 } },
-          { t: 'A gets-everything defensive retrieve', w: { akane: 2, okuhara: 2, naraoka: 1 } },
-          { t: 'A blistering fast net-to-net exchange', w: { ginting: 2, jonatan: 1, lakshya: 1 } }
-        ] },
-      { q: 'How do you train?',
-        a: [
-          { t: 'Rigid routine, strict diet, zero shortcuts', w: { an: 2, axelsen: 1, chou: 2 } },
-          { t: 'Experiment, improvise, keep it playful', w: { tai: 2, ratchanok: 1, lindan: 1 } },
-          { t: 'Grind fitness until my tank is bottomless', w: { naraoka: 2, okuhara: 2, chou: 1 } },
-          { t: 'Quietly fix my weaknesses, session by session', w: { yeo: 2, kunlavut: 1, wangzy: 1, shi: 1 } }
-        ] },
-      { q: 'What\u2019s your energy on court?',
-        a: [
-          { t: 'Fiery \u2014 I roar, I fist-pump, I feed off emotion', w: { marin: 2, lindan: 1, jonatan: 1 } },
-          { t: 'Ice-cold and unreadable', w: { chenyf: 2, momota: 1, an: 1 } },
-          { t: 'Humble \u2014 I\u2019d rather fly under the radar', w: { yeo: 2, okuhara: 1, gregoria: 1, tommy: 1 } },
-          { t: 'A showman \u2014 I love entertaining the crowd', w: { lindan: 2, jonatan: 2, leezii: 1 } }
-        ] },
-      { q: 'What drives you the most?',
-        a: [
-          { t: 'Being a fearless underdog with nothing to lose', w: { loh: 2, lakshya: 2, gregoria: 1 } },
-          { t: 'Blazing a trail others will follow', w: { marin: 1, saina: 2, sindhu: 1, lcw: 1 } },
-          { t: 'Outlasting everyone through sheer fitness', w: { chou: 2, naraoka: 1, okuhara: 1 } },
-          { t: 'Perfecting a complete, all-round game', w: { shi: 2, axelsen: 1, wangzy: 1, kunlavut: 1 } }
-        ] },
-      { q: 'Your ideal way to win a point?',
-        a: [
-          { t: 'Overwhelm them with power and speed', w: { loh: 1, sindhu: 2, ginting: 2, leezii: 1 } },
-          { t: 'Outsmart them with deception and touch', w: { tai: 2, ratchanok: 1, tommy: 1, antonsen: 2 } },
-          { t: 'Outlast them until they break', w: { an: 1, akane: 2, naraoka: 1, okuhara: 1 } },
-          { t: 'Rise to the moment when it matters most', w: { sindhu: 1, lcw: 2, lindan: 1, saina: 1, momota: 1 } }
-        ] }
+    // Option weight maps (parallel to the localized questions in I18N.data.quiz).
+    var WEIGHTS = [
+      [ { an: 2, kunlavut: 2, momota: 1, wangzy: 1 }, { tai: 2, loh: 2, leezii: 1 }, { axelsen: 2, momota: 1, shi: 1 }, { akane: 2, naraoka: 2, okuhara: 1 } ],
+      [ { loh: 2, axelsen: 1, sindhu: 1, leezii: 1 }, { tai: 2, ratchanok: 2, antonsen: 1, tommy: 1 }, { akane: 2, okuhara: 2, naraoka: 1 }, { ginting: 2, jonatan: 1, lakshya: 1 } ],
+      [ { an: 2, axelsen: 1, chou: 2 }, { tai: 2, ratchanok: 1, lindan: 1 }, { naraoka: 2, okuhara: 2, chou: 1 }, { yeo: 2, kunlavut: 1, wangzy: 1, shi: 1 } ],
+      [ { marin: 2, lindan: 1, jonatan: 1 }, { chenyf: 2, momota: 1, an: 1 }, { yeo: 2, okuhara: 1, gregoria: 1, tommy: 1 }, { lindan: 2, jonatan: 2, leezii: 1 } ],
+      [ { loh: 2, lakshya: 2, gregoria: 1 }, { marin: 1, saina: 2, sindhu: 1, lcw: 1 }, { chou: 2, naraoka: 1, okuhara: 1 }, { shi: 2, axelsen: 1, wangzy: 1, kunlavut: 1 } ],
+      [ { loh: 1, sindhu: 2, ginting: 2, leezii: 1 }, { tai: 2, ratchanok: 1, tommy: 1, antonsen: 2 }, { an: 1, akane: 2, naraoka: 1, okuhara: 1 }, { sindhu: 1, lcw: 2, lindan: 1, saina: 1, momota: 1 } ]
     ];
 
-    var scores = {}, current = 0;
+    var I18N = window.I18N;
+    function lang() { return I18N ? I18N.lang() : 'en'; }
+    function players() { return (I18N && I18N.data.players[lang()]) || I18N.data.players.en; }
+    function questions() { return (I18N && I18N.data.quiz[lang()]) || I18N.data.quiz.en; }
+    function player(key) {
+      var p = players()[key] || {};
+      var m = PLAYER_META[key] || {};
+      return { name: p.name, role: p.role, tag: p.tag, desc: p.desc, img: m.img, flag: m.flag, lic: m.lic };
+    }
+
+    var scores = {}, current = 0, lastResult = null, view = 'intro';
     var qWrap = document.getElementById('quizQ');
     var progress = document.getElementById('quizProgress');
+    var progressBar = document.getElementById('quizProgressBar');
     var result = document.getElementById('quizResult');
     var stage = document.getElementById('quizStage');
     var startBtn = document.getElementById('quizStart');
     var intro = document.getElementById('quizIntro');
 
+    function setProgress(pct) {
+      progress.style.width = pct + '%';
+      if (progressBar) progressBar.setAttribute('aria-valuenow', String(Math.round(pct)));
+    }
+
     function reset() {
       scores = {}; current = 0;
-      Object.keys(PLAYERS).forEach(function (k) { scores[k] = 0; });
+      Object.keys(PLAYER_META).forEach(function (k) { scores[k] = 0; });
     }
 
     function renderQuestion() {
-      var Q = QUESTIONS[current];
-      progress.style.width = ((current) / QUESTIONS.length * 100) + '%';
-      var html = '<p class="quiz__count">Question ' + (current + 1) + ' / ' + QUESTIONS.length + '</p>';
+      view = 'question';
+      var QS = questions();
+      var Q = QS[current];
+      setProgress(current / QS.length * 100);
+      var html = '<p class="quiz__count">' + I18N.t('quiz.count', { n: current + 1, total: QS.length }) + '</p>';
       html += '<h3 class="quiz__q">' + Q.q + '</h3><div class="quiz__opts">';
-      Q.a.forEach(function (opt, i) {
-        html += '<button class="quiz__opt" data-i="' + i + '"><span>' + String.fromCharCode(65 + i) + '</span>' + opt.t + '</button>';
+      Q.a.forEach(function (optText, i) {
+        html += '<button class="quiz__opt" data-i="' + i + '"><span aria-hidden="true">' + String.fromCharCode(65 + i) + '</span>' + optText + '</button>';
       });
       html += '</div>';
       qWrap.innerHTML = html;
       qWrap.classList.remove('fade'); void qWrap.offsetWidth; qWrap.classList.add('fade');
       qWrap.querySelectorAll('.quiz__opt').forEach(function (btn) {
         btn.addEventListener('click', function () {
-          var w = Q.a[+btn.dataset.i].w;
+          var w = WEIGHTS[current][+btn.dataset.i];
           Object.keys(w).forEach(function (k) { scores[k] += w[k]; });
           current++;
-          if (current < QUESTIONS.length) renderQuestion();
+          if (current < QS.length) renderQuestion();
           else showResult();
         });
       });
     }
 
     function showResult() {
-      progress.style.width = '100%';
-      var bestScore = -1;
-      Object.keys(scores).forEach(function (k) { if (scores[k] > bestScore) bestScore = scores[k]; });
-      // collect everyone tied at the top, then pick one at random for variety
-      var top = Object.keys(scores).filter(function (k) { return scores[k] === bestScore; });
-      var best = top[Math.floor(Math.random() * top.length)];
-      var p = PLAYERS[best];
+      view = 'result';
+      setProgress(100);
+      if (!lastResult) {
+        var bestScore = -1;
+        Object.keys(scores).forEach(function (k) { if (scores[k] > bestScore) bestScore = scores[k]; });
+        var top = Object.keys(scores).filter(function (k) { return scores[k] === bestScore; });
+        lastResult = top[Math.floor(Math.random() * top.length)];
+      }
+      renderResult();
+    }
+
+    function renderResult() {
+      var p = player(lastResult);
       qWrap.style.display = 'none';
       result.style.display = 'block';
       result.innerHTML =
-        '<p class="quiz__count">Your badminton twin is\u2026</p>' +
-        '<div class="quiz__photo"><img src="' + p.img + '" alt="' + p.name + '" loading="lazy"><span class="quiz__flagbadge">' + p.flag + '</span></div>' +
+        '<p class="quiz__count">' + I18N.t('quiz.resultLead') + '</p>' +
+        '<div class="quiz__photo"><img src="' + p.img + '" alt="' + p.name + '" loading="lazy"><span class="quiz__flagbadge" aria-hidden="true">' + p.flag + '</span></div>' +
         '<h3 class="quiz__name">' + p.name + '</h3>' +
         '<p class="quiz__role">' + p.role + '</p>' +
         '<p class="quiz__playertag">\u201C' + p.tag + '\u201D</p>' +
         '<p class="quiz__desc">' + p.desc + '</p>' +
-        '<button class="btn btn--ghost" id="quizAgain">Play again</button>' +
-        '<p class="quiz__credit">Photo: Wikimedia Commons · ' + p.lic + '</p>';
+        '<button class="btn btn--ghost" id="quizAgain">' + I18N.t('quiz.again') + '</button>' +
+        '<p class="quiz__credit">' + I18N.t('quiz.credit', { lic: p.lic }) + '</p>';
       result.classList.remove('fade'); void result.offsetWidth; result.classList.add('fade');
       document.getElementById('quizAgain').addEventListener('click', function () {
         result.style.display = 'none'; qWrap.style.display = 'block';
-        reset(); renderQuestion();
+        lastResult = null; reset(); renderQuestion();
       });
     }
 
     startBtn.addEventListener('click', function () {
       intro.style.display = 'none';
       stage.style.display = 'block';
-      reset(); renderQuestion();
+      lastResult = null; reset(); renderQuestion();
+    });
+
+    // Re-render whatever is on screen when the language changes.
+    document.addEventListener('i18n:change', function () {
+      if (view === 'question') renderQuestion();
+      else if (view === 'result') renderResult();
     });
   })();
 
@@ -662,7 +631,30 @@
         result: 'The top 8 in each discipline meet to close the 2026 season.' }
     ];
 
-    function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+    function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+
+    var I18N = window.I18N;
+    function lang() { return I18N ? I18N.lang() : 'en'; }
+    // Look up translated fields for an event; fall back to the English source.
+    function tr(ev) {
+      var over = (I18N && I18N.data.news[lang()] && I18N.data.news[lang()][ev.name]) || null;
+      return {
+        name: (over && over.name) || ev.name,
+        grade: (over && over.grade) || ev.grade,
+        result: over && over.result ? over.result : (lang() === 'en' ? ev.result : null)
+        // For zh, only show a result if we have a translated one; otherwise use the muted fallback.
+      };
+    }
+    function monthLabel(m) {
+      var map = (I18N && I18N.data.months[lang()]) || {};
+      return map[m] || m;
+    }
+    function dateLabel(ev) {
+      // English keeps the descriptive date range; Chinese uses the month label
+      // (the English ranges like "6–11 Jan" are not localised to avoid errors).
+      if (lang() === 'en') return ev.date + ' ' + ev.m.slice(0, 3) + ' 2026';
+      return monthLabel(ev.m) + ' · 2026';
+    }
 
     var VISIBLE = 4;              // most-recent shown by default
     var expanded = false;
@@ -678,13 +670,15 @@
       var shown = expanded ? list : list.slice(0, VISIBLE);
       var html = '';
       shown.forEach(function (ev) {
+        var x = tr(ev);
         var cls = 'ncard' + (ev.latest ? ' ncard--latest' : '') + (ev.status === 'upcoming' ? ' ncard--next' : '');
+        var badge = ev.latest ? ' · ' + I18N.t('news.latest') : (ev.status === 'upcoming' ? ' · ' + I18N.t('news.upcoming') : '');
         html += '<article class="' + cls + '">';
-        html += '<div class="ncard__head"><span class="ncard__date">' + ev.date + ' ' + ev.m.slice(0, 3) + ' 2026' + (ev.latest ? ' · Latest' : (ev.status === 'upcoming' ? ' · Upcoming' : '')) + '</span>';
-        html += '<span class="ncard__grade">' + esc(ev.grade) + '</span></div>';
-        html += '<h4 class="ncard__name">' + esc(ev.name) + '</h4>';
-        if (ev.result) html += '<p class="ncard__result">' + esc(ev.result) + '</p>';
-        else html += '<p class="ncard__result ncard__result--muted">' + (ev.status === 'upcoming' ? 'Scheduled — results to come.' : 'Completed. Champions per BWF records.') + '</p>';
+        html += '<div class="ncard__head"><span class="ncard__date">' + dateLabel(ev) + badge + '</span>';
+        html += '<span class="ncard__grade">' + esc(x.grade) + '</span></div>';
+        html += '<h4 class="ncard__name">' + esc(x.name) + '</h4>';
+        if (x.result) html += '<p class="ncard__result">' + esc(x.result) + '</p>';
+        else html += '<p class="ncard__result ncard__result--muted">' + (ev.status === 'upcoming' ? I18N.t('news.tbdUpcoming') : I18N.t('news.tbdDone')) + '</p>';
         html += '</article>';
       });
       mount.innerHTML = html;
@@ -693,7 +687,8 @@
       if (toggleBtn) {
         if (extra > 0) {
           toggleBtn.style.display = '';
-          toggleBtn.textContent = expanded ? 'Show less' : ('Show all ' + list.length + ' tournaments');
+          toggleBtn.textContent = expanded ? I18N.t('news.showLess') : I18N.t('news.showAllN', { n: list.length });
+          toggleBtn.setAttribute('aria-expanded', String(expanded));
         } else {
           toggleBtn.style.display = 'none';
         }
@@ -711,13 +706,16 @@
       filters.addEventListener('click', function (e) {
         var btn = e.target.closest('.news__filter');
         if (!btn) return;
-        filters.querySelectorAll('.news__filter').forEach(function (b) { b.classList.remove('is-active'); });
-        btn.classList.add('is-active');
+        filters.querySelectorAll('.news__filter').forEach(function (b) { b.classList.remove('is-active'); b.setAttribute('aria-pressed', 'false'); });
+        btn.classList.add('is-active'); btn.setAttribute('aria-pressed', 'true');
         currentFilter = btn.dataset.filter;
         expanded = false;
         render();
       });
     }
+
+    // Re-render on language change.
+    document.addEventListener('i18n:change', render);
   })();
 
   /* =====================================================================
@@ -738,6 +736,9 @@
     var elMsg = document.getElementById('gameMsg');
     var elRally = document.getElementById('gameRally');
     var elShot = document.getElementById('gameShot');
+
+    var I18N = window.I18N;
+    function T(key, vars) { return I18N ? I18N.t(key, vars) : key; }
 
     function size() { W = canvas.clientWidth; H = canvas.clientHeight; canvas.width = W * DPR; canvas.height = H * DPR; ctx.setTransform(DPR, 0, 0, DPR, 0, 0); }
 
@@ -792,7 +793,7 @@
     }
 
     function serveBird(byWho) {
-      rally = 0; updateScore(); setShot('Serve');
+      rally = 0; updateScore(); setShot(T('play.shotServe'));
       var fromLeft = byWho === 'you';
       var x0 = fromLeft ? (NET_X - W * 0.20) : (NET_X + W * 0.20);
       var y0 = GROUND - 60;
@@ -802,7 +803,7 @@
       var v = launchTo(x0, y0, landX, 0.9);
       bird = { x: x0, y: y0, vx: v.vx, vy: v.vy, live: true, last: byWho, cool: 0 };
       state = 'play';
-      setMsg(byWho === 'you' ? 'Your serve is up! ← → move · ↑ / W jump · SPACE / ↓ swing.' : 'Opponent serves — get under the shuttle and swing!');
+      setMsg(byWho === 'you' ? T('play.serveYou') : T('play.serveCpu'));
     }
 
     function startGame() {
@@ -820,13 +821,13 @@
       server = who;
       updateScore();
       burst(bird ? bird.x : W / 2, bird ? bird.y : GROUND, who === 'you' ? '198,255,46' : '255,90,90', 26);
-      setMsg((who === 'you' ? 'Point YOU' : 'Point Dummy') + ' — ' + reason + '.  ' + scoreYou + '\u2013' + scoreCpu);
+      setMsg((who === 'you' ? T('play.pointYou') : T('play.pointCpu')) + ' — ' + reason + '.  ' + scoreYou + '\u2013' + scoreCpu);
       if (bird) bird.live = false;
       if (scoreYou >= TARGET || scoreCpu >= TARGET) {
         state = 'over';
         setTimeout(function () {
-          elStart.style.display = ''; elStart.textContent = 'Play again';
-          setMsg(scoreYou > scoreCpu ? 'GAME! You win ' + scoreYou + '\u2013' + scoreCpu + ' \uD83C\uDFC6' : 'Dummy wins ' + scoreCpu + '\u2013' + scoreYou + '. Play again!');
+          elStart.style.display = ''; elStart.textContent = T('play.again');
+          setMsg(scoreYou > scoreCpu ? T('play.win', { a: scoreYou, b: scoreCpu }) : T('play.lose', { a: scoreCpu, b: scoreYou }));
           state = 'idle';
         }, 1200);
       }
@@ -894,14 +895,14 @@
         // SMASH: quick & angled downward into the far court (starts above the net so it clears)
         bird.vx = dir * (4.6 + Math.random() * 1.4);
         bird.vy = 1.4 + Math.random() * 0.8;
-        setShot((who === 'you' ? 'You' : 'Dummy') + ': SMASH!');
+        setShot((who === 'you' ? T('play.you') : T('play.cpu')) + ': ' + T('play.shotSmash'));
         burst(tip.x, tip.y, '255,90,90', 26);
       } else {
         // CLEAR / LIFT: a high, floaty arc that sails deep toward the far baseline.
         var landX = who === 'you' ? (NET_X + W * 0.34 + Math.random() * W * 0.13) : (NET_X - W * 0.34 - Math.random() * W * 0.13);
         var v = launchTo(bird.x, bird.y, landX, 1.05 + Math.random() * 0.35);
         bird.vx = v.vx; bird.vy = v.vy;
-        setShot((who === 'you' ? 'You' : 'Dummy') + ': Clear');
+        setShot((who === 'you' ? T('play.you') : T('play.cpu')) + ': ' + T('play.shotClear'));
         burst(tip.x, tip.y, '150,220,255', 16);
       }
       bird.last = who; bird.cool = 14; rally++; updateScore();
@@ -934,7 +935,7 @@
         // net: block low crossings
         if (bird.x > NET_X - 6 && bird.x < NET_X + 6 && bird.y > NET_TOP) {
           bird.vx *= -0.3; bird.x += bird.vx * 2;
-          awardPoint(bird.last === 'you' ? 'cpu' : 'you', (bird.last === 'you' ? 'you' : 'dummy') + ' hit the net');
+          awardPoint(bird.last === 'you' ? 'cpu' : 'you', T('play.reasonNet', { who: bird.last === 'you' ? T('play.whoYou') : T('play.whoCpu') }));
         }
         // side walls: shuttle bounces back in (arena style, no side-out)
         if (bird.x < BIRD_R + 2) { bird.x = BIRD_R + 2; bird.vx = Math.abs(bird.vx) * 0.7; }
@@ -944,8 +945,8 @@
         // floor
         if (bird.y >= GROUND) {
           bird.y = GROUND;
-          if (bird.x < NET_X) awardPoint('cpu', 'shuttle landed on your side');
-          else awardPoint('you', 'shuttle landed on the dummy\u2019s side');
+          if (bird.x < NET_X) awardPoint('cpu', T('play.reasonYourSide'));
+          else awardPoint('you', T('play.reasonCpuSide'));
         }
       }
 
@@ -1057,7 +1058,9 @@
 
     size(); layout(); resetPositions();
     window.addEventListener('resize', function () { size(); layout(); if (state === 'idle') resetPositions(); });
-    setMsg('Press Start. ← → move · ↑ jump · SPACE swing. Jump into high shuttles to SMASH. First to 7!');
+    setMsg(T('play.msgStart'));
+    // When idle (not mid-game), refresh the start prompt on language change.
+    document.addEventListener('i18n:change', function () { if (state === 'idle') setMsg(T('play.msgStart')); });
     loop();
   })();
 
@@ -1070,56 +1073,70 @@
     var hub = document.getElementById('hub');
     if (!hub) return;
 
+    // id: stable key used to look up translated name/area/meta in I18N.data.venues.
     // type: 'private' | 'activesg' | 'club'
     // book: direct booking URL where publicly available; otherwise omitted.
+    // The English name/area/meta below are the fallback / default-language values.
     var VENUES = [
       // ---------- PRIVATE HALLS ----------
-      { name: 'Wyse Active Hub', area: 'Jurong East', type: 'private', addr: '1 Venture Avenue, #03-01, Perennial Business City, S608521', meta: 'Air-conditioned · 32 courts (SG\u2019s largest)', book: 'https://wyseactive.rezerv.co/' },
-      { name: 'Fernvale Village', area: 'Sengkang', type: 'private', addr: '61 Fernvale Link, S799956', meta: 'Air-conditioned · badminton & pickleball', book: 'https://booking.fernvalevillage.com/' },
-      { name: 'The Sports Arina @ Jalan Kayu', area: 'Sengkang West', type: 'private', addr: '28 Fernvale Road, S799951', meta: 'Air-conditioned · multi-sport hub', book: 'https://thesportsarina.com/' },
-      { name: 'Singapore Badminton Hall (SBH @ Sims)', area: 'Geylang', type: 'private', addr: '1 Lorong 23 Geylang, S388352', meta: '16 courts + VIP · Tel 6744 4111' },
-      { name: 'SBH East Coast @ Expo', area: 'Changi', type: 'private', addr: 'Singapore Expo, Carpark J, Changi South Ave 1, S486150', meta: 'SG\u2019s largest private hall · 22+ courts' },
-      { name: 'OBA Arena @ Pasir Ris', area: 'Pasir Ris', type: 'private', addr: '3A Pasir Ris Drive 6, S519422', meta: 'Academy-operated arena', book: 'https://www.optimumbadmintonacademy.com/' },
-      { name: 'OBA Arena @ Punggol', area: 'Punggol', type: 'private', addr: '11 Northshore Drive, S828670', meta: 'Covered arena', book: 'https://www.optimumbadmintonacademy.com/' },
-      { name: 'City Sprouts @ Bedok', area: 'Bedok', type: 'private', addr: '200 Bedok North Avenue 1', meta: 'Community hub · courts by XY Badminton', book: 'https://xyacademy.rezerv.co/' },
-      { name: 'KFF Badminton Arena / Singapore Badminton Stadium', area: 'Geylang', type: 'private', addr: '100 Guillemard Road, S399718', meta: 'Historic SBA venue · 12 courts (reopened 2025)' },
-      { name: 'Smash Arena', area: 'Joo Koon', type: 'private', addr: '511 Upper Jurong Road, D\u2019Arena, Blk B L2, S638366', meta: '9 doubles + 1 single · Taraflex flooring', book: 'https://booking.smasharena.sg/' },
-      { name: 'Cereza Sports Hall', area: 'Eunos', type: 'private', addr: '3 Chin Cheng Avenue, S429401', meta: '~4 courts · rubber-mat flooring' },
-      { name: 'Kovan Sports Centre', area: 'Hougang', type: 'private', addr: '60 Hougang Street 21, S538738', meta: 'Indoor courts' },
+      { id: 'wyse', name: 'Wyse Active Hub', area: 'Jurong East', type: 'private', addr: '1 Venture Avenue, #03-01, Perennial Business City, S608521', meta: 'Air-conditioned · 32 courts (SG\u2019s largest)', book: 'https://wyseactive.rezerv.co/' },
+      { id: 'fernvale', name: 'Fernvale Village', area: 'Sengkang', type: 'private', addr: '61 Fernvale Link, S799956', meta: 'Air-conditioned · badminton & pickleball', book: 'https://booking.fernvalevillage.com/' },
+      { id: 'arina', name: 'The Sports Arina @ Jalan Kayu', area: 'Sengkang West', type: 'private', addr: '28 Fernvale Road, S799951', meta: 'Air-conditioned · multi-sport hub', book: 'https://thesportsarina.com/' },
+      { id: 'sbhsims', name: 'Singapore Badminton Hall (SBH @ Sims)', area: 'Geylang', type: 'private', addr: '1 Lorong 23 Geylang, S388352', meta: '16 courts + VIP · Tel 6744 4111' },
+      { id: 'sbhexpo', name: 'SBH East Coast @ Expo', area: 'Changi', type: 'private', addr: 'Singapore Expo, Carpark J, Changi South Ave 1, S486150', meta: 'SG\u2019s largest private hall · 22+ courts' },
+      { id: 'obapasirris', name: 'OBA Arena @ Pasir Ris', area: 'Pasir Ris', type: 'private', addr: '3A Pasir Ris Drive 6, S519422', meta: 'Academy-operated arena', book: 'https://www.optimumbadmintonacademy.com/' },
+      { id: 'obapunggol', name: 'OBA Arena @ Punggol', area: 'Punggol', type: 'private', addr: '11 Northshore Drive, S828670', meta: 'Covered arena', book: 'https://www.optimumbadmintonacademy.com/' },
+      { id: 'citysprouts', name: 'City Sprouts @ Bedok', area: 'Bedok', type: 'private', addr: '200 Bedok North Avenue 1', meta: 'Community hub · courts by XY Badminton', book: 'https://xyacademy.rezerv.co/' },
+      { id: 'kff', name: 'KFF Badminton Arena / Singapore Badminton Stadium', area: 'Geylang', type: 'private', addr: '100 Guillemard Road, S399718', meta: 'Historic SBA venue · 12 courts (reopened 2025)' },
+      { id: 'smash', name: 'Smash Arena', area: 'Joo Koon', type: 'private', addr: '511 Upper Jurong Road, D\u2019Arena, Blk B L2, S638366', meta: '9 doubles + 1 single · Taraflex flooring', book: 'https://booking.smasharena.sg/' },
+      { id: 'cereza', name: 'Cereza Sports Hall', area: 'Eunos', type: 'private', addr: '3 Chin Cheng Avenue, S429401', meta: '~4 courts · rubber-mat flooring' },
+      { id: 'kovan', name: 'Kovan Sports Centre', area: 'Hougang', type: 'private', addr: '60 Hougang Street 21, S538738', meta: 'Indoor courts' },
 
       // ---------- ACTIVESG PUBLIC SPORT CENTRES ----------
-      { name: 'OCBC Arena', area: 'Kallang', type: 'activesg', addr: '5 Stadium Drive, S397631 (Singapore Sports Hub)', meta: 'Air-conditioned arena', book: 'https://www.sportshub.com.sg/' },
-      { name: 'Our Tampines Hub — Tampines Sport Centre', area: 'Tampines', type: 'activesg', addr: '1 Tampines Walk, S528523', meta: 'Flagship ActiveSG hall · ~20 courts' },
-      { name: 'Bishan Sport Centre', area: 'Bishan', type: 'activesg', addr: '5 Bishan Street 14, S579783' },
-      { name: 'Bukit Canberra Sport Centre', area: 'Sembawang', type: 'activesg', addr: '21 Canberra Link, S756973' },
-      { name: 'Bukit Gombak Sport Centre', area: 'Bukit Batok', type: 'activesg', addr: '810 Bukit Batok West Ave 5, S659088' },
-      { name: 'Choa Chu Kang Sport Centre', area: 'Choa Chu Kang', type: 'activesg', addr: '1 Choa Chu Kang Street 53, S689236' },
-      { name: 'Clementi Sport Centre', area: 'Clementi', type: 'activesg', addr: '518 Clementi Avenue 3, S129907' },
-      { name: 'Delta Sport Centre', area: 'Tiong Bahru', type: 'activesg', addr: '900 Tiong Bahru Road, S158790' },
-      { name: 'Heartbeat @ Bedok Sport Centre', area: 'Bedok', type: 'activesg', addr: '11 Bedok North Street 1, S469662' },
-      { name: 'Hougang Sport Centre', area: 'Hougang', type: 'activesg', addr: '93 Hougang Avenue 4, S538832' },
-      { name: 'Jurong East Sport Centre', area: 'Jurong East', type: 'activesg', addr: '21 Jurong East Street 31, S609517' },
-      { name: 'Jurong West Sport Centre', area: 'Jurong West', type: 'activesg', addr: '20 Jurong West Street 93, S648965' },
-      { name: 'Pasir Ris Sport Centre', area: 'Pasir Ris', type: 'activesg', addr: '120 Pasir Ris Central, S519640' },
-      { name: 'Queenstown Sport Centre', area: 'Queenstown', type: 'activesg', addr: '473 Stirling Road, S148948' },
-      { name: 'Sengkang Sport Centre', area: 'Sengkang', type: 'activesg', addr: '57 Anchorvale Road, S544964' },
-      { name: 'Senja-Cashew Sport Centre', area: 'Bukit Panjang', type: 'activesg', addr: '101 Bukit Panjang Road, S679910' },
-      { name: 'Serangoon Sport Centre', area: 'Serangoon', type: 'activesg', addr: '35 Yio Chu Kang Road, S545552' },
-      { name: 'St. Wilfred Sport Centre', area: 'Kallang', type: 'activesg', addr: '3 St. Wilfred Road, S327920' },
-      { name: 'Toa Payoh Sport Centre', area: 'Toa Payoh', type: 'activesg', addr: '301 Lorong 6 Toa Payoh, S319392' },
-      { name: 'Woodlands Sport Centre', area: 'Woodlands', type: 'activesg', addr: '1 Woodlands Street 13, S738597' },
-      { name: 'Yio Chu Kang Sport Centre', area: 'Ang Mo Kio', type: 'activesg', addr: '200 Ang Mo Kio Avenue 9, S569770' },
-      { name: 'Yishun Sport Centre', area: 'Yishun', type: 'activesg', addr: '101 Yishun Avenue 1, S769130' },
-      { name: 'MOE (Evans) Sport Hall', area: 'Bukit Timah', type: 'activesg', addr: '21 Evans Road, S259366' },
+      { id: 'ocbc', name: 'OCBC Arena', area: 'Kallang', type: 'activesg', addr: '5 Stadium Drive, S397631 (Singapore Sports Hub)', meta: 'Air-conditioned arena', book: 'https://www.sportshub.com.sg/' },
+      { id: 'oth', name: 'Our Tampines Hub — Tampines Sport Centre', area: 'Tampines', type: 'activesg', addr: '1 Tampines Walk, S528523', meta: 'Flagship ActiveSG hall · ~20 courts' },
+      { id: 'bishan', name: 'Bishan Sport Centre', area: 'Bishan', type: 'activesg', addr: '5 Bishan Street 14, S579783' },
+      { id: 'canberra', name: 'Bukit Canberra Sport Centre', area: 'Sembawang', type: 'activesg', addr: '21 Canberra Link, S756973' },
+      { id: 'gombak', name: 'Bukit Gombak Sport Centre', area: 'Bukit Batok', type: 'activesg', addr: '810 Bukit Batok West Ave 5, S659088' },
+      { id: 'cck', name: 'Choa Chu Kang Sport Centre', area: 'Choa Chu Kang', type: 'activesg', addr: '1 Choa Chu Kang Street 53, S689236' },
+      { id: 'clementi', name: 'Clementi Sport Centre', area: 'Clementi', type: 'activesg', addr: '518 Clementi Avenue 3, S129907' },
+      { id: 'delta', name: 'Delta Sport Centre', area: 'Tiong Bahru', type: 'activesg', addr: '900 Tiong Bahru Road, S158790' },
+      { id: 'heartbeat', name: 'Heartbeat @ Bedok Sport Centre', area: 'Bedok', type: 'activesg', addr: '11 Bedok North Street 1, S469662' },
+      { id: 'hougang', name: 'Hougang Sport Centre', area: 'Hougang', type: 'activesg', addr: '93 Hougang Avenue 4, S538832' },
+      { id: 'jurongeast', name: 'Jurong East Sport Centre', area: 'Jurong East', type: 'activesg', addr: '21 Jurong East Street 31, S609517' },
+      { id: 'jurongwest', name: 'Jurong West Sport Centre', area: 'Jurong West', type: 'activesg', addr: '20 Jurong West Street 93, S648965' },
+      { id: 'pasirris', name: 'Pasir Ris Sport Centre', area: 'Pasir Ris', type: 'activesg', addr: '120 Pasir Ris Central, S519640' },
+      { id: 'queenstown', name: 'Queenstown Sport Centre', area: 'Queenstown', type: 'activesg', addr: '473 Stirling Road, S148948' },
+      { id: 'sengkang', name: 'Sengkang Sport Centre', area: 'Sengkang', type: 'activesg', addr: '57 Anchorvale Road, S544964' },
+      { id: 'senja', name: 'Senja-Cashew Sport Centre', area: 'Bukit Panjang', type: 'activesg', addr: '101 Bukit Panjang Road, S679910' },
+      { id: 'serangoon', name: 'Serangoon Sport Centre', area: 'Serangoon', type: 'activesg', addr: '35 Yio Chu Kang Road, S545552' },
+      { id: 'wilfred', name: 'St. Wilfred Sport Centre', area: 'Kallang', type: 'activesg', addr: '3 St. Wilfred Road, S327920' },
+      { id: 'toapayoh', name: 'Toa Payoh Sport Centre', area: 'Toa Payoh', type: 'activesg', addr: '301 Lorong 6 Toa Payoh, S319392' },
+      { id: 'woodlands', name: 'Woodlands Sport Centre', area: 'Woodlands', type: 'activesg', addr: '1 Woodlands Street 13, S738597' },
+      { id: 'yck', name: 'Yio Chu Kang Sport Centre', area: 'Ang Mo Kio', type: 'activesg', addr: '200 Ang Mo Kio Avenue 9, S569770' },
+      { id: 'yishun', name: 'Yishun Sport Centre', area: 'Yishun', type: 'activesg', addr: '101 Yishun Avenue 1, S769130' },
+      { id: 'evans', name: 'MOE (Evans) Sport Hall', area: 'Bukit Timah', type: 'activesg', addr: '21 Evans Road, S259366' },
 
       // ---------- COUNTRY / SOCIAL CLUBS (members) ----------
-      { name: 'Chinese Swimming Club', area: 'Katong', type: 'club', addr: '21 Amber Road, S439870', meta: 'Members only · est. 1909' },
-      { name: 'Singapore Swimming Club', area: 'Tanjong Rhu', type: 'club', addr: '45 Tanjong Rhu Road, S436899', meta: 'Members only · est. 1894' },
-      { name: 'Warren Golf & Country Club', area: 'Dover', type: 'club', addr: '23 Folkestone Road, S139599', meta: 'Members only · Tel 6778 0127' }
+      { id: 'csc', name: 'Chinese Swimming Club', area: 'Katong', type: 'club', addr: '21 Amber Road, S439870', meta: 'Members only · est. 1909' },
+      { id: 'ssc', name: 'Singapore Swimming Club', area: 'Tanjong Rhu', type: 'club', addr: '45 Tanjong Rhu Road, S436899', meta: 'Members only · est. 1894' },
+      { id: 'warren', name: 'Warren Golf & Country Club', area: 'Dover', type: 'club', addr: '23 Folkestone Road, S139599', meta: 'Members only · Tel 6778 0127' }
     ];
 
     var ACTIVESG_BOOK = 'https://activesg.gov.sg/facility-bookings/activities/YLONatwvqJfikKOmB5N9U/venues';
-    var TYPE_LABEL = { private: 'Private', activesg: 'ActiveSG', club: 'Club' };
+
+    var I18N = window.I18N;
+    function T(key, vars) { return I18N ? I18N.t(key, vars) : key; }
+    function lang() { return I18N ? I18N.lang() : 'en'; }
+    // Merge English defaults with any translated name/area/meta for the language.
+    function loc(v) {
+      var over = (I18N && I18N.data.venues[lang()] && I18N.data.venues[lang()][v.id]) || null;
+      return {
+        name: (over && over.name) || v.name,
+        area: (over && over.area) || v.area,
+        meta: over && over.meta ? over.meta : v.meta
+      };
+    }
 
     var grid = document.getElementById('hallGrid');
     var countEl = document.getElementById('hallCount');
@@ -1127,46 +1144,51 @@
     var filtersEl = document.getElementById('hallFilters');
     var tabsEl = document.getElementById('hubTabs');
     var panels = hub.querySelectorAll('.hub__panel');
+    var tabs = tabsEl ? tabsEl.querySelectorAll('.hub__tab') : [];
 
     var currentType = 'all';
     var query = '';
 
     function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function attr(s) { return esc(s); }
 
     function mapsUrl(v) {
       return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(v.name + ' ' + v.addr.replace(/,?\s*S\d{6}.*/, '') + ' Singapore');
     }
 
     function render() {
+      // Search matches both English and translated name/area so it works in any language.
       var list = VENUES.filter(function (v) {
         if (currentType !== 'all' && v.type !== currentType) return false;
         if (query) {
-          var hay = (v.name + ' ' + v.area + ' ' + v.addr).toLowerCase();
+          var l = loc(v);
+          var hay = (v.name + ' ' + v.area + ' ' + v.addr + ' ' + l.name + ' ' + l.area).toLowerCase();
           if (hay.indexOf(query) === -1) return false;
         }
         return true;
       });
 
-      if (countEl) countEl.textContent = list.length + (list.length === 1 ? ' venue' : ' venues');
+      if (countEl) countEl.textContent = list.length === 1 ? T('hub.countOne') : T('hub.count', { n: list.length });
 
       if (!list.length) {
-        grid.innerHTML = '<p class="hub__empty">No venues match — try a different search or filter.</p>';
+        grid.innerHTML = '<p class="hub__empty">' + T('hub.empty') + '</p>';
         return;
       }
 
       grid.innerHTML = list.map(function (v) {
+        var l = loc(v);
         var book = v.book || (v.type === 'activesg' ? ACTIVESG_BOOK : '');
-        var bookLabel = v.type === 'activesg' ? 'Book on ActiveSG' : 'Book';
-        var actions = '<a class="hcard__link" href="' + mapsUrl(v) + '" target="_blank" rel="noopener">Map \u2197</a>';
-        if (book) actions += '<a class="hcard__link hcard__link--book" href="' + book + '" target="_blank" rel="noopener">' + bookLabel + ' \u2197</a>';
+        var bookLabel = v.type === 'activesg' ? T('hub.bookActivesg') : T('hub.book');
+        var actions = '<a class="hcard__link" href="' + mapsUrl(v) + '" target="_blank" rel="noopener" aria-label="' + attr(T('hub.mapAria', { name: l.name })) + '">' + T('hub.map') + ' \u2197</a>';
+        if (book) actions += '<a class="hcard__link hcard__link--book" href="' + book + '" target="_blank" rel="noopener" aria-label="' + attr(T('hub.bookAria', { name: l.name })) + '">' + bookLabel + ' \u2197</a>';
         return '<article class="hcard">' +
           '<div class="hcard__head">' +
-            '<h3 class="hcard__name">' + esc(v.name) + '</h3>' +
-            '<span class="hcard__tag hcard__tag--' + v.type + '">' + TYPE_LABEL[v.type] + '</span>' +
+            '<h3 class="hcard__name">' + esc(l.name) + '</h3>' +
+            '<span class="hcard__tag hcard__tag--' + v.type + '">' + T('tag.' + v.type) + '</span>' +
           '</div>' +
-          '<p class="hcard__area">' + esc(v.area) + '</p>' +
+          '<p class="hcard__area">' + esc(l.area) + '</p>' +
           '<p class="hcard__addr">' + esc(v.addr) + '</p>' +
-          (v.meta ? '<p class="hcard__meta">' + esc(v.meta) + '</p>' : '') +
+          (l.meta ? '<p class="hcard__meta">' + esc(l.meta) + '</p>' : '') +
           '<div class="hcard__actions">' + actions + '</div>' +
         '</article>';
       }).join('');
@@ -1177,8 +1199,8 @@
       filtersEl.addEventListener('click', function (e) {
         var btn = e.target.closest('.hub__filter');
         if (!btn) return;
-        filtersEl.querySelectorAll('.hub__filter').forEach(function (b) { b.classList.remove('is-active'); });
-        btn.classList.add('is-active');
+        filtersEl.querySelectorAll('.hub__filter').forEach(function (b) { b.classList.remove('is-active'); b.setAttribute('aria-pressed', 'false'); });
+        btn.classList.add('is-active'); btn.setAttribute('aria-pressed', 'true');
         currentType = btn.dataset.type;
         render();
       });
@@ -1188,24 +1210,50 @@
       searchEl.addEventListener('input', function () { query = searchEl.value.trim().toLowerCase(); render(); });
     }
 
-    // tabs
-    function activateTab(name) {
-      tabsEl.querySelectorAll('.hub__tab').forEach(function (b) { b.classList.toggle('is-active', b.dataset.tab === name); });
-      panels.forEach(function (p) { p.classList.toggle('is-active', p.dataset.panel === name); });
+    // tabs (ARIA tablist pattern: click + arrow-key navigation)
+    function activateTab(name, focusIt) {
+      tabs.forEach(function (b) {
+        var on = b.dataset.tab === name;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-selected', String(on));
+        b.setAttribute('tabindex', on ? '0' : '-1');
+        if (on && focusIt) b.focus();
+      });
+      panels.forEach(function (p) {
+        var on = p.dataset.panel === name;
+        p.classList.toggle('is-active', on);
+        if (on) p.removeAttribute('hidden'); else p.setAttribute('hidden', '');
+      });
     }
     if (tabsEl) {
       tabsEl.addEventListener('click', function (e) {
         var btn = e.target.closest('.hub__tab');
         if (btn) activateTab(btn.dataset.tab);
       });
+      tabsEl.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft' && e.key !== 'Home' && e.key !== 'End') return;
+        var order = Array.prototype.map.call(tabs, function (b) { return b.dataset.tab; });
+        var cur = order.indexOf(document.activeElement.dataset ? document.activeElement.dataset.tab : order[0]);
+        if (cur < 0) cur = 0;
+        var next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % order.length;
+        else if (e.key === 'ArrowLeft') next = (cur - 1 + order.length) % order.length;
+        else if (e.key === 'Home') next = 0;
+        else if (e.key === 'End') next = order.length - 1;
+        e.preventDefault();
+        activateTab(order[next], true);
+      });
     }
-    // inline "go to Where to Play" links inside the How-to-Book panel
+    // inline "go to Where to play" links inside the How-to-book panel
     hub.addEventListener('click', function (e) {
       var link = e.target.closest('.hub__inline-link');
       if (link && link.dataset.goto) activateTab(link.dataset.goto);
     });
 
     render();
+    // Re-render the venue list when the language changes (static text in the
+    // book/groups panels is handled by the i18n engine directly).
+    document.addEventListener('i18n:change', render);
   })();
 
 })();
