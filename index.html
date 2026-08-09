@@ -39,6 +39,7 @@
       <a href="#hub" data-i18n="nav.hub">SG Hub</a>
       <a href="#news" data-i18n="nav.news">News</a>
       <a href="#play" data-i18n="nav.play">Play</a>
+      <a href="#reviews" data-i18n="nav.reviews">Reviews</a>
       <a href="#contact" class="nav__cta magnetic" data-i18n="nav.join">Join Us</a>
       <div class="lang" role="group" aria-label="Language / 语言">
         <button class="lang__btn is-active" id="langEn" data-lang="en" lang="en" aria-pressed="true">EN</button>
@@ -341,6 +342,58 @@
       </div>
       <p class="play__msg" id="gameMsg" aria-live="polite" data-i18n="play.msgStart">Select Start. Move under the shuttle, then jump and swing to hit it back.</p>
     </div>
+  </section>
+
+  <!-- ===== REFLEX TEST ===== -->
+  <section class="reflex" id="reflex" aria-labelledby="reflexTitle">
+    <div class="section-head">
+      <span class="kicker reveal" data-i18n="reflex.kicker">08 — Reaction Test</span>
+      <h2 class="section-title reveal" id="reflexTitle" data-i18n-html="reflex.title">How fast are your <em>reflexes</em>?</h2>
+      <p class="reflex__hint reveal" data-delay="120" data-i18n="reflex.hint">Wait for the shuttle to drop, then tap as fast as you can. Reaction time matters on court — pros react in under 0.2 seconds.</p>
+    </div>
+    <div class="reflex__wrap reveal" data-delay="160">
+      <button class="reflex__pad reflex__pad--idle" id="reflexPad" aria-live="polite">
+        <span class="reflex__shuttle" id="reflexShuttle" aria-hidden="true">🏸</span>
+        <span class="reflex__msg" id="reflexMsg" data-i18n="reflex.start">Tap to start</span>
+        <span class="reflex__sub" id="reflexSub" data-i18n="reflex.sub">Test your reaction speed</span>
+      </button>
+      <div class="reflex__stats">
+        <div class="reflex__stat"><span data-i18n="reflex.last">Last</span><b id="reflexLast">—</b></div>
+        <div class="reflex__stat reflex__stat--best"><span data-i18n="reflex.best">Best</span><b id="reflexBest">—</b></div>
+        <div class="reflex__stat"><span data-i18n="reflex.rank">Rank</span><b id="reflexRank">—</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GUESS THE PRO ===== -->
+  <section class="guess" id="guess" aria-labelledby="guessTitle">
+    <div class="section-head">
+      <span class="kicker reveal" data-i18n="guess.kicker">09 — Photo Quiz</span>
+      <h2 class="section-title reveal" id="guessTitle" data-i18n-html="guess.title">Guess the <em>pro</em>.</h2>
+      <p class="guess__hint reveal" data-delay="120" data-i18n="guess.hint">Ten photos, four names each. How many of the world's badminton stars can you name?</p>
+    </div>
+    <div class="guess__wrap reveal" data-delay="160">
+      <div class="guess__intro" id="guessIntro">
+        <button class="btn btn--primary magnetic" id="guessStart" data-i18n="guess.start">Start</button>
+      </div>
+      <div class="guess__stage" id="guessStage" style="display:none" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIALS / REVIEWS ===== -->
+  <section class="reviews" id="reviews" aria-labelledby="reviewsTitle">
+    <div class="section-head">
+      <span class="kicker reveal" data-i18n="reviews.kicker">10 — Reviews</span>
+      <h2 class="section-title reveal" id="reviewsTitle" data-i18n-html="reviews.title">Loved by <em>players &amp; parents</em>.</h2>
+      <p class="reviews__hint reveal" data-delay="120" data-i18n="reviews.hint">What our community says about training at Élever.</p>
+    </div>
+    <div class="reviews__carousel reveal" data-delay="160">
+      <button class="reviews__nav reviews__nav--prev" id="revPrev" aria-label="Previous review">&lsaquo;</button>
+      <div class="reviews__viewport"><div class="reviews__track" id="revTrack" aria-live="polite"></div></div>
+      <button class="reviews__nav reviews__nav--next" id="revNext" aria-label="Next review">&rsaquo;</button>
+    </div>
+    <div class="reviews__dots" id="revDots" role="tablist" aria-label="Choose a review"></div>
+    <p class="reviews__disclaimer" data-i18n="reviews.disclaimer">Sample testimonials shown for layout — replace with your real reviews.</p>
   </section>
 
   <!-- ===== CTA / CONTACT ===== -->

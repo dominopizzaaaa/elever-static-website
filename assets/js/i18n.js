@@ -23,7 +23,7 @@
 
       'nav.about': 'About', 'nav.quiz': 'Quiz', 'nav.programs': 'Programs',
       'nav.team': 'Coaches', 'nav.hub': 'SG Hub', 'nav.news': 'News',
-      'nav.play': 'Play', 'nav.join': 'Join us',
+      'nav.play': 'Play', 'nav.reviews': 'Reviews', 'nav.join': 'Join us',
 
       'hero.eyebrow': 'Singapore · Badminton Excellence',
       'hero.sub': 'To build. To raise. To bring something to a higher position. Élite coaching that turns first swings into championship dreams.',
@@ -159,6 +159,31 @@
       'play.win': 'Game! You win {a}–{b} 🏆',
       'play.lose': 'The computer wins {a}–{b}. Play again!',
 
+      'reflex.kicker': '08 — Reaction Test',
+      'reflex.title': 'How fast are your <em>reflexes</em>?',
+      'reflex.hint': 'Wait for the shuttle to drop, then tap as fast as you can. Reaction time matters on court — the pros react in under 0.2 seconds.',
+      'reflex.start': 'Tap to start', 'reflex.sub': 'Test your reaction speed',
+      'reflex.wait': 'Wait for it…', 'reflex.waitSub': 'Tap the moment the shuttle drops',
+      'reflex.tap': 'TAP NOW!', 'reflex.early': 'Too soon!', 'reflex.earlySub': 'Tap to try again',
+      'reflex.last': 'Last', 'reflex.best': 'Best', 'reflex.rank': 'Rank',
+      'reflex.rankPro': 'Pro reflexes ⚡', 'reflex.rankFast': 'Lightning fast', 'reflex.rankSharp': 'Sharp', 'reflex.rankOk': 'Not bad', 'reflex.rankWarm': 'Warming up',
+
+      'guess.kicker': '09 — Photo Quiz',
+      'guess.title': 'Guess the <em>pro</em>.',
+      'guess.hint': 'Ten photos, four names each. How many of the world’s badminton stars can you name?',
+      'guess.start': 'Start', 'guess.again': 'Play again',
+      'guess.count': 'Photo {n}/{total}', 'guess.score': 'Score {s}', 'guess.done': 'Your score',
+      'guess.alt': 'Guess this badminton player',
+      'guess.end9': 'Incredible — you really know your badminton! 🏆',
+      'guess.end6': 'Nice one! You know your stars.',
+      'guess.end3': 'Not bad — keep watching!',
+      'guess.end0': 'Time to watch more badminton! 🏸',
+
+      'reviews.kicker': '10 — Reviews',
+      'reviews.title': 'Loved by <em>players &amp; parents</em>.',
+      'reviews.hint': 'What our community says about training at Élever.',
+      'reviews.disclaimer': 'Sample testimonials shown for layout — replace with your real reviews.',
+
       'cta.title': 'Ready to <em>elevate</em>?',
       'cta.body': 'Whether it\u2019s your first swing or your next title, there\u2019s a place for you at Élever Badminton.',
       'cta.enquire': 'Enquire now', 'cta.email': 'Email us',
@@ -174,7 +199,7 @@
 
       'nav.about': '关于我们', 'nav.quiz': '测验', 'nav.programs': '课程',
       'nav.team': '教练团队', 'nav.hub': '新加坡中心', 'nav.news': '赛事资讯',
-      'nav.play': '小游戏', 'nav.join': '加入我们',
+      'nav.play': '小游戏', 'nav.reviews': '评价', 'nav.join': '加入我们',
 
       'hero.eyebrow': '新加坡 · 卓越羽毛球',
       'hero.sub': '培养、提升，让你更上一层楼。精英级教学，把第一次挥拍化为冠军梦想。',
@@ -309,6 +334,31 @@
       'play.whoYou': '你', 'play.whoCpu': '电脑',
       'play.win': '胜利！你以 {a}–{b} 获胜 🏆',
       'play.lose': '电脑以 {a}–{b} 获胜。再玩一次吧！',
+
+      'reflex.kicker': '08 — 反应测试',
+      'reflex.title': '你的<em>反应</em>有多快？',
+      'reflex.hint': '等羽球落下，然后尽快点击。场上反应速度很关键 — 职业球员的反应不到 0.2 秒。',
+      'reflex.start': '点击开始', 'reflex.sub': '测测你的反应速度',
+      'reflex.wait': '稍等…', 'reflex.waitSub': '羽球一落下就点击',
+      'reflex.tap': '快点击！', 'reflex.early': '太早了！', 'reflex.earlySub': '点击再试一次',
+      'reflex.last': '上次', 'reflex.best': '最佳', 'reflex.rank': '评级',
+      'reflex.rankPro': '职业级反应 ⚡', 'reflex.rankFast': '闪电般', 'reflex.rankSharp': '敏锐', 'reflex.rankOk': '还不错', 'reflex.rankWarm': '热身中',
+
+      'guess.kicker': '09 — 看图猜球星',
+      'guess.title': '<em>猜猜</em>这位球星。',
+      'guess.hint': '十张照片，每题四个名字。你能认出多少位世界羽球明星？',
+      'guess.start': '开始', 'guess.again': '再玩一次',
+      'guess.count': '第 {n}/{total} 张', 'guess.score': '得分 {s}', 'guess.done': '你的得分',
+      'guess.alt': '猜猜这位羽毛球运动员',
+      'guess.end9': '太厉害了 — 你真是羽球通！🏆',
+      'guess.end6': '不错！你很了解这些球星。',
+      'guess.end3': '还行 — 继续看比赛吧！',
+      'guess.end0': '该多看看羽毛球啦！🏸',
+
+      'reviews.kicker': '10 — 评价',
+      'reviews.title': '深受<em>球员与家长</em>喜爱。',
+      'reviews.hint': '我们的学员与家长如何评价在 Élever 的训练。',
+      'reviews.disclaimer': '此处为示例评价（仅供排版展示）— 请替换为真实评价。',
 
       'cta.title': '准备好<em>提升</em>了吗？',
       'cta.body': '无论是你的第一次挥拍，还是下一座奖杯 — 在 Élever 羽毛球学院，总有属于你的一席之地。',

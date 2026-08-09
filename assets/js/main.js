@@ -1509,4 +1509,124 @@
     document.addEventListener('i18n:change', render);
   })();
 
+  /* =====================================================================
+     11. REFLEX / REACTION TEST — tap when the shuttle drops
+     ===================================================================== */
+  (function reflexTest() {
+    var pad = document.getElementById('reflexPad');
+    if (!pad) return;
+    var msg = document.getElementById('reflexMsg'), sub = document.getElementById('reflexSub');
+    var lastEl = document.getElementById('reflexLast'), bestEl = document.getElementById('reflexBest'), rankEl = document.getElementById('reflexRank');
+    var I18N = window.I18N;
+    function T(k, v) { return I18N ? I18N.t(k, v) : k; }
+    var state = 'idle', timer = null, dropAt = 0;
+    var best = parseInt(localStorage.getItem('elever-reflex-best') || '0', 10) || 0;
+    function rank(ms) { return ms < 200 ? T('reflex.rankPro') : ms < 260 ? T('reflex.rankFast') : ms < 340 ? T('reflex.rankSharp') : ms < 450 ? T('reflex.rankOk') : T('reflex.rankWarm'); }
+    function setPad(c) { pad.className = 'reflex__pad reflex__pad--' + c; }
+    function paintBest() { bestEl.textContent = best ? best + ' ms' : '—'; }
+    paintBest();
+    function arm() {
+      state = 'wait'; setPad('wait'); msg.textContent = T('reflex.wait'); sub.textContent = T('reflex.waitSub');
+      timer = setTimeout(function () { state = 'go'; setPad('go'); dropAt = performance.now(); msg.textContent = T('reflex.tap'); sub.textContent = ''; }, 1400 + Math.random() * 2600);
+    }
+    function result(ms) {
+      state = 'result'; setPad('result'); msg.textContent = ms + ' ms'; sub.textContent = rank(ms);
+      lastEl.textContent = ms + ' ms'; rankEl.textContent = rank(ms);
+      if (!best || ms < best) { best = ms; try { localStorage.setItem('elever-reflex-best', String(best)); } catch (e) {} }
+      paintBest();
+    }
+    function tooSoon() { if (timer) { clearTimeout(timer); timer = null; } state = 'early'; setPad('early'); msg.textContent = T('reflex.early'); sub.textContent = T('reflex.earlySub'); }
+    pad.addEventListener('click', function () {
+      if (state === 'idle' || state === 'result' || state === 'early') { arm(); }
+      else if (state === 'wait') { tooSoon(); }
+      else if (state === 'go') { result(Math.round(performance.now() - dropAt)); }
+    });
+    document.addEventListener('i18n:change', function () {
+      if (state === 'idle') { msg.textContent = T('reflex.start'); sub.textContent = T('reflex.sub'); }
+      paintBest();
+    });
+  })();
+
+  /* =====================================================================
+     12. GUESS THE PRO — photo quiz (reuses the player portraits)
+     ===================================================================== */
+  (function guessPro() {
+    var root = document.getElementById('guess');
+    if (!root) return;
+    var I18N = window.I18N;
+    function T(k, v) { return I18N ? I18N.t(k, v) : k; }
+    function lang() { return I18N ? I18N.lang() : 'en'; }
+    var IMG = 'assets/img/players/';
+    var PIC = { an: 'an-se-young.jpg', tai: 'tai-tzu-ying.jpg', akane: 'akane-yamaguchi.jpg', yeo: 'yeo-jia-min.jpg', axelsen: 'viktor-axelsen.jpg', kunlavut: 'kunlavut-vitidsarn.jpg', loh: 'loh-kean-yew.jpg', antonsen: 'anders-antonsen.jpg', chou: 'chou-tien-chen.jpg', naraoka: 'kodai-naraoka.jpg', shi: 'shi-yuqi.jpg', jonatan: 'jonatan-christie.jpg', lakshya: 'lakshya-sen.jpg', chenyf: 'chen-yufei.jpg', marin: 'carolina-mar-n.jpg', sindhu: 'p-v-sindhu.jpg', ratchanok: 'ratchanok-intanon.jpg', wangzy: 'wang-zhiyi.jpg', leezii: 'lee-zii-jia.jpg', ginting: 'anthony-sinisuka-ginting.jpg', gregoria: 'gregoria-mariska-tunjung.jpg', lindan: 'lin-dan.jpg', lcw: 'lee-chong-wei.jpg', okuhara: 'nozomi-okuhara.jpg', momota: 'kento-momota.png', saina: 'saina-nehwal.jpg', tommy: 'tommy-sugiarto.jpg' };
+    var KEYS = Object.keys(PIC), ROUNDS = 10;
+    var stage = document.getElementById('guessStage'), intro = document.getElementById('guessIntro'), startBtn = document.getElementById('guessStart');
+    var order = [], idx = 0, score = 0, answered = false;
+    function nameOf(k) { var db = (I18N && I18N.data.players[lang()]) || I18N.data.players.en; var p = db[k] || I18N.data.players.en[k] || {}; return p.name || k; }
+    function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+    function start() { order = shuffle(KEYS).slice(0, ROUNDS); idx = 0; score = 0; intro.style.display = 'none'; stage.style.display = 'block'; renderRound(); }
+    function renderRound() {
+      answered = false;
+      var key = order[idx];
+      var opts = shuffle(KEYS.filter(function (k) { return k !== key; })).slice(0, 3); opts.push(key); opts = shuffle(opts);
+      var html = '<div class="guess__card fade"><p class="guess__count">' + T('guess.count', { n: idx + 1, total: ROUNDS }) + ' · <b>' + T('guess.score', { s: score }) + '</b></p>';
+      html += '<div class="guess__photo"><img src="' + IMG + PIC[key] + '" alt="' + T('guess.alt') + '" loading="lazy"></div><div class="guess__opts">';
+      opts.forEach(function (k) { html += '<button class="guess__opt" data-k="' + k + '">' + nameOf(k) + '</button>'; });
+      html += '</div></div>';
+      stage.innerHTML = html;
+      stage.querySelectorAll('.guess__opt').forEach(function (btn) { btn.addEventListener('click', function () { pick(btn, key); }); });
+    }
+    function pick(btn, key) {
+      if (answered) return; answered = true;
+      if (btn.dataset.k === key) score++;
+      stage.querySelectorAll('.guess__opt').forEach(function (b) { b.disabled = true; if (b.dataset.k === key) b.classList.add('guess__opt--correct'); else if (b === btn) b.classList.add('guess__opt--wrong'); });
+      setTimeout(function () { idx++; if (idx < ROUNDS) renderRound(); else renderEnd(); }, 950);
+    }
+    function renderEnd() {
+      var m = score >= 9 ? T('guess.end9') : score >= 6 ? T('guess.end6') : score >= 3 ? T('guess.end3') : T('guess.end0');
+      stage.innerHTML = '<div class="guess__card fade"><p class="guess__count">' + T('guess.done') + '</p><div class="guess__score">' + score + '/' + ROUNDS + '</div><p class="guess__scoremsg">' + m + '</p><button class="btn btn--primary magnetic" id="guessAgain">' + T('guess.again') + '</button></div>';
+      document.getElementById('guessAgain').addEventListener('click', start);
+    }
+    if (startBtn) startBtn.addEventListener('click', start);
+  })();
+
+  /* =====================================================================
+     13. TESTIMONIALS CAROUSEL
+        NOTE: sample/placeholder testimonials — swap in real reviews.
+     ===================================================================== */
+  (function reviewsCarousel() {
+    var track = document.getElementById('revTrack');
+    if (!track) return;
+    var dotsEl = document.getElementById('revDots'), prev = document.getElementById('revPrev'), next = document.getElementById('revNext');
+    var I18N = window.I18N;
+    function lang() { return I18N ? I18N.lang() : 'en'; }
+    var DATA = [
+      { n: 'Rachel T.', c: '#2151d1', en: { r: 'Parent of a P4 player', q: 'My daughter went from a shy beginner to competing for her school team in under a year. The coaches make every session something she looks forward to.' }, zh: { r: '小四学员家长', q: '不到一年，我女儿从害羞的新手成长为校队选手。教练让每一节课都充满乐趣，她每次都很期待。' } },
+      { n: 'Marcus L.', c: '#e5487a', en: { r: 'Student, 15', q: 'The drills are tough but I can actually feel myself getting faster and sharper. Training here made me fall in love with badminton again.' }, zh: { r: '15 岁学员', q: '训练很有挑战，但我能明显感觉到自己变得更快更敏捷。在这里训练让我重新爱上了羽毛球。' } },
+      { n: 'Priya S.', c: '#0d9488', en: { r: 'Parent', q: 'Small groups, patient coaches and real, visible progress. Booking is simple and the communication with parents is excellent.' }, zh: { r: '家长', q: '小班教学、耐心的教练，进步看得见。约课方便，与家长的沟通也非常到位。' } },
+      { n: 'Daniel W.', c: '#e08a0b', en: { r: 'Adult beginner', q: 'I started at 30 with zero experience. Three months in and I’m rallying with confidence. The clinics are perfect for adults.' }, zh: { r: '成人初学者', q: '我 30 岁零基础开始学。三个月后已经能自信地打多拍回合。这里的训练营很适合成年人。' } },
+      { n: 'Jia Hui', c: '#7c3aed', en: { r: 'Parent of twins', q: 'Both my kids count down to camp every holiday. It’s safe, high-energy, and they’ve made real friends on court.' }, zh: { r: '双胞胎家长', q: '每个假期我两个孩子都盼着来训练营。安全、充满活力，他们还在球场上交到了真正的朋友。' } }
+    ];
+    var i = 0, timer = null;
+    function render() {
+      track.innerHTML = DATA.map(function (d) {
+        var L = lang() === 'zh' ? d.zh : d.en;
+        return '<article class="reviews__card"><div class="reviews__stars" aria-label="5 out of 5 stars">★★★★★</div>' +
+          '<p class="reviews__quote">' + L.q + '</p><div class="reviews__who">' +
+          '<span class="reviews__avatar" style="background:' + d.c + '">' + d.n.charAt(0) + '</span>' +
+          '<span class="reviews__meta"><span class="reviews__name">' + d.n + '</span><br><span class="reviews__role">' + L.r + '</span></span></div></article>';
+      }).join('');
+      dotsEl.innerHTML = DATA.map(function (_, k) { return '<button class="reviews__dot' + (k === i ? ' is-active' : '') + '" data-k="' + k + '" aria-label="Review ' + (k + 1) + '"></button>'; }).join('');
+      dotsEl.querySelectorAll('.reviews__dot').forEach(function (b) { b.addEventListener('click', function () { go(+b.dataset.k); restart(); }); });
+      go(i);
+    }
+    function go(n) { i = (n + DATA.length) % DATA.length; track.style.transform = 'translateX(-' + (i * 100) + '%)'; dotsEl.querySelectorAll('.reviews__dot').forEach(function (b, k) { b.classList.toggle('is-active', k === i); }); }
+    function restart() { if (timer) clearInterval(timer); timer = setInterval(function () { go(i + 1); }, 5000); }
+    if (prev) prev.addEventListener('click', function () { go(i - 1); restart(); });
+    if (next) next.addEventListener('click', function () { go(i + 1); restart(); });
+    var wrap = document.querySelector('.reviews__carousel');
+    if (wrap) { wrap.addEventListener('mouseenter', function () { if (timer) clearInterval(timer); }); wrap.addEventListener('mouseleave', restart); }
+    render(); restart();
+    document.addEventListener('i18n:change', render);
+  })();
+
 })();
