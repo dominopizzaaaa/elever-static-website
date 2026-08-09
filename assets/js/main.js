@@ -17,38 +17,80 @@
     ctx.rotate(angle);
     ctx.scale(scale, scale);
 
-    // feather skirt (cone of feathers)
-    var feathers = 14, topR = 34, botR = 9, len = 60;
-    for (var i = 0; i < feathers; i++) {
-      var t = (i / (feathers - 1)) - 0.5;         // -0.5..0.5
-      var spread = t * topR * 2;
+    var len = 60;          // skirt height: cork sits near 0, feather crown at -len
+    var crownR = 31;       // half-width of the flared feather crown
+    var neckR = 8;         // half-width where the feathers gather into the cork
+    var N = 16;            // number of feather vanes
+
+    // ---- soft cone body behind the feathers (gives the skirt real volume) ----
+    ctx.beginPath();
+    ctx.moveTo(-neckR, -2);
+    ctx.quadraticCurveTo(-crownR * 1.04, -len * 0.72, -crownR, -len);
+    ctx.quadraticCurveTo(0, -len - 7, crownR, -len);
+    ctx.quadraticCurveTo(crownR * 1.04, -len * 0.72, neckR, -2);
+    ctx.closePath();
+    var body = ctx.createLinearGradient(0, 0, 0, -len);
+    body.addColorStop(0, 'rgba(238,242,249,.92)');
+    body.addColorStop(1, 'rgba(210,221,236,.72)');
+    ctx.fillStyle = body;
+    ctx.fill();
+
+    // ---- individual overlapping feather vanes ----
+    for (var i = 0; i < N; i++) {
+      var f = i / (N - 1);                                    // 0..1 across the crown
+      var topX = (f - 0.5) * crownR * 2;
+      var baseX = (f - 0.5) * neckR * 2;
+      var topY = -len - Math.cos((f - 0.5) * Math.PI) * 6;    // crown domes up in the middle
+      var edge = Math.abs(f - 0.5) * 2;                       // 0 centre .. 1 outer feathers
+      var w = 4.4 - edge * 1.5;                               // vane half-width, slimmer at the edges
+
       ctx.beginPath();
-      ctx.moveTo(-botR * (t * 2), 0);              // base near cork
-      ctx.lineTo(spread - 6, -len);
-      ctx.lineTo(spread + 6, -len);
+      ctx.moveTo(baseX, -2);
+      ctx.lineTo(topX - w, topY + 3);
+      ctx.quadraticCurveTo(topX, topY - 3, topX + w, topY + 3);  // rounded feather tip
       ctx.closePath();
-      var g = ctx.createLinearGradient(0, 0, 0, -len);
-      g.addColorStop(0, 'rgba(255,255,255,.95)');
-      g.addColorStop(1, 'rgba(210,222,238,.65)');
+      var g = ctx.createLinearGradient(baseX, -2, topX, topY);
+      g.addColorStop(0, 'rgba(255,255,255,.98)');
+      g.addColorStop(1, 'rgba(226,234,246,' + (0.96 - edge * 0.22) + ')');
       ctx.fillStyle = g;
       ctx.fill();
-      ctx.strokeStyle = 'rgba(120,140,165,.35)';
-      ctx.lineWidth = 0.8;
+      ctx.strokeStyle = 'rgba(150,168,193,.5)';
+      ctx.lineWidth = 0.7;
+      ctx.stroke();
+      // central quill/rib
+      ctx.beginPath();
+      ctx.moveTo(baseX, -3);
+      ctx.lineTo(topX, topY + 4);
+      ctx.strokeStyle = 'rgba(150,166,190,.4)';
+      ctx.lineWidth = 0.6;
       ctx.stroke();
     }
-    // binding threads
-    ctx.strokeStyle = 'rgba(150,170,195,.5)';
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.ellipse(0, -len * 0.55, topR * 0.55, 6, 0, 0, Math.PI * 2); ctx.stroke();
 
-    // cork base (rounded)
-    var cg = ctx.createRadialGradient(-4, 6, 2, 0, 10, 22);
-    cg.addColorStop(0, '#ffffff');
-    cg.addColorStop(1, '#d8dee7');
-    ctx.fillStyle = cg;
+    // ---- two crossing binding threads (the classic double ring) ----
+    ctx.strokeStyle = 'rgba(120,140,168,.55)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.ellipse(0, -len * 0.42, crownR * 0.5, 3.4, 0, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(0, -len * 0.66, crownR * 0.72, 4.6, 0, 0, Math.PI * 2); ctx.stroke();
+
+    // ---- cork base: domed top, rounded bottom, softly shaded ----
+    var cw = neckR + 3;
+    var cork = ctx.createRadialGradient(-cw * 0.35, 1, 2, 0, 5, cw * 2);
+    cork.addColorStop(0, '#ffffff');
+    cork.addColorStop(0.72, '#f3f1ea');
+    cork.addColorStop(1, '#d3d0c6');
+    ctx.fillStyle = cork;
     ctx.beginPath();
-    ctx.arc(0, 8, botR + 5, 0, Math.PI * 2);
+    ctx.moveTo(-cw, 2);
+    ctx.quadraticCurveTo(0, -3, cw, 2);              // gently domed top
+    ctx.lineTo(cw, 5);
+    ctx.arc(0, 5, cw, 0, Math.PI, false);            // rounded bottom
+    ctx.lineTo(-cw, 2);
+    ctx.closePath();
     ctx.fill();
+    // little specular highlight on the cork
+    ctx.fillStyle = 'rgba(255,255,255,.65)';
+    ctx.beginPath(); ctx.ellipse(-cw * 0.32, 3, 2.6, 3.4, -0.3, 0, Math.PI * 2); ctx.fill();
+
     ctx.restore();
   }
 
@@ -461,15 +503,47 @@
       [ { loh: 1, sindhu: 2, ginting: 2, leezii: 1 }, { tai: 2, ratchanok: 1, tommy: 1, antonsen: 2 }, { an: 1, akane: 2, naraoka: 1, okuhara: 1 }, { sindhu: 1, lcw: 2, lindan: 1, saina: 1, momota: 1 } ]
     ];
 
-    // A playful emoji "sticker" for each option (parallel to the questions),
-    // so the answers feel like a fun quiz rather than an A/B/C/D exam.
-    var OPTION_ICONS = [
-      ['🧘', '🎯', '🧠', '🏃'],
-      ['💥', '🎭', '🛡️', '⚡'],
-      ['⏰', '🎨', '🔋', '🔧'],
-      ['🔥', '❄️', '🤫', '🤩'],
-      ['🥊', '🚩', '⏳', '🧩'],
-      ['💪', '🪄', '🪨', '🏆']
+    // Clean line-art icons (self-contained SVG, inherit the badge colour), each
+    // picked to actually match its answer — a big step up from generic emoji.
+    function svgIcon(inner, filled) {
+      return '<svg viewBox="0 0 24 24" ' +
+        (filled ? 'fill="currentColor" stroke="none"'
+                : 'fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"') +
+        ' aria-hidden="true">' + inner + '</svg>';
+    }
+    var ICONS = {
+      shield:    svgIcon('<path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z"/>'),
+      target:    svgIcon('<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/>'),
+      clipboard: svgIcon('<rect x="6" y="4" width="12" height="16" rx="2"/><path d="M9 4V3a3 3 0 0 1 6 0v1"/><path d="M9 12.5l2 2 4-4"/>'),
+      pulse:     svgIcon('<path d="M2 12h4l3 8 4-16 3 8h6"/>'),
+      dumbbell:  svgIcon('<path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10"/>'),
+      mask:      svgIcon('<path d="M4 6c5-2 11-2 16 0 0 8-3.5 12-8 12S4 14 4 6Z"/><circle cx="9.5" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="14.5" cy="11" r="1" fill="currentColor" stroke="none"/><path d="M9.5 15c1.2 1 3.8 1 5 0"/>'),
+      wall:      svgIcon('<rect x="3" y="5" width="18" height="14" rx="1"/><path d="M3 10h18M3 15h18M9 5v5M15 5v5M9 15v4M15 15v4"/>'),
+      bolt:      svgIcon('<path d="M13 2 4 14h6l-1 8 9-12h-6z"/>', true),
+      alarm:     svgIcon('<circle cx="12" cy="13" r="7"/><path d="M12 10v3l2 1.5"/><path d="M5 4 2.5 6.5M19 4l2.5 2.5"/>'),
+      palette:   svgIcon('<path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-1 2-2s.6-2 2-2h1.5A2.5 2.5 0 0 0 20 14.5C20 8 16.4 3 12 3Z"/><circle cx="8" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="8" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="11" r="1" fill="currentColor" stroke="none"/>'),
+      battery:   svgIcon('<rect x="2" y="8" width="17" height="9" rx="2"/><path d="M22 11.5v2"/><path d="M6 11.5v3M9.5 11.5v3M13 11.5v3"/>'),
+      gear:      svgIcon('<circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.2 5.2l2.1 2.1M16.7 16.7l2.1 2.1M18.8 5.2l-2.1 2.1M7.3 16.7l-2.1 2.1"/>'),
+      flame:     svgIcon('<path d="M12 2c1 4 5 5 5 9a5 5 0 0 1-10 0c0-1.6.6-2.8 1.5-3.7C8.7 9 9 10.2 10 10.7 10 8 11 4.6 12 2Z"/>', true),
+      snowflake: svgIcon('<path d="M12 2v20M4 7l16 10M20 7 4 17M12 6l2-1.5M12 6l-2-1.5M12 18l2 1.5M12 18l-2 1.5"/>'),
+      eyeoff:    svgIcon('<path d="M2 12s4-6.5 10-6.5c1.7 0 3.1.4 4.4 1M22 12s-4 6.5-10 6.5c-1.7 0-3.1-.4-4.4-1"/><circle cx="12" cy="12" r="2.5"/><path d="M3 3 21 21"/>'),
+      mic:       svgIcon('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6"/>'),
+      rocket:    svgIcon('<path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2M9.5 11.5A11 11 0 0 1 18 3c2 0 3 1 3 3a11 11 0 0 1-8.5 8.5l-1.5 1.5-3-3z"/><circle cx="14.5" cy="8.5" r="1.4"/>'),
+      flag:      svgIcon('<path d="M5 21V3M5 4h11l-2 3.5L16 11H5"/>'),
+      hourglass: svgIcon('<path d="M6 3h12M6 21h12M8 3c0 4.5 4 5.5 4 9s-4 4.5-4 9M16 3c0 4.5-4 5.5-4 9s4 4.5 4 9"/>'),
+      grid:      svgIcon('<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>'),
+      wand:      svgIcon('<path d="M4 20 13 11"/><path d="M17 3l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1z"/>'),
+      mountain:  svgIcon('<path d="M3 20 9 8l4 6 2-3 6 9z"/><path d="m9 8 1.6 3"/>'),
+      trophy:    svgIcon('<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6.5H5.6A1.5 1.5 0 0 0 7 9.6M16 6.5h2.4A1.5 1.5 0 0 1 15 9.6"/><path d="M12 13v3M10 16h4l.8 4H9.2z"/>')
+    };
+    // Which icon fits each option (parallel to the localized questions).
+    var OPTION_ICON_NAMES = [
+      ['shield', 'target', 'clipboard', 'pulse'],
+      ['dumbbell', 'mask', 'wall', 'bolt'],
+      ['alarm', 'palette', 'battery', 'gear'],
+      ['flame', 'snowflake', 'eyeoff', 'mic'],
+      ['rocket', 'flag', 'hourglass', 'grid'],
+      ['dumbbell', 'wand', 'mountain', 'trophy']
     ];
 
     var I18N = window.I18N;
@@ -509,8 +583,9 @@
       var html = '<p class="quiz__count">' + I18N.t('quiz.count', { n: current + 1, total: QS.length }) + '</p>';
       html += '<h3 class="quiz__q">' + Q.q + '</h3><div class="quiz__opts">';
       Q.a.forEach(function (optText, i) {
-        var ic = (OPTION_ICONS[current] && OPTION_ICONS[current][i]) || '🏸';
-        html += '<button class="quiz__opt" data-i="' + i + '"><span class="quiz__opt-emoji" aria-hidden="true">' + ic + '</span><span class="quiz__opt-text">' + optText + '</span></button>';
+        var names = OPTION_ICON_NAMES[current] || [];
+        var mark = ICONS[names[i]] || ICONS.target;
+        html += '<button class="quiz__opt" data-i="' + i + '"><span class="quiz__opt-icon quiz__opt-icon--' + i + '" aria-hidden="true">' + mark + '</span><span class="quiz__opt-text">' + optText + '</span></button>';
       });
       html += '</div>';
       qWrap.innerHTML = html;

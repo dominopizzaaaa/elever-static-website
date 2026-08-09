@@ -245,14 +245,20 @@ em{font-style:normal;color:var(--accent)}   /* highlight — brand blue, never i
 .quiz__opts{display:grid;gap:.9rem}
 /* option = a tappable sticker card with a playful emoji badge (no exam A/B/C/D) */
 .quiz__opt{display:flex;align-items:center;gap:.9rem;text-align:left;width:100%;padding:.9rem 1.05rem;border:2.5px solid rgba(33,81,209,.14);border-radius:20px;background:#fff;color:var(--ink);font-family:inherit;font-weight:600;font-size:1.02rem;box-shadow:0 4px 0 rgba(33,81,209,.08);transition:transform .25s var(--ease-bounce),border-color .25s,background .25s,box-shadow .25s}
-.quiz__opt-emoji{flex:none;width:46px;height:46px;display:grid;place-items:center;font-size:1.55rem;line-height:1;background:#fff;border-radius:50%;box-shadow:0 5px 12px -3px rgba(33,81,209,.35),inset 0 0 0 2px rgba(33,81,209,.12);transition:transform .3s var(--ease-bounce)}
+.quiz__opt-icon{flex:none;width:48px;height:48px;display:grid;place-items:center;border-radius:15px;box-shadow:0 5px 12px -4px rgba(13,28,66,.3),inset 0 0 0 2px rgba(255,255,255,.75);transition:transform .3s var(--ease-bounce)}
+.quiz__opt-icon svg{width:27px;height:27px;display:block}
+/* four bright, distinct sticker colours by option position */
+.quiz__opt-icon--0{background:#e7edff;color:var(--accent)}
+.quiz__opt-icon--1{background:#ffe6ef;color:#e5487a}
+.quiz__opt-icon--2{background:#d7f6ee;color:#0d9488}
+.quiz__opt-icon--3{background:#fff0d6;color:#d97706}
 .quiz__opt-text{flex:1}
-.quiz__opt:nth-child(1) .quiz__opt-emoji{transform:rotate(-7deg)}
-.quiz__opt:nth-child(2) .quiz__opt-emoji{transform:rotate(6deg)}
-.quiz__opt:nth-child(3) .quiz__opt-emoji{transform:rotate(-4deg)}
-.quiz__opt:nth-child(4) .quiz__opt-emoji{transform:rotate(7deg)}
+.quiz__opt:nth-child(1) .quiz__opt-icon{transform:rotate(-6deg)}
+.quiz__opt:nth-child(2) .quiz__opt-icon{transform:rotate(5deg)}
+.quiz__opt:nth-child(3) .quiz__opt-icon{transform:rotate(-4deg)}
+.quiz__opt:nth-child(4) .quiz__opt-icon{transform:rotate(6deg)}
 .quiz__opt:hover{border-color:var(--accent);background:var(--accent-soft);transform:translateY(-3px) rotate(-.5deg);box-shadow:0 14px 24px -12px rgba(33,81,209,.5)}
-.quiz__opt:hover .quiz__opt-emoji{transform:scale(1.18) rotate(-10deg)}
+.quiz__opt:hover .quiz__opt-icon{transform:scale(1.16) rotate(-8deg)}
 .quiz__opt:active{transform:translateY(0) scale(.99)}
 
 /* result — celebratory */
