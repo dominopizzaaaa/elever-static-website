@@ -57,8 +57,8 @@
     <div class="hero__content">
       <p class="hero__eyebrow reveal" data-i18n="hero.eyebrow">Singapore · Badminton Excellence</p>
       <h1 class="hero__title">
-        <span class="line reveal"><i>E</i><i>L</i><i>E</i><i>V</i><i>A</i><i>T</i><i>E</i></span>
-        <span class="line line--accent reveal" data-delay="120"><i>Y</i><i>O</i><i>U</i><i>R</i>&nbsp;<i>G</i><i>A</i><i>M</i><i>E</i></span>
+        <span class="line reveal"><span class="word"><i>E</i><i>L</i><i>E</i><i>V</i><i>A</i><i>T</i><i>E</i></span></span>
+        <span class="line line--accent reveal" data-delay="120"><span class="word"><i>Y</i><i>O</i><i>U</i><i>R</i></span> <span class="word"><i>G</i><i>A</i><i>M</i><i>E</i></span></span>
       </h1>
       <p class="hero__sub reveal" data-delay="240" data-i18n="hero.sub">To build. To raise. To bring something to a higher position. Élite coaching that turns first swings into championship dreams.</p>
       <div class="hero__actions reveal" data-delay="320">
@@ -101,6 +101,9 @@
 
   <!-- ===== FIND YOUR BADMINTON TWIN (personality quiz) ===== -->
   <section class="quiz" id="quiz" aria-labelledby="quizTitle">
+    <div class="quiz__deco" aria-hidden="true">
+      <span>🏸</span><span>✨</span><span>💫</span><span>⭐</span><span>🏸</span><span>💙</span>
+    </div>
     <div class="section-head">
       <span class="kicker reveal" data-i18n="quiz.kicker">02 — Interactive</span>
       <h2 class="section-title reveal" id="quizTitle" data-i18n-html="quiz.title">Which pro is your <em>badminton twin</em>?</h2>
@@ -109,8 +112,9 @@
       <div class="quiz__progress-wrap" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="quizProgressBar"><div class="quiz__progress" id="quizProgress"></div></div>
 
       <div class="quiz__intro" id="quizIntro">
+        <div class="quiz__mascot" aria-hidden="true">🏸</div>
         <p class="quiz__lead" data-i18n-html="quiz.lead">Answer 6 quick questions about how you play &amp; think.<br>We'll reveal which of the world's badminton stars is your on-court twin — with their photo. <strong>No peeking</strong> — there are 27 possible matches, and yours is a surprise.</p>
-        <button class="btn btn--primary magnetic" id="quizStart" data-i18n="quiz.start">Start the quiz</button>
+        <button class="btn btn--primary magnetic quiz__cta" id="quizStart" data-i18n="quiz.start">Start the quiz</button>
       </div>
 
       <div class="quiz__stage" id="quizStage" style="display:none">

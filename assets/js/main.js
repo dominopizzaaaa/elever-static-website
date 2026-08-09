@@ -650,9 +650,11 @@
       return map[m] || m;
     }
     function dateLabel(ev) {
+      // ev.date already carries the month (e.g. "6–11 Jan", "Jul", "May–Jun"),
+      // so we must NOT append the month again — that produced "Jul Jul 2026".
       // English keeps the descriptive date range; Chinese uses the month label
       // (the English ranges like "6–11 Jan" are not localised to avoid errors).
-      if (lang() === 'en') return ev.date + ' ' + ev.m.slice(0, 3) + ' 2026';
+      if (lang() === 'en') return ev.date + ' 2026';
       return monthLabel(ev.m) + ' · 2026';
     }
 
@@ -889,20 +891,43 @@
       if (dx * dx + dy * dy > 60 * 60) return;
 
       var dir = who === 'you' ? 1 : -1;
-      var high = bird.y < NET_TOP - 10;      // clearly above the net -> can attack down
+      var netH = GROUND - NET_TOP;
+      var aboveTape = NET_TOP - bird.y;        // > 0 when the shuttle is above the net tape
+      var SMASH_OK = netH * 0.16;              // contact must be this far above the tape to smash cleanly
+      var label = (who === 'you' ? T('play.you') : T('play.cpu'));
 
-      if (high && Math.abs(bird.x - NET_X) > W * 0.10) {
-        // SMASH: quick & angled downward into the far court (starts above the net so it clears)
-        bird.vx = dir * (4.6 + Math.random() * 1.4);
-        bird.vy = 1.4 + Math.random() * 0.8;
-        setShot((who === 'you' ? T('play.you') : T('play.cpu')) + ': ' + T('play.shotSmash'));
-        burst(tip.x, tip.y, '255,90,90', 26);
+      if (aboveTape > SMASH_OK) {
+        // ---- SMASH (contact comfortably above the net) ----
+        // Aim the shuttle to pass just above the tape, then let physics dive it into
+        // the far court. Because it is aimed above the tape it ALWAYS clears the net.
+        // The flight is fast, so the receiver has little time to react — a clean high
+        // smash wins the point most of the time.
+        var aimY = NET_TOP - Math.max(12, netH * 0.10);      // a hair above the tape
+        var aimX = NET_X + dir * 10;
+        var tx = aimX - bird.x, ty = aimY - bird.y;
+        var len = Math.hypot(tx, ty) || 1;
+        var SPEED = 11 + Math.random() * 2;                  // fast → hard to reach
+        bird.vx = tx / len * SPEED;
+        bird.vy = ty / len * SPEED;
+        if (bird.vy < 0.5) bird.vy = 0.5;                    // keep a real smash descending
+        setShot(label + ': ' + T('play.shotSmash'));
+        burst(tip.x, tip.y, '255,90,90', 28);
+      } else if (aboveTape > 0) {
+        // ---- SMASH TOO LOW ----
+        // The shuttle isn't high enough to angle down safely, so the attempted smash
+        // is driven straight into the net — the smasher loses the point (handled when
+        // the net collision / own-side landing is resolved in update()).
+        bird.vx = dir * 4.2;
+        bird.vy = 3.4;
+        setShot(label + ': ' + T('play.shotSmash'));
+        burst(tip.x, tip.y, '255,90,90', 18);
       } else {
-        // CLEAR / LIFT: a high, floaty arc that sails deep toward the far baseline.
+        // ---- LIFT / CLEAR (shuttle at or below the tape) ----
+        // A safe, high, floaty arc that sails deep toward the far baseline and clears the net.
         var landX = who === 'you' ? (NET_X + W * 0.34 + Math.random() * W * 0.13) : (NET_X - W * 0.34 - Math.random() * W * 0.13);
         var v = launchTo(bird.x, bird.y, landX, 1.05 + Math.random() * 0.35);
         bird.vx = v.vx; bird.vy = v.vy;
-        setShot((who === 'you' ? T('play.you') : T('play.cpu')) + ': ' + T('play.shotClear'));
+        setShot(label + ': ' + T('play.shotClear'));
         burst(tip.x, tip.y, '150,220,255', 16);
       }
       bird.last = who; bird.cool = 14; rally++; updateScore();
