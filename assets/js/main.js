@@ -1544,11 +1544,23 @@
       updateMarker(ms);
     }
     function tooSoon() { if (timer) { clearTimeout(timer); timer = null; } state = 'early'; setPad('early'); msg.textContent = T('reflex.early'); sub.textContent = T('reflex.earlySub'); }
-    pad.addEventListener('click', function () {
+    function handleAction(e) {
+      if (e && e.type === 'keydown') {
+        if (e.code !== 'Space' && e.key !== ' ') return;
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        var rect = pad.getBoundingClientRect();
+        if (rect.top > window.innerHeight || rect.bottom < 0) return;
+        e.preventDefault();
+        // If it's a keydown from the pad itself, it will also trigger click.
+        // We prevent default so it doesn't scroll, but we don't want double firing if it also fires click.
+        // Actually preventDefault on keydown for space stops the click from firing on the button.
+      }
       if (state === 'idle' || state === 'result' || state === 'early') { arm(); }
       else if (state === 'wait') { tooSoon(); }
       else if (state === 'go') { result(Math.round(performance.now() - dropAt)); }
-    });
+    }
+    pad.addEventListener('click', handleAction);
+    window.addEventListener('keydown', handleAction);
     document.addEventListener('i18n:change', function () {
       if (state === 'idle') { msg.textContent = T('reflex.start'); sub.textContent = T('reflex.sub'); }
       else if (state === 'result') { sub.textContent = rank(parseInt(lastEl.textContent, 10)); }

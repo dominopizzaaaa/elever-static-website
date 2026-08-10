@@ -166,10 +166,10 @@
 
       'reflex.kicker': '08 — Reaction Test',
       'reflex.title': 'How fast are your <em>reflexes</em>?',
-      'reflex.hint': 'Wait for the shuttle to drop, then tap as fast as you can. Reaction time matters on court — the pros react in under 0.2 seconds.',
-      'reflex.start': 'Tap to start', 'reflex.sub': 'Test your reaction speed',
-      'reflex.wait': 'Wait for it…', 'reflex.waitSub': 'Tap the moment the shuttle drops',
-      'reflex.tap': 'TAP NOW!', 'reflex.early': 'Too soon!', 'reflex.earlySub': 'Tap to try again',
+      'reflex.hint': 'Wait for the shuttle to drop, then tap (or press Space) as fast as you can. Reaction time matters on court — the pros react in under 0.2 seconds.',
+      'reflex.start': 'Tap or press Space to start', 'reflex.sub': 'Test your reaction speed',
+      'reflex.wait': 'Wait for it…', 'reflex.waitSub': 'Tap or press Space the moment the shuttle drops',
+      'reflex.tap': 'TAP NOW!', 'reflex.early': 'Too soon!', 'reflex.earlySub': 'Tap or press Space to try again',
       'reflex.last': 'Last', 'reflex.best': 'Best', 'reflex.rank': 'Rank',
       'reflex.rankF1': 'F1 Driver', 'reflex.rankPro': 'Badminton Pro', 'reflex.rankNormal': 'Normal Human', 'reflex.rankSlow': 'Sluggish',
 
@@ -344,10 +344,10 @@
 
       'reflex.kicker': '08 — 反应测试',
       'reflex.title': '你的<em>反应</em>有多快？',
-      'reflex.hint': '等羽球落下，然后尽快点击。场上反应速度很关键 — 职业球员的反应不到 0.2 秒。',
-      'reflex.start': '点击开始', 'reflex.sub': '测测你的反应速度',
-      'reflex.wait': '稍等…', 'reflex.waitSub': '羽球一落下就点击',
-      'reflex.tap': '快点击！', 'reflex.early': '太早了！', 'reflex.earlySub': '点击再试一次',
+      'reflex.hint': '等羽球落下，然后尽快点击（或按空格键）。场上反应速度很关键 — 职业球员的反应不到 0.2 秒。',
+      'reflex.start': '点击或按空格键开始', 'reflex.sub': '测测你的反应速度',
+      'reflex.wait': '稍等…', 'reflex.waitSub': '羽球一落下就点击或按空格键',
+      'reflex.tap': '快点击！', 'reflex.early': '太早了！', 'reflex.earlySub': '点击或按空格键再试一次',
       'reflex.last': '上次', 'reflex.best': '最佳', 'reflex.rank': '评级',
       'reflex.rankF1': 'F1 车手', 'reflex.rankPro': '职业球员', 'reflex.rankNormal': '普通人', 'reflex.rankSlow': '较迟缓',
 
@@ -522,10 +522,10 @@
 
       'reflex.kicker': '08 — रिएक्शन टेस्ट',
       'reflex.title': 'आपके <em>रिफ़्लेक्स</em> कितने तेज़ हैं?',
-      'reflex.hint': 'शटल के गिरने का इंतज़ार करें, फिर जितनी तेज़ी से हो सके टैप करें। कोर्ट पर रिएक्शन टाइम मायने रखता है — प्रो 0.2 सेकंड से भी कम में प्रतिक्रिया देते हैं।',
-      'reflex.start': 'शुरू करने के लिए टैप करें', 'reflex.sub': 'अपनी रिएक्शन स्पीड जाँचें',
-      'reflex.wait': 'रुकिए…', 'reflex.waitSub': 'जैसे ही शटल गिरे, टैप करें',
-      'reflex.tap': 'अभी टैप करें!', 'reflex.early': 'बहुत जल्दी!', 'reflex.earlySub': 'फिर से कोशिश करने के लिए टैप करें',
+      'reflex.hint': 'शटल के गिरने का इंतज़ार करें, फिर जितनी तेज़ी से हो सके टैप करें (या स्पेस दबाएं)। कोर्ट पर रिएक्शन टाइम मायने रखता है — प्रो 0.2 सेकंड से भी कम में प्रतिक्रिया देते हैं।',
+      'reflex.start': 'शुरू करने के लिए टैप करें या स्पेस दबाएं', 'reflex.sub': 'अपनी रिएक्शन स्पीड जाँचें',
+      'reflex.wait': 'रुकिए…', 'reflex.waitSub': 'जैसे ही शटल गिरे, टैप करें या स्पेस दबाएं',
+      'reflex.tap': 'अभी टैप करें!', 'reflex.early': 'बहुत जल्दी!', 'reflex.earlySub': 'फिर से कोशिश करने के लिए टैप करें या स्पेस दबाएं',
       'reflex.last': 'पिछला', 'reflex.best': 'सर्वश्रेष्ठ', 'reflex.rank': 'रैंक',
       'reflex.rankF1': 'F1 ड्राइवर', 'reflex.rankPro': 'बैडमिंटन प्रो', 'reflex.rankNormal': 'सामान्य इंसान', 'reflex.rankSlow': 'सुस्त',
 
@@ -701,9 +701,9 @@
       'reflex.kicker': '08 — எதிர்வினை சோதனை',
       'reflex.title': 'உங்கள் <em>எதிர்வினை</em> எவ்வளவு வேகம்?',
       'reflex.hint': 'ஷட்டில் விழுவதற்குக் காத்திருங்கள், பின்னர் முடிந்தவரை வேகமாகத் தட்டுங்கள். கோர்ட்டில் எதிர்வினை நேரம் முக்கியம் — ப்ரோக்கள் 0.2 வினாடிக்கும் குறைவாக எதிர்வினையாற்றுகிறார்கள்.',
-      'reflex.start': 'தொடங்க தட்டுங்கள்', 'reflex.sub': 'உங்கள் எதிர்வினை வேகத்தைச் சோதியுங்கள்',
-      'reflex.wait': 'காத்திருங்கள்…', 'reflex.waitSub': 'ஷட்டில் விழும் தருணத்தில் தட்டுங்கள்',
-      'reflex.tap': 'இப்போது தட்டு!', 'reflex.early': 'மிக விரைவு!', 'reflex.earlySub': 'மீண்டும் முயற்சிக்க தட்டுங்கள்',
+      'reflex.start': 'தொடங்க தட்டுங்கள் அல்லது ஸ்பேஸ் அழுத்தவும்', 'reflex.sub': 'உங்கள் எதிர்வினை வேகத்தைச் சோதியுங்கள்',
+      'reflex.wait': 'காத்திருங்கள்…', 'reflex.waitSub': 'ஷட்டில் விழும் தருணத்தில் தட்டுங்கள் அல்லது ஸ்பேஸ் அழுத்தவும்',
+      'reflex.tap': 'இப்போது தட்டு!', 'reflex.early': 'மிக விரைவு!', 'reflex.earlySub': 'மீண்டும் முயற்சிக்க தட்டுங்கள் அல்லது ஸ்பேஸ் அழுத்தவும்',
       'reflex.last': 'கடைசி', 'reflex.best': 'சிறந்தது', 'reflex.rank': 'தரவரிசை',
       'reflex.rankF1': 'F1 டிரைவர்', 'reflex.rankPro': 'பேட்மிண்டன் ப்ரோ', 'reflex.rankNormal': 'சாதாரண மனிதன்', 'reflex.rankSlow': 'மந்தமான',
 
@@ -878,10 +878,10 @@
 
       'reflex.kicker': '08 — Ujian Reaksi',
       'reflex.title': 'Berapa pantas <em>refleks</em> anda?',
-      'reflex.hint': 'Tunggu bulu tangkis jatuh, kemudian ketik sepantas mungkin. Masa tindak balas penting di gelanggang — pro bertindak balas dalam kurang 0.2 saat.',
-      'reflex.start': 'Ketik untuk mula', 'reflex.sub': 'Uji kelajuan tindak balas anda',
-      'reflex.wait': 'Tunggu…', 'reflex.waitSub': 'Ketik sebaik bulu tangkis jatuh',
-      'reflex.tap': 'KETIK SEKARANG!', 'reflex.early': 'Terlalu awal!', 'reflex.earlySub': 'Ketik untuk cuba lagi',
+      'reflex.hint': 'Tunggu bulu tangkis jatuh, kemudian ketik (atau tekan Space) sepantas mungkin. Masa tindak balas penting di gelanggang — pro bertindak balas dalam kurang 0.2 saat.',
+      'reflex.start': 'Ketik atau tekan Space untuk mula', 'reflex.sub': 'Uji kelajuan tindak balas anda',
+      'reflex.wait': 'Tunggu…', 'reflex.waitSub': 'Ketik atau tekan Space sebaik bulu tangkis jatuh',
+      'reflex.tap': 'KETIK SEKARANG!', 'reflex.early': 'Terlalu awal!', 'reflex.earlySub': 'Ketik atau tekan Space untuk cuba lagi',
       'reflex.last': 'Terakhir', 'reflex.best': 'Terbaik', 'reflex.rank': 'Pangkat',
       'reflex.rankF1': 'Pemandu F1', 'reflex.rankPro': 'Pemain Pro', 'reflex.rankNormal': 'Manusia Biasa', 'reflex.rankSlow': 'Lembap',
 
