@@ -182,13 +182,15 @@
       'reviews.kicker': '10 — Reviews',
       'reviews.title': 'Loved by <em>players &amp; parents</em>.',
       'reviews.hint': 'What our community says about training at Élever.',
-      'reviews.disclaimer': 'Sample testimonials shown for layout — replace with your real reviews.',
+      'reviews.ig': 'See real moments on Instagram',
+      'reviews.disclaimer': 'The quotes above are sample placeholders — follow us on Instagram for real training moments, results and updates.',
 
       'cta.title': 'Ready to <em>elevate</em>?',
       'cta.body': 'Whether it\u2019s your first swing or your next title, there\u2019s a place for you at Élever Badminton.',
-      'cta.enquire': 'Enquire now', 'cta.email': 'Email us',
+      'cta.enquire': 'Enquire now', 'cta.email': 'Email us', 'cta.instagram': 'Follow on Instagram',
 
       'footer.tag': 'To build. To raise. To rise higher.',
+      'footer.instagram': 'Instagram',
       'footer.official': 'Official site',
       'footer.note': 'Concept redesign · Built for Élever Badminton. Photography © Élever Badminton.'
     },
@@ -358,13 +360,15 @@
       'reviews.kicker': '10 — 评价',
       'reviews.title': '深受<em>球员与家长</em>喜爱。',
       'reviews.hint': '我们的学员与家长如何评价在 Élever 的训练。',
-      'reviews.disclaimer': '此处为示例评价（仅供排版展示）— 请替换为真实评价。',
+      'reviews.ig': '在 Instagram 看真实瞬间',
+      'reviews.disclaimer': '以上评价为示例占位文字 — 关注我们的 Instagram，查看真实的训练瞬间、成绩与动态。',
 
       'cta.title': '准备好<em>提升</em>了吗？',
       'cta.body': '无论是你的第一次挥拍，还是下一座奖杯 — 在 Élever 羽毛球学院，总有属于你的一席之地。',
-      'cta.enquire': '立即咨询', 'cta.email': '发送邮件',
+      'cta.enquire': '立即咨询', 'cta.email': '发送邮件', 'cta.instagram': '关注 Instagram',
 
       'footer.tag': '培养、提升，更上一层楼。',
+      'footer.instagram': 'Instagram',
       'footer.official': '官方网站',
       'footer.note': '概念改版设计 · 为 Élever 羽毛球学院打造。摄影 © Élever 羽毛球学院。'
     }
