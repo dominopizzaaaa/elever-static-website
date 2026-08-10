@@ -11,7 +11,12 @@
   'use strict';
 
   var STORAGE_KEY = 'elever-lang';
-  var SUPPORTED = ['en', 'zh'];
+  var SUPPORTED = ['en', 'zh', 'hi', 'ta', 'ms'];
+  // BCP-47 codes for the <html lang> attribute per UI language.
+  var LANG_TAG = { en: 'en', zh: 'zh-Hans', hi: 'hi', ta: 'ta', ms: 'ms' };
+  // Short label shown on the switcher button, and full name for accessibility.
+  var LANG_LABELS = { en: 'EN', zh: '中文', hi: 'हिन्दी', ta: 'தமிழ்', ms: 'BM' };
+  var LANG_NAMES = { en: 'English', zh: '中文', hi: 'हिन्दी', ta: 'தமிழ்', ms: 'Bahasa Melayu' };
 
   /* ------------------------------------------------------------------ */
   /* 1. UI STRINGS                                                       */
@@ -371,6 +376,540 @@
       'footer.instagram': 'Instagram',
       'footer.official': '官方网站',
       'footer.note': '概念改版设计 · 为 Élever 羽毛球学院打造。摄影 © Élever 羽毛球学院。'
+    },
+
+    hi: {
+      'a11y.skip': 'मुख्य सामग्री पर जाएँ',
+      'intro.skip': 'इंट्रो छोड़ें',
+
+      'nav.about': 'परिचय', 'nav.quiz': 'क्विज़', 'nav.programs': 'प्रोग्राम',
+      'nav.team': 'कोच', 'nav.hub': 'SG हब', 'nav.news': 'समाचार',
+      'nav.play': 'खेलें', 'nav.reviews': 'समीक्षाएँ', 'nav.join': 'जुड़ें',
+
+      'hero.eyebrow': 'सिंगापुर · बैडमिंटन उत्कृष्टता',
+      'hero.sub': 'निर्माण करें। ऊँचा उठें। किसी चीज़ को और ऊँचे स्तर तक ले जाएँ। एलीट कोचिंग जो पहली स्ट्रोक को चैंपियनशिप के सपनों में बदल देती है।',
+      'hero.ctaPrograms': 'प्रोग्राम देखें',
+      'hero.ctaQuiz': 'अपना जुड़वाँ खोजें',
+      'hero.hint': '↳ अपना कर्सर हिलाएँ — शटल आप पर प्रतिक्रिया देते हैं',
+      'hero.scroll': 'स्क्रॉल',
+      'hero.stat1': 'विशेषज्ञ कोच', 'hero.stat2': 'प्रोग्राम स्तंभ', 'hero.stat3': '% जुनून',
+
+      'about.kicker': '01 — Élever के बारे में',
+      'about.title': 'सिर्फ़ एक खेल नहीं।<br><em>महानता की ओर एक राह।</em>',
+      'about.lead': '<strong>Élever</strong> <span class="about__def">(क्रिया)</span> — निर्माण करना या ऊपर उठाना; किसी चीज़ को और ऊँचे स्थान तक ले जाना।',
+      'about.p1': 'उत्कृष्टता एक यात्रा है — और Élever Badminton में यह क्रमिक स्तंभों पर बनी एक सुनियोजित राह पर चलती है। आपकी पहली स्ट्रोक से लेकर एलीट प्रतिस्पर्धा तक, हमारे कोच हर खिलाड़ी को आत्मविश्वास बनाने और खेल में महारत हासिल करने के लिए विशेषज्ञ मार्गदर्शन और सहयोगी समुदाय प्रदान करते हैं।',
+      'about.p2': 'हमारा मानना है कि हर खिलाड़ी विश्वस्तरीय मार्गदर्शन का हक़दार है, चाहे वह अपनी यात्रा में कहीं भी हो। यही विश्वास कोर्ट पर और बाहर, हमारे हर काम को प्रेरित करता है।',
+
+      'quiz.kicker': '02 — इंटरैक्टिव',
+      'quiz.title': 'कौन-सा प्रो आपका <em>बैडमिंटन जुड़वाँ</em> है?',
+      'quiz.lead': 'आप कैसे खेलते और सोचते हैं, इस पर 6 छोटे सवालों के जवाब दें।<br>हम बताएँगे कि दुनिया के कौन-से बैडमिंटन सितारे आपके कोर्ट-जुड़वाँ हैं — उनकी तस्वीर के साथ। <strong>झाँकना मना है</strong> — 27 संभावित मैच हैं, और आपका एक सरप्राइज़ है।',
+      'quiz.start': 'क्विज़ शुरू करें',
+      'quiz.count': '🏸 {n} / {total}',
+      'quiz.resultLead': 'आपका बैडमिंटन जुड़वाँ है…',
+      'quiz.again': 'फिर से खेलें',
+      'quiz.share': 'नतीजा शेयर करें',
+      'quiz.rrPrompt': 'यह रहा आपका प्रो जुड़वाँ — पर आपका <em>असली</em> स्तर क्या है? नीचे जानें 👇',
+      'quiz.rrCta': 'Racket Ratings पर रेटिंग पाएँ →',
+      'quiz.credit': 'तस्वीर: Wikimedia Commons · {lic}',
+
+      'programs.kicker': '03 — हम क्या करते हैं',
+      'programs.title': 'ऊपर उठने के <em>चार</em> रास्ते।',
+      'programs.campsTitle': 'कैम्प',
+      'programs.campsBody': 'हमारे छुट्टियों के एक्सप्लोरेशन कैम्प हर स्कूल-अवकाश को बैडमिंटन के रोमांच में बदल देते हैं। कम या बिना अनुभव वाले खिलाड़ियों के लिए खेल-आधारित सीख — मज़बूत बुनियाद और शारीरिक विकास, और खेलने का उत्साह बनाए रखते हुए।',
+      'programs.classesTitle': 'कक्षाएँ',
+      'programs.classesBody': 'चार क्रमिक स्तंभों पर बनी एक सुनियोजित राह। पहली स्ट्रोक से लेकर एलीट प्रतिस्पर्धा तक, हमारी कक्षाएँ आत्मविश्वास बनाने और खेल में महारत के लिए विशेषज्ञ मार्गदर्शन और सहयोगी समुदाय देती हैं।',
+      'programs.clinicsTitle': 'क्लिनिक',
+      'programs.clinicsBody': 'गतिशील, समुदाय-संचालित प्रशिक्षण — विशेष, अल्पकालिक वर्कशॉप। खिलाड़ी तकनीक, फुटवर्क और रणनीति में गहराई से उतरते हैं, हर आयु-वर्ग और स्तर के अनुरूप एक ऊर्जावान माहौल में।',
+      'programs.carnivalsTitle': 'कार्निवल',
+      'programs.carnivalsBody': 'सामुदायिक पहुँच जो क्लिनिक, मज़ेदार खेल और गतिविधियों को जोड़ती है। खेल को स्थानीय समुदायों तक ले जाकर हम बैडमिंटन को सबके लिए सुलभ बनाते हैं — स्वास्थ्य, जुड़ाव और खेल के आनंद का उत्सव।',
+
+      'team.kicker': '04 — हमारी टीम',
+      'team.title': '<em>कोचों</em> से मिलें।',
+      'team.founders': 'सह-संस्थापक',
+      'team.team': 'हमारी टीम',
+      'role.cofounderTech': 'सह-संस्थापक · तकनीकी निदेशक',
+      'role.cofounder': 'सह-संस्थापक',
+      'role.performance': 'परफ़ॉर्मेंस मैनेजर · S&C कोच',
+      'role.senior': 'वरिष्ठ कोच',
+      'role.development': 'डेवलपमेंट कोच',
+      'role.assistant': 'सहायक कोच',
+      'role.bwf1': 'BWF लेवल 1',
+
+      'hub.kicker': '05 — सिंगापुर बैडमिंटन हब',
+      'hub.title': 'बैडमिंटन का <em>सब कुछ</em>, एक जगह।',
+      'hub.hint': 'सिंगापुर में खेलने की हर जगह ढूँढने के लिए कोई एक स्थान नहीं था — तो हमने बना दिया। हॉल देखें, कोर्ट बुक करना सीखें, और साथ खेलने वाले लोग खोजें। नए हैं? पहले <a href="https://racketratings.net/" target="_blank" rel="noopener">Racket Ratings</a> पर अपना स्तर जानें। <strong>सिर्फ़ एक अकादमी नहीं — सिंगापुर में बैडमिंटन का घर।</strong>',
+      'hub.tabHalls': 'कहाँ खेलें',
+      'hub.tabBook': 'बुक कैसे करें',
+      'hub.tabGroups': 'ग्रुप और रेटिंग',
+      'hub.searchLabel': 'वेन्यू खोजें',
+      'hub.searchPh': 'नाम या इलाके से खोजें, जैसे Tampines',
+      'hub.filterAll': 'सभी वेन्यू',
+      'hub.filterElever': 'Élever कक्षाएँ',
+      'hub.filterPrivate': 'निजी हॉल',
+      'hub.filterActivesg': 'ActiveSG (सार्वजनिक)',
+      'hub.filterClub': 'कंट्री क्लब',
+      'hub.count': '{n} वेन्यू',
+      'hub.countOne': '1 वेन्यू',
+      'hub.empty': 'आपकी खोज से कोई वेन्यू मेल नहीं खाता। कोई और शब्द या फ़िल्टर आज़माएँ।',
+      'hub.map': 'नक्शा देखें',
+      'hub.book': 'बुक करें',
+      'hub.bookActivesg': 'ActiveSG पर बुक करें',
+      'hub.mapAria': '{name} को Google Maps में खोलें (नए टैब में खुलता है)',
+      'hub.bookAria': '{name} बुक करें (नए टैब में खुलता है)',
+      'hub.note': 'पते Google Maps और आधिकारिक SportSG सुविधा डेटासेट से संकलित हैं। ActiveSG सार्वजनिक हॉल MyActiveSG ऐप में भी बुक किए जा सकते हैं। Community Club (CC) कोर्ट <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a> पर बुक होते हैं। कोई गलती या छूटा हुआ हॉल दिखा? <a href="mailto:hello@eleverbadminton.com?subject=SG%20Badminton%20Hub%20—%20hall%20update">हमें बताएँ</a>।',
+      'tag.private': 'निजी', 'tag.activesg': 'ActiveSG', 'tag.club': 'क्लब', 'tag.elever': 'Élever',
+
+      'book.privateTitle': 'निजी हॉल',
+      'book.privateBody': 'वातानुकूलित कोर्ट जिन्हें आप घंटे के हिसाब से किराए पर लेते हैं, आमतौर पर हर हॉल की अपनी वेबसाइट या ऐप के ज़रिए। बिना बैलट के पक्की स्लॉट के लिए सबसे अच्छा। कीमतें अलग-अलग — प्रति कोर्ट लगभग <strong>S$20–40 प्रति घंटा</strong>।',
+      'book.privateStep1': '<button class="hub__inline-link" data-goto="halls" type="button">कहाँ खेलें</button> टैब पर एक हॉल चुनें।',
+      'book.privateStep2': 'उसका बुकिंग लिंक खोलें और तारीख़ व समय चुनें।',
+      'book.privateStep3': 'ऑनलाइन भुगतान कर पुष्टि करें — हो गया।',
+      'book.activesgTitle': 'ActiveSG सार्वजनिक हॉल',
+      'book.activesgBody': 'खेलने का सबसे किफ़ायती तरीका — लगभग <strong>S$3.50–7.40 प्रति घंटा</strong> से। <a href="https://activesg.gov.sg/facility-bookings/activities/YLONatwvqJfikKOmB5N9U/venues" target="_blank" rel="noopener">activesg.gov.sg</a> पर या MyActiveSG ऐप में बुक करें।',
+      'book.activesgStep1': '<strong>Singpass</strong> से लॉग इन करें, फिर Book a Facility → Badminton चुनें।',
+      'book.activesgStep2': 'पोस्टल कोड या वेन्यू से खोजें। हर स्लॉट 1 घंटे का (रोज़ 2 तक)।',
+      'book.activesgStep3': '<strong>पीक</strong> घंटे (सप्ताह में शाम 6 बजे के बाद, सप्ताहांत और सार्वजनिक अवकाश) एक <strong>बैलट</strong> से चलते हैं जो लगभग 14 दिन पहले खुलता है। <strong>ऑफ़-पीक</strong> पहले-आओ-पहले-पाओ, लगभग 13 दिन पहले दोपहर 12 बजे जारी।',
+      'book.ccTitle': 'Community Club (CC) कोर्ट',
+      'book.ccBody': 'पूरे द्वीप में People’s Association द्वारा संचालित। कीमतें CC के अनुसार अलग, लगभग <strong>S$5–7 प्रति घंटा</strong>। <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a> पर बुक करें।',
+      'book.ccStep1': '<strong>Singpass</strong> से लॉग इन करें, फिर Facilities → Book a Facility चुनें।',
+      'book.ccStep2': 'Badminton Court चुनें, फिर अपना क्षेत्र, तारीख़ और समय।',
+      'book.ccStep3': 'नई स्लॉट <strong>रोज़ रात 10 बजे</strong> खुलती हैं, <strong>15 दिन</strong> पहले तक।',
+
+      'groups.featureEyebrow': 'हमारी टॉप पसंद · अपना स्तर जानें',
+      'groups.featureTitle': 'Racket Ratings',
+      'groups.featureBody': 'पक्का नहीं कि आप असल में कितने अच्छे हैं — या किसके साथ खेलें? <strong>Racket Ratings</strong> सिंगापुर की मुफ़्त रेटिंग है जो आपको एक असली स्किल-स्तर देती है और उसी के आसपास के खिलाड़ियों, kaki और मैचों से जोड़ती है। यह जानने का सबसे आसान तरीका कि आप कहाँ खड़े हैं — हम हर खिलाड़ी को यहीं से शुरू करने की सलाह देते हैं।',
+      'groups.featureCta': 'अपनी मुफ़्त रेटिंग पाएँ →',
+      'groups.casualTitle': 'कैज़ुअल और सोशल खेल',
+      'groups.casualBody': 'ज़्यादातर सोशल गेम समुदाय प्लेटफ़ॉर्म पर बनते हैं। अपने पास और अपने स्तर का सेशन खोजने के लिए ये आज़माएँ:',
+      'groups.casualLink1': '<a href="https://racketratings.net/" target="_blank" rel="noopener">Racket Ratings</a> — रेटेड खिलाड़ी और सेशन',
+      'groups.casualLink2': '<a href="https://www.meetup.com/find/?keywords=badminton&location=sg--Singapore" target="_blank" rel="noopener">Meetup — सिंगापुर बैडमिंटन</a>',
+      'groups.casualLink3': 'Facebook और Telegram के “kaki” ग्रुप (“badminton Singapore” खोजें)',
+      'groups.casualLink4': 'आपका पड़ोसी CC — कई ड्रॉप-इन सोशल सेशन चलाते हैं',
+      'groups.coachTitle': 'संरचित कोचिंग पसंद है?',
+      'groups.coachBody': 'अगर आप किसी कोच के साथ सुधार करना चाहते हैं, तो हम यही करते हैं। पहली स्ट्रोक से प्रतिस्पर्धा तक, Élever के कैम्प, कक्षाएँ और क्लिनिक में आपके लिए जगह है।',
+      'groups.coachCta': 'हमारे प्रोग्राम देखें',
+
+      'news.kicker': '06 — 2026 सीज़न',
+      'news.title': '<em>वर्ल्ड टूर</em> का हर पड़ाव।',
+      'news.hint': '2026 HSBC BWF वर्ल्ड टूर के चार सबसे हालिया नतीजे। पूरे सीज़न के लिए “सभी दिखाएँ” चुनें। 7 अगस्त 2026 को अपडेट किया गया।',
+      'news.filterAll': 'सभी', 'news.filterDone': 'समाप्त', 'news.filterUpcoming': 'आगामी',
+      'news.showAll': 'सभी टूर्नामेंट दिखाएँ',
+      'news.showAllN': 'सभी {n} टूर्नामेंट दिखाएँ',
+      'news.showLess': 'कम दिखाएँ',
+      'news.latest': 'नवीनतम', 'news.upcoming': 'आगामी',
+      'news.tbdUpcoming': 'निर्धारित — नतीजे आने बाकी।',
+      'news.tbdDone': 'समाप्त। चैंपियन BWF रिकॉर्ड के अनुसार।',
+      'news.source': 'पूरा शेड्यूल और नतीजे BWF वर्ल्ड टूर, Wikipedia और समाचार एजेंसी रिपोर्ट (AFP/Xinhua) से लिए गए हैं। 7 अगस्त 2026 तक समाप्त इवेंट, जहाँ उपलब्ध हो, सत्यापित सिंगल्स और डबल्स चैंपियन दिखाते हैं; बाद के इवेंट तारीख़ और ग्रेड दर्शाते हैं। कोई तस्वीर इस्तेमाल नहीं।',
+
+      'play.kicker': '07 — गेम ऑन',
+      'play.title': 'एक <em>रैली</em> खेलें।',
+      'play.hintDesktop': 'कंप्यूटर के ख़िलाफ़ एक क्लासिक स्टिक-बैडमिंटन मैच। ← → (या A/D) से <strong>चलें</strong>, ↑ (या W) से <strong>कूदें</strong>, Space या ↓ से <strong>स्विंग</strong> करें। ऊँचे शटल पर कूदकर उसे <strong>स्मैश</strong> करें; नीचे वालों को नेट के ऊपर उठाएँ। पहले 7 अंक तक पहुँचने वाला जीतता है।',
+      'play.hintMobile': 'कंप्यूटर के ख़िलाफ़ एक क्लासिक स्टिक-बैडमिंटन मैच। चलने, कूदने और स्विंग के लिए नीचे दिए बटन इस्तेमाल करें। ऊँचे शटल पर कूदकर उसे <strong>स्मैश</strong> करें; नीचे वालों को नेट के ऊपर उठाएँ। पहले 7 अंक तक पहुँचने वाला जीतता है।',
+      'play.you': 'आप', 'play.rally': 'रैली', 'play.cpu': 'कंप्यूटर',
+      'play.start': 'गेम शुरू करें', 'play.again': 'फिर से खेलें',
+      'play.move': 'चलें', 'play.jump': 'कूदें', 'play.swing': 'स्विंग',
+      'play.msgStart': 'Start चुनें। शटल के नीचे जाएँ, फिर कूदकर स्विंग कर उसे वापस मारें।',
+      'play.serveYou': 'आपकी सर्विस! ← → से चलें, ↑ / W से कूदें, Space / ↓ से स्विंग करें।',
+      'play.serveCpu': 'प्रतिद्वंद्वी सर्व कर रहा है — शटल के नीचे जाकर स्विंग करें!',
+      'play.shotServe': 'सर्व', 'play.shotSmash': 'स्मैश!', 'play.shotClear': 'क्लियर',
+      'play.pointYou': 'आपको अंक', 'play.pointCpu': 'कंप्यूटर को अंक',
+      'play.reasonNet': '{who} ने नेट पर मारा',
+      'play.reasonYourSide': 'शटल आपकी ओर गिरा',
+      'play.reasonCpuSide': 'शटल कंप्यूटर की ओर गिरा',
+      'play.whoYou': 'आपने', 'play.whoCpu': 'कंप्यूटर ने',
+      'play.win': 'गेम! आप {a}–{b} से जीते 🏆',
+      'play.lose': 'कंप्यूटर {a}–{b} से जीता। फिर से खेलें!',
+
+      'reflex.kicker': '08 — रिएक्शन टेस्ट',
+      'reflex.title': 'आपके <em>रिफ़्लेक्स</em> कितने तेज़ हैं?',
+      'reflex.hint': 'शटल के गिरने का इंतज़ार करें, फिर जितनी तेज़ी से हो सके टैप करें। कोर्ट पर रिएक्शन टाइम मायने रखता है — प्रो 0.2 सेकंड से भी कम में प्रतिक्रिया देते हैं।',
+      'reflex.start': 'शुरू करने के लिए टैप करें', 'reflex.sub': 'अपनी रिएक्शन स्पीड जाँचें',
+      'reflex.wait': 'रुकिए…', 'reflex.waitSub': 'जैसे ही शटल गिरे, टैप करें',
+      'reflex.tap': 'अभी टैप करें!', 'reflex.early': 'बहुत जल्दी!', 'reflex.earlySub': 'फिर से कोशिश करने के लिए टैप करें',
+      'reflex.last': 'पिछला', 'reflex.best': 'सर्वश्रेष्ठ', 'reflex.rank': 'रैंक',
+      'reflex.rankPro': 'प्रो रिफ़्लेक्स ⚡', 'reflex.rankFast': 'बिजली जैसी तेज़', 'reflex.rankSharp': 'तेज़', 'reflex.rankOk': 'बुरा नहीं', 'reflex.rankWarm': 'वॉर्म-अप',
+
+      'guess.kicker': '09 — फ़ोटो क्विज़',
+      'guess.title': '<em>प्रो</em> पहचानें।',
+      'guess.hint': 'दस तस्वीरें, हर एक के चार नाम। दुनिया के कितने बैडमिंटन सितारों को आप पहचान सकते हैं?',
+      'guess.start': 'शुरू करें', 'guess.again': 'फिर से खेलें',
+      'guess.count': 'फ़ोटो {n}/{total}', 'guess.score': 'स्कोर {s}', 'guess.done': 'आपका स्कोर',
+      'guess.alt': 'इस बैडमिंटन खिलाड़ी को पहचानें',
+      'guess.end9': 'कमाल! आप वाक़ई बैडमिंटन के जानकार हैं! 🏆',
+      'guess.end6': 'बढ़िया! आप अपने सितारों को जानते हैं।',
+      'guess.end3': 'बुरा नहीं — देखते रहिए!',
+      'guess.end0': 'और बैडमिंटन देखने का समय आ गया! 🏸',
+
+      'reviews.kicker': '10 — समीक्षाएँ',
+      'reviews.title': '<em>खिलाड़ियों और अभिभावकों</em> का प्यार।',
+      'reviews.hint': 'Élever में प्रशिक्षण के बारे में हमारा समुदाय क्या कहता है।',
+      'reviews.ig': 'Instagram पर असली पल देखें',
+      'reviews.disclaimer': 'ऊपर दिए उद्धरण नमूना प्लेसहोल्डर हैं — असली प्रशिक्षण के पल, नतीजे और अपडेट के लिए हमें Instagram पर फ़ॉलो करें।',
+
+      'cta.title': '<em>ऊपर उठने</em> के लिए तैयार?',
+      'cta.body': 'चाहे यह आपकी पहली स्ट्रोक हो या अगला ख़िताब, Élever Badminton में आपके लिए जगह है।',
+      'cta.enquire': 'अभी पूछताछ करें', 'cta.email': 'ईमेल करें', 'cta.instagram': 'Instagram पर फ़ॉलो करें',
+
+      'footer.tag': 'निर्माण करें। ऊपर उठें। और ऊँचे जाएँ।',
+      'footer.instagram': 'Instagram',
+      'footer.official': 'आधिकारिक साइट',
+      'footer.note': 'कॉन्सेप्ट रीडिज़ाइन · Élever Badminton के लिए बनाया गया। फ़ोटोग्राफ़ी © Élever Badminton।'
+    },
+
+    ta: {
+      'a11y.skip': 'முதன்மை உள்ளடக்கத்திற்குச் செல்',
+      'intro.skip': 'அறிமுகத்தைத் தவிர்',
+
+      'nav.about': 'எங்களைப் பற்றி', 'nav.quiz': 'வினா', 'nav.programs': 'திட்டங்கள்',
+      'nav.team': 'பயிற்சியாளர்கள்', 'nav.hub': 'SG மையம்', 'nav.news': 'செய்திகள்',
+      'nav.play': 'விளையாடு', 'nav.reviews': 'கருத்துகள்', 'nav.join': 'இணையுங்கள்',
+
+      'hero.eyebrow': 'சிங்கப்பூர் · பேட்மிண்டன் சிறப்பு',
+      'hero.sub': 'உருவாக்குங்கள். உயருங்கள். மேலும் உயர்ந்த நிலைக்கு எடுத்துச் செல்லுங்கள். முதல் அடியை சாம்பியன்ஷிப் கனவுகளாக மாற்றும் உயர்தர பயிற்சி.',
+      'hero.ctaPrograms': 'திட்டங்களைப் பாருங்கள்',
+      'hero.ctaQuiz': 'உங்கள் இரட்டையைக் கண்டறியுங்கள்',
+      'hero.hint': '↳ உங்கள் கர்சரை நகர்த்துங்கள் — ஷட்டில்கள் உங்களுக்கு எதிர்வினையாற்றும்',
+      'hero.scroll': 'ஸ்க்ரோல்',
+      'hero.stat1': 'நிபுணர் பயிற்சியாளர்கள்', 'hero.stat2': 'திட்டத் தூண்கள்', 'hero.stat3': '% ஆர்வம்',
+
+      'about.kicker': '01 — Élever பற்றி',
+      'about.title': 'ஒரு விளையாட்டை விட மேலானது.<br><em>சிறப்புக்கான ஒரு பாதை.</em>',
+      'about.lead': '<strong>Élever</strong> <span class="about__def">(வினைச்சொல்)</span> — உருவாக்குதல் அல்லது உயர்த்துதல்; ஏதோ ஒன்றை மேலும் உயர்ந்த நிலைக்கு கொண்டு செல்லுதல்.',
+      'about.p1': 'சிறப்பு என்பது ஒரு பயணம் — Élever Badminton-இல் அது படிப்படியான தூண்களின் மேல் கட்டமைக்கப்பட்ட நன்கு திட்டமிட்ட பாதையைப் பின்பற்றுகிறது. உங்கள் முதல் அடியிலிருந்து உயர்தர போட்டி வரை, ஒவ்வொரு வீரரும் தன்னம்பிக்கையை வளர்க்கவும் விளையாட்டில் தேர்ச்சி பெறவும் தேவையான நிபுணர் வழிகாட்டுதலையும் ஆதரவான சமூகத்தையும் எங்கள் பயிற்சியாளர்கள் வழங்குகிறார்கள்.',
+      'about.p2': 'ஒவ்வொரு வீரரும், தங்கள் பயணத்தில் எங்கிருந்தாலும், உலகத் தரமான வழிகாட்டுதலுக்கு தகுதியானவர் என நாங்கள் நம்புகிறோம். அந்த நம்பிக்கையே கோர்ட்டிலும் வெளியேயும் நாங்கள் செய்யும் அனைத்தையும் இயக்குகிறது.',
+
+      'quiz.kicker': '02 — ஊடாடும்',
+      'quiz.title': 'எந்த ப்ரோ உங்கள் <em>பேட்மிண்டன் இரட்டை</em>?',
+      'quiz.lead': 'நீங்கள் எப்படி விளையாடுகிறீர்கள், சிந்திக்கிறீர்கள் என்பது குறித்த 6 சிறு கேள்விகளுக்கு பதிலளியுங்கள்.<br>உலகின் எந்த பேட்மிண்டன் நட்சத்திரம் உங்கள் கோர்ட்-இரட்டை என்பதை — அவரது புகைப்படத்துடன் — வெளிப்படுத்துவோம். <strong>பார்க்காதீர்கள்</strong> — 27 சாத்தியமான பொருத்தங்கள், உங்களுடையது ஒரு அதிர்ச்சி.',
+      'quiz.start': 'வினாவைத் தொடங்கு',
+      'quiz.count': '🏸 {n} / {total}',
+      'quiz.resultLead': 'உங்கள் பேட்மிண்டன் இரட்டை…',
+      'quiz.again': 'மீண்டும் விளையாடு',
+      'quiz.share': 'முடிவைப் பகிர்',
+      'quiz.rrPrompt': 'இதுதான் உங்கள் ப்ரோ இரட்டை — ஆனால் உங்கள் <em>உண்மையான</em> நிலை என்ன? கீழே அறியுங்கள் 👇',
+      'quiz.rrCta': 'Racket Ratings-இல் மதிப்பீடு பெறுங்கள் →',
+      'quiz.credit': 'புகைப்படம்: Wikimedia Commons · {lic}',
+
+      'programs.kicker': '03 — நாங்கள் செய்வது',
+      'programs.title': 'உயர <em>நான்கு</em> வழிகள்.',
+      'programs.campsTitle': 'கேம்ப்கள்',
+      'programs.campsBody': 'எங்கள் விடுமுறை ஆய்வுக் கேம்ப்கள் ஒவ்வொரு பள்ளி விடுமுறையையும் பேட்மிண்டன் சாகசமாக மாற்றுகின்றன. குறைவான அல்லது அனுபவமில்லாத வீரர்களுக்கு விளையாட்டு அடிப்படையிலான கற்றல் — வலுவான அடித்தளத்தையும் உடல் வளர்ச்சியையும் உருவாக்கி, மேலும் விளையாட ஆவலை தக்கவைக்கிறது.',
+      'programs.classesTitle': 'வகுப்புகள்',
+      'programs.classesBody': 'நான்கு படிப்படியான தூண்களின் மேல் கட்டமைக்கப்பட்ட ஒரு திட்டமிட்ட பாதை. முதல் அடியிலிருந்து உயர்தர போட்டி வரை, எங்கள் வகுப்புகள் தன்னம்பிக்கையை வளர்க்கவும் விளையாட்டில் தேர்ச்சி பெறவும் நிபுணர் வழிகாட்டுதலையும் ஆதரவான சமூகத்தையும் வழங்குகின்றன.',
+      'programs.clinicsTitle': 'கிளினிக்குகள்',
+      'programs.clinicsBody': 'சுறுசுறுப்பான, சமூக இயக்கப் பயிற்சி — சிறப்பு, குறுகிய கால பட்டறைகள். ஒவ்வொரு வயதுப் பிரிவுக்கும் திறன் நிலைக்கும் ஏற்ற உற்சாகமான சூழலில் வீரர்கள் நுட்பம், கால்வேலை மற்றும் உத்தியில் ஆழமாக இறங்குகிறார்கள்.',
+      'programs.carnivalsTitle': 'கார்னிவல்கள்',
+      'programs.carnivalsBody': 'கிளினிக்குகள், வேடிக்கை விளையாட்டுகள் மற்றும் செயல்பாடுகளை இணைக்கும் சமூக அணுகல். விளையாட்டை உள்ளூர் சமூகங்களுக்குக் கொண்டு வருவதன் மூலம், பேட்மிண்டனை அனைவருக்கும் அணுகக்கூடியதாக்குகிறோம் — ஆரோக்கியம், இணைப்பு மற்றும் விளையாட்டின் மகிழ்ச்சியைக் கொண்டாடுகிறோம்.',
+
+      'team.kicker': '04 — எங்கள் குழு',
+      'team.title': '<em>பயிற்சியாளர்களை</em> சந்திக்கவும்.',
+      'team.founders': 'இணை நிறுவனர்கள்',
+      'team.team': 'எங்கள் குழு',
+      'role.cofounderTech': 'இணை நிறுவனர் · தொழில்நுட்ப இயக்குநர்',
+      'role.cofounder': 'இணை நிறுவனர்',
+      'role.performance': 'செயல்திறன் மேலாளர் · S&C பயிற்சியாளர்',
+      'role.senior': 'மூத்த பயிற்சியாளர்',
+      'role.development': 'மேம்பாட்டுப் பயிற்சியாளர்',
+      'role.assistant': 'உதவிப் பயிற்சியாளர்',
+      'role.bwf1': 'BWF நிலை 1',
+
+      'hub.kicker': '05 — சிங்கப்பூர் பேட்மிண்டன் மையம்',
+      'hub.title': 'பேட்மிண்டன் <em>அனைத்தும்</em>, ஒரே இடத்தில்.',
+      'hub.hint': 'சிங்கப்பூரில் விளையாடும் ஒவ்வொரு இடத்தையும் கண்டறிய ஒரு தளம் இல்லை — அதனால் நாங்களே உருவாக்கினோம். ஹால்களை உலாவுங்கள், கோர்ட் பதிவு செய்வதை அறியுங்கள், சேர்ந்து விளையாட ஆட்களைக் கண்டறியுங்கள். புதியவரா? முதலில் <a href="https://racketratings.net/" target="_blank" rel="noopener">Racket Ratings</a>-இல் உங்கள் திறன் நிலையைப் பெறுங்கள். <strong>வெறும் அகாடமி அல்ல — சிங்கப்பூரில் பேட்மிண்டனின் இல்லம்.</strong>',
+      'hub.tabHalls': 'எங்கே விளையாடுவது',
+      'hub.tabBook': 'எப்படி பதிவு செய்வது',
+      'hub.tabGroups': 'குழுக்கள் & மதிப்பீடுகள்',
+      'hub.searchLabel': 'இடத்தைக் கண்டறியுங்கள்',
+      'hub.searchPh': 'பெயர் அல்லது பகுதி மூலம் தேடுங்கள், எ.கா. Tampines',
+      'hub.filterAll': 'அனைத்து இடங்கள்',
+      'hub.filterElever': 'Élever வகுப்புகள்',
+      'hub.filterPrivate': 'தனியார் ஹால்கள்',
+      'hub.filterActivesg': 'ActiveSG (பொது)',
+      'hub.filterClub': 'கன்ட்ரி கிளப்புகள்',
+      'hub.count': '{n} இடங்கள்',
+      'hub.countOne': '1 இடம்',
+      'hub.empty': 'உங்கள் தேடலுக்கு எந்த இடமும் பொருந்தவில்லை. வேறு சொல் அல்லது வடிகட்டியை முயற்சிக்கவும்.',
+      'hub.map': 'வரைபடம் பார்',
+      'hub.book': 'பதிவு',
+      'hub.bookActivesg': 'ActiveSG-இல் பதிவு',
+      'hub.mapAria': '{name}-ஐ Google Maps-இல் திற (புதிய தாவலில் திறக்கும்)',
+      'hub.bookAria': '{name} பதிவு செய் (புதிய தாவலில் திறக்கும்)',
+      'hub.note': 'முகவரிகள் Google Maps மற்றும் அதிகாரப்பூர்வ SportSG வசதிகள் தரவுத்தொகுப்பிலிருந்து தொகுக்கப்பட்டவை. ActiveSG பொது ஹால்களை MyActiveSG ஆப்பிலும் பதிவு செய்யலாம். Community Club (CC) கோர்ட்கள் <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a>-இல் பதிவு செய்யப்படும். தவறு அல்லது விடுபட்ட ஹால் கண்டீர்களா? <a href="mailto:hello@eleverbadminton.com?subject=SG%20Badminton%20Hub%20—%20hall%20update">எங்களிடம் சொல்லுங்கள்</a>.',
+      'tag.private': 'தனியார்', 'tag.activesg': 'ActiveSG', 'tag.club': 'கிளப்', 'tag.elever': 'Élever',
+
+      'book.privateTitle': 'தனியார் ஹால்கள்',
+      'book.privateBody': 'மணிநேர அடிப்படையில் வாடகைக்கு எடுக்கும் குளிரூட்டப்பட்ட கோர்ட்கள், பொதுவாக ஒவ்வொரு ஹாலின் சொந்த இணையதளம் அல்லது ஆப் வழியாக. வாக்கெடுப்பு இல்லாமல் உறுதியான நேரத்திற்கு சிறந்தது. விலைகள் மாறுபடும் — கோர்ட் ஒன்றுக்கு தோராயமாக <strong>S$20–40 மணிநேரம்</strong>.',
+      'book.privateStep1': '<button class="hub__inline-link" data-goto="halls" type="button">எங்கே விளையாடுவது</button> தாவலில் ஒரு ஹாலைத் தேர்ந்தெடுங்கள்.',
+      'book.privateStep2': 'அதன் பதிவு இணைப்பைத் திறந்து தேதி மற்றும் நேரத்தைத் தேர்வு செய்யுங்கள்.',
+      'book.privateStep3': 'ஆன்லைனில் பணம் செலுத்தி உறுதிப்படுத்துங்கள் — முடிந்தது.',
+      'book.activesgTitle': 'ActiveSG பொது ஹால்கள்',
+      'book.activesgBody': 'விளையாட மிகவும் மலிவான வழி — தோராயமாக <strong>S$3.50–7.40 மணிநேரம்</strong> முதல். <a href="https://activesg.gov.sg/facility-bookings/activities/YLONatwvqJfikKOmB5N9U/venues" target="_blank" rel="noopener">activesg.gov.sg</a>-இல் அல்லது MyActiveSG ஆப்பில் பதிவு செய்யுங்கள்.',
+      'book.activesgStep1': '<strong>Singpass</strong> மூலம் உள்நுழையவும், பின்னர் Book a Facility → Badminton தேர்ந்தெடுக்கவும்.',
+      'book.activesgStep2': 'அஞ்சல் குறியீடு அல்லது இடத்தின் மூலம் தேடுங்கள். ஒவ்வொரு நேரமும் 1 மணி (ஒரு நாளைக்கு 2 வரை).',
+      'book.activesgStep3': '<strong>உச்ச</strong> நேரங்கள் (வார நாட்களில் மாலை 6 மணிக்குப் பிறகு, வார இறுதி மற்றும் பொது விடுமுறை) தோராயமாக 14 நாட்களுக்கு முன் திறக்கும் <strong>வாக்கெடுப்பைப்</strong> பயன்படுத்துகின்றன. <strong>உச்சமல்லாத</strong> நேரம் முதலில் வருபவர் அடிப்படையில், தோராயமாக 13 நாட்களுக்கு முன் மதியம் 12 மணிக்கு வெளியிடப்படும்.',
+      'book.ccTitle': 'Community Club (CC) கோர்ட்கள்',
+      'book.ccBody': 'தீவு முழுவதும் People’s Association மூலம் நடத்தப்படுகின்றன. விலைகள் CC-க்கு ஏற்ப மாறுபடும், தோராயமாக <strong>S$5–7 மணிநேரம்</strong>. <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a>-இல் பதிவு செய்யுங்கள்.',
+      'book.ccStep1': '<strong>Singpass</strong> மூலம் உள்நுழையவும், பின்னர் Facilities → Book a Facility தேர்ந்தெடுக்கவும்.',
+      'book.ccStep2': 'Badminton Court-ஐத் தேர்ந்தெடுத்து, பின்னர் உங்கள் பகுதி, தேதி மற்றும் நேரம்.',
+      'book.ccStep3': 'புதிய நேரங்கள் <strong>தினமும் இரவு 10 மணிக்கு</strong> திறக்கும், <strong>15 நாட்கள்</strong> வரை முன்னதாக.',
+
+      'groups.featureEyebrow': 'எங்கள் சிறந்த தேர்வு · உங்கள் நிலையை அறியுங்கள்',
+      'groups.featureTitle': 'Racket Ratings',
+      'groups.featureBody': 'நீங்கள் உண்மையில் எவ்வளவு திறமையானவர் — அல்லது யாருடன் விளையாடுவது என்பது உறுதியில்லையா? <strong>Racket Ratings</strong> என்பது சிங்கப்பூரின் இலவச மதிப்பீடு, இது உங்களுக்கு உண்மையான திறன் நிலையை வழங்கி, அதற்கு ஏற்ற வீரர்கள், kaki மற்றும் விளையாட்டுகளுடன் பொருத்துகிறது. நீங்கள் எங்கே நிற்கிறீர்கள் என்பதை அறிய எளிதான வழி — ஒவ்வொரு வீரரும் இங்கிருந்தே தொடங்க பரிந்துரைக்கிறோம்.',
+      'groups.featureCta': 'உங்கள் இலவச மதிப்பீட்டைப் பெறுங்கள் →',
+      'groups.casualTitle': 'சாதாரண & சமூக விளையாட்டு',
+      'groups.casualBody': 'பெரும்பாலான சமூக விளையாட்டுகள் சமூக தளங்களில் உருவாகின்றன. உங்கள் அருகில், உங்கள் நிலையில் ஒரு அமர்வைக் கண்டறிய இவற்றை முயற்சிக்கவும்:',
+      'groups.casualLink1': '<a href="https://racketratings.net/" target="_blank" rel="noopener">Racket Ratings</a> — மதிப்பிடப்பட்ட வீரர்கள் மற்றும் அமர்வுகள்',
+      'groups.casualLink2': '<a href="https://www.meetup.com/find/?keywords=badminton&location=sg--Singapore" target="_blank" rel="noopener">Meetup — சிங்கப்பூர் பேட்மிண்டன்</a>',
+      'groups.casualLink3': 'Facebook மற்றும் Telegram “kaki” குழுக்கள் (“badminton Singapore” தேடுங்கள்)',
+      'groups.casualLink4': 'உங்கள் அருகிலுள்ள CC — பல ட்ராப்-இன் சமூக அமர்வுகளை நடத்துகின்றன',
+      'groups.coachTitle': 'கட்டமைக்கப்பட்ட பயிற்சி விரும்புகிறீர்களா?',
+      'groups.coachBody': 'நீங்கள் ஒரு பயிற்சியாளருடன் மேம்பட விரும்பினால், அதைத்தான் நாங்கள் செய்கிறோம். உங்கள் முதல் அடியிலிருந்து போட்டி வரை, Élever-இன் கேம்ப்கள், வகுப்புகள் மற்றும் கிளினிக்குகளில் உங்களுக்கு இடம் உண்டு.',
+      'groups.coachCta': 'எங்கள் திட்டங்களைப் பாருங்கள்',
+
+      'news.kicker': '06 — 2026 சீசன்',
+      'news.title': '<em>உலகச் சுற்றுப்</em> பயணத்தின் ஒவ்வொரு நிறுத்தமும்.',
+      'news.hint': '2026 HSBC BWF உலகச் சுற்றுப் பயணத்தின் நான்கு சமீபத்திய முடிவுகள். முழு சீசனுக்கும் “அனைத்தையும் காட்டு” தேர்வு செய்யுங்கள். 7 ஆகஸ்ட் 2026 அன்று புதுப்பிக்கப்பட்டது.',
+      'news.filterAll': 'அனைத்தும்', 'news.filterDone': 'முடிந்தது', 'news.filterUpcoming': 'வரவிருக்கும்',
+      'news.showAll': 'அனைத்து போட்டிகளையும் காட்டு',
+      'news.showAllN': 'அனைத்து {n} போட்டிகளையும் காட்டு',
+      'news.showLess': 'குறைவாகக் காட்டு',
+      'news.latest': 'சமீபத்தியது', 'news.upcoming': 'வரவிருக்கும்',
+      'news.tbdUpcoming': 'திட்டமிடப்பட்டது — முடிவுகள் வர இருக்கின்றன.',
+      'news.tbdDone': 'முடிந்தது. சாம்பியன்கள் BWF பதிவுகளின்படி.',
+      'news.source': 'முழு அட்டவணையும் முடிவுகளும் BWF உலகச் சுற்றுப் பயணம், Wikipedia மற்றும் செய்தி நிறுவன அறிக்கைகள் (AFP/Xinhua) மூலம் பெறப்பட்டவை. 7 ஆகஸ்ட் 2026 வரை முடிந்த நிகழ்வுகள், கிடைக்கும் இடத்தில், சரிபார்க்கப்பட்ட ஒற்றையர் மற்றும் இரட்டையர் சாம்பியன்களைக் காட்டுகின்றன; பிற்பட்ட நிகழ்வுகள் தேதி மற்றும் தரத்தைப் பட்டியலிடுகின்றன. படங்கள் எதுவும் பயன்படுத்தப்படவில்லை.',
+
+      'play.kicker': '07 — விளையாட்டு தொடங்கு',
+      'play.title': 'ஒரு <em>ரேலி</em> விளையாடு.',
+      'play.hintDesktop': 'கணினிக்கு எதிரான ஒரு கிளாசிக் ஸ்டிக்-பேட்மிண்டன் போட்டி. ← → (அல்லது A/D) மூலம் <strong>நகர்</strong>, ↑ (அல்லது W) மூலம் <strong>குதி</strong>, Space அல்லது ↓ மூலம் <strong>அடி</strong>. உயரமான ஷட்டிலுக்குள் குதித்து அதை <strong>ஸ்மாஷ்</strong> செய்யுங்கள்; தாழ்வானவற்றை நெட்டுக்கு மேல் தூக்குங்கள். முதலில் 7 புள்ளிகளை அடைபவர் வெற்றி.',
+      'play.hintMobile': 'கணினிக்கு எதிரான ஒரு கிளாசிக் ஸ்டிக்-பேட்மிண்டன் போட்டி. நகர, குதிக்க, அடிக்க கீழேயுள்ள திரை பொத்தான்களைப் பயன்படுத்துங்கள். உயரமான ஷட்டிலுக்குள் குதித்து அதை <strong>ஸ்மாஷ்</strong> செய்யுங்கள்; தாழ்வானவற்றை நெட்டுக்கு மேல் தூக்குங்கள். முதலில் 7 புள்ளிகளை அடைபவர் வெற்றி.',
+      'play.you': 'நீங்கள்', 'play.rally': 'ரேலி', 'play.cpu': 'கணினி',
+      'play.start': 'விளையாட்டைத் தொடங்கு', 'play.again': 'மீண்டும் விளையாடு',
+      'play.move': 'நகர்', 'play.jump': 'குதி', 'play.swing': 'அடி',
+      'play.msgStart': 'Start-ஐத் தேர்வு செய்யுங்கள். ஷட்டிலுக்குக் கீழே நகர்ந்து, பின்னர் குதித்து அடித்து அதைத் திருப்பியடியுங்கள்.',
+      'play.serveYou': 'உங்கள் சர்வீஸ்! ← → மூலம் நகர், ↑ / W மூலம் குதி, Space / ↓ மூலம் அடி.',
+      'play.serveCpu': 'எதிராளி சர்வ் செய்கிறார் — ஷட்டிலுக்குக் கீழே சென்று அடியுங்கள்!',
+      'play.shotServe': 'சர்வ்', 'play.shotSmash': 'ஸ்மாஷ்!', 'play.shotClear': 'கிளியர்',
+      'play.pointYou': 'உங்களுக்கு புள்ளி', 'play.pointCpu': 'கணினிக்கு புள்ளி',
+      'play.reasonNet': '{who} நெட்டில் அடித்தது',
+      'play.reasonYourSide': 'ஷட்டில் உங்கள் பக்கம் விழுந்தது',
+      'play.reasonCpuSide': 'ஷட்டில் கணினியின் பக்கம் விழுந்தது',
+      'play.whoYou': 'நீங்கள்', 'play.whoCpu': 'கணினி',
+      'play.win': 'கேம்! நீங்கள் {a}–{b} வெற்றி 🏆',
+      'play.lose': 'கணினி {a}–{b} வெற்றி. மீண்டும் விளையாடு!',
+
+      'reflex.kicker': '08 — எதிர்வினை சோதனை',
+      'reflex.title': 'உங்கள் <em>எதிர்வினை</em> எவ்வளவு வேகம்?',
+      'reflex.hint': 'ஷட்டில் விழுவதற்குக் காத்திருங்கள், பின்னர் முடிந்தவரை வேகமாகத் தட்டுங்கள். கோர்ட்டில் எதிர்வினை நேரம் முக்கியம் — ப்ரோக்கள் 0.2 வினாடிக்கும் குறைவாக எதிர்வினையாற்றுகிறார்கள்.',
+      'reflex.start': 'தொடங்க தட்டுங்கள்', 'reflex.sub': 'உங்கள் எதிர்வினை வேகத்தைச் சோதியுங்கள்',
+      'reflex.wait': 'காத்திருங்கள்…', 'reflex.waitSub': 'ஷட்டில் விழும் தருணத்தில் தட்டுங்கள்',
+      'reflex.tap': 'இப்போது தட்டு!', 'reflex.early': 'மிக விரைவு!', 'reflex.earlySub': 'மீண்டும் முயற்சிக்க தட்டுங்கள்',
+      'reflex.last': 'கடைசி', 'reflex.best': 'சிறந்தது', 'reflex.rank': 'தரவரிசை',
+      'reflex.rankPro': 'ப்ரோ எதிர்வினை ⚡', 'reflex.rankFast': 'மின்னல் வேகம்', 'reflex.rankSharp': 'கூர்மை', 'reflex.rankOk': 'மோசமில்லை', 'reflex.rankWarm': 'வார்ம்-அப்',
+
+      'guess.kicker': '09 — புகைப்பட வினா',
+      'guess.title': '<em>ப்ரோ</em>வை யூகியுங்கள்.',
+      'guess.hint': 'பத்து புகைப்படங்கள், ஒவ்வொன்றுக்கும் நான்கு பெயர்கள். உலகின் எத்தனை பேட்மிண்டன் நட்சத்திரங்களை உங்களால் பெயரிட முடியும்?',
+      'guess.start': 'தொடங்கு', 'guess.again': 'மீண்டும் விளையாடு',
+      'guess.count': 'படம் {n}/{total}', 'guess.score': 'மதிப்பெண் {s}', 'guess.done': 'உங்கள் மதிப்பெண்',
+      'guess.alt': 'இந்த பேட்மிண்டன் வீரரை யூகியுங்கள்',
+      'guess.end9': 'அபாரம் — நீங்கள் உண்மையிலேயே பேட்மிண்டன் நிபுணர்! 🏆',
+      'guess.end6': 'நன்று! உங்கள் நட்சத்திரங்களை அறிவீர்கள்.',
+      'guess.end3': 'மோசமில்லை — தொடர்ந்து பாருங்கள்!',
+      'guess.end0': 'இன்னும் அதிக பேட்மிண்டன் பார்க்க வேண்டிய நேரம்! 🏸',
+
+      'reviews.kicker': '10 — கருத்துகள்',
+      'reviews.title': '<em>வீரர்கள் & பெற்றோர்</em> விரும்பும்.',
+      'reviews.hint': 'Élever-இல் பயிற்சி பற்றி எங்கள் சமூகம் என்ன சொல்கிறது.',
+      'reviews.ig': 'Instagram-இல் உண்மையான தருணங்களைப் பாருங்கள்',
+      'reviews.disclaimer': 'மேலே உள்ள மேற்கோள்கள் மாதிரி இடம்பிடிப்புகள் — உண்மையான பயிற்சி தருணங்கள், முடிவுகள் மற்றும் புதுப்பிப்புகளுக்கு எங்களை Instagram-இல் பின்தொடருங்கள்.',
+
+      'cta.title': '<em>உயர</em> தயாரா?',
+      'cta.body': 'இது உங்கள் முதல் அடியாக இருந்தாலும் அல்லது அடுத்த பட்டமாக இருந்தாலும், Élever Badminton-இல் உங்களுக்கு ஒரு இடம் உண்டு.',
+      'cta.enquire': 'இப்போது விசாரியுங்கள்', 'cta.email': 'மின்னஞ்சல் அனுப்பு', 'cta.instagram': 'Instagram-இல் பின்தொடர்',
+
+      'footer.tag': 'உருவாக்கு. உயர். மேலும் உயர.',
+      'footer.instagram': 'Instagram',
+      'footer.official': 'அதிகாரப்பூர்வ தளம்',
+      'footer.note': 'கான்செப்ட் மறுவடிவமைப்பு · Élever Badminton-க்காக உருவாக்கப்பட்டது. புகைப்படம் © Élever Badminton.'
+    },
+
+    ms: {
+      'a11y.skip': 'Langkau ke kandungan utama',
+      'intro.skip': 'Langkau intro',
+
+      'nav.about': 'Tentang', 'nav.quiz': 'Kuiz', 'nav.programs': 'Program',
+      'nav.team': 'Jurulatih', 'nav.hub': 'Hab SG', 'nav.news': 'Berita',
+      'nav.play': 'Main', 'nav.reviews': 'Ulasan', 'nav.join': 'Sertai kami',
+
+      'hero.eyebrow': 'Singapura · Kecemerlangan Badminton',
+      'hero.sub': 'Membina. Meningkat. Membawa sesuatu ke tahap yang lebih tinggi. Kejurulatihan elit yang mengubah ayunan pertama menjadi impian kejuaraan.',
+      'hero.ctaPrograms': 'Terokai program',
+      'hero.ctaQuiz': 'Cari kembar anda',
+      'hero.hint': '↳ Gerakkan kursor anda — bulu tangkis bertindak balas kepada anda',
+      'hero.scroll': 'Skrol',
+      'hero.stat1': 'Jurulatih pakar', 'hero.stat2': 'Tunjang program', 'hero.stat3': '% Semangat',
+
+      'about.kicker': '01 — Tentang Élever',
+      'about.title': 'Lebih daripada sukan.<br><em>Laluan ke arah kegemilangan.</em>',
+      'about.lead': '<strong>Élever</strong> <span class="about__def">(kata kerja)</span> — membina atau meningkatkan; membawa sesuatu ke kedudukan yang lebih tinggi.',
+      'about.p1': 'Kecemerlangan ialah satu perjalanan — dan di Élever Badminton ia mengikuti laluan tersusun rapi yang dibina atas tunjang berperingkat. Dari ayunan pertama anda hingga ke pertandingan elit, jurulatih kami memberikan bimbingan pakar dan komuniti menyokong yang diperlukan setiap atlet untuk membina keyakinan dan menguasai permainan.',
+      'about.p2': 'Kami percaya setiap pemain layak mendapat bimbingan bertaraf dunia, di mana sahaja mereka dalam perjalanan mereka. Kepercayaan itu mendorong segala yang kami lakukan — di dalam dan di luar gelanggang.',
+
+      'quiz.kicker': '02 — Interaktif',
+      'quiz.title': 'Pro mana yang jadi <em>kembar badminton</em> anda?',
+      'quiz.lead': 'Jawab 6 soalan ringkas tentang cara anda bermain dan berfikir.<br>Kami akan dedahkan bintang badminton dunia yang mana menjadi kembar anda di gelanggang — dengan gambar mereka. <strong>Jangan mengintai</strong> — ada 27 padanan yang mungkin, dan milik anda satu kejutan.',
+      'quiz.start': 'Mula kuiz',
+      'quiz.count': '🏸 {n} / {total}',
+      'quiz.resultLead': 'Kembar badminton anda ialah…',
+      'quiz.again': 'Main lagi',
+      'quiz.share': 'Kongsi keputusan',
+      'quiz.rrPrompt': 'Itulah kembar pro anda — tapi apa tahap <em>sebenar</em> anda? Ketahui di bawah 👇',
+      'quiz.rrCta': 'Dapatkan penilaian di Racket Ratings →',
+      'quiz.credit': 'Gambar: Wikimedia Commons · {lic}',
+
+      'programs.kicker': '03 — Apa Kami Buat',
+      'programs.title': 'Empat cara untuk <em>meningkat</em>.',
+      'programs.campsTitle': 'Kem',
+      'programs.campsBody': 'Kem penerokaan cuti kami menjadikan setiap cuti sekolah satu pengembaraan badminton. Pembelajaran berasaskan permainan untuk pemain yang kurang atau tiada pengalaman — membina asas kukuh dan perkembangan fizikal sambil mengekalkan keghairahan untuk bermain lagi.',
+      'programs.classesTitle': 'Kelas',
+      'programs.classesBody': 'Laluan tersusun yang dibina atas empat tunjang berperingkat. Dari ayunan pertama anda hingga ke pertandingan elit, kelas kami memberikan bimbingan pakar dan komuniti menyokong untuk membina keyakinan dan menguasai permainan.',
+      'programs.clinicsTitle': 'Klinik',
+      'programs.clinicsBody': 'Latihan dinamik yang dipacu komuniti — bengkel khusus jangka pendek. Pemain mendalami teknik, kerja kaki dan strategi dalam persekitaran bertenaga tinggi yang disesuaikan untuk kumpulan umur dan setiap tahap kemahiran.',
+      'programs.carnivalsTitle': 'Karnival',
+      'programs.carnivalsBody': 'Jangkauan komuniti yang menggabungkan klinik, permainan menyeronokkan dan aktiviti. Dengan membawa sukan ini ke komuniti setempat, kami menjadikan badminton mudah diakses oleh semua — meraikan kesihatan, hubungan dan keseronokan bermain.',
+
+      'team.kicker': '04 — Warga Kami',
+      'team.title': 'Temui <em>jurulatih</em>.',
+      'team.founders': 'Pengasas Bersama',
+      'team.team': 'Pasukan Kami',
+      'role.cofounderTech': 'Pengasas Bersama · Pengarah Teknikal',
+      'role.cofounder': 'Pengasas Bersama',
+      'role.performance': 'Pengurus Prestasi · Jurulatih S&C',
+      'role.senior': 'Jurulatih Kanan',
+      'role.development': 'Jurulatih Pembangunan',
+      'role.assistant': 'Jurulatih Pembantu',
+      'role.bwf1': 'BWF Tahap 1',
+
+      'hub.kicker': '05 — Hab Badminton Singapura',
+      'hub.title': 'Segala <em>badminton</em>, di satu tempat.',
+      'hub.hint': 'Tiada tempat di Singapura untuk mencari setiap lokasi bermain — jadi kami membinanya. Layari dewan, pelajari cara menempah gelanggang, dan cari rakan bermain. Baru dalam bidang ini? Dapatkan tahap kemahiran anda di <a href="https://racketratings.net/" target="_blank" rel="noopener">Racket Ratings</a> dahulu. <strong>Bukan sekadar akademi — rumah badminton di Singapura.</strong>',
+      'hub.tabHalls': 'Tempat bermain',
+      'hub.tabBook': 'Cara menempah',
+      'hub.tabGroups': 'Kumpulan & penilaian',
+      'hub.searchLabel': 'Cari lokasi',
+      'hub.searchPh': 'Cari mengikut nama atau kawasan, cth. Tampines',
+      'hub.filterAll': 'Semua lokasi',
+      'hub.filterElever': 'Kelas Élever',
+      'hub.filterPrivate': 'Dewan persendirian',
+      'hub.filterActivesg': 'ActiveSG (awam)',
+      'hub.filterClub': 'Kelab desa',
+      'hub.count': '{n} lokasi',
+      'hub.countOne': '1 lokasi',
+      'hub.empty': 'Tiada lokasi sepadan dengan carian anda. Cuba perkataan atau penapis lain.',
+      'hub.map': 'Lihat peta',
+      'hub.book': 'Tempah',
+      'hub.bookActivesg': 'Tempah di ActiveSG',
+      'hub.mapAria': 'Buka {name} dalam Google Maps (buka dalam tab baharu)',
+      'hub.bookAria': 'Tempah {name} (buka dalam tab baharu)',
+      'hub.note': 'Alamat disusun daripada Google Maps dan set data kemudahan rasmi SportSG. Dewan awam ActiveSG juga boleh ditempah dalam aplikasi MyActiveSG. Gelanggang Kelab Komuniti (CC) ditempah di <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a>. Nampak kesilapan atau dewan yang tertinggal? <a href="mailto:hello@eleverbadminton.com?subject=SG%20Badminton%20Hub%20—%20hall%20update">Beritahu kami</a>.',
+      'tag.private': 'Persendirian', 'tag.activesg': 'ActiveSG', 'tag.club': 'Kelab', 'tag.elever': 'Élever',
+
+      'book.privateTitle': 'Dewan persendirian',
+      'book.privateBody': 'Gelanggang berhawa dingin yang anda sewa mengikut jam, biasanya melalui laman web atau aplikasi setiap dewan. Terbaik untuk slot terjamin tanpa undian. Harga berbeza — kira-kira <strong>S$20–40 sejam</strong> setiap gelanggang.',
+      'book.privateStep1': 'Pilih dewan pada tab <button class="hub__inline-link" data-goto="halls" type="button">Tempat bermain</button>.',
+      'book.privateStep2': 'Buka pautan tempahannya dan pilih tarikh dan masa.',
+      'book.privateStep3': 'Bayar dalam talian untuk mengesahkan — selesai.',
+      'book.activesgTitle': 'Dewan awam ActiveSG',
+      'book.activesgBody': 'Cara paling berpatutan untuk bermain — dari sekitar <strong>S$3.50–7.40 sejam</strong>. Tempah di <a href="https://activesg.gov.sg/facility-bookings/activities/YLONatwvqJfikKOmB5N9U/venues" target="_blank" rel="noopener">activesg.gov.sg</a> atau dalam aplikasi MyActiveSG.',
+      'book.activesgStep1': 'Log masuk dengan <strong>Singpass</strong>, kemudian pilih Book a Facility → Badminton.',
+      'book.activesgStep2': 'Cari mengikut poskod atau lokasi. Setiap slot 1 jam (sehingga 2 sehari).',
+      'book.activesgStep3': 'Waktu <strong>puncak</strong> (hari bekerja selepas 6 petang, hujung minggu dan cuti umum) menggunakan <strong>undian</strong> yang dibuka kira-kira 14 hari lebih awal. <strong>Luar puncak</strong> ialah siapa cepat dia dapat, dikeluarkan kira-kira 13 hari lebih awal pada 12 tengah hari.',
+      'book.ccTitle': 'Gelanggang Kelab Komuniti (CC)',
+      'book.ccBody': 'Dikendalikan oleh People’s Association di seluruh pulau. Harga berbeza mengikut CC, kira-kira <strong>S$5–7 sejam</strong>. Tempah di <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a>.',
+      'book.ccStep1': 'Log masuk dengan <strong>Singpass</strong>, kemudian pilih Facilities → Book a Facility.',
+      'book.ccStep2': 'Pilih Badminton Court, kemudian wilayah, tarikh dan masa anda.',
+      'book.ccStep3': 'Slot baharu dibuka <strong>setiap hari jam 10 malam</strong>, sehingga <strong>15 hari</strong> lebih awal.',
+
+      'groups.featureEyebrow': 'Pilihan utama kami · Kenali tahap anda',
+      'groups.featureTitle': 'Racket Ratings',
+      'groups.featureBody': 'Tak pasti sejauh mana kemahiran anda — atau dengan siapa hendak bermain? <strong>Racket Ratings</strong> ialah penilaian percuma Singapura yang memberikan anda tahap kemahiran sebenar dan memadankan anda dengan pemain, kaki dan perlawanan pada tahap itu. Cara paling mudah untuk melihat kedudukan anda — kami mengesyorkan setiap pemain bermula di sini.',
+      'groups.featureCta': 'Dapatkan penilaian percuma anda →',
+      'groups.casualTitle': 'Permainan santai & sosial',
+      'groups.casualBody': 'Kebanyakan perlawanan sosial terbentuk di platform komuniti. Cuba yang berikut untuk mencari sesi berdekatan dan pada tahap anda:',
+      'groups.casualLink1': '<a href="https://racketratings.net/" target="_blank" rel="noopener">Racket Ratings</a> — pemain dan sesi yang dinilai',
+      'groups.casualLink2': '<a href="https://www.meetup.com/find/?keywords=badminton&location=sg--Singapore" target="_blank" rel="noopener">Meetup — badminton Singapura</a>',
+      'groups.casualLink3': 'Kumpulan “kaki” di Facebook dan Telegram (cari “badminton Singapore”)',
+      'groups.casualLink4': 'CC kejiranan anda — banyak menganjurkan sesi sosial masuk terus',
+      'groups.coachTitle': 'Lebih suka kejurulatihan berstruktur?',
+      'groups.coachBody': 'Jika anda lebih suka menambah baik dengan jurulatih, itulah yang kami lakukan. Dari ayunan pertama hingga pertandingan, kem, kelas dan klinik Élever ada tempat untuk anda.',
+      'groups.coachCta': 'Lihat program kami',
+
+      'news.kicker': '06 — Musim 2026',
+      'news.title': 'Setiap perhentian dalam <em>jelajah dunia</em>.',
+      'news.hint': 'Empat keputusan terkini daripada BWF World Tour HSBC 2026. Pilih “Tunjuk semua” untuk keseluruhan musim. Dikemas kini 7 Ogos 2026.',
+      'news.filterAll': 'Semua', 'news.filterDone': 'Selesai', 'news.filterUpcoming': 'Akan datang',
+      'news.showAll': 'Tunjuk semua kejohanan',
+      'news.showAllN': 'Tunjuk semua {n} kejohanan',
+      'news.showLess': 'Tunjuk kurang',
+      'news.latest': 'Terkini', 'news.upcoming': 'Akan datang',
+      'news.tbdUpcoming': 'Dijadualkan — keputusan menyusul.',
+      'news.tbdDone': 'Selesai. Juara mengikut rekod BWF.',
+      'news.source': 'Jadual penuh dan keputusan diperoleh daripada BWF World Tour, Wikipedia dan laporan agensi berita (AFP/Xinhua). Acara yang selesai sehingga 7 Ogos 2026 menunjukkan juara perseorangan dan beregu yang disahkan jika ada; acara kemudian menyenaraikan tarikh dan gred. Tiada imej digunakan.',
+
+      'play.kicker': '07 — Mula Main',
+      'play.title': 'Main satu <em>rali</em>.',
+      'play.hintDesktop': 'Perlawanan stik-badminton klasik menentang komputer. <strong>Gerak</strong> dengan ← → (atau A/D), <strong>lompat</strong> dengan ↑ (atau W), <strong>ayun</strong> dengan Space atau ↓. Lompat ke bulu tangkis tinggi untuk <strong>smash</strong> ke bawah; angkat yang rendah melepasi jaring. Pertama mencapai 7 mata menang.',
+      'play.hintMobile': 'Perlawanan stik-badminton klasik menentang komputer. Guna butang pada skrin di bawah untuk gerak, lompat dan ayun. Lompat ke bulu tangkis tinggi untuk <strong>smash</strong> ke bawah; angkat yang rendah melepasi jaring. Pertama mencapai 7 mata menang.',
+      'play.you': 'Anda', 'play.rally': 'Rali', 'play.cpu': 'Komputer',
+      'play.start': 'Mula permainan', 'play.again': 'Main lagi',
+      'play.move': 'Gerak', 'play.jump': 'Lompat', 'play.swing': 'Ayun',
+      'play.msgStart': 'Pilih Start. Bergerak di bawah bulu tangkis, kemudian lompat dan ayun untuk memukulnya semula.',
+      'play.serveYou': 'Servis anda! Gerak dengan ← →, lompat dengan ↑ / W, ayun dengan Space / ↓.',
+      'play.serveCpu': 'Lawan sedang servis — pergi ke bawah bulu tangkis dan ayun!',
+      'play.shotServe': 'Servis', 'play.shotSmash': 'SMASH!', 'play.shotClear': 'Clear',
+      'play.pointYou': 'Mata untuk anda', 'play.pointCpu': 'Mata untuk komputer',
+      'play.reasonNet': '{who} kena jaring',
+      'play.reasonYourSide': 'bulu tangkis jatuh di pihak anda',
+      'play.reasonCpuSide': 'bulu tangkis jatuh di pihak komputer',
+      'play.whoYou': 'anda', 'play.whoCpu': 'komputer',
+      'play.win': 'Permainan! Anda menang {a}–{b} 🏆',
+      'play.lose': 'Komputer menang {a}–{b}. Main lagi!',
+
+      'reflex.kicker': '08 — Ujian Reaksi',
+      'reflex.title': 'Berapa pantas <em>refleks</em> anda?',
+      'reflex.hint': 'Tunggu bulu tangkis jatuh, kemudian ketik sepantas mungkin. Masa tindak balas penting di gelanggang — pro bertindak balas dalam kurang 0.2 saat.',
+      'reflex.start': 'Ketik untuk mula', 'reflex.sub': 'Uji kelajuan tindak balas anda',
+      'reflex.wait': 'Tunggu…', 'reflex.waitSub': 'Ketik sebaik bulu tangkis jatuh',
+      'reflex.tap': 'KETIK SEKARANG!', 'reflex.early': 'Terlalu awal!', 'reflex.earlySub': 'Ketik untuk cuba lagi',
+      'reflex.last': 'Terakhir', 'reflex.best': 'Terbaik', 'reflex.rank': 'Pangkat',
+      'reflex.rankPro': 'Refleks pro ⚡', 'reflex.rankFast': 'Sepantas kilat', 'reflex.rankSharp': 'Tajam', 'reflex.rankOk': 'Tak teruk', 'reflex.rankWarm': 'Memanaskan badan',
+
+      'guess.kicker': '09 — Kuiz Foto',
+      'guess.title': 'Teka <em>pro</em>.',
+      'guess.hint': 'Sepuluh foto, empat nama setiap satu. Berapa ramai bintang badminton dunia yang anda boleh namakan?',
+      'guess.start': 'Mula', 'guess.again': 'Main lagi',
+      'guess.count': 'Foto {n}/{total}', 'guess.score': 'Skor {s}', 'guess.done': 'Skor anda',
+      'guess.alt': 'Teka pemain badminton ini',
+      'guess.end9': 'Hebat — anda betul-betul kenal badminton! 🏆',
+      'guess.end6': 'Bagus! Anda kenal bintang-bintang anda.',
+      'guess.end3': 'Tak teruk — teruskan menonton!',
+      'guess.end0': 'Masa untuk tonton lebih banyak badminton! 🏸',
+
+      'reviews.kicker': '10 — Ulasan',
+      'reviews.title': 'Disukai <em>pemain & ibu bapa</em>.',
+      'reviews.hint': 'Apa kata komuniti kami tentang latihan di Élever.',
+      'reviews.ig': 'Lihat detik sebenar di Instagram',
+      'reviews.disclaimer': 'Petikan di atas ialah teks contoh — ikuti kami di Instagram untuk detik latihan, keputusan dan kemas kini sebenar.',
+
+      'cta.title': 'Sedia untuk <em>meningkat</em>?',
+      'cta.body': 'Sama ada ayunan pertama anda atau gelaran seterusnya, ada tempat untuk anda di Élever Badminton.',
+      'cta.enquire': 'Tanya sekarang', 'cta.email': 'E-mel kami', 'cta.instagram': 'Ikuti di Instagram',
+
+      'footer.tag': 'Membina. Meningkat. Naik lebih tinggi.',
+      'footer.instagram': 'Instagram',
+      'footer.official': 'Laman rasmi',
+      'footer.note': 'Reka bentuk semula konsep · Dibina untuk Élever Badminton. Fotografi © Élever Badminton.'
     }
   };
 
@@ -470,6 +1009,48 @@
           a: ['做一名无所畏惧、毫无包袱的黑马', '开辟一条后人追随的道路', '靠纯粹的体能耗过所有人', '把全面的技术打磨到极致'] },
         { q: '你最理想的得分方式？',
           a: ['用力量与速度碾压对手', '用假动作与手感智取对手', '耗到对手崩溃为止', '在最关键的时刻挺身而出'] }
+      ],
+      hi: [
+        { q: 'मैच पॉइंट है और दबाव चरम पर। आपकी सहज प्रतिक्रिया क्या है?',
+          a: ['शांत रहें और उनके गलती करने का इंतज़ार करें', 'जोखिम भरा विनर लगाएँ — बड़ा जोखिम, बड़ा इनाम', 'उस प्लान पर टिके रहें जो मैंने सौ बार अभ्यास किया है', 'हर एक शॉट के पीछे भागें जब तक वे टूट न जाएँ'] },
+        { q: 'अपना पसंदीदा शॉट चुनें।',
+          a: ['एक ज़बरदस्त जंप स्मैश', 'एक चालाक फ़ेक जो उन्हें गलत दिशा में भेज दे', 'एक नामुमकिन बचाव जिसकी किसी ने उम्मीद न की हो', 'नेट पर बिजली जैसी तेज़ हाथ-सफ़ाई'] },
+        { q: 'आप कैसे ट्रेनिंग करते हैं?',
+          a: ['हर दिन वही सख़्त रूटीन, कोई शॉर्टकट नहीं', 'मस्ती करें, नई चीज़ें आज़माएँ, मज़ा बनाए रखें', 'शुद्ध फ़िटनेस मेहनत ताकि मेरी ऊर्जा कभी खत्म न हो', 'चुपचाप अपनी कमज़ोरियाँ सुधारें, एक-एक सेशन'] },
+        { q: 'कोर्ट पर आप कैसे हैं?',
+          a: ['ज़ोरदार और जोश में — मैं अपनी भावनाएँ दिखाता हूँ', 'शांत, चुप और पढ़ने में मुश्किल', 'लो-की — मैं अपने रैकेट को बोलने देता हूँ', 'थोड़ा शो-ऑफ़ — मुझे भीड़ को जोश दिलाना पसंद है'] },
+        { q: 'आपको सबसे ज़्यादा क्या प्रेरित करता है?',
+          a: ['बिना कुछ खोने वाला अंडरडॉग होना', 'पहला होना — जिसकी ओर दूसरे देखें', 'सबको तब पछाड़ना जब वे थक जाएँ', 'खेल के हर हिस्से में मज़बूत होना'] },
+        { q: 'पॉइंट जीतने का आपका पसंदीदा तरीका?',
+          a: ['गति और ताक़त से उन्हें हावी कर दें', 'चालाकी और नाज़ुक टच से उन्हें मात दें', 'उन्हें तब तक थकाएँ जब तक वे हार न मानें', 'जब सबसे ज़रूरी हो तब कमाल दिखाएँ'] }
+      ],
+      ta: [
+        { q: 'மேட்ச் பாயிண்ட், அழுத்தம் உச்சத்தில். உங்கள் உள்ளுணர்வு எதிர்வினை என்ன?',
+          a: ['அமைதியாக இருந்து அவர்கள் தவறு செய்யக் காத்திருங்கள்', 'ரிஸ்க் எடுத்து வின்னர் அடியுங்கள் — பெரிய ரிஸ்க், பெரிய வெகுமதி', 'நூறு முறை பயிற்சி செய்த திட்டத்தில் உறுதியாக இருங்கள்', 'அவர்கள் சோர்ந்து போகும் வரை ஒவ்வொரு அடியையும் துரத்துங்கள்'] },
+        { q: 'உங்கள் விருப்பமான ஷாட்டைத் தேர்வு செய்யுங்கள்.',
+          a: ['ஒரு பலமான ஜம்ப் ஸ்மாஷ்', 'அவர்களைத் தவறான திசையில் அனுப்பும் ஒரு தந்திரமான ஃபேக்', 'யாரும் எதிர்பார்க்காத ஒரு சாத்தியமற்ற காப்பாற்றல்', 'நெட்டில் மின்னல் வேக கை வேலை'] },
+        { q: 'நீங்கள் எப்படி பயிற்சி செய்கிறீர்கள்?',
+          a: ['தினமும் அதே கடுமையான வழக்கம், குறுக்குவழிகள் இல்லை', 'விளையாடி, புதியவற்றை முயற்சித்து, சுவாரஸ்யமாக வைத்திருங்கள்', 'ஆற்றல் ஒருபோதும் தீராதபடி தூய உடற்பயிற்சி உழைப்பு', 'அமைதியாக என் பலவீனங்களை சரிசெய்கிறேன், ஒவ்வொரு அமர்வாக'] },
+        { q: 'கோர்ட்டில் நீங்கள் எப்படி?',
+          a: ['சத்தமாக, உற்சாகமாக — என் உணர்வுகளைக் காட்டுகிறேன்', 'அமைதி, மௌனம், படிக்க கடினம்', 'அமைதியானவன் — என் ராக்கெட்டையே பேச விடுகிறேன்', 'சற்று ஷோ-ஆஃப் — கூட்டத்தை உற்சாகப்படுத்த விரும்புகிறேன்'] },
+        { q: 'உங்களை மிகவும் தூண்டுவது எது?',
+          a: ['இழப்பதற்கு எதுவுமில்லாத அண்டர்டாக் ஆக இருப்பது', 'முதலாமவராக இருப்பது — மற்றவர்கள் மதிக்கும் ஒருவர்', 'அனைவரும் சோர்ந்த பின்பும் நீடிப்பது', 'விளையாட்டின் ஒவ்வொரு பகுதியிலும் திடமாக இருப்பது'] },
+        { q: 'புள்ளி வெல்ல உங்கள் விருப்பமான வழி?',
+          a: ['வேகம் மற்றும் பலத்தால் அவர்களை மிஞ்சுங்கள்', 'தந்திரம் மற்றும் மென்மையான டச்சால் புத்திசாலித்தனமாக வெல்லுங்கள்', 'அவர்கள் விட்டுக்கொடுக்கும் வரை சோர்வடையச் செய்யுங்கள்', 'மிக முக்கியமான தருணத்தில் சிறந்து விளங்குங்கள்'] }
+      ],
+      ms: [
+        { q: 'Mata perlawanan dan tekanan memuncak. Apa reaksi naluri anda?',
+          a: ['Kekal tenang dan tunggu mereka buat silap', 'Cuba pukulan berisiko — risiko tinggi, ganjaran tinggi', 'Ikut rancangan yang saya latih beratus kali', 'Kejar setiap pukulan sehingga mereka tumbang'] },
+        { q: 'Pilih pukulan pilihan anda.',
+          a: ['Smash lompat yang hebat', 'Tipuan licik yang menghantar mereka ke arah salah', 'Penyelamatan mustahil yang tiada siapa sangka saya capai', 'Tangan sepantas kilat dalam pertempuran jaring'] },
+        { q: 'Bagaimana anda berlatih?',
+          a: ['Rutin ketat yang sama setiap hari, tiada jalan pintas', 'Bermain-main, cuba benda baharu, kekalkan keseronokan', 'Latihan kecergasan tulen supaya tenaga tak pernah habis', 'Diam-diam perbaiki kelemahan saya, satu sesi demi satu'] },
+        { q: 'Bagaimana anda di gelanggang?',
+          a: ['Lantang dan bersemangat — saya tunjuk emosi saya', 'Tenang, senyap dan sukar dibaca', 'Rendah diri — saya biar raket saya bercakap', 'Sedikit suka menunjuk — saya suka menaikkan semangat penonton'] },
+        { q: 'Apa yang paling mendorong anda?',
+          a: ['Menjadi pihak bawah yang tiada apa nak rugi', 'Menjadi yang pertama — orang yang dicontohi', 'Bertahan lebih lama apabila semua sudah keletihan', 'Mantap dalam setiap aspek permainan'] },
+        { q: 'Cara kegemaran anda untuk menang mata?',
+          a: ['Atasi mereka dengan kepantasan dan kuasa', 'Kalahkan mereka dengan tipu helah dan sentuhan halus', 'Lelahkan mereka sehingga mengalah', 'Naikkan tahap apabila ia paling penting'] }
       ]
     },
 
@@ -618,21 +1199,23 @@
   }
 
   function updateToggle() {
-    var en = document.getElementById('langEn');
-    var zh = document.getElementById('langZh');
-    if (en && zh) {
-      en.classList.toggle('is-active', current === 'en');
-      zh.classList.toggle('is-active', current === 'zh');
-      en.setAttribute('aria-pressed', String(current === 'en'));
-      zh.setAttribute('aria-pressed', String(current === 'zh'));
-    }
+    var label = document.getElementById('langCurrent');
+    if (label) label.textContent = LANG_LABELS[current] || current.toUpperCase();
+    document.querySelectorAll('.lang__opt').forEach(function (b) {
+      var on = b.getAttribute('data-lang') === current;
+      b.classList.toggle('is-active', on);
+      b.setAttribute('aria-checked', String(on));
+    });
+    var toggle = document.getElementById('langToggle');
+    if (toggle) toggle.setAttribute('aria-label', 'Language / 语言: ' + (LANG_NAMES[current] || current));
   }
 
   function setLang(lang, opts) {
     current = normalise(lang);
     try { localStorage.setItem(STORAGE_KEY, current); } catch (e) {}
-    document.documentElement.setAttribute('lang', current === 'zh' ? 'zh-Hans' : 'en');
-    document.documentElement.classList.toggle('lang-zh', current === 'zh');
+    var rootEl = document.documentElement;
+    rootEl.setAttribute('lang', LANG_TAG[current] || 'en');
+    SUPPORTED.forEach(function (l) { rootEl.classList.toggle('lang-' + l, current === l); });
     applyStatic(document);
     // fix the search placeholder (input uses a dedicated string)
     var search = document.getElementById('hallSearch');
@@ -649,7 +1232,9 @@
     try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
     if (saved && SUPPORTED.indexOf(saved) !== -1) return saved;
     var nav = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
-    return nav.indexOf('zh') === 0 ? 'zh' : 'en';
+    var codes = ['zh', 'hi', 'ta', 'ms'];
+    for (var i = 0; i < codes.length; i++) { if (nav.indexOf(codes[i]) === 0) return codes[i]; }
+    return 'en';
   }
 
   // Public API
@@ -663,10 +1248,28 @@
 
   // Wire up toggle buttons + initial language as soon as the DOM is ready.
   function init() {
-    var en = document.getElementById('langEn');
-    var zh = document.getElementById('langZh');
-    if (en) en.addEventListener('click', function () { setLang('en'); });
-    if (zh) zh.addEventListener('click', function () { setLang('zh'); });
+    var toggle = document.getElementById('langToggle');
+    var menu = document.getElementById('langMenu');
+    if (toggle && menu) {
+      toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var open = menu.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+      document.addEventListener('click', function () {
+        menu.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false');
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { menu.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); }
+      });
+    }
+    document.querySelectorAll('.lang__opt').forEach(function (b) {
+      b.addEventListener('click', function () {
+        setLang(b.getAttribute('data-lang'));
+        if (menu) menu.classList.remove('open');
+        if (toggle) toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
     // Apply the detected/saved language. Modules load after this file and
     // render themselves in the current language on their own first run.
     setLang(detectInitial(), { silent: true });

@@ -41,10 +41,19 @@
       <a href="#play" data-i18n="nav.play">Play</a>
       <a href="#reviews" data-i18n="nav.reviews">Reviews</a>
       <a href="#contact" class="nav__cta magnetic" data-i18n="nav.join">Join Us</a>
-      <div class="lang" role="group" aria-label="Language / 语言">
-        <button class="lang__btn is-active" id="langEn" data-lang="en" lang="en" aria-pressed="true">EN</button>
-        <span class="lang__sep" aria-hidden="true">/</span>
-        <button class="lang__btn" id="langZh" data-lang="zh" lang="zh" aria-pressed="false">中文</button>
+      <div class="lang" id="langMenu">
+        <button class="lang__toggle" id="langToggle" aria-haspopup="true" aria-expanded="false" aria-label="Language / 语言">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.8 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.8-3.8-9S9.5 5.6 12 3z"/></svg>
+          <span id="langCurrent">EN</span>
+          <span class="lang__chev" aria-hidden="true">▾</span>
+        </button>
+        <ul class="lang__list" role="menu" aria-label="Choose language">
+          <li role="none"><button class="lang__opt is-active" role="menuitemradio" aria-checked="true" data-lang="en" lang="en">English</button></li>
+          <li role="none"><button class="lang__opt" role="menuitemradio" aria-checked="false" data-lang="zh" lang="zh">中文</button></li>
+          <li role="none"><button class="lang__opt" role="menuitemradio" aria-checked="false" data-lang="hi" lang="hi">हिन्दी</button></li>
+          <li role="none"><button class="lang__opt" role="menuitemradio" aria-checked="false" data-lang="ta" lang="ta">தமிழ்</button></li>
+          <li role="none"><button class="lang__opt" role="menuitemradio" aria-checked="false" data-lang="ms" lang="ms">Bahasa Melayu</button></li>
+        </ul>
       </div>
     </nav>
     <button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span></span></button>
