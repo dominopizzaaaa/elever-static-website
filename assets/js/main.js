@@ -1516,24 +1516,32 @@
     var pad = document.getElementById('reflexPad');
     if (!pad) return;
     var msg = document.getElementById('reflexMsg'), sub = document.getElementById('reflexSub');
-    var lastEl = document.getElementById('reflexLast'), bestEl = document.getElementById('reflexBest'), rankEl = document.getElementById('reflexRank');
+    var lastEl = document.getElementById('reflexLast'), bestEl = document.getElementById('reflexBest'), marker = document.getElementById('reflexMarker');
     var I18N = window.I18N;
     function T(k, v) { return I18N ? I18N.t(k, v) : k; }
     var state = 'idle', timer = null, dropAt = 0;
     var best = parseInt(localStorage.getItem('elever-reflex-best') || '0', 10) || 0;
-    function rank(ms) { return ms < 200 ? T('reflex.rankPro') : ms < 260 ? T('reflex.rankFast') : ms < 340 ? T('reflex.rankSharp') : ms < 450 ? T('reflex.rankOk') : T('reflex.rankWarm'); }
+    function rank(ms) { return ms < 150 ? T('reflex.rankF1') : ms < 250 ? T('reflex.rankPro') : ms < 350 ? T('reflex.rankNormal') : T('reflex.rankSlow'); }
     function setPad(c) { pad.className = 'reflex__pad reflex__pad--' + c; }
     function paintBest() { bestEl.textContent = best ? best + ' ms' : '—'; }
+    function updateMarker(ms) {
+      if (!marker) return;
+      var pct = Math.min(Math.max(ms / 500 * 100, 0), 100);
+      marker.style.left = pct + '%';
+      marker.style.opacity = '1';
+    }
     paintBest();
+    if (best) updateMarker(best);
     function arm() {
       state = 'wait'; setPad('wait'); msg.textContent = T('reflex.wait'); sub.textContent = T('reflex.waitSub');
       timer = setTimeout(function () { state = 'go'; setPad('go'); dropAt = performance.now(); msg.textContent = T('reflex.tap'); sub.textContent = ''; }, 1400 + Math.random() * 2600);
     }
     function result(ms) {
       state = 'result'; setPad('result'); msg.textContent = ms + ' ms'; sub.textContent = rank(ms);
-      lastEl.textContent = ms + ' ms'; rankEl.textContent = rank(ms);
+      lastEl.textContent = ms + ' ms';
       if (!best || ms < best) { best = ms; try { localStorage.setItem('elever-reflex-best', String(best)); } catch (e) {} }
       paintBest();
+      updateMarker(ms);
     }
     function tooSoon() { if (timer) { clearTimeout(timer); timer = null; } state = 'early'; setPad('early'); msg.textContent = T('reflex.early'); sub.textContent = T('reflex.earlySub'); }
     pad.addEventListener('click', function () {
@@ -1543,6 +1551,7 @@
     });
     document.addEventListener('i18n:change', function () {
       if (state === 'idle') { msg.textContent = T('reflex.start'); sub.textContent = T('reflex.sub'); }
+      else if (state === 'result') { sub.textContent = rank(parseInt(lastEl.textContent, 10)); }
       paintBest();
     });
   })();

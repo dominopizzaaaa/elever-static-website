@@ -171,7 +171,7 @@
       'reflex.wait': 'Wait for it…', 'reflex.waitSub': 'Tap the moment the shuttle drops',
       'reflex.tap': 'TAP NOW!', 'reflex.early': 'Too soon!', 'reflex.earlySub': 'Tap to try again',
       'reflex.last': 'Last', 'reflex.best': 'Best', 'reflex.rank': 'Rank',
-      'reflex.rankPro': 'Pro reflexes ⚡', 'reflex.rankFast': 'Lightning fast', 'reflex.rankSharp': 'Sharp', 'reflex.rankOk': 'Not bad', 'reflex.rankWarm': 'Warming up',
+      'reflex.rankF1': 'F1 Driver', 'reflex.rankPro': 'Badminton Pro', 'reflex.rankNormal': 'Normal Human', 'reflex.rankSlow': 'Sluggish',
 
       'guess.kicker': '09 — Photo Quiz',
       'guess.title': 'Guess the <em>pro</em>.',
@@ -349,7 +349,7 @@
       'reflex.wait': '稍等…', 'reflex.waitSub': '羽球一落下就点击',
       'reflex.tap': '快点击！', 'reflex.early': '太早了！', 'reflex.earlySub': '点击再试一次',
       'reflex.last': '上次', 'reflex.best': '最佳', 'reflex.rank': '评级',
-      'reflex.rankPro': '职业级反应 ⚡', 'reflex.rankFast': '闪电般', 'reflex.rankSharp': '敏锐', 'reflex.rankOk': '还不错', 'reflex.rankWarm': '热身中',
+      'reflex.rankF1': 'F1 车手', 'reflex.rankPro': '职业球员', 'reflex.rankNormal': '普通人', 'reflex.rankSlow': '较迟缓',
 
       'guess.kicker': '09 — 看图猜球星',
       'guess.title': '<em>猜猜</em>这位球星。',
@@ -527,7 +527,7 @@
       'reflex.wait': 'रुकिए…', 'reflex.waitSub': 'जैसे ही शटल गिरे, टैप करें',
       'reflex.tap': 'अभी टैप करें!', 'reflex.early': 'बहुत जल्दी!', 'reflex.earlySub': 'फिर से कोशिश करने के लिए टैप करें',
       'reflex.last': 'पिछला', 'reflex.best': 'सर्वश्रेष्ठ', 'reflex.rank': 'रैंक',
-      'reflex.rankPro': 'प्रो रिफ़्लेक्स ⚡', 'reflex.rankFast': 'बिजली जैसी तेज़', 'reflex.rankSharp': 'तेज़', 'reflex.rankOk': 'बुरा नहीं', 'reflex.rankWarm': 'वॉर्म-अप',
+      'reflex.rankF1': 'F1 ड्राइवर', 'reflex.rankPro': 'बैडमिंटन प्रो', 'reflex.rankNormal': 'सामान्य इंसान', 'reflex.rankSlow': 'सुस्त',
 
       'guess.kicker': '09 — फ़ोटो क्विज़',
       'guess.title': '<em>प्रो</em> पहचानें।',
@@ -705,7 +705,7 @@
       'reflex.wait': 'காத்திருங்கள்…', 'reflex.waitSub': 'ஷட்டில் விழும் தருணத்தில் தட்டுங்கள்',
       'reflex.tap': 'இப்போது தட்டு!', 'reflex.early': 'மிக விரைவு!', 'reflex.earlySub': 'மீண்டும் முயற்சிக்க தட்டுங்கள்',
       'reflex.last': 'கடைசி', 'reflex.best': 'சிறந்தது', 'reflex.rank': 'தரவரிசை',
-      'reflex.rankPro': 'ப்ரோ எதிர்வினை ⚡', 'reflex.rankFast': 'மின்னல் வேகம்', 'reflex.rankSharp': 'கூர்மை', 'reflex.rankOk': 'மோசமில்லை', 'reflex.rankWarm': 'வார்ம்-அப்',
+      'reflex.rankF1': 'F1 டிரைவர்', 'reflex.rankPro': 'பேட்மிண்டன் ப்ரோ', 'reflex.rankNormal': 'சாதாரண மனிதன்', 'reflex.rankSlow': 'மந்தமான',
 
       'guess.kicker': '09 — புகைப்பட வினா',
       'guess.title': '<em>ப்ரோ</em>வை யூகியுங்கள்.',
@@ -883,7 +883,7 @@
       'reflex.wait': 'Tunggu…', 'reflex.waitSub': 'Ketik sebaik bulu tangkis jatuh',
       'reflex.tap': 'KETIK SEKARANG!', 'reflex.early': 'Terlalu awal!', 'reflex.earlySub': 'Ketik untuk cuba lagi',
       'reflex.last': 'Terakhir', 'reflex.best': 'Terbaik', 'reflex.rank': 'Pangkat',
-      'reflex.rankPro': 'Refleks pro ⚡', 'reflex.rankFast': 'Sepantas kilat', 'reflex.rankSharp': 'Tajam', 'reflex.rankOk': 'Tak teruk', 'reflex.rankWarm': 'Memanaskan badan',
+      'reflex.rankF1': 'Pemandu F1', 'reflex.rankPro': 'Pemain Pro', 'reflex.rankNormal': 'Manusia Biasa', 'reflex.rankSlow': 'Lembap',
 
       'guess.kicker': '09 — Kuiz Foto',
       'guess.title': 'Teka <em>pro</em>.',

@@ -369,7 +369,22 @@
       <div class="reflex__stats">
         <div class="reflex__stat"><span data-i18n="reflex.last">Last</span><b id="reflexLast">—</b></div>
         <div class="reflex__stat reflex__stat--best"><span data-i18n="reflex.best">Best</span><b id="reflexBest">—</b></div>
-        <div class="reflex__stat"><span data-i18n="reflex.rank">Rank</span><b id="reflexRank">—</b></div>
+      </div>
+      <div class="reflex__scale" aria-hidden="true">
+        <div class="reflex__scale-track">
+          <div class="reflex__scale-marker" id="reflexMarker"></div>
+          <div class="reflex__scale-zones">
+            <div class="reflex__scale-zone" style="flex: 30;"><span data-i18n="reflex.rankF1">F1 Driver</span></div>
+            <div class="reflex__scale-zone" style="flex: 20;"><span data-i18n="reflex.rankPro">Badminton Pro</span></div>
+            <div class="reflex__scale-zone" style="flex: 20;"><span data-i18n="reflex.rankNormal">Normal Human</span></div>
+            <div class="reflex__scale-zone" style="flex: 30;"><span data-i18n="reflex.rankSlow">Sluggish</span></div>
+          </div>
+        </div>
+        <div class="reflex__scale-ticks">
+          <span style="left: 30%;">150ms</span>
+          <span style="left: 50%;">250ms</span>
+          <span style="left: 70%;">350ms</span>
+        </div>
       </div>
     </div>
   </section>

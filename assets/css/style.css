@@ -555,6 +555,20 @@ em{font-style:normal;color:var(--accent)}   /* highlight — brand blue, never i
 .reflex__stat b{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.5rem;color:var(--ink)}
 .reflex__stat--best b{color:var(--accent)}
 
+.reflex__scale{margin-top:1.2rem;background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.5rem 1.2rem;box-shadow:var(--shadow-sm)}
+.reflex__scale-track{position:relative;height:28px;background:var(--bg-2);border-radius:14px;overflow:hidden}
+.reflex__scale-marker{position:absolute;top:0;bottom:0;width:6px;background:var(--ink);border-radius:3px;z-index:10;transition:left .4s var(--ease-bounce);box-shadow:0 0 0 2px #fff;margin-left:-3px;opacity:0}
+.reflex__scale-zones{display:flex;height:100%}
+.reflex__scale-zone{height:100%;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#fff;border-right:1px solid rgba(255,255,255,.3)}
+.reflex__scale-zone:last-child{border-right:none}
+.reflex__scale-zone:nth-child(1){background:#e08a0b}
+.reflex__scale-zone:nth-child(2){background:#12a45f}
+.reflex__scale-zone:nth-child(3){background:#2151d1}
+.reflex__scale-zone:nth-child(4){background:#cbd5e1;color:var(--muted)}
+.reflex__scale-zone span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px}
+.reflex__scale-ticks{position:relative;height:20px;margin-top:.4rem}
+.reflex__scale-ticks span{position:absolute;transform:translateX(-50%);font-size:.65rem;color:var(--muted);font-family:'Montserrat',sans-serif;font-weight:600}
+
 /* ===================== GUESS THE PRO ===================== */
 .guess{padding:7rem 0;background:var(--bg-2)}
 .guess__hint{color:var(--muted);font-size:.95rem;margin-top:1rem;max-width:560px}
