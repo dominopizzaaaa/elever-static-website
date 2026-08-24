@@ -121,7 +121,10 @@
 
   function runIntro() {
     var canvas = document.getElementById('introCanvas');
-    var ctx = canvas.getContext('2d');
+    var ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
+    // No 2d context (canvas disabled/unsupported): skip straight to the page
+    // rather than throwing and leaving body.intro-lock stuck on.
+    if (!ctx) { finishIntro(); return; }
     var word = document.getElementById('introWord');
     var tag = document.getElementById('introTag');
     var skip = document.getElementById('skipIntro');
@@ -272,7 +275,8 @@
   function initHero() {
     var canvas = document.getElementById('heroCanvas');
     if (!canvas || reduce) return;
-    var ctx = canvas.getContext('2d');
+    var ctx = canvas.getContext ? canvas.getContext('2d') : null;
+    if (!ctx) return;
     var W, H, DPR = Math.min(window.devicePixelRatio || 1, 2);
     var shuttles = [];
     var mouse = { x: -9999, y: -9999, active: false };
@@ -363,9 +367,13 @@
   var nav = document.getElementById('nav');
   var burger = document.getElementById('burger');
   var navLinks = document.getElementById('navLinks');
-  window.addEventListener('scroll', function () {
-    nav.classList.toggle('scrolled', window.scrollY > 40);
-  }, { passive: true });
+  // Interior pages keep the solid treatment at all scroll positions.
+  var navSolid = nav && nav.classList.contains('nav--solid');
+  if (nav) {
+    window.addEventListener('scroll', function () {
+      nav.classList.toggle('scrolled', navSolid || window.scrollY > 40);
+    }, { passive: true });
+  }
   if (burger) {
     burger.addEventListener('click', function () { nav.classList.toggle('open'); });
     navLinks.querySelectorAll('a').forEach(function (a) {
@@ -434,8 +442,12 @@
   }
 
   function runCounters() {
+    var hasIO = 'IntersectionObserver' in window;
     document.querySelectorAll('[data-count]').forEach(function (el) {
       var target = parseInt(el.getAttribute('data-count'), 10);
+      // Without IntersectionObserver there is nothing to trigger the count-up,
+      // so show the final figure rather than leaving a permanent 0.
+      if (!hasIO) { el.textContent = target; return; }
       var io = new IntersectionObserver(function (ent) {
         if (ent[0].isIntersecting) {
           var start = null;
@@ -933,7 +945,8 @@
   (function rallyGame() {
     var canvas = document.getElementById('gameCanvas');
     if (!canvas) return;
-    var ctx = canvas.getContext('2d');
+    var ctx = canvas.getContext ? canvas.getContext('2d') : null;
+    if (!ctx) return;
     var DPR = Math.min(window.devicePixelRatio || 1, 2);
     var W = 0, H = 0;
 

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Play — Badminton Games & Reflex Test | Élever Badminton</title>
+  <meta name="description" content="Play a rally against the computer, test your reaction speed, find your badminton twin and guess the pro. Interactive badminton games from Élever Badminton." />
+  <meta property="og:title" content="Play — Badminton Games & Reflex Test | Élever Badminton" />
+  <meta property="og:description" content="Play a rally against the computer, test your reaction speed, find your badminton twin and guess the pro. Interactive badminton games from Élever Badminton." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/pages.css" />
+</head>
+<body data-page="play" data-nav="solid" data-base="">
+
+  <a href="#main" class="skip-link" data-i18n="a11y.skip">Skip to main content</a>
+  <header id="siteHeader"></header>
+
+  <main id="main">
+    <section class="phead">
+      <div class="phead__inner">
+        <p class="phead__crumbs"><a href="index.html">Home</a> · Play</p>
+        <h1>Have a <em>go</em>.</h1>
+        <p class="phead__lead">Four small things to play with while you decide whether to book a class. A rally against the computer, a reaction test, a personality quiz and a photo quiz.</p>
+      </div>
+    </section>
+
+  <section class="quiz" id="quiz" aria-labelledby="quizTitle">
+    <div class="quiz__deco" aria-hidden="true">
+      <span>🏸</span><span>✨</span><span>💫</span><span>⭐</span><span>🏸</span><span>💙</span><span>🔥</span><span>🏆</span><span>🎉</span>
+    </div>
+    <div class="section-head">
+      <span class="kicker reveal" data-i18n="quiz.kicker">02 — Interactive</span>
+      <h2 class="section-title reveal" id="quizTitle" data-i18n-html="quiz.title">Which pro is your <em>badminton twin</em>?</h2>
+    </div>
+    <div class="quiz__wrap reveal" data-delay="120">
+      <div class="quiz__progress-wrap" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="quizProgressBar"><div class="quiz__progress" id="quizProgress"></div></div>
+
+      <div class="quiz__intro" id="quizIntro">
+        <div class="quiz__mascot" aria-hidden="true">🏸</div>
+        <p class="quiz__lead" data-i18n-html="quiz.lead">Answer 6 quick questions about how you play &amp; think.<br>We'll reveal which of the world's badminton stars is your on-court twin — with their photo. <strong>No peeking</strong> — there are 27 possible matches, and yours is a surprise.</p>
+        <button class="btn btn--primary magnetic quiz__cta" id="quizStart" data-i18n="quiz.start">Start the quiz</button>
+      </div>
+
+      <div class="quiz__stage" id="quizStage" style="display:none">
+        <div class="quiz__card" id="quizQ" aria-live="polite"></div>
+        <div class="quiz__card quiz__result" id="quizResult" style="display:none" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+  <section class="play" id="play" aria-labelledby="playTitle">
+    <div class="section-head">
+      <span class="kicker reveal" data-i18n="play.kicker">07 — Game On</span>
+      <h2 class="section-title reveal" id="playTitle" data-i18n-html="play.title">Play a <em>rally</em>.</h2>
+      <p class="play__hint reveal" data-delay="120"><span class="play__desktopHint" data-i18n-html="play.hintDesktop">A classic stick-badminton match against the computer. <strong>Move</strong> with ← → (or A/D), <strong>jump</strong> with ↑ (or W), <strong>swing</strong> with Space or ↓. Jump into a high shuttle to <strong>smash</strong> it down; lift low ones over the net. First to 7 points wins.</span><span class="play__mobileHint" data-i18n-html="play.hintMobile">A classic stick-badminton match against the computer. Use the on-screen buttons below to move, jump and swing. Jump into a high shuttle to <strong>smash</strong> it down; lift low ones over the net. First to 7 points wins.</span></p>
+    </div>
+    <div class="play__wrap reveal" data-delay="160">
+      <div class="play__scoreboard">
+        <div class="play__score play__score--you"><span class="play__label" data-i18n="play.you">You</span><b id="scoreYou">0</b></div>
+        <div class="play__rally"><span data-i18n="play.rally">Rally</span><b id="gameRally">0</b></div>
+        <div class="play__score play__score--cpu"><b id="scoreCpu">0</b><span class="play__label" data-i18n="play.cpu">Computer</span></div>
+      </div>
+      <div class="play__court">
+        <canvas id="gameCanvas"></canvas>
+        <button class="btn btn--primary play__start" id="gameStart" data-i18n="play.start">Start game</button>
+        <div class="play__shot" id="gameShot" aria-hidden="true">—</div>
+      </div>
+      <div class="play__legend play__desktopHint">
+        <span class="play__key">← →<small data-i18n="play.move">Move</small></span>
+        <span class="play__key">↑ / W<small data-i18n="play.jump">Jump</small></span>
+        <span class="play__key">Space / ↓<small data-i18n="play.swing">Swing</small></span>
+      </div>
+      <div class="play__pad">
+        <div class="play__pad-move">
+          <button class="play__pad-btn" id="padLeft" aria-label="Move left">‹</button>
+          <button class="play__pad-btn" id="padRight" aria-label="Move right">›</button>
+        </div>
+        <div class="play__pad-act">
+          <button class="play__pad-btn play__pad-jump" id="padJump" data-i18n="play.jump" aria-label="Jump">Jump</button>
+          <button class="play__pad-btn play__pad-swing" id="padSwing" data-i18n="play.swing" aria-label="Swing">Swing</button>
+        </div>
+      </div>
+      <p class="play__msg" id="gameMsg" aria-live="polite" data-i18n="play.msgStart">Select Start. Move under the shuttle, then jump and swing to hit it back.</p>
+    </div>
+  </section>
+  <section class="reflex" id="reflex" aria-labelledby="reflexTitle">
+    <div class="section-head">
+      <span class="kicker reveal" data-i18n="reflex.kicker">08 — Reaction Test</span>
+      <h2 class="section-title reveal" id="reflexTitle" data-i18n-html="reflex.title">How fast are your <em>reflexes</em>?</h2>
+      <p class="reflex__hint reveal" data-delay="120" data-i18n="reflex.hint">Wait for the shuttle to drop, then tap as fast as you can. Reaction time matters on court — pros react in under 0.2 seconds.</p>
+    </div>
+    <div class="reflex__wrap reveal" data-delay="160">
+      <button class="reflex__pad reflex__pad--idle" id="reflexPad" aria-live="polite">
+        <span class="reflex__shuttle" id="reflexShuttle" aria-hidden="true">🏸</span>
+        <span class="reflex__msg" id="reflexMsg" data-i18n="reflex.start">Tap to start</span>
+        <span class="reflex__sub" id="reflexSub" data-i18n="reflex.sub">Test your reaction speed</span>
+      </button>
+      <div class="reflex__stats">
+        <div class="reflex__stat"><span data-i18n="reflex.last">Last</span><b id="reflexLast">—</b></div>
+        <div class="reflex__stat reflex__stat--best"><span data-i18n="reflex.best">Best</span><b id="reflexBest">—</b></div>
+      </div>
+      <div class="reflex__scale" aria-hidden="true">
+        <div class="reflex__scale-track">
+          <div class="reflex__scale-marker" id="reflexMarker"></div>
+          <div class="reflex__scale-zones">
+            <div class="reflex__scale-zone" style="flex: 30;"><span data-i18n="reflex.rankF1">F1 Driver</span></div>
+            <div class="reflex__scale-zone" style="flex: 20;"><span data-i18n="reflex.rankPro">Badminton Pro</span></div>
+            <div class="reflex__scale-zone" style="flex: 20;"><span data-i18n="reflex.rankNormal">Normal Human</span></div>
+            <div class="reflex__scale-zone" style="flex: 30;"><span data-i18n="reflex.rankSlow">Sluggish</span></div>
+          </div>
+        </div>
+        <div class="reflex__scale-ticks">
+          <span style="left: 30%;">150ms</span>
+          <span style="left: 50%;">250ms</span>
+          <span style="left: 70%;">350ms</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="guess" id="guess" aria-labelledby="guessTitle">
+    <div class="section-head">
+      <span class="kicker reveal" data-i18n="guess.kicker">09 — Photo Quiz</span>
+      <h2 class="section-title reveal" id="guessTitle" data-i18n-html="guess.title">Guess the <em>pro</em>.</h2>
+      <p class="guess__hint reveal" data-delay="120" data-i18n="guess.hint">Ten photos, four names each. How many of the world's badminton stars can you name?</p>
+    </div>
+    <div class="guess__wrap reveal" data-delay="160">
+      <div class="guess__intro" id="guessIntro">
+        <button class="btn btn--primary magnetic" id="guessStart" data-i18n="guess.start">Start</button>
+      </div>
+      <div class="guess__stage" id="guessStage" style="display:none" aria-live="polite"></div>
+    </div>
+  </section>
+  </main>
+
+  <footer id="siteFooter"></footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/site.js"></script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/pages.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

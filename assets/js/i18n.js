@@ -29,6 +29,8 @@
       'nav.about': 'About', 'nav.quiz': 'Quiz', 'nav.programs': 'Programs',
       'nav.team': 'Coaches', 'nav.hub': 'SG Hub', 'nav.news': 'News',
       'nav.play': 'Play', 'nav.reviews': 'Reviews', 'nav.join': 'Join us',
+      'nav.classes': 'Classes', 'nav.camps': 'Camps', 'nav.events': 'Events',
+      'nav.book': 'Book a class', 'nav.contact': 'Contact',
 
       'hero.eyebrow': 'Singapore · Badminton Excellence',
       'hero.sub': 'To build. To raise. To bring something to a higher position. Élite coaching that turns first swings into championship dreams.',
@@ -207,6 +209,8 @@
       'nav.about': '关于我们', 'nav.quiz': '测验', 'nav.programs': '课程',
       'nav.team': '教练团队', 'nav.hub': '新加坡中心', 'nav.news': '赛事资讯',
       'nav.play': '小游戏', 'nav.reviews': '评价', 'nav.join': '加入我们',
+      'nav.classes': '课程', 'nav.camps': '训练营', 'nav.events': '活动',
+      'nav.book': '预订课程', 'nav.contact': '联系我们',
 
       'hero.eyebrow': '新加坡 · 卓越羽毛球',
       'hero.sub': '培养、提升，让你更上一层楼。精英级教学，把第一次挥拍化为冠军梦想。',
@@ -385,6 +389,8 @@
       'nav.about': 'परिचय', 'nav.quiz': 'क्विज़', 'nav.programs': 'प्रोग्राम',
       'nav.team': 'कोच', 'nav.hub': 'SG हब', 'nav.news': 'समाचार',
       'nav.play': 'खेलें', 'nav.reviews': 'समीक्षाएँ', 'nav.join': 'जुड़ें',
+      'nav.classes': 'कक्षाएँ', 'nav.camps': 'कैम्प', 'nav.events': 'इवेंट्स',
+      'nav.book': 'क्लास बुक करें', 'nav.contact': 'संपर्क',
 
       'hero.eyebrow': 'सिंगापुर · बैडमिंटन उत्कृष्टता',
       'hero.sub': 'निर्माण करें। ऊँचा उठें। किसी चीज़ को और ऊँचे स्तर तक ले जाएँ। एलीट कोचिंग जो पहली स्ट्रोक को चैंपियनशिप के सपनों में बदल देती है।',
@@ -563,6 +569,8 @@
       'nav.about': 'எங்களைப் பற்றி', 'nav.quiz': 'வினா', 'nav.programs': 'திட்டங்கள்',
       'nav.team': 'பயிற்சியாளர்கள்', 'nav.hub': 'SG மையம்', 'nav.news': 'செய்திகள்',
       'nav.play': 'விளையாடு', 'nav.reviews': 'கருத்துகள்', 'nav.join': 'இணையுங்கள்',
+      'nav.classes': 'வகுப்புகள்', 'nav.camps': 'முகாம்கள்', 'nav.events': 'நிகழ்வுகள்',
+      'nav.book': 'வகுப்பை முன்பதிவு', 'nav.contact': 'தொடர்பு',
 
       'hero.eyebrow': 'சிங்கப்பூர் · பேட்மிண்டன் சிறப்பு',
       'hero.sub': 'உருவாக்குங்கள். உயருங்கள். மேலும் உயர்ந்த நிலைக்கு எடுத்துச் செல்லுங்கள். முதல் அடியை சாம்பியன்ஷிப் கனவுகளாக மாற்றும் உயர்தர பயிற்சி.',
@@ -741,6 +749,8 @@
       'nav.about': 'Tentang', 'nav.quiz': 'Kuiz', 'nav.programs': 'Program',
       'nav.team': 'Jurulatih', 'nav.hub': 'Hab SG', 'nav.news': 'Berita',
       'nav.play': 'Main', 'nav.reviews': 'Ulasan', 'nav.join': 'Sertai kami',
+      'nav.classes': 'Kelas', 'nav.camps': 'Kem', 'nav.events': 'Acara',
+      'nav.book': 'Tempah kelas', 'nav.contact': 'Hubungi',
 
       'hero.eyebrow': 'Singapura · Kecemerlangan Badminton',
       'hero.sub': 'Membina. Meningkat. Membawa sesuatu ke tahap yang lebih tinggi. Kejurulatihan elit yang mengubah ayunan pertama menjadi impian kejuaraan.',
