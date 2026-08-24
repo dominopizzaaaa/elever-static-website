@@ -396,6 +396,99 @@
     render();
   })();
 
+
+  /* =================================================================
+     RACKET RATINGS + RECREATIONAL PLAY GROUPS  (SG Hub → Groups tab)
+     Racket Ratings Clubs is the live directory of recreational groups
+     and maintains itself, so it leads. The curated list below it is
+     only for groups that ask Élever to feature them.
+     ================================================================= */
+  (function racketRatings() {
+    var mount = el('rrFeatures');
+    if (!mount) return;
+    var rr = D.racketRatings;
+
+    mount.innerHTML = rr.features.map(function (f, i) {
+      return '<a class="rrcard' + (f.primary ? ' rrcard--primary' : '') + ' reveal" data-delay="' + (i * 70) + '"' +
+        ' href="' + esc(f.href) + '" target="_blank" rel="noopener">' +
+        '<span class="rrcard__icon" aria-hidden="true">' + f.icon + '</span>' +
+        '<h4>' + esc(f.name) + (f.primary ? '<span class="rrcard__flag">Start here for groups</span>' : '') + '</h4>' +
+        '<p>' + esc(f.desc) + '</p>' +
+        '<span class="rrcard__go">Open on Racket Ratings &rsaquo;</span>' +
+      '</a>';
+    }).join('');
+  })();
+
+  (function recGroups() {
+    var mount = el('groupDir');
+    if (!mount) return;
+    var filters = el('groupFilters');
+    var countEl = el('groupCount');
+    var rows = D.recGroups || [];
+    var region = 'all';
+
+    var CLUBS = (D.racketRatings && D.racketRatings.features.filter(function (f) { return f.key === 'clubs'; })[0]) || null;
+    var clubsHref = CLUBS ? CLUBS.href : 'https://www.racketratings.net/badminton/clubs';
+
+    function emptyState(msg) {
+      return '<div class="grpempty">' +
+        '<p>' + esc(msg) + '</p>' +
+        '<a class="btn btn--primary magnetic" href="' + esc(clubsHref) + '" target="_blank" rel="noopener">Browse clubs on Racket Ratings</a>' +
+      '</div>';
+    }
+
+    function render() {
+      var list = rows.filter(function (g) { return region === 'all' || g.region === region; });
+      if (countEl) countEl.textContent = list.length + (list.length === 1 ? ' group' : ' groups');
+
+      if (!rows.length) {
+        mount.innerHTML = emptyState('We are not featuring any local groups just yet — Racket Ratings Clubs has the live list, kept up to date by the groups themselves.');
+        return;
+      }
+      if (!list.length) {
+        mount.innerHTML = emptyState('No featured groups in that region yet. Racket Ratings Clubs lists many more across Singapore.');
+        return;
+      }
+
+      mount.innerHTML = list.map(function (g) {
+        return '<article class="grpcard">' +
+          '<div class="grpcard__top">' +
+            '<h4>' + esc(g.name) + sampleTag(g) + '</h4>' +
+            '<span class="grpcard__region">' + esc(g.region) + '</span>' +
+          '</div>' +
+          '<dl class="grpcard__meta">' +
+            '<div><dt>When</dt><dd>' + esc(g.day) + ' · ' + esc(g.time) + '</dd></div>' +
+            '<div><dt>Where</dt><dd>' + esc(g.venue) + '</dd></div>' +
+            '<div><dt>Level</dt><dd>' + esc(g.level) + '</dd></div>' +
+            '<div><dt>Contact</dt><dd>' + esc(g.contact) + '</dd></div>' +
+          '</dl>' +
+          (g.rrClub ? '<a class="grpcard__rr" href="' + esc(g.rrClub) + '" target="_blank" rel="noopener">View this club on Racket Ratings &rsaquo;</a>' : '') +
+        '</article>';
+      }).join('');
+    }
+
+    if (filters) {
+      var regions = ['all'].concat(rows.map(function (g) { return g.region; })
+        .filter(function (v, i, a) { return a.indexOf(v) === i; }).sort());
+      filters.innerHTML = regions.map(function (r, i) {
+        return '<button class="sched__filter' + (i === 0 ? ' is-active' : '') + '" data-region="' + esc(r) + '"' +
+          ' aria-pressed="' + (i === 0) + '">' + (r === 'all' ? 'All regions' : esc(r)) + '</button>';
+      }).join('');
+      filters.addEventListener('click', function (e) {
+        var b = e.target.closest('.sched__filter');
+        if (!b) return;
+        region = b.getAttribute('data-region');
+        filters.querySelectorAll('.sched__filter').forEach(function (x) {
+          var on = x === b;
+          x.classList.toggle('is-active', on);
+          x.setAttribute('aria-pressed', String(on));
+        });
+        render();
+      });
+    }
+    render();
+  })();
+
   /* =================================================================
      LEAD FORMS
      No backend is wired yet, so submitting opens a pre-filled email

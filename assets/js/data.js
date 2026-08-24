@@ -211,6 +211,48 @@
     { slug: 'first-five-sessions', title: 'Badminton for beginners: your first five sessions', category: 'Coaching tips', date: '2026-07-02', read: '6 min', excerpt: 'What a complete beginner should expect to learn, in order, and how to tell whether it is going well.', placeholder: true }
   ];
 
+
+  /* ---------------------------------------------------------------
+     RACKET RATINGS — the free rating platform we point players at
+     https://www.racketratings.net/badminton
+     Two separate metrics: Rating = how strong you are;
+     Ranking = what you have won. Formats: Singles, Doubles, 3v3.
+     --------------------------------------------------------------- */
+  var RACKET_RATINGS = {
+    home: 'https://www.racketratings.net/badminton',
+    features: [
+      { key: 'leaderboard', icon: '📊', name: 'Leaderboard',
+        desc: 'See where you actually stand. Separate boards for Singles, Doubles and 3v3.',
+        href: 'https://www.racketratings.net/badminton' },
+      { key: 'clubs', icon: '👥', name: 'Clubs',
+        desc: 'Find a recreational club near you, join its ladder and climb its leaderboard. The best place to find a regular group.',
+        href: 'https://www.racketratings.net/badminton/clubs', primary: true },
+      { key: 'tournaments', icon: '🏆', name: 'Tournaments',
+        desc: 'Browse open tournaments and enter — or create one for your own group.',
+        href: 'https://www.racketratings.net/badminton/tournaments' },
+      { key: 'h2h', icon: '⚔️', name: 'Head to head',
+        desc: 'Your match history against any opponent, so you can see whether you are actually improving.',
+        href: 'https://www.racketratings.net/badminton/matches/head-to-head' }
+    ]
+  };
+
+  /* ---------------------------------------------------------------
+     RECREATIONAL PLAY GROUPS
+     A small curated list of local groups that welcome new players.
+     Racket Ratings Clubs is the live, self-maintaining directory —
+     this list is only for groups that ask us to feature them.
+     Leave the array empty and the page falls back to a clean empty
+     state that points at Racket Ratings Clubs instead.
+     --------------------------------------------------------------- */
+  var REC_GROUPS = [
+    { name: 'Sample social group', region: 'East', day: 'Tuesday', time: '8.00pm – 10.00pm',
+      venue: 'Add the hall name', level: 'All levels', contact: 'Add a contact', rrClub: '', placeholder: true },
+    { name: 'Sample weekend kakis', region: 'West', day: 'Saturday', time: '10.00am – 12.00pm',
+      venue: 'Add the hall name', level: 'Intermediate', contact: 'Add a contact', rrClub: '', placeholder: true },
+    { name: 'Sample beginners meet', region: 'Central', day: 'Sunday', time: '4.00pm – 6.00pm',
+      venue: 'Add the hall name', level: 'Beginner friendly', contact: 'Add a contact', rrClub: '', placeholder: true }
+  ];
+
   window.ELEVER_DATA = {
     coaches: COACHES,
     pathways: PATHWAYS,
@@ -222,6 +264,8 @@
     eventsUpcoming: EVENTS_UPCOMING,
     eventsPast: EVENTS_PAST,
     partners: PARTNERS,
-    articles: ARTICLES
+    articles: ARTICLES,
+    racketRatings: RACKET_RATINGS,
+    recGroups: REC_GROUPS
   };
 })();

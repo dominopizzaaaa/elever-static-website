@@ -688,7 +688,7 @@
           '<button class="btn btn--ghost" id="quizAgain">' + I18N.t('quiz.again') + '</button>' +
         '</div>' +
         '<p class="quiz__rr">' + I18N.t('quiz.rrPrompt') + '</p>' +
-        '<a class="btn btn--primary magnetic quiz__rrbtn" href="https://racketratings.net/" target="_blank" rel="noopener">' + I18N.t('quiz.rrCta') + '</a>' +
+        '<a class="btn btn--primary magnetic quiz__rrbtn" href="https://www.racketratings.net/badminton" target="_blank" rel="noopener">' + I18N.t('quiz.rrCta') + '</a>' +
         '<p class="quiz__credit">' + I18N.t('quiz.credit', { lic: p.lic }) + '</p>';
       result.classList.remove('fade'); void result.offsetWidth; result.classList.add('fade');
       document.getElementById('quizAgain').addEventListener('click', function () {

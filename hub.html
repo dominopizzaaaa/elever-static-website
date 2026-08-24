@@ -108,27 +108,68 @@
 
     <!-- ===== PANEL: GROUPS & RATINGS ===== -->
     <div class="hub__panel" data-panel="groups" id="panel-groups" role="tabpanel" aria-labelledby="tab-groups" tabindex="0" hidden>
+
+      <!-- ===== RACKET RATINGS ===== -->
+      <section class="rr">
+        <div class="rr__head">
+          <span class="rr__eyebrow" data-i18n="rr.eyebrow">Our top pick · Know your level</span>
+          <h3 data-i18n="rr.title">Racket Ratings</h3>
+          <p class="rr__lead" data-i18n="rr.lead">A free platform that gives every badminton player in Singapore a real, comparable skill level — then uses it to match you with clubs, ladders and tournaments at your standard. If you want to find people to play with, this is the single most useful thing on this page.</p>
+          <div class="rr__metrics">
+            <div class="rr__metric"><b data-i18n="rr.ratingLabel">⚡ Rating</b><span data-i18n="rr.ratingDesc">How strong you are</span></div>
+            <div class="rr__metric"><b data-i18n="rr.rankingLabel">🏅 Ranking</b><span data-i18n="rr.rankingDesc">What you have won</span></div>
+            <div class="rr__metric"><b data-i18n="rr.formatsLabel">Formats</b><span data-i18n="rr.formats">Singles · Doubles · 3v3</span></div>
+          </div>
+        </div>
+        <div class="rr__grid" id="rrFeatures"></div>
+        <div class="rr__foot">
+          <a href="https://www.racketratings.net/badminton" target="_blank" rel="noopener" class="btn btn--primary magnetic" data-i18n="rr.cta">Get your free rating →</a>
+          <p class="rr__note" data-i18n="rr.note">Free to use, available in English and Chinese, and it covers table tennis, tennis, pickleball and squash too. Élever is not affiliated with Racket Ratings — we point players there because it is the most useful tool in the local scene.</p>
+        </div>
+      </section>
+
+      <!-- ===== RECREATIONAL PLAY GROUPS ===== -->
+      <section class="grp">
+        <div class="grp__head">
+          <span class="rr__eyebrow" data-i18n="groups.dirEyebrow">Recreational play</span>
+          <h3 data-i18n="groups.dirTitle">Find a group to play with</h3>
+          <p class="rr__lead" data-i18n="groups.dirLead">The fastest route to a regular game is Racket Ratings Clubs above — it is kept current by the groups themselves. Below are local groups that have asked us to feature them and are happy to take new players.</p>
+        </div>
+        <div class="sched__controls">
+          <div id="groupFilters" role="group" aria-label="Filter groups by region"></div>
+        </div>
+        <p class="hub__count" id="groupCount" aria-live="polite"></p>
+        <div class="grp__grid" id="groupDir"></div>
+        <div class="grp__add">
+          <div>
+            <b data-i18n="groups.addTitle">Run a group that welcomes new players?</b>
+            <span data-i18n="groups.addBody">Tell us the day, time, venue and level and we will list it here — free, whether or not you train with Élever.</span>
+          </div>
+          <a class="btn btn--ghost" href="mailto:hello@eleverbadminton.com?subject=Add%20our%20badminton%20group%20to%20the%20SG%20Hub" data-i18n="groups.addCta">Add your group</a>
+        </div>
+      </section>
+
+      <!-- ===== OTHER ROUTES ===== -->
       <div class="hub__groups">
-        <article class="gcard gcard--feature reveal">
-          <span class="gcard__eyebrow" data-i18n="groups.featureEyebrow">Our top pick · Know your level</span>
-          <h3 data-i18n="groups.featureTitle">Racket Ratings</h3>
-          <p data-i18n-html="groups.featureBody">Not sure how good you actually are — or who to play with? <strong>Racket Ratings</strong> is the free Singapore rating that gives you a real skill level and matches you with players, kakis and games around it. It's the easiest way to see where you stand — we recommend every player start here.</p>
-          <a href="https://racketratings.net/" target="_blank" rel="noopener" class="btn btn--primary magnetic" data-i18n="groups.featureCta">Get your free rating →</a>
-        </article>
-        <article class="gcard reveal" data-delay="100">
+        <article class="gcard reveal">
           <h3 data-i18n="groups.casualTitle">Casual &amp; social play</h3>
           <p data-i18n="groups.casualBody">Most social games form up on community platforms. Try these to find a session near you and at your level:</p>
           <ul class="gcard__list">
-            <li data-i18n-html="groups.casualLink1"><a href="https://racketratings.net/" target="_blank" rel="noopener">Racket Ratings</a> — rated players and sessions</li>
+            <li data-i18n-html="groups.casualLink1"><a href="https://www.racketratings.net/badminton/clubs" target="_blank" rel="noopener">Racket Ratings Clubs</a> — rated players and ladders</li>
             <li data-i18n-html="groups.casualLink2"><a href="https://www.meetup.com/find/?keywords=badminton&location=sg--Singapore" target="_blank" rel="noopener">Meetup — Singapore badminton</a></li>
             <li data-i18n="groups.casualLink3">Facebook and Telegram “kaki” groups (search “badminton Singapore”)</li>
             <li data-i18n="groups.casualLink4">Your neighbourhood CC — many run drop-in social sessions</li>
           </ul>
         </article>
+        <article class="gcard reveal" data-delay="100">
+          <h3 data-i18n="groups.compTitle">Ready to compete?</h3>
+          <p data-i18n="groups.compBody">Once you have a rating, Racket Ratings lists open tournaments you can enter — and lets your own group create one. A low-pressure way into competitive play.</p>
+          <a href="https://www.racketratings.net/badminton/tournaments" target="_blank" rel="noopener" class="btn btn--ghost" data-i18n="groups.compCta">Browse tournaments</a>
+        </article>
         <article class="gcard reveal" data-delay="200">
           <h3 data-i18n="groups.coachTitle">Prefer structured coaching?</h3>
           <p data-i18n="groups.coachBody">If you'd rather improve with a coach, that's exactly what we do. From your first swing to competition, Élever's camps, classes and clinics have a place for you.</p>
-          <a href="#programs" class="btn btn--ghost" data-i18n="groups.coachCta">See our programs</a>
+          <a href="classes.html" class="btn btn--ghost" data-i18n="groups.coachCta">See our classes</a>
         </article>
       </div>
     </div>

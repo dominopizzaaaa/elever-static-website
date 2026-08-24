@@ -15,7 +15,7 @@ rather than one long scrolling page.
 | About | `about.html` | Definition, founder story, coaching approach, credentials, the coaching team, the 5 pillars |
 | Coaches | `coaches/<slug>.html` | One generated page per coach — photo, profile, stages coached, languages |
 | News | `news.html` | Articles, filterable by category, newsletter signup |
-| SG Badminton Hub | `hub.html` | Venue directory with filters, how to book each system, groups & ratings, world tour calendar |
+| SG Badminton Hub | `hub.html` | Venue directory with filters, how to book each system, **Racket Ratings + recreational play groups**, world tour calendar |
 | Play | `play.html` | The interactive pieces — rally game, reflex test, badminton-twin quiz, guess-the-pro |
 | Contact | `contact.html` | Enquiry form, WhatsApp / email / events routing, FAQ |
 | Privacy | `privacy.html` | PDPA privacy notice draft (needs completion — see below) |
@@ -23,8 +23,21 @@ rather than one long scrolling page.
 ## Editing content — start here
 
 **`assets/js/data.js` is the file to edit.** Coaches, development pathways, the class schedule,
-camps, event types, upcoming/past events, partners and articles all live there. Nothing is baked
-into the markup, so changing a class time does not require touching HTML.
+camps, event types, upcoming/past events, partners, articles, the Racket Ratings links and the
+recreational play groups all live there. Nothing is baked into the markup, so changing a class
+time does not require touching HTML.
+
+### Recreational play groups & Racket Ratings
+
+The SG Hub's **Groups & ratings** tab leads with [Racket Ratings](https://www.racketratings.net/badminton),
+deep-linked to the four places that matter — Leaderboard, **Clubs**, Tournaments and Head to Head.
+Clubs is flagged as the starting point because it is effectively a live directory of recreational
+groups that the groups themselves keep current, which no hand-maintained list can match.
+
+Below it, `REC_GROUPS` in `data.js` is a small curated list for groups that ask Élever to feature
+them (day, time, venue, level, contact, optional Racket Ratings club link). Empty the array and the
+section falls back to a clean empty state pointing at Racket Ratings Clubs — it never shows a
+broken or stale list.
 
 Entries flagged `placeholder: true` are structural samples so pages can be seen working. They
 render with a small **sample** tag on the page. Replace the content and delete the flag.
@@ -46,6 +59,8 @@ node tools/build-coaches.js
 - A form endpoint — forms currently open a pre-filled email; point them at Formspree, Netlify
   Forms or the CRM to capture leads properly
 - The academy WhatsApp number for click-to-chat on the Contact page
+- Real recreational groups for `REC_GROUPS` (currently three sample rows), or leave it empty and
+  let Racket Ratings Clubs carry it
 
 ## Structure
 
