@@ -95,8 +95,8 @@
         scrollWheelZoom: false // prevents zooming when scrolling down the page
       }).setView([1.3521, 103.8198], 11); // Center of Singapore
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Sources: Esri, HERE, Garmin, FAO, NOAA, USGS, &copy; OpenStreetMap contributors',
         maxZoom: 19
       }).addTo(leafletMap);
     }
