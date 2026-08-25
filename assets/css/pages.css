@@ -103,12 +103,19 @@
 .sched__map .maplibregl-ctrl-group{border-radius:10px!important;box-shadow:0 2px 8px rgba(0,0,0,.12)!important;overflow:hidden}
 .sched__map .maplibregl-ctrl-group button{width:32px!important;height:32px!important}
 .sched__map .maplibregl-ctrl-attrib{font-size:10px;background:rgba(255,255,255,.85);border-radius:6px}
-.sched__pin{position:relative;background:var(--accent);color:#fff;border:0;
-  width:32px;height:42px;border-radius:50% 50% 50% 4px;rotate:-45deg;cursor:pointer;
-  box-shadow:0 4px 14px -2px rgba(33,81,209,.55);transition:transform .25s var(--ease),background .25s;
-  display:flex;align-items:center;justify-content:center}
-.sched__pin span{rotate:45deg;display:block;font-size:.82rem;font-weight:800;line-height:1;color:#fff;padding-bottom:6px}
-.sched__pin:hover,.sched__pin.is-active{background:var(--ink);transform:scale(1.18);z-index:2}
+.sched__pin{position:relative;background:transparent;color:#fff;border:0;
+  width:34px;height:48px;cursor:pointer;transition:transform .25s var(--ease);
+  display:flex;align-items:flex-start;justify-content:center;padding-top:5px}
+.sched__pin::before{content:'';position:absolute;left:50%;top:0;transform:translateX(-50%);
+  width:28px;height:28px;border-radius:50%;background:var(--accent);
+  box-shadow:0 4px 14px -2px rgba(33,81,209,.55),inset 0 -2px 6px rgba(0,0,0,.12)}
+.sched__pin::after{content:'';position:absolute;left:50%;top:22px;transform:translateX(-50%);
+  width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;
+  border-top:26px solid var(--accent)}
+.sched__pin span{position:relative;z-index:1;font-size:.76rem;font-weight:800;line-height:1;color:#fff;padding-top:1px}
+.sched__pin:hover,.sched__pin.is-active{transform:translateY(-2px) scale(1.12);z-index:2}
+.sched__pin:hover::before,.sched__pin.is-active::before{background:var(--ink)}
+.sched__pin:hover::after,.sched__pin.is-active::after{border-top-color:var(--ink)}
 .sched__maphint{margin-top:.7rem;font-size:.76rem;color:var(--faint);text-align:center}
 
 .sched__list{display:flex;flex-direction:column;gap:.8rem}
