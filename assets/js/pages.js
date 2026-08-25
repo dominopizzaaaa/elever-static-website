@@ -82,38 +82,24 @@
 
     var level = 'all';
 
-    // Tile-free venue locator. External raster map tiles were unreliable in
-    // some environments, so this uses only local SVG/CSS and real coordinates.
-    var BOUNDS = { w: 103.60, e: 104.05, s: 1.21, n: 1.48 };
-    function px(lng) { return (lng - BOUNDS.w) / (BOUNDS.e - BOUNDS.w) * 100; }
-    function py(lat) { return (BOUNDS.n - lat) / (BOUNDS.n - BOUNDS.s) * 100; }
-
-    var OUTLINE = [
-      [103.635, 1.325], [103.665, 1.405], [103.705, 1.442], [103.775, 1.462],
-      [103.845, 1.455], [103.905, 1.425], [103.975, 1.398], [104.020, 1.372],
-      [103.985, 1.318], [103.940, 1.288], [103.870, 1.258], [103.800, 1.252],
-      [103.720, 1.262], [103.660, 1.288]
-    ];
+    // Interactive Map via MapLibre GL JS (vector tiles — OpenFreeMap, no API key needed)
+    var maplibreMap = null;
+    var markers = [];
 
     function drawMap() {
-      if (!mapMount) return;
-      var pts = OUTLINE.map(function (p) { return px(p[0]).toFixed(2) + ',' + py(p[1]).toFixed(2); }).join(' ');
-      mapMount.innerHTML =
-        '<svg class="sched__locator" viewBox="0 0 100 100" preserveAspectRatio="none" role="img" aria-label="Singapore venue locator showing Élever class venues">' +
-          '<defs>' +
-            '<linearGradient id="locatorSea" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#eef5ff"/><stop offset="1" stop-color="#dbe9ff"/></linearGradient>' +
-            '<linearGradient id="locatorIsland" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f4f7ff"/></linearGradient>' +
-          '</defs>' +
-          '<rect width="100" height="100" rx="8" fill="url(#locatorSea)"/>' +
-          '<path d="M8 72 C20 55 28 58 35 43 S55 28 67 36 S84 40 94 25" class="sched__route sched__route--blue"/>' +
-          '<path d="M12 35 C28 42 38 30 52 51 S72 70 90 58" class="sched__route sched__route--gold"/>' +
-          '<polygon points="' + pts + '" class="sched__island"/>' +
-          '<text x="20" y="33" class="sched__label">West</text>' +
-          '<text x="47" y="47" class="sched__label">Central</text>' +
-          '<text x="71" y="39" class="sched__label">North-East</text>' +
-          '<text x="76" y="62" class="sched__label">East</text>' +
-          '<text x="42" y="83" class="sched__watermark">Élever venue locator</text>' +
-        '</svg>';
+      if (!mapMount || !window.maplibregl) return;
+      mapMount.innerHTML = '';
+
+      maplibreMap = new maplibregl.Map({
+        container: mapMount,
+        style: 'https://tiles.openfreemap.org/styles/positron',
+        center: [103.8198, 1.3521],
+        zoom: 11,
+        scrollZoom: false,
+        attributionControl: { compact: true }
+      });
+
+      maplibreMap.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left');
     }
 
     function visible() {
@@ -155,22 +141,35 @@
         }).join('');
       }
 
-      // coordinate pins
-      if (mapMount) {
-        mapMount.querySelectorAll('.sched__pin').forEach(function (p) { p.remove(); });
+      // MapLibre markers
+      if (maplibreMap) {
+        markers.forEach(function(m) { m.remove(); });
+        markers = [];
+        var bounds = new maplibregl.LngLatBounds();
+        var hasMarkers = false;
+
         rows.forEach(function (v, i) {
           if (!v.lat || !v.lng) return;
-          var b = document.createElement('button');
-          b.className = 'sched__pin';
-          b.type = 'button';
-          b.style.left = px(v.lng) + '%';
-          b.style.top = py(v.lat) + '%';
-          b.setAttribute('data-venue', v.venueId);
-          b.setAttribute('aria-label', v.venue + ' — ' + v.area);
-          b.innerHTML = '<span>' + (i + 1) + '</span>';
-          b.addEventListener('click', function () { focusVenue(v.venueId); });
-          mapMount.appendChild(b);
+          var el = document.createElement('div');
+          el.className = 'sched__pin';
+          el.setAttribute('data-venue', v.venueId);
+          el.setAttribute('aria-label', v.venue + ' — ' + (v.region || v.area || ''));
+          el.innerHTML = '<span>' + (i + 1) + '</span>';
+          el.addEventListener('click', function () { focusVenue(v.venueId); });
+
+          var marker = new maplibregl.Marker({ element: el, anchor: 'bottom' })
+            .setLngLat([v.lng, v.lat])
+            .addTo(maplibreMap);
+
+          marker._venueId = v.venueId;
+          markers.push(marker);
+          bounds.extend([v.lng, v.lat]);
+          hasMarkers = true;
         });
+
+        if (hasMarkers) {
+          maplibreMap.fitBounds(bounds, { padding: { top: 40, bottom: 40, left: 40, right: 40 }, maxZoom: 14, duration: 600 });
+        }
       }
     }
 
@@ -178,14 +177,17 @@
       listMount.querySelectorAll('.vcard').forEach(function (c) {
         c.classList.toggle('is-active', c.getAttribute('data-venue') === id);
       });
-      if (mapMount) {
-        mapMount.querySelectorAll('.sched__pin').forEach(function (p) {
-          p.classList.toggle('is-active', p.getAttribute('data-venue') === id);
+      if (maplibreMap) {
+        markers.forEach(function(m) {
+          var active = m._venueId === id;
+          if (m.getElement()) m.getElement().classList.toggle('is-active', active);
+          if (active) {
+            maplibreMap.flyTo({ center: m.getLngLat(), zoom: Math.max(maplibreMap.getZoom(), 13), duration: 500 });
+          }
         });
       }
       var card = listMount.querySelector('[data-venue="' + id + '"]');
       if (card) {
-        // smooth scroll the container instead of the window if possible, or just standard scrollIntoView
         card.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }
