@@ -18,14 +18,18 @@ const esc = s => String(s == null ? '' : s)
 
 function page(c) {
   const title = `${c.name} — Coach at Élever Badminton`;
-  const desc = `${c.name}, ${c.role} at Élever Badminton Singapore. ${String(c.bio).slice(0, 110)}…`;
+  const bio = String(c.bio || '');
+  const excerpt = bio.length > 130 ? bio.slice(0, 130).replace(/\s+\S*$/, '') + '...' : bio;
+  const desc = `${c.name}, ${c.role} at Élever Badminton Singapore. ${excerpt}`;
+  const canonical = `https://www.eleverbadminton.com/coaches/${c.slug}.html`;
+  const image = `https://www.eleverbadminton.com/${c.photo}`;
   const sample = c.placeholder
     ? ' <span class="sample" title="Sample content — replace in assets/js/data.js">sample bio</span>' : '';
 
   const jsonld = JSON.stringify({
     '@context': 'https://schema.org', '@type': 'Person',
     name: c.name, jobTitle: c.role, worksFor: { '@type': 'Organization', name: 'Élever Badminton' },
-    image: '../' + c.photo, knowsLanguage: c.languages
+    url: canonical, image, knowsLanguage: c.languages
   });
 
   return `<!DOCTYPE html>
@@ -38,6 +42,13 @@ function page(c) {
   <meta property="og:title" content="${esc(title)}" />
   <meta property="og:description" content="${esc(desc)}" />
   <meta property="og:type" content="profile" />
+  <link rel="canonical" href="${esc(canonical)}" />
+  <meta property="og:url" content="${esc(canonical)}" />
+  <meta property="og:image" content="${esc(image)}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${esc(title)}" />
+  <meta name="twitter:description" content="${esc(desc)}" />
+  <meta name="twitter:image" content="${esc(image)}" />
   <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
