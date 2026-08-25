@@ -97,14 +97,21 @@
 .sched__mapwrap{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:16px;
   padding:1rem;box-shadow:var(--shadow-sm);position:sticky;top:88px}
 @media(max-width:940px){.sched__mapwrap{position:static}}
-.sched__map{position:relative;width:100%;aspect-ratio:1.55/1}
+.sched__map{position:relative;width:100%;aspect-ratio:1.55/1;overflow:hidden;border-radius:14px;
+  background:linear-gradient(135deg,#eef5ff,#dbe9ff)}
 .sched__map svg{width:100%;height:100%;display:block}
+.sched__locator{filter:drop-shadow(0 18px 36px rgba(13,28,66,.12))}
+.sched__island{fill:url(#locatorIsland);stroke:#b9c9ee;stroke-width:.65;vector-effect:non-scaling-stroke}
+.sched__route{fill:none;stroke-width:1.1;stroke-linecap:round;stroke-dasharray:4 3;opacity:.72;vector-effect:non-scaling-stroke}
+.sched__route--blue{stroke:#2151D1}
+.sched__route--gold{stroke:#f0b429}
+.sched__label{font-size:3.2px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;fill:#5d6c84}
+.sched__watermark{font-size:2.6px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;fill:rgba(33,81,209,.32)}
 .sched__pin{position:absolute;transform:translate(-50%,-100%);background:var(--accent);color:#fff;border:0;
   width:26px;height:26px;border-radius:50% 50% 50% 4px;rotate:-45deg;cursor:pointer;
   box-shadow:0 4px 12px -2px rgba(33,81,209,.55);transition:transform .25s var(--ease),background .25s}
-.sched__pin span{rotate:45deg;display:block;font-size:.7rem;font-weight:800;line-height:28px;text-align:center; color:#fff;}
-.sched__pin-wrapper:hover .sched__pin, .sched__pin-wrapper.is-active .sched__pin {background:var(--ink); transform: translate(-50%,-100%) scale(1.22);}
-.sched__pin-wrapper:hover, .sched__pin-wrapper.is-active { z-index: 1000 !important; }
+.sched__pin span{rotate:45deg;display:block;font-size:.7rem;font-weight:800;line-height:28px;text-align:center;color:#fff}
+.sched__pin:hover,.sched__pin.is-active{background:var(--ink);transform:translate(-50%,-100%) scale(1.22);z-index:2}
 .sched__maphint{margin-top:.7rem;font-size:.76rem;color:var(--faint);text-align:center}
 
 .sched__list{display:flex;flex-direction:column;gap:.8rem}
