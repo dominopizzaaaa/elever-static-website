@@ -1,164 +1,381 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Élever Badminton — Badminton Coaching, Camps &amp; Events in Singapore</title>
-  <meta name="description" content="Élever Badminton — to build or raise; to bring something to a higher position. Badminton classes, holiday camps, carnivals, clinics and competitions across Singapore." />
-  <meta property="og:title" content="Élever Badminton — Badminton Coaching in Singapore" />
-  <meta property="og:description" content="Classes, camps, carnivals, clinics and competitions across Singapore. Find a class near you." />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="assets/css/pages.css" />
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SportsActivityLocation","name":"Élever Badminton","description":"Badminton coaching academy in Singapore offering classes, holiday camps, carnivals, clinics and competitions.","areaServed":"Singapore","url":"https://www.eleverbadminton.com/","sameAs":["https://www.instagram.com/eleverbadminton/"]}</script>
-</head>
-<body data-page="home" data-base="">
-
-  <!-- ===== CINEMATIC INTRO ===== -->
-  <div id="intro" class="intro">
-    <canvas id="introCanvas" class="intro__canvas"></canvas>
-    <div class="intro__center">
-      <div class="intro__word" id="introWord">
-        <span>É</span><span>L</span><span>E</span><span>V</span><span>E</span><span>R</span>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Élever Badminton — Badminton Coaching, Camps &amp; Events in Singapore
+    </title>
+    <meta
+      name="description"
+      content="Élever Badminton — to build or raise; to bring something to a higher position. Badminton classes, holiday camps, carnivals, clinics and competitions across Singapore."
+    />
+    <meta
+      property="og:title"
+      content="Élever Badminton — Badminton Coaching in Singapore"
+    />
+    <meta
+      property="og:description"
+      content="Classes, camps, carnivals, clinics and competitions across Singapore. Find a class near you."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/pages.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SportsActivityLocation",
+        "name": "Élever Badminton",
+        "description": "Badminton coaching academy in Singapore offering classes, holiday camps, carnivals, clinics and competitions.",
+        "areaServed": "Singapore",
+        "url": "https://www.eleverbadminton.com/",
+        "sameAs": ["https://www.instagram.com/eleverbadminton/"]
+      }
+    </script>
+  </head>
+  <body data-page="home" data-base="">
+    <!-- ===== CINEMATIC INTRO ===== -->
+    <div id="intro" class="intro">
+      <canvas id="introCanvas" class="intro__canvas"></canvas>
+      <div class="intro__center">
+        <div class="intro__word" id="introWord">
+          <span>É</span><span>L</span><span>E</span><span>V</span><span>E</span
+          ><span>R</span>
+        </div>
+        <div class="intro__tag" id="introTag">B A D M I N T O N</div>
       </div>
-      <div class="intro__tag" id="introTag">B A D M I N T O N</div>
-    </div>
-    <button class="intro__skip" id="skipIntro"><span data-i18n="intro.skip">Skip intro</span> &rsaquo;</button>
-  </div>
-
-  <a href="#top" class="skip-link" data-i18n="a11y.skip">Skip to main content</a>
-  <header id="siteHeader"></header>
-
-  <main id="main">
-
-  <section class="hero" id="top">
-    <div class="hero__bg" style="background-image:url('assets/img/hero-action.jpg')"></div>
-    <div class="hero__overlay"></div>
-    <canvas id="heroCanvas" class="hero__canvas"></canvas>
-    <div class="hero__content">
-      <p class="hero__eyebrow reveal" data-i18n="hero.eyebrow">Singapore · Badminton Excellence</p>
-      <h1 class="hero__title">
-        <span class="line reveal"><span class="word"><i>E</i><i>L</i><i>E</i><i>V</i><i>A</i><i>T</i><i>E</i></span></span>
-        <span class="line line--accent reveal" data-delay="120"><span class="word"><i>Y</i><i>O</i><i>U</i><i>R</i></span> <span class="word"><i>G</i><i>A</i><i>M</i><i>E</i></span></span>
-      </h1>
-      <p class="hero__sub reveal" data-delay="240" data-i18n="hero.sub">To build. To raise. To bring something to a higher position. Élite coaching that turns first swings into championship dreams.</p>
-      <div class="hero__actions reveal" data-delay="320">
-        <a href="classes.html" class="btn btn--primary magnetic" data-i18n="hero.ctaPrograms">Explore classes</a>
-        <a href="https://app.eleverbadminton.com/" target="_blank" rel="noopener" class="btn btn--ghost">Book a trial class</a>
+      <div
+        class="intro__action"
+        id="introAction"
+        style="
+          position: absolute;
+          bottom: 15%;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 10;
+          opacity: 0;
+          transition: opacity 0.5s;
+        "
+      >
+        <button
+          class="btn btn--primary intro__smash-btn magnetic"
+          id="smashEnterBtn"
+          aria-label="Smash to enter site"
+          style="
+            font-size: 1.1rem;
+            padding: 1rem 2.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            background: rgba(33, 81, 209, 0.9);
+            box-shadow: 0 0 20px rgba(33, 81, 209, 0.5);
+          "
+        >
+          Smash to Enter <span aria-hidden="true">🏸</span>
+        </button>
       </div>
-      <p class="hero__hint reveal" data-delay="420" data-i18n="hero.hint">↳ Move your cursor — the shuttles react to you</p>
+      <button class="intro__skip" id="skipIntro" style="opacity: 0.6">
+        <span data-i18n="intro.skip">Skip</span> &rsaquo;
+      </button>
     </div>
-    <div class="hero__scroll" aria-hidden="true"><span></span><span data-i18n="hero.scroll">Scroll</span></div>
-    <div class="hero__stats">
-      <div class="stat reveal"><b data-count="15">0</b><small data-i18n="hero.stat1">Expert coaches</small></div>
-      <div class="stat reveal" data-delay="120"><b data-count="5">0</b><small>Programme pillars</small></div>
-      <div class="stat reveal" data-delay="240"><b data-count="100">0</b><small data-i18n="hero.stat3">% Passion</small></div>
-    </div>
-  </section>
 
-  <!-- ===== MARQUEE ===== -->
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee__track">
-      <span>CAMPS ·</span><span>CLASSES ·</span><span>CLINICS ·</span><span>CARNIVALS ·</span>
-      <span>ÉLEVATE ·</span><span>CAMPS ·</span><span>CLASSES ·</span><span>CLINICS ·</span>
-      <span>CARNIVALS ·</span><span>ÉLEVATE ·</span>
-    </div>
-  </div>
+    <a href="#top" class="skip-link" data-i18n="a11y.skip"
+      >Skip to main content</a
+    >
+    <header id="siteHeader"></header>
 
-    <!-- ===== WHAT IS ÉLEVER ===== -->
-    <section class="psec" id="what">
-      <div class="cols2">
-        <div>
+    <main id="main">
+      <section class="hero" id="top">
+        <div
+          class="hero__bg"
+          style="background-image: url(&quot;assets/img/hero-action.jpg&quot;)"
+        ></div>
+        <div class="hero__overlay"></div>
+        <canvas id="heroCanvas" class="hero__canvas"></canvas>
+        <div class="hero__content">
+          <p class="hero__eyebrow reveal" data-i18n="hero.eyebrow">
+            Singapore · Badminton Excellence
+          </p>
+          <h1 class="hero__title">
+            <span class="line reveal"
+              ><span class="word"
+                ><i>E</i><i>L</i><i>E</i><i>V</i><i>A</i><i>T</i><i>E</i></span
+              ></span
+            >
+            <span class="line line--accent reveal" data-delay="120"
+              ><span class="word"><i>Y</i><i>O</i><i>U</i><i>R</i></span>
+              <span class="word"><i>G</i><i>A</i><i>M</i><i>E</i></span></span
+            >
+          </h1>
+          <p class="hero__sub reveal" data-delay="240" data-i18n="hero.sub">
+            To build. To raise. To bring something to a higher position. Élite
+            coaching that turns first swings into championship dreams.
+          </p>
+          <div class="hero__actions reveal" data-delay="320">
+            <a
+              href="classes.html"
+              class="btn btn--primary magnetic"
+              data-i18n="hero.ctaPrograms"
+              >Explore classes</a
+            >
+            <a
+              href="https://app.eleverbadminton.com/"
+              target="_blank"
+              rel="noopener"
+              class="btn btn--ghost"
+              >Book a trial class</a
+            >
+          </div>
+          <p class="hero__hint reveal" data-delay="420" data-i18n="hero.hint">
+            ↳ Move your cursor — the shuttles react to you
+          </p>
+        </div>
+        <div class="hero__scroll" aria-hidden="true">
+          <span></span><span data-i18n="hero.scroll">Scroll</span>
+        </div>
+        <div class="hero__stats">
+          <div class="stat reveal">
+            <b data-count="15">0</b
+            ><small data-i18n="hero.stat1">Expert coaches</small>
+          </div>
+          <div class="stat reveal" data-delay="120">
+            <b data-count="5">0</b><small>Programme pillars</small>
+          </div>
+          <div class="stat reveal" data-delay="240">
+            <b data-count="100">0</b
+            ><small data-i18n="hero.stat3">% Passion</small>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== MARQUEE ===== -->
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee__track">
+          <span>CAMPS ·</span><span>CLASSES ·</span><span>CLINICS ·</span
+          ><span>CARNIVALS ·</span> <span>ÉLEVATE ·</span><span>CAMPS ·</span
+          ><span>CLASSES ·</span><span>CLINICS ·</span> <span>CARNIVALS ·</span
+          ><span>ÉLEVATE ·</span>
+        </div>
+      </div>
+
+      <!-- ===== WHAT IS ÉLEVER ===== -->
+      <section class="psec" id="what">
+        <div class="cols2">
+          <div>
+            <div class="psec__head">
+              <span class="psec__kicker">What is Élever</span>
+              <h2>
+                <strong>Élever</strong>
+                <span class="deftag">(verb, French)</span> — to build or raise;
+                to bring something to a higher position.
+              </h2>
+            </div>
+            <div class="prose">
+              <p>
+                We named the academy after the thing we are actually trying to
+                do. Élever Badminton is a Singapore coaching academy built
+                around a single structured pathway — four progressive stages
+                that take a player from a first swing in a holiday camp all the
+                way to competitive play.
+              </p>
+              <p>
+                We also run badminton as a service for other organisations:
+                carnivals, clinics and competitions for companies, schools and
+                community groups across the island.
+              </p>
+            </div>
+            <div
+              style="
+                margin-top: 1.6rem;
+                display: flex;
+                gap: 0.8rem;
+                flex-wrap: wrap;
+              "
+            >
+              <a class="btn btn--primary magnetic" href="about.html"
+                >Read more about us</a
+              >
+              <a class="btn btn--ghost" href="classes.html#schedule"
+                >Find a class near you</a
+              >
+            </div>
+          </div>
+          <div>
+            <div class="lead" style="padding: 1.6rem">
+              <h3>Find a class near you</h3>
+              <p>
+                Pick the part of the island that suits you and we will show you
+                the venues, days and levels we run there.
+              </p>
+              <div class="uses">
+                <a href="classes.html#schedule"><span>Central</span></a>
+                <a href="classes.html#schedule"><span>East</span></a>
+                <a href="classes.html#schedule"><span>West</span></a>
+                <a href="classes.html#schedule"><span>North</span></a>
+                <a href="classes.html#schedule"><span>North-East</span></a>
+              </div>
+              <div
+                style="
+                  margin-top: 1.4rem;
+                  display: flex;
+                  gap: 0.7rem;
+                  flex-wrap: wrap;
+                "
+              >
+                <a
+                  class="btn btn--primary magnetic"
+                  href="classes.html#schedule"
+                  >See the full schedule</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== THE FIVE PILLARS ===== -->
+      <section class="psec psec--alt">
+        <div class="psec__inner">
           <div class="psec__head">
-            <span class="psec__kicker">What is Élever</span>
-            <h2><strong>Élever</strong> <span class="deftag">(verb, French)</span> — to build or raise; to bring something to a higher position.</h2>
+            <span class="psec__kicker">What we do</span>
+            <h2>Five pillars</h2>
+            <p class="psec__sub">
+              Two of them are how you train with us. Three of them are how we
+              work with companies, schools and communities.
+            </p>
           </div>
-          <div class="prose">
-            <p>We named the academy after the thing we are actually trying to do. Élever Badminton is a Singapore coaching academy built around a single structured pathway — four progressive stages that take a player from a first swing in a holiday camp all the way to competitive play.</p>
-            <p>We also run badminton as a service for other organisations: carnivals, clinics and competitions for companies, schools and community groups across the island.</p>
+          <div class="pillars" id="pillarsGrid"></div>
+        </div>
+      </section>
+
+      <section class="reviews" id="reviews" aria-labelledby="reviewsTitle">
+        <div class="section-head">
+          <span class="kicker reveal" data-i18n="reviews.kicker"
+            >10 — Reviews</span
+          >
+          <h2
+            class="section-title reveal"
+            id="reviewsTitle"
+            data-i18n-html="reviews.title"
+          >
+            Loved by <em>players &amp; parents</em>.
+          </h2>
+          <p
+            class="reviews__hint reveal"
+            data-delay="120"
+            data-i18n="reviews.hint"
+          >
+            What our community says about training at Élever.
+          </p>
+        </div>
+        <div class="reviews__carousel reveal" data-delay="160">
+          <button
+            class="reviews__nav reviews__nav--prev"
+            id="revPrev"
+            aria-label="Previous review"
+          >
+            &lsaquo;
+          </button>
+          <div class="reviews__viewport">
+            <div class="reviews__track" id="revTrack" aria-live="polite"></div>
           </div>
-          <div style="margin-top:1.6rem;display:flex;gap:.8rem;flex-wrap:wrap">
-            <a class="btn btn--primary magnetic" href="about.html">Read more about us</a>
-            <a class="btn btn--ghost" href="classes.html#schedule">Find a class near you</a>
+          <button
+            class="reviews__nav reviews__nav--next"
+            id="revNext"
+            aria-label="Next review"
+          >
+            &rsaquo;
+          </button>
+        </div>
+        <div
+          class="reviews__dots"
+          id="revDots"
+          role="tablist"
+          aria-label="Choose a review"
+        ></div>
+        <div class="reviews__cta reveal">
+          <a
+            class="reviews__ig"
+            href="https://www.instagram.com/eleverbadminton/"
+            target="_blank"
+            rel="noopener"
+            aria-label="Follow Élever Badminton on Instagram"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle
+                cx="17.6"
+                cy="6.4"
+                r="1.2"
+                fill="currentColor"
+                stroke="none"
+              />
+            </svg>
+            <span
+              ><b data-i18n="reviews.ig">See real moments on Instagram</b
+              ><small>@eleverbadminton</small></span
+            >
+          </a>
+        </div>
+        <p class="reviews__disclaimer" data-i18n="reviews.disclaimer">
+          The quotes above are sample placeholders — follow us on Instagram for
+          real training moments, results and updates.
+        </p>
+      </section>
+
+      <!-- ===== CTA ===== -->
+      <section class="cta" id="contact" aria-labelledby="ctaTitle">
+        <div class="cta__inner">
+          <h2 class="reveal" id="ctaTitle" data-i18n-html="cta.title">
+            Ready to <em>elevate</em>?
+          </h2>
+          <p class="reveal" data-delay="120" data-i18n="cta.body">
+            Whether it's your first swing or your next title, there's a place
+            for you at Élever Badminton.
+          </p>
+          <div class="cta__actions reveal" data-delay="200">
+            <a
+              href="https://app.eleverbadminton.com/"
+              target="_blank"
+              rel="noopener"
+              class="btn btn--primary magnetic"
+              >Book a class</a
+            >
+            <a href="contact.html" class="btn btn--ghost">Talk to us</a>
+            <a
+              href="https://www.instagram.com/eleverbadminton/"
+              target="_blank"
+              rel="noopener"
+              class="btn btn--ghost"
+              data-i18n="cta.instagram"
+              >Follow on Instagram</a
+            >
           </div>
         </div>
-        <div>
-          <div class="lead" style="padding:1.6rem">
-            <h3>Find a class near you</h3>
-            <p>Pick the part of the island that suits you and we will show you the venues, days and levels we run there.</p>
-            <div class="uses">
-              <a href="classes.html#schedule"><span>Central</span></a>
-              <a href="classes.html#schedule"><span>East</span></a>
-              <a href="classes.html#schedule"><span>West</span></a>
-              <a href="classes.html#schedule"><span>North</span></a>
-              <a href="classes.html#schedule"><span>North-East</span></a>
-            </div>
-            <div style="margin-top:1.4rem;display:flex;gap:.7rem;flex-wrap:wrap">
-              <a class="btn btn--primary magnetic" href="classes.html#schedule">See the full schedule</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
+    </main>
 
-    <!-- ===== THE FIVE PILLARS ===== -->
-    <section class="psec psec--alt">
-      <div class="psec__inner">
-        <div class="psec__head">
-          <span class="psec__kicker">What we do</span>
-          <h2>Five pillars</h2>
-          <p class="psec__sub">Two of them are how you train with us. Three of them are how we work with companies, schools and communities.</p>
-        </div>
-        <div class="pillars" id="pillarsGrid"></div>
-      </div>
-    </section>
+    <footer id="siteFooter"></footer>
 
-  <section class="reviews" id="reviews" aria-labelledby="reviewsTitle">
-    <div class="section-head">
-      <span class="kicker reveal" data-i18n="reviews.kicker">10 — Reviews</span>
-      <h2 class="section-title reveal" id="reviewsTitle" data-i18n-html="reviews.title">Loved by <em>players &amp; parents</em>.</h2>
-      <p class="reviews__hint reveal" data-delay="120" data-i18n="reviews.hint">What our community says about training at Élever.</p>
-    </div>
-    <div class="reviews__carousel reveal" data-delay="160">
-      <button class="reviews__nav reviews__nav--prev" id="revPrev" aria-label="Previous review">&lsaquo;</button>
-      <div class="reviews__viewport"><div class="reviews__track" id="revTrack" aria-live="polite"></div></div>
-      <button class="reviews__nav reviews__nav--next" id="revNext" aria-label="Next review">&rsaquo;</button>
-    </div>
-    <div class="reviews__dots" id="revDots" role="tablist" aria-label="Choose a review"></div>
-    <div class="reviews__cta reveal">
-      <a class="reviews__ig" href="https://www.instagram.com/eleverbadminton/" target="_blank" rel="noopener" aria-label="Follow Élever Badminton on Instagram">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.6" cy="6.4" r="1.2" fill="currentColor" stroke="none"/></svg>
-        <span><b data-i18n="reviews.ig">See real moments on Instagram</b><small>@eleverbadminton</small></span>
-      </a>
-    </div>
-    <p class="reviews__disclaimer" data-i18n="reviews.disclaimer">The quotes above are sample placeholders — follow us on Instagram for real training moments, results and updates.</p>
-  </section>
-
-    <!-- ===== CTA ===== -->
-    <section class="cta" id="contact" aria-labelledby="ctaTitle">
-      <div class="cta__inner">
-        <h2 class="reveal" id="ctaTitle" data-i18n-html="cta.title">Ready to <em>elevate</em>?</h2>
-        <p class="reveal" data-delay="120" data-i18n="cta.body">Whether it's your first swing or your next title, there's a place for you at Élever Badminton.</p>
-        <div class="cta__actions reveal" data-delay="200">
-          <a href="https://app.eleverbadminton.com/" target="_blank" rel="noopener" class="btn btn--primary magnetic">Book a class</a>
-          <a href="contact.html" class="btn btn--ghost">Talk to us</a>
-          <a href="https://www.instagram.com/eleverbadminton/" target="_blank" rel="noopener" class="btn btn--ghost" data-i18n="cta.instagram">Follow on Instagram</a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer id="siteFooter"></footer>
-
-  <script src="assets/js/data.js"></script>
-  <script src="assets/js/site.js"></script>
-  <script src="assets/js/i18n.js"></script>
-  <script src="assets/js/pages.js"></script>
-  <script src="assets/js/main.js"></script>
-</body>
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/site.js"></script>
+    <script src="assets/js/i18n.js"></script>
+    <script src="assets/js/pages.js"></script>
+    <script src="assets/js/main.js"></script>
+  </body>
 </html>

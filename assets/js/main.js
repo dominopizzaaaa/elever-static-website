@@ -119,15 +119,16 @@
     runIntro();
   }
 
+  
   function runIntro() {
     var canvas = document.getElementById('introCanvas');
     var ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
-    // No 2d context (canvas disabled/unsupported): skip straight to the page
-    // rather than throwing and leaving body.intro-lock stuck on.
     if (!ctx) { finishIntro(); return; }
     var word = document.getElementById('introWord');
     var tag = document.getElementById('introTag');
     var skip = document.getElementById('skipIntro');
+    var smashBtn = document.getElementById('smashEnterBtn');
+    var introAction = document.getElementById('introAction');
     var W, H, DPR = Math.min(window.devicePixelRatio || 1, 2);
 
     function size() {
@@ -138,13 +139,19 @@
     size();
     window.addEventListener('resize', size);
 
-    var t0 = performance.now();
-    var IMPACT = 1050;             // ms when smash happens
+    var t0 = 0;
+    var IMPACT = 1050;
     var particles = [];
     var trail = [];
     var revealed = false, tagged = false, ended = false;
+    var started = false;
     var cx = function () { return W * 0.5; };
     var cy = function () { return H * 0.52; };
+
+    // Show button after a short delay
+    setTimeout(function() {
+      if(introAction) introAction.style.opacity = '1';
+    }, 300);
 
     function spawnBurst(px, py) {
       for (var i = 0; i < 90; i++) {
@@ -160,6 +167,16 @@
     }
 
     function frame(now) {
+      if(!started) {
+        // Idle animation of shuttlecock before click
+        ctx.clearRect(0, 0, W, H);
+        var hoverPy = -H * 0.15 + (cy() - (-H * 0.15)) * 0.2 + Math.sin(now / 500) * 10;
+        var hoverPx = -W * 0.1 + (cx() - (-W * 0.1)) * 0.2 + Math.cos(now / 700) * 10;
+        drawShuttle(ctx, hoverPx, hoverPy, 0.7, -0.7);
+        if (!intro.dataset.done) requestAnimationFrame(frame);
+        return;
+      }
+
       var e = now - t0;
       ctx.clearRect(0, 0, W, H);
 
@@ -174,26 +191,22 @@
       }
       ctx.restore();
 
-      // ---- shuttle motion ----
       var px, py, ang, scale;
       if (e < IMPACT) {
-        // fly in from top-left toward center, decelerating
-        var p = e / IMPACT;                 // 0..1
+        var p = e / IMPACT;
         var ease = 1 - Math.pow(1 - p, 2);
         px = -W * 0.1 + (cx() - (-W * 0.1)) * ease;
         py = -H * 0.15 + (cy() - (-H * 0.15)) * ease;
         ang = -0.9 + ease * 0.9;
         scale = 0.7 + ease * 0.9;
 
-        // racket swings in from right just before impact
         if (e > IMPACT - 260) {
-          var rp = (e - (IMPACT - 260)) / 260; // 0..1
+          var rp = (e - (IMPACT - 260)) / 260;
           drawRacket(ctx, cx() + 180 - rp * 170, cy() - 120 + rp * 90, -0.6 + rp * 0.8, 1);
         }
         drawShuttle(ctx, px, py, scale, ang);
       } else {
         if (!particles.length && !revealed) { spawnBurst(cx(), cy()); flash(ctx); }
-        // shuttle rockets away to lower-right, shrinking
         var q = Math.min((e - IMPACT) / 900, 1);
         var qe = q * q;
         px = cx() + qe * W * 0.9;
@@ -202,13 +215,11 @@
         scale = 1.6 * (1 - qe * 0.85);
         if (q < 1) drawShuttle(ctx, px, py, Math.max(scale, 0.05), ang);
 
-        // reveal wordmark
         if (!revealed && e > IMPACT + 150) { revealed = true; word.classList.add('show'); }
         if (!tagged && e > IMPACT + 900) { tagged = true; tag.classList.add('show'); }
         if (!ended && e > IMPACT + 2400) { ended = true; finishIntro(); }
       }
 
-      // ---- particles ----
       for (var j = particles.length - 1; j >= 0; j--) {
         var pt = particles[j];
         pt.x += pt.vx; pt.y += pt.vy; pt.vy += 0.25; pt.vx *= 0.98; pt.life -= 0.018;
@@ -219,7 +230,6 @@
       }
       ctx.globalAlpha = 1;
 
-      // ---- cursor trail (interactive) ----
       for (var k = trail.length - 1; k >= 0; k--) {
         var tr = trail[k]; tr.life -= 0.04;
         if (tr.life <= 0) { trail.splice(k, 1); continue; }
@@ -238,17 +248,30 @@
       setTimeout(function () { intro.classList.remove('flash'); }, 260);
     }
 
-    // interactive: cursor leaves shuttle sparks during intro
     intro.addEventListener('mousemove', function (ev) {
       var r = canvas.getBoundingClientRect();
       trail.push({ x: ev.clientX - r.left, y: ev.clientY - r.top, life: 1 });
       if (trail.length > 40) trail.shift();
     });
 
+    function startSmash() {
+      if(started) return;
+      started = true;
+      t0 = performance.now();
+      if(introAction) introAction.style.display = 'none';
+      if(skip) skip.style.display = 'none';
+    }
+
+    if(smashBtn) {
+      smashBtn.addEventListener('click', startSmash);
+    } else {
+      // Fallback
+      setTimeout(startSmash, 500);
+    }
+
     if (skip) skip.addEventListener('click', finishIntro);
-    // safety timeout
-    setTimeout(finishIntro, 5200);
   }
+
 
   function drawRacket(ctx, x, y, angle, scale) {
     ctx.save();
@@ -375,9 +398,15 @@
     }, { passive: true });
   }
   if (burger) {
-    burger.addEventListener('click', function () { nav.classList.toggle('open'); });
+    burger.addEventListener('click', function () { 
+      const isOpen = nav.classList.toggle('open'); 
+      burger.setAttribute('aria-expanded', isOpen);
+    });
     navLinks.querySelectorAll('a').forEach(function (a) {
-      a.addEventListener('click', function () { nav.classList.remove('open'); });
+      a.addEventListener('click', function () { 
+        nav.classList.remove('open'); 
+        burger.setAttribute('aria-expanded', 'false');
+      });
     });
   }
 
@@ -1624,3 +1653,123 @@
   })();
 
 })();
+
+/* =====================================================================
+   SEARCH, BREADCRUMBS, AND SCROLLSPY
+   ===================================================================== */
+document.addEventListener('DOMContentLoaded', function() {
+  // --- 1. Search Overlay ---
+  const searchToggle = document.getElementById('searchToggle');
+  const searchOverlay = document.getElementById('searchOverlay');
+  const searchClose = document.getElementById('searchClose');
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+
+  // Simple searchable content index
+  const searchIndex = [
+    { title: 'About Élever', id: 'about', keywords: 'about, mission, vision, meaning' },
+    { title: 'Programs: Camps', id: 'programs', keywords: 'camps, kids, holiday, beginner' },
+    { title: 'Programs: Classes', id: 'programs', keywords: 'classes, regular, structured' },
+    { title: 'Programs: Clinics', id: 'programs', keywords: 'clinics, specialized, technical' },
+    { title: 'Programs: Carnivals', id: 'programs', keywords: 'carnivals, fun, community' },
+    { title: 'Our Coaches', id: 'team', keywords: 'team, coaches, founders, loh kean hean, eng chin an' },
+    { title: 'SG Badminton Hub', id: 'hub', keywords: 'hub, where to play, active sg, cc courts, racket ratings' },
+    { title: 'News & Tournaments', id: 'news', keywords: 'news, bwf, world tour, tournaments' },
+    { title: 'Interactive Play', id: 'play', keywords: 'play, game, rally, smash' },
+    { title: 'Reaction Test', id: 'reflex', keywords: 'reflex, reaction, test' },
+    { title: 'Reviews', id: 'reviews', keywords: 'reviews, testimonials, feedback' },
+    { title: 'Contact / Join Us', id: 'contact', keywords: 'contact, join, email, enquire' }
+  ];
+
+  function openSearch() {
+    searchOverlay.hidden = false;
+    searchToggle.setAttribute('aria-expanded', 'true');
+    setTimeout(() => { searchInput.focus(); }, 100);
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSearch() {
+    searchOverlay.hidden = true;
+    searchToggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  if (searchToggle) searchToggle.addEventListener('click', openSearch);
+  if (searchClose) searchClose.addEventListener('click', closeSearch);
+
+  // Close on Esc
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && !searchOverlay.hidden) closeSearch();
+  });
+
+  // Autocomplete search
+  if (searchInput) {
+    searchInput.addEventListener('input', function(e) {
+      const query = e.target.value.toLowerCase();
+      searchResults.innerHTML = '';
+      if (!query.trim()) return;
+      
+      const results = searchIndex.filter(item => 
+        item.title.toLowerCase().includes(query) || 
+        item.keywords.includes(query)
+      );
+
+      results.forEach(res => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#' + res.id;
+        a.textContent = res.title;
+        a.addEventListener('click', () => {
+          closeSearch();
+        });
+        li.appendChild(a);
+        searchResults.appendChild(li);
+      });
+    });
+  }
+
+  // --- 2. Scrollspy & Breadcrumbs ---
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav__links .nav__link');
+  const breadcrumbCurrent = document.getElementById('breadcrumbCurrent');
+
+  function onScroll() {
+    let currentId = '';
+    let currentTitle = 'Welcome';
+
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.clientHeight;
+      if (window.scrollY >= (sectionTop - 150)) {
+        currentId = section.getAttribute('id');
+        // Try to find a section title
+        const titleEl = section.querySelector('.section-title');
+        if (titleEl) {
+          currentTitle = titleEl.textContent;
+        } else if (currentId === 'top') {
+          currentTitle = 'Welcome';
+        } else {
+          currentTitle = currentId.charAt(0).toUpperCase() + currentId.slice(1);
+        }
+      }
+    });
+
+    // Update active nav link
+    navLinks.forEach(link => {
+      link.classList.remove('is-active');
+      if (link.getAttribute('href') === '#' + currentId) {
+        link.classList.add('is-active');
+      }
+    });
+
+    // Update breadcrumb
+    if (breadcrumbCurrent && currentId !== 'top') {
+      breadcrumbCurrent.textContent = currentTitle;
+    } else if (breadcrumbCurrent) {
+      breadcrumbCurrent.textContent = 'Welcome';
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+});
