@@ -42,8 +42,8 @@ function page(c) {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../assets/css/style.css?v=7" />
-  <link rel="stylesheet" href="../assets/css/pages.css?v=7" />
+  <link rel="stylesheet" href="../assets/css/style.css?v=8" />
+  <link rel="stylesheet" href="../assets/css/pages.css?v=8" />
   <script type="application/ld+json">${jsonld}</script>
 </head>
 <body data-page="about" data-nav="solid" data-base="../">
@@ -64,7 +64,7 @@ function page(c) {
       <div class="profile">
         <div>
           <figure class="profile__photo">
-            <img src="../${esc(c.photo)}" alt="${esc(c.name)}, ${esc(c.role)} at Élever Badminton" />
+            <img src="../${esc(c.photo)}" alt="${esc(c.name)}, ${esc(c.role)} at Élever Badminton" width="640" height="640" loading="lazy" decoding="async" />
           </figure>
           <ul class="profile__meta">
             <li><span>Role</span><b>${esc(c.role)}</b></li>
@@ -96,10 +96,10 @@ function page(c) {
   <footer id="siteFooter"></footer>
 
   <script src="../assets/js/data.js"></script>
-  <script src="../assets/js/site.js"></script>
+  <script src="../assets/js/site.js?v=8"></script>
   <script src="../assets/js/i18n.js"></script>
-  <script src="../assets/js/pages.js?v=7"></script>
-  <script src="../assets/js/main.js?v=7"></script>
+  <script src="../assets/js/pages.js?v=8"></script>
+  <script src="../assets/js/main.js?v=8"></script>
 </body>
 </html>
 `;

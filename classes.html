@@ -13,8 +13,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=7" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=7" />
+  <link rel="stylesheet" href="assets/css/style.css?v=8" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=8" />
   <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
 </head>
 <body data-page="classes" data-nav="solid" data-base="">
@@ -124,9 +124,9 @@
             <h3>Ask about a class</h3>
             <p>No obligation — we'll just tell you what fits.</p>
             <div class="lead__grid">
-              <label class="lead__field"><span>Your name</span><input type="text" name="Name" required></label>
-              <label class="lead__field"><span>Email or mobile</span><input type="text" name="Contact" required></label>
-              <label class="lead__field"><span>Player's age</span><input type="text" name="Player age" placeholder="e.g. 9"></label>
+              <label class="lead__field"><span>Your name</span><input type="text" name="Name" autocomplete="name" required></label>
+              <label class="lead__field"><span>Email or mobile</span><input type="text" name="Contact" autocomplete="email" inputmode="email" required></label>
+              <label class="lead__field"><span>Player's age</span><input type="number" name="Player age" min="3" max="99" inputmode="numeric" placeholder="e.g. 9"></label>
               <label class="lead__field"><span>Preferred area</span>
                 <select name="Preferred area">
                   <option value="">Any</option><option>Central</option><option>East</option>
@@ -151,9 +151,9 @@
 
   <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
   <script src="assets/js/data.js?v=6"></script>
-  <script src="assets/js/site.js?v=6"></script>
+  <script src="assets/js/site.js?v=8"></script>
   <script src="assets/js/i18n.js?v=6"></script>
-  <script src="assets/js/pages.js?v=7"></script>
-  <script src="assets/js/main.js?v=7"></script>
+  <script src="assets/js/pages.js?v=8"></script>
+  <script src="assets/js/main.js?v=8"></script>
 </body>
 </html>

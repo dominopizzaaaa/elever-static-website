@@ -203,7 +203,7 @@
 .partners{display:flex;flex-wrap:wrap;gap:.7rem}
 .partners__chip{display:grid;place-items:center;min-width:150px;height:74px;padding:0 1.2rem;background:var(--panel);
   border:1px dashed var(--line-2);border-radius:12px;color:var(--faint);font-size:.82rem;font-weight:700;text-align:center}
-.partners img{max-height:44px;width:auto;filter:grayscale(1);opacity:.75;transition:.3s}
+.partners img{max-height:44px;max-width:100%;width:auto;object-fit:contain;filter:grayscale(1);opacity:.75;transition:.3s}
 .partners a:hover img{filter:none;opacity:1}
 
 /* ---------- COACHES ---------- */
@@ -233,8 +233,22 @@
 .profile__meta b{font-weight:800;text-align:right}
 .profile__bio{font-size:1.02rem;color:var(--muted);line-height:1.72;max-width:62ch}
 
+@media(max-width:560px){
+  .psec{padding:3.4rem 5vw}
+  .phead{padding:8rem 5vw 2.6rem}
+  .phead h1{max-width:none}
+  .sched__controls{align-items:stretch}
+  #schedFilters{display:flex;flex-wrap:wrap;gap:.5rem;width:100%}
+  .sched__filter{flex:1 1 130px}
+  .vcard__lvl{margin-left:0}
+  .timetable li{grid-template-columns:1fr;gap:.25rem}
+  .profile__meta li{display:block}
+  .profile__meta span,.profile__meta b{display:block;text-align:left}
+  .profile__photo{max-width:100%}
+}
+
 /* ---------- NEWS ---------- */
-.articles{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem}
+.articles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:1.2rem}
 .article{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:14px;
   padding:1.4rem 1.4rem;box-shadow:var(--shadow-sm);transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
 .article:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}

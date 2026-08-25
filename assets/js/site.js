@@ -32,8 +32,8 @@
   function navLinks() {
     return NAV.map(function (item) {
       var active = item.key === page;
-      return '<a href="' + url(item.href) + '"' +
-        (active ? ' class="is-current" aria-current="page"' : '') +
+      return '<a href="' + url(item.href) + '" class="nav__link' + (active ? ' is-current' : '') + '"' +
+        (active ? ' aria-current="page"' : '') +
         (item.i18n ? ' data-i18n="' + item.i18n + '"' : '') +
         '>' + item.label + '</a>';
     }).join('');

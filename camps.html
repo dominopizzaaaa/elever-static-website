@@ -13,8 +13,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=7" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=7" />
+  <link rel="stylesheet" href="assets/css/style.css?v=8" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=8" />
 </head>
 <body data-page="camps" data-nav="solid" data-base="">
 
@@ -69,8 +69,8 @@
             <h3>Tell me when the next camp opens</h3>
             <p>Camps go on sale a few weeks before each MOE school holiday and the popular age groups fill quickly. Leave your email and we will write to you the day registration opens — nothing else.</p>
             <div class="lead__grid">
-              <label class="lead__field lead__field--wide"><span>Email address</span><input type="email" name="Email" required placeholder="you@example.com"></label>
-              <label class="lead__field"><span>Child's age (optional)</span><input type="text" name="Child age"></label>
+              <label class="lead__field lead__field--wide"><span>Email address</span><input type="email" name="Email" autocomplete="email" required placeholder="you@example.com"></label>
+              <label class="lead__field"><span>Child's age (optional)</span><input type="number" name="Child age" min="3" max="18" inputmode="numeric"></label>
               <label class="lead__field"><span>Which holiday?</span>
                 <select name="Holiday"><option>Any</option><option>March</option><option>June</option><option>September</option><option>December</option></select>
               </label>
@@ -108,9 +108,9 @@
   <footer id="siteFooter"></footer>
 
   <script src="assets/js/data.js"></script>
-  <script src="assets/js/site.js"></script>
+  <script src="assets/js/site.js?v=8"></script>
   <script src="assets/js/i18n.js"></script>
-  <script src="assets/js/pages.js?v=7"></script>
-  <script src="assets/js/main.js?v=7"></script>
+  <script src="assets/js/pages.js?v=8"></script>
+  <script src="assets/js/main.js?v=8"></script>
 </body>
 </html>

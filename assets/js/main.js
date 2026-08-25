@@ -1682,6 +1682,7 @@ document.addEventListener('DOMContentLoaded', function() {
   ];
 
   function openSearch() {
+    if (!searchOverlay || !searchToggle || !searchInput) return;
     searchOverlay.hidden = false;
     searchToggle.setAttribute('aria-expanded', 'true');
     setTimeout(() => { searchInput.focus(); }, 100);
@@ -1689,6 +1690,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function closeSearch() {
+    if (!searchOverlay || !searchToggle) return;
     searchOverlay.hidden = true;
     searchToggle.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
@@ -1699,13 +1701,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Close on Esc
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && !searchOverlay.hidden) closeSearch();
+    if (searchOverlay && e.key === 'Escape' && !searchOverlay.hidden) closeSearch();
   });
 
   // Autocomplete search
   if (searchInput) {
     searchInput.addEventListener('input', function(e) {
       const query = e.target.value.toLowerCase();
+      if (!searchResults) return;
       searchResults.innerHTML = '';
       if (!query.trim()) return;
       
@@ -1730,7 +1733,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // --- 2. Scrollspy & Breadcrumbs ---
   const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav__links .nav__link');
+  const navLinks = document.querySelectorAll('.nav__links a[href^="#"], .nav__links .nav__link');
   const breadcrumbCurrent = document.getElementById('breadcrumbCurrent');
 
   function onScroll() {

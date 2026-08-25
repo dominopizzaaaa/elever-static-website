@@ -336,7 +336,7 @@
     if (partners) {
       partners.innerHTML = D.partners.map(function (p) {
         return p.logo
-          ? '<a href="#" class="partners__chip"><img src="' + esc(p.logo) + '" alt="' + esc(p.name) + '" loading="lazy"></a>'
+          ? '<a href="#" class="partners__chip"><img src="' + esc(p.logo) + '" alt="' + esc(p.name) + '" loading="lazy" decoding="async"></a>'
           : '<span class="partners__chip">' + esc(p.name) + '</span>';
       }).join('');
     }
@@ -353,7 +353,7 @@
 
     function card(c, i) {
       return '<a class="coach reveal" data-delay="' + ((i % 6) * 60) + '" href="' + base + 'coaches/' + esc(c.slug) + '.html">' +
-        '<div class="coach__img"><img src="' + base + esc(c.photo) + '" alt="' + esc(c.name) + '" loading="lazy"></div>' +
+        '<div class="coach__img"><img src="' + base + esc(c.photo) + '" alt="' + esc(c.name) + '" width="640" height="640" loading="lazy" decoding="async"></div>' +
         '<div class="coach__body"><h3>' + esc(c.name) + '</h3>' +
           '<p class="coach__role">' + esc(c.role) + '</p>' +
           (c.cert ? '<span class="coach__cert">' + esc(c.cert) + '</span>' : '') +
@@ -543,13 +543,17 @@
         e.preventDefault();
         clearErrors();
         var firstInvalid = null;
-        form.querySelectorAll('input[required], select[required], textarea[required]').forEach(function (field) {
-          var valid = field.type === 'checkbox' ? field.checked : String(field.value || '').trim();
+        form.querySelectorAll('input, select, textarea').forEach(function (field) {
+          var hasValue = field.type === 'checkbox' ? field.checked : String(field.value || '').trim();
+          var valid = field.required ? hasValue : true;
+          if (valid && hasValue && field.validity && !field.validity.valid) valid = false;
           if (!valid) {
             if (!firstInvalid) firstInvalid = field;
             showError(field, field.type === 'checkbox'
               ? 'Please tick this box so we can respond to your enquiry.'
-              : 'Please complete this field before sending your enquiry.');
+              : (field.validity && field.validity.typeMismatch
+                ? 'Please enter this in the correct format.'
+                : 'Please complete this field before sending your enquiry.'));
           }
         });
         if (firstInvalid) {

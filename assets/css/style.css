@@ -413,8 +413,8 @@ em{font-style:normal;color:var(--accent)}   /* highlight — brand blue, never i
 /* ===================== NEWS — FULL SEASON ===================== */
 .news{padding:8rem 0;background:var(--bg-2)}
 .news__hint{color:var(--muted);font-size:.9rem;margin-top:1rem;max-width:620px}
-.news__filters{display:flex;gap:.6rem;margin-top:1.6rem}
-.news__filter{padding:.5rem 1.2rem;border-radius:100px;border:1px solid var(--line);background:#fff;color:var(--muted);font-family:inherit;font-size:.85rem;font-weight:600;transition:.3s}
+.news__filters{display:flex;gap:.6rem;margin-top:1.6rem;flex-wrap:wrap}
+.news__filter{padding:.65rem 1.2rem;min-height:48px;border-radius:100px;border:1px solid var(--line);background:#fff;color:var(--muted);font-family:inherit;font-size:1rem;font-weight:700;transition:.3s}
 .news__filter:hover{color:var(--ink);border-color:var(--accent)}
 .news__filter.is-active{background:var(--accent);color:#fff;border-color:var(--accent)}
 .news__timeline{max-width:1200px;margin:0 auto;padding:0 6vw;display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem}
@@ -508,10 +508,13 @@ em{font-style:normal;color:var(--accent)}   /* highlight — brand blue, never i
   .hub__grid,.hub__book,.hub__groups{grid-template-columns:repeat(2,1fr)}
   .news__timeline{grid-template-columns:1fr}
   .hero__stats{display:none}
-  .nav__links{position:fixed;inset:0;background:rgba(255,255,255,.98);backdrop-filter:blur(10px);flex-direction:column;justify-content:center;gap:2.2rem;font-size:1.4rem;transform:translateX(100%);transition:transform .5s var(--ease)}
+  .nav__links{position:fixed;inset:0;background:rgba(255,255,255,.98);backdrop-filter:blur(10px);flex-direction:column;justify-content:flex-start;align-items:stretch;gap:clamp(.65rem,2vh,1.2rem);font-size:1.25rem;transform:translateX(100%);transition:transform .5s var(--ease);padding:6rem 6vw 2rem;min-height:100dvh;overflow-y:auto;-webkit-overflow-scrolling:touch}
   .nav.open .nav__links{transform:none}
-  .nav__links a{color:var(--ink)}
+  .nav__links a{color:var(--ink);justify-content:center;border:1px solid var(--line);border-radius:16px;background:#fff}
   .nav.scrolled .nav__links a:not(.nav__cta){color:var(--ink)}
+  .nav__links .lang{width:100%}
+  .nav__links .lang__toggle{width:100%;justify-content:center;background:#fff;color:var(--ink);border-color:var(--line)}
+  .nav__links .lang__list{position:static;transform:none;min-width:0;width:100%;margin-top:.5rem;box-shadow:var(--shadow-sm)}
   .nav__burger{display:flex}
 }
 @media(max-width:560px){
@@ -522,11 +525,20 @@ em{font-style:normal;color:var(--accent)}   /* highlight — brand blue, never i
   .hero__hint{display:none}
   /* --- game fits a phone --- */
   .play{padding:5rem 0}
+  .play__scoreboard{flex-direction:column}
+  .play__score--cpu{justify-content:flex-start}
+  .play__rally{order:-1;min-height:64px}
   .play__court{aspect-ratio:5/4}                 /* taller playfield for portrait screens */
   .play__score b{font-size:1.9rem}
   .play__score{padding:.7rem 1rem}
   .play__hint{font-size:.88rem}
   .play__pad-btn{height:58px}
+  .cta__actions .btn{width:100%}
+  .news__filters{flex-wrap:wrap;justify-content:stretch}
+  .news__filters button{flex:1 1 140px}
+  .reflex__stats{flex-wrap:wrap}
+  .reflex__stat{flex:1 1 140px}
+  .guess__opts{grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.001ms!important;animation-iteration-count:1!important}

@@ -13,8 +13,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=7" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=7" />
+  <link rel="stylesheet" href="assets/css/style.css?v=8" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=8" />
 </head>
 <body data-page="events" data-nav="solid" data-base="">
 
@@ -128,21 +128,21 @@
           <h3>Request a proposal</h3>
           <p>The more you can tell us, the more useful the first reply will be.</p>
           <div class="lead__grid">
-            <label class="lead__field"><span>Organisation</span><input type="text" name="Organisation" required></label>
+            <label class="lead__field"><span>Organisation</span><input type="text" name="Organisation" autocomplete="organization" required></label>
             <label class="lead__field"><span>Organisation type</span>
               <select name="Organisation type">
                 <option>Company</option><option>School</option><option>Condo / MCST</option>
                 <option>Community group</option><option>Sports association</option><option>Other</option>
               </select>
             </label>
-            <label class="lead__field"><span>Contact name</span><input type="text" name="Contact name" required></label>
-            <label class="lead__field"><span>Email</span><input type="email" name="Email" required></label>
-            <label class="lead__field"><span>Phone</span><input type="text" name="Phone"></label>
+            <label class="lead__field"><span>Contact name</span><input type="text" name="Contact name" autocomplete="name" required></label>
+            <label class="lead__field"><span>Email</span><input type="email" name="Email" autocomplete="email" required></label>
+            <label class="lead__field"><span>Phone</span><input type="tel" name="Phone" autocomplete="tel"></label>
             <label class="lead__field"><span>Event type</span>
               <select name="Event type"><option>Carnival</option><option>Clinic</option><option>Competition</option><option>Not sure yet</option></select>
             </label>
             <label class="lead__field"><span>Preferred date(s)</span><input type="text" name="Preferred dates" placeholder="e.g. mid-March 2027"></label>
-            <label class="lead__field"><span>Expected headcount</span><input type="text" name="Headcount" placeholder="e.g. 120"></label>
+            <label class="lead__field"><span>Expected headcount</span><input type="number" name="Headcount" min="1" inputmode="numeric" placeholder="e.g. 120"></label>
             <label class="lead__field"><span>Venue</span>
               <select name="Venue"><option>We have a venue</option><option>We need help sourcing one</option></select>
             </label>
@@ -163,9 +163,9 @@
   <footer id="siteFooter"></footer>
 
   <script src="assets/js/data.js"></script>
-  <script src="assets/js/site.js"></script>
+  <script src="assets/js/site.js?v=8"></script>
   <script src="assets/js/i18n.js"></script>
-  <script src="assets/js/pages.js?v=7"></script>
-  <script src="assets/js/main.js?v=7"></script>
+  <script src="assets/js/pages.js?v=8"></script>
+  <script src="assets/js/main.js?v=8"></script>
 </body>
 </html>
