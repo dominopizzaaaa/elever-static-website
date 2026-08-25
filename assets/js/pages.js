@@ -82,26 +82,24 @@
 
     var level = 'all';
 
-    // Schematic Singapore outline — pins are placed from real lat/lng,
-    // so relative positions are accurate even though the shape is simplified.
-    var BOUNDS = { w: 103.60, e: 104.05, s: 1.21, n: 1.48 };
-    function px(lng) { return (lng - BOUNDS.w) / (BOUNDS.e - BOUNDS.w) * 100; }
-    function py(lat) { return (BOUNDS.n - lat) / (BOUNDS.n - BOUNDS.s) * 100; }
-
-    var OUTLINE = [
-      [103.635, 1.325], [103.665, 1.405], [103.705, 1.442], [103.775, 1.462],
-      [103.845, 1.455], [103.905, 1.425], [103.975, 1.398], [104.020, 1.372],
-      [103.985, 1.318], [103.940, 1.288], [103.870, 1.258], [103.800, 1.252],
-      [103.720, 1.262], [103.660, 1.288]
-    ];
+    // Interactive Map via Leaflet
+    var leafletMap = null;
+    var markers = [];
 
     function drawMap() {
-      if (!mapMount) return;
-      var pts = OUTLINE.map(function (p) { return px(p[0]).toFixed(2) + ',' + py(p[1]).toFixed(2); }).join(' ');
-      mapMount.innerHTML =
-        '<svg viewBox="0 0 100 100" preserveAspectRatio="none" role="img" aria-label="Schematic map of Singapore showing Élever class venues">' +
-          '<polygon points="' + pts + '" fill="#dbe5fa" stroke="#b9c9ee" stroke-width="0.6" vector-effect="non-scaling-stroke"/>' +
-        '</svg>';
+      if (!mapMount || !window.L) return;
+      mapMount.innerHTML = ''; // clear any existing
+      
+      leafletMap = L.map(mapMount, {
+        zoomControl: true,
+        scrollWheelZoom: false // prevents zooming when scrolling down the page
+      }).setView([1.3521, 103.8198], 11); // Center of Singapore
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+      }).addTo(leafletMap);
     }
 
     function visible() {
@@ -143,21 +141,36 @@
         }).join('');
       }
 
-      // pins
-      if (mapMount) {
-        mapMount.querySelectorAll('.sched__pin').forEach(function (p) { p.remove(); });
+      // pins via Leaflet
+      if (leafletMap) {
+        markers.forEach(function(m) { leafletMap.removeLayer(m); });
+        markers = [];
+        var bounds = L.latLngBounds();
+
         rows.forEach(function (v, i) {
-          var b = document.createElement('button');
-          b.className = 'sched__pin';
-          b.type = 'button';
-          b.style.left = px(v.lng) + '%';
-          b.style.top = py(v.lat) + '%';
-          b.setAttribute('data-venue', v.venueId);
-          b.setAttribute('aria-label', v.venue + ' — ' + v.area);
-          b.innerHTML = '<span>' + (i + 1) + '</span>';
-          b.addEventListener('click', function () { focusVenue(v.venueId); });
-          mapMount.appendChild(b);
+          if (!v.lat || !v.lng) return;
+
+          var customIcon = L.divIcon({
+            className: 'sched__pin-wrapper',
+            html: '<div class="sched__pin"><span>' + (i + 1) + '</span></div>',
+            iconSize: [0, 0],
+            iconAnchor: [0, 0]
+          });
+
+          var marker = L.marker([v.lat, v.lng], { icon: customIcon }).addTo(leafletMap);
+          
+          marker.on('click', function() {
+            focusVenue(v.venueId);
+          });
+          
+          marker._venueId = v.venueId; // store for easy access
+          markers.push(marker);
+          bounds.extend([v.lat, v.lng]);
         });
+
+        if (markers.length > 0) {
+          leafletMap.fitBounds(bounds, { padding: [30, 30] });
+        }
       }
     }
 
@@ -165,13 +178,21 @@
       listMount.querySelectorAll('.vcard').forEach(function (c) {
         c.classList.toggle('is-active', c.getAttribute('data-venue') === id);
       });
-      if (mapMount) {
-        mapMount.querySelectorAll('.sched__pin').forEach(function (p) {
-          p.classList.toggle('is-active', p.getAttribute('data-venue') === id);
+      if (leafletMap) {
+        markers.forEach(function(m) {
+          if (m._venueId === id) {
+            L.DomUtil.addClass(m._icon, 'is-active');
+            leafletMap.panTo(m.getLatLng());
+          } else {
+            L.DomUtil.removeClass(m._icon, 'is-active');
+          }
         });
       }
       var card = listMount.querySelector('[data-venue="' + id + '"]');
-      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (card) {
+        // smooth scroll the container instead of the window if possible, or just standard scrollIntoView
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
 
     if (filterWrap) {

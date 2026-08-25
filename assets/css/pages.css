@@ -102,8 +102,9 @@
 .sched__pin{position:absolute;transform:translate(-50%,-100%);background:var(--accent);color:#fff;border:0;
   width:26px;height:26px;border-radius:50% 50% 50% 4px;rotate:-45deg;cursor:pointer;
   box-shadow:0 4px 12px -2px rgba(33,81,209,.55);transition:transform .25s var(--ease),background .25s}
-.sched__pin span{rotate:45deg;display:block;font-size:.68rem;font-weight:800;line-height:26px;text-align:center}
-.sched__pin:hover,.sched__pin.is-active{background:var(--ink);transform:translate(-50%,-100%) scale(1.22)}
+.sched__pin span{rotate:45deg;display:block;font-size:.7rem;font-weight:800;line-height:28px;text-align:center; color:#fff;}
+.sched__pin-wrapper:hover .sched__pin, .sched__pin-wrapper.is-active .sched__pin {background:var(--ink); transform: translate(-50%,-100%) scale(1.22);}
+.sched__pin-wrapper:hover, .sched__pin-wrapper.is-active { z-index: 1000 !important; }
 .sched__maphint{margin-top:.7rem;font-size:.76rem;color:var(--faint);text-align:center}
 
 .sched__list{display:flex;flex-direction:column;gap:.8rem}
