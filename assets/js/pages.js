@@ -519,8 +519,44 @@
 
     forms.forEach(function (form) {
       var status = form.querySelector('.lead__status');
+      function clearErrors() {
+        form.querySelectorAll('.field-error').forEach(function (err) { err.remove(); });
+        form.querySelectorAll('[aria-invalid="true"]').forEach(function (field) {
+          field.removeAttribute('aria-invalid');
+          field.removeAttribute('aria-describedby');
+        });
+      }
+
+      function showError(field, message) {
+        var id = (field.id || field.name || 'field').replace(/\s+/g, '-').toLowerCase() + '-error';
+        var err = document.createElement('span');
+        err.className = 'field-error';
+        err.id = id;
+        err.textContent = message;
+        field.setAttribute('aria-invalid', 'true');
+        field.setAttribute('aria-describedby', id);
+        var label = field.closest('label') || field.parentElement;
+        if (label) label.appendChild(err);
+      }
+
       form.addEventListener('submit', function (e) {
         e.preventDefault();
+        clearErrors();
+        var firstInvalid = null;
+        form.querySelectorAll('input[required], select[required], textarea[required]').forEach(function (field) {
+          var valid = field.type === 'checkbox' ? field.checked : String(field.value || '').trim();
+          if (!valid) {
+            if (!firstInvalid) firstInvalid = field;
+            showError(field, field.type === 'checkbox'
+              ? 'Please tick this box so we can respond to your enquiry.'
+              : 'Please complete this field before sending your enquiry.');
+          }
+        });
+        if (firstInvalid) {
+          if (status) { status.textContent = 'Please fix the highlighted fields and try again.'; status.className = 'lead__status lead__status--err'; }
+          firstInvalid.focus();
+          return;
+        }
         var consent = form.querySelector('input[name="consent"]');
         if (consent && !consent.checked) {
           if (status) { status.textContent = 'Please tick the consent box so we know we may reply to you.'; status.className = 'lead__status lead__status--err'; }

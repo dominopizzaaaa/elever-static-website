@@ -42,8 +42,8 @@ function page(c) {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../assets/css/style.css" />
-  <link rel="stylesheet" href="../assets/css/pages.css" />
+  <link rel="stylesheet" href="../assets/css/style.css?v=7" />
+  <link rel="stylesheet" href="../assets/css/pages.css?v=7" />
   <script type="application/ld+json">${jsonld}</script>
 </head>
 <body data-page="about" data-nav="solid" data-base="../">
@@ -98,8 +98,8 @@ function page(c) {
   <script src="../assets/js/data.js"></script>
   <script src="../assets/js/site.js"></script>
   <script src="../assets/js/i18n.js"></script>
-  <script src="../assets/js/pages.js"></script>
-  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/pages.js?v=7"></script>
+  <script src="../assets/js/main.js?v=7"></script>
 </body>
 </html>
 `;
