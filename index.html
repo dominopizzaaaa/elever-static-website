@@ -38,12 +38,38 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "SportsActivityLocation",
+        "@type": ["SportsActivityLocation", "LocalBusiness"],
         "name": "Élever Badminton",
-        "description": "Badminton coaching academy in Singapore offering classes, holiday camps, carnivals, clinics and competitions.",
-        "areaServed": "Singapore",
+        "description": "Badminton coaching academy in Singapore offering junior badminton training, private coaching, holiday camps, corporate badminton events and community clinics.",
         "url": "https://www.eleverbadminton.com/",
-        "sameAs": ["https://www.instagram.com/eleverbadminton/"]
+        "image": "https://www.eleverbadminton.com/assets/img/hero-action.jpg",
+        "logo": "https://www.eleverbadminton.com/assets/img/hero-action.jpg",
+        "areaServed": [
+          { "@type": "Country", "name": "Singapore" },
+          { "@type": "Place", "name": "Central Singapore" },
+          { "@type": "Place", "name": "East Singapore" },
+          { "@type": "Place", "name": "West Singapore" },
+          { "@type": "Place", "name": "North Singapore" },
+          { "@type": "Place", "name": "North-East Singapore" }
+        ],
+        "sameAs": ["https://www.instagram.com/eleverbadminton/"],
+        "knowsAbout": [
+          "badminton coaching Singapore",
+          "junior badminton training Singapore",
+          "private badminton coaches Singapore",
+          "badminton camps Singapore",
+          "corporate badminton events Singapore"
+        ],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Singapore badminton coaching and events",
+          "itemListElement": [
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Junior badminton classes in Singapore" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Private badminton coaching in Singapore" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Holiday badminton camps in Singapore" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Corporate and school badminton events in Singapore" } }
+          ]
+        }
       }
     </script>
   </head>

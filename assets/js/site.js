@@ -18,7 +18,8 @@
     { key: 'events', href: 'events.html', label: 'Events', i18n: 'nav.events' },
     { key: 'hub', href: 'hub.html', label: 'SG Hub', i18n: 'nav.hub' },
     { key: 'news', href: 'news.html', label: 'News', i18n: 'nav.news' },
-    { key: 'play', href: 'play.html', label: 'Play', i18n: 'nav.play' }
+    { key: 'play', href: 'play.html', label: 'Play', i18n: 'nav.play' },
+    { key: 'contact', href: 'contact.html', label: 'Contact', i18n: 'nav.contact' },
   ];
 
   // Pages live either at the root or in /coaches/ — fix relative links.

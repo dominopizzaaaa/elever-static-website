@@ -22,6 +22,25 @@
   <link rel="stylesheet" href="assets/css/style.css?v=8" />
   <link rel="stylesheet" href="assets/css/pages.css?v=8" />
   <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "Badminton Classes in Singapore",
+      "description": "Structured badminton coaching in Singapore for juniors and adults, including group classes, private coaching, beginner pathway training and competitive development.",
+      "provider": {
+        "@type": "Organization",
+        "name": "Élever Badminton",
+        "url": "https://www.eleverbadminton.com/"
+      },
+      "areaServed": "Singapore",
+      "hasCourseInstance": [
+        { "@type": "CourseInstance", "name": "Essentials badminton classes", "courseMode": "In person", "location": "Singapore" },
+        { "@type": "CourseInstance", "name": "Emergence badminton classes", "courseMode": "In person", "location": "Singapore" },
+        { "@type": "CourseInstance", "name": "Private badminton coaching", "courseMode": "In person", "location": "Singapore" }
+      ]
+    }
+  </script>
 </head>
 <body data-page="classes" data-nav="solid" data-base="">
 
@@ -33,7 +52,7 @@
       <div class="phead__inner">
         <p class="phead__crumbs"><a href="index.html">Home</a> · Classes</p>
         <h1>Classes built as a <em>pathway</em>, not a timetable.</h1>
-        <p class="phead__lead">Every Élever player moves along the same four-stage development pathway — from a first swing in Exploration to competitive play in Elite. You join at the stage that fits, and you move up when you are ready.</p>
+        <p class="phead__lead">Every Élever player moves along the same four-stage development pathway — from a first swing in Exploration to competitive play in Elite. Our badminton classes in Singapore support beginners, juniors, school players, adults and families looking for regular training or private badminton coaching.</p>
         <div class="phead__actions">
           <a class="btn btn--primary magnetic" href="#schedule">Find a class near you</a>
           <a class="btn btn--ghost" href="https://app.eleverbadminton.com/" target="_blank" rel="noopener">Book a trial class</a>
@@ -90,6 +109,10 @@
         <p class="psec__sub">Every venue where Élever runs weekly classes, with the day, time and level of play. Tap a pin to jump to that venue — or use the list, which is how most people prefer to read this on a phone.</p>
       </div>
 
+        <div class="note-strip">
+          <strong>Singapore class areas:</strong>
+          <span>Find badminton training in Central Singapore, East Singapore, West Singapore, North Singapore and North-East Singapore, including sample locations near Newton, Woodleigh, Jurong East, Sengkang, Aljunied, Expo and Dakota.</span>
+        </div>
       <div class="note-strip">
         <div><b>For Élever:</b> the schedule below is sample data so the page can be seen working. Real days, times and levels go in <code>assets/js/data.js</code> — no developer needed for a timetable change. Entries still marked “sample” have not been replaced yet.</div>
       </div>
