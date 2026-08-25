@@ -1581,47 +1581,7 @@
     });
   })();
 
-  /* =====================================================================
-     12. GUESS THE PRO — photo quiz (reuses the player portraits)
-     ===================================================================== */
-  (function guessPro() {
-    var root = document.getElementById('guess');
-    if (!root) return;
-    var I18N = window.I18N;
-    function T(k, v) { return I18N ? I18N.t(k, v) : k; }
-    function lang() { return I18N ? I18N.lang() : 'en'; }
-    var IMG = 'assets/img/players/';
-    var PIC = { an: 'an-se-young.jpg', tai: 'tai-tzu-ying.jpg', akane: 'akane-yamaguchi.jpg', yeo: 'yeo-jia-min.jpg', axelsen: 'viktor-axelsen.jpg', kunlavut: 'kunlavut-vitidsarn.jpg', loh: 'loh-kean-yew.jpg', antonsen: 'anders-antonsen.jpg', chou: 'chou-tien-chen.jpg', naraoka: 'kodai-naraoka.jpg', shi: 'shi-yuqi.jpg', jonatan: 'jonatan-christie.jpg', lakshya: 'lakshya-sen.jpg', chenyf: 'chen-yufei.jpg', marin: 'carolina-mar-n.jpg', sindhu: 'p-v-sindhu.jpg', ratchanok: 'ratchanok-intanon.jpg', wangzy: 'wang-zhiyi.jpg', leezii: 'lee-zii-jia.jpg', ginting: 'anthony-sinisuka-ginting.jpg', gregoria: 'gregoria-mariska-tunjung.jpg', lindan: 'lin-dan.jpg', lcw: 'lee-chong-wei.jpg', okuhara: 'nozomi-okuhara.jpg', momota: 'kento-momota.png', saina: 'saina-nehwal.jpg', tommy: 'tommy-sugiarto.jpg' };
-    var KEYS = Object.keys(PIC), ROUNDS = 10;
-    var stage = document.getElementById('guessStage'), intro = document.getElementById('guessIntro'), startBtn = document.getElementById('guessStart');
-    var order = [], idx = 0, score = 0, answered = false;
-    function nameOf(k) { var db = (I18N && I18N.data.players[lang()]) || I18N.data.players.en; var p = db[k] || I18N.data.players.en[k] || {}; return p.name || k; }
-    function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
-    function start() { order = shuffle(KEYS).slice(0, ROUNDS); idx = 0; score = 0; intro.style.display = 'none'; stage.style.display = 'block'; renderRound(); }
-    function renderRound() {
-      answered = false;
-      var key = order[idx];
-      var opts = shuffle(KEYS.filter(function (k) { return k !== key; })).slice(0, 3); opts.push(key); opts = shuffle(opts);
-      var html = '<div class="guess__card fade"><p class="guess__count">' + T('guess.count', { n: idx + 1, total: ROUNDS }) + ' · <b>' + T('guess.score', { s: score }) + '</b></p>';
-      html += '<div class="guess__photo"><img src="' + IMG + PIC[key] + '" alt="' + T('guess.alt') + '" loading="lazy"></div><div class="guess__opts">';
-      opts.forEach(function (k) { html += '<button class="guess__opt" data-k="' + k + '">' + nameOf(k) + '</button>'; });
-      html += '</div></div>';
-      stage.innerHTML = html;
-      stage.querySelectorAll('.guess__opt').forEach(function (btn) { btn.addEventListener('click', function () { pick(btn, key); }); });
-    }
-    function pick(btn, key) {
-      if (answered) return; answered = true;
-      if (btn.dataset.k === key) score++;
-      stage.querySelectorAll('.guess__opt').forEach(function (b) { b.disabled = true; if (b.dataset.k === key) b.classList.add('guess__opt--correct'); else if (b === btn) b.classList.add('guess__opt--wrong'); });
-      setTimeout(function () { idx++; if (idx < ROUNDS) renderRound(); else renderEnd(); }, 950);
-    }
-    function renderEnd() {
-      var m = score >= 9 ? T('guess.end9') : score >= 6 ? T('guess.end6') : score >= 3 ? T('guess.end3') : T('guess.end0');
-      stage.innerHTML = '<div class="guess__card fade"><p class="guess__count">' + T('guess.done') + '</p><div class="guess__score">' + score + '/' + ROUNDS + '</div><p class="guess__scoremsg">' + m + '</p><button class="btn btn--primary magnetic" id="guessAgain">' + T('guess.again') + '</button></div>';
-      document.getElementById('guessAgain').addEventListener('click', start);
-    }
-    if (startBtn) startBtn.addEventListener('click', start);
-  })();
+
 
   /* =====================================================================
      13. TESTIMONIALS CAROUSEL
