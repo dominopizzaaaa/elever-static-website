@@ -9,7 +9,9 @@
 
   var D = window.ELEVER_DATA;
   if (!D) return;
-  var BOOK = (window.ELEVER_SITE && window.ELEVER_SITE.bookUrl) || 'https://app.eleverbadminton.com/';
+  var SITE = window.ELEVER_SITE || {};
+  var BOOK = SITE.bookUrl || 'https://app.eleverbadminton.com/';
+  var EMAIL = SITE.email || 'info@eleverbadminton.com';
 
   function esc(s) {
     return String(s == null ? '' : s)
@@ -23,19 +25,19 @@
      THE FIVE PILLARS — Home + About
      ================================================================= */
   var PILLARS = [
-    { num: '01', name: 'Classes', href: 'classes.html', who: 'Weekly coaching along a structured pathway — from a first swing to competitive play.' },
-    { num: '02', name: 'Camps', href: 'camps.html', who: 'Holiday Exploration camps that turn a school break into a first taste of badminton.' },
-    { num: '03', name: 'Carnivals', href: 'events.html#carnival', who: 'Mass-participation event days for companies, schools and community groups.' },
-    { num: '04', name: 'Clinics', href: 'events.html#clinic', who: 'Short, focused coaching workshops for teams, CCAs and interest groups.' },
-    { num: '05', name: 'Competitions', href: 'events.html#competition', who: 'Properly run tournaments — draws, umpiring and results handled end to end.' }
+    { num: '01', name: 'Classes', href: 'classes.html', who: 'Weekly coaching along a structured pathway.' },
+    { num: '02', name: 'Camps', href: 'camps.html', who: 'Holiday Exploration camps for new players.' },
+    { num: '03', name: 'Carnivals', href: 'events.html#carnival', who: 'Mass-participation event days.' },
+    { num: '04', name: 'Clinics', href: 'events.html#clinic', who: 'Short, focused coaching workshops.' },
+    { num: '05', name: 'Competitions', href: 'events.html#competition', who: 'Tournaments run end to end.' }
   ];
 
   (function pillars() {
     var mount = el('pillarsGrid');
     if (!mount) return;
-    var base = (window.ELEVER_SITE && window.ELEVER_SITE.base) || '';
+    var base = SITE.base || '';
     mount.innerHTML = PILLARS.map(function (p, i) {
-      return '<a class="pillar reveal" data-delay="' + (i * 70) + '" href="' + base + p.href + '">' +
+      return '<a class="pillar" href="' + base + p.href + '">' +
         '<span class="pillar__num">' + p.num + '</span>' +
         '<h3>' + esc(p.name) + '</h3>' +
         '<p class="pillar__who">' + esc(p.who) + '</p>' +
@@ -51,26 +53,21 @@
     var mount = el('pathsGrid');
     if (!mount) return;
     mount.innerHTML = D.pathways.map(function (p, i) {
-      return '<article class="path reveal" id="' + p.key + '" data-delay="' + (i * 80) + '">' +
+      return '<article class="path" id="' + p.key + '">' +
         '<span class="path__num">' + p.num + '</span>' +
         '<h3>' + esc(p.name) + '</h3>' +
         '<span class="path__tag">' + esc(p.tag) + '</span>' +
         '<p class="path__blurb">' + esc(p.blurb) + '</p>' +
-        '<div class="path__facts">' +
-          '<div><span>Ages</span><b>' + esc(p.ages) + '</b></div>' +
-          '<div><span>Typical</span><b>' + esc(p.commitment) + '</b></div>' +
-        '</div>' +
         '<ul class="path__learn">' + p.learn.map(function (l) { return '<li>' + esc(l) + '</li>'; }).join('') + '</ul>' +
-        '<p class="path__next">' + esc(p.next) + '</p>' +
         '<a class="path__cta" href="' + esc(p.cta.href) + '">' + esc(p.cta.label) + ' &rsaquo;</a>' +
       '</article>';
     }).join('');
   })();
 
   /* =================================================================
-     CLASSES — schedule: schematic map + list, filterable
+     CLASSES — locations. Map OR list, never both at once.
      ================================================================= */
-  (function schedule() {
+  (function locations() {
     var listMount = el('schedList');
     if (!listMount) return;
 
@@ -78,42 +75,27 @@
     var countEl = el('schedCount');
     var filterWrap = el('schedFilters');
     var toggleWrap = el('schedToggle');
-    var layout = el('schedLayout');
+    var mapView = el('schedMapView');
+    var listView = el('schedListView');
 
     var level = 'all';
-
-    // Interactive Map via Google Maps Embed (iframe, no API key required)
     var mapFrame = null;
 
     function gmapsSearchUrl(v) {
-      var q = v.name || v.venue || '';
       var addr = (v.addr || '').replace(/,?\s*S\d{6}.*/, '');
       return 'https://www.google.com/maps/search/?api=1&query=' +
-        encodeURIComponent((q + ' ' + addr + ' Singapore').trim());
-    }
-
-    function gmapsEmbedForVenue(v) {
-      // Centre on the venue coordinates with a marker; keyless embed endpoint.
-      return 'https://maps.google.com/maps?q=' + encodeURIComponent(v.lat + ',' + v.lng) +
-        '&hl=en&z=16&output=embed';
-    }
-
-    function gmapsEmbedAll() {
-      // Whole-of-Singapore overview when no single venue is selected.
-      return 'https://maps.google.com/maps?q=' + encodeURIComponent('Singapore') +
-        '&hl=en&z=11&output=embed';
+        encodeURIComponent((v.venue + ' ' + addr + ' Singapore').trim());
     }
 
     function drawMap() {
-      if (!mapMount) return;
-      mapMount.innerHTML = '';
+      if (!mapMount || mapFrame) return;
       mapFrame = document.createElement('iframe');
       mapFrame.className = 'sched__mapframe';
-      mapFrame.setAttribute('title', 'Map of Élever class venues on Google Maps');
+      mapFrame.setAttribute('title', 'Map of Élever class venues');
       mapFrame.setAttribute('loading', 'lazy');
       mapFrame.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
       mapFrame.setAttribute('allowfullscreen', '');
-      mapFrame.src = gmapsEmbedAll();
+      mapFrame.src = 'https://maps.google.com/maps?q=' + encodeURIComponent('Singapore') + '&hl=en&z=11&output=embed';
       mapMount.appendChild(mapFrame);
     }
 
@@ -123,7 +105,6 @@
         return v.sessions.some(function (s) { return s.level === level; });
       });
     }
-
     function sessionsFor(v) {
       return v.sessions.filter(function (s) { return level === 'all' || s.level === level; });
     }
@@ -140,40 +121,25 @@
       if (!rows.length) {
         listMount.innerHTML = '<p class="sched__empty">No classes match that level yet. Try “All levels”, or ' +
           '<a href="contact.html">ask us about a venue near you</a>.</p>';
-      } else {
-        listMount.innerHTML = rows.map(function (v) {
-          return '<article class="vcard" id="venue-' + esc(v.venueId) + '" data-venue="' + esc(v.venueId) + '">' +
-            '<div class="vcard__top"><h3>' + esc(v.venue) + sampleTag(v) + '</h3>' +
-              '<span class="vcard__region">' + esc(v.region) + '</span></div>' +
-            '<p class="vcard__addr">' + esc(v.addr) + (v.mrt ? ' · Nearest MRT: ' + esc(v.mrt) : '') + '</p>' +
-            '<ul class="vcard__sessions">' + sessionsFor(v).map(function (s) {
-              return '<li><span class="vcard__day">' + esc(s.day) + '</span>' +
-                '<span class="vcard__time">' + esc(s.time) + '</span>' +
-                '<span class="vcard__lvl vcard__lvl--' + esc(s.level.toLowerCase()) + '">' + esc(s.level) + '</span></li>';
-            }).join('') + '</ul>' +
-            '<div class="vcard__actions">' +
-              '<button type="button" class="vcard__showmap" data-venue="' + esc(v.venueId) + '">Show on map</button>' +
-              '<a class="vcard__gmaps" href="' + gmapsSearchUrl(v) + '" target="_blank" rel="noopener">Open in Google Maps &#8599;</a>' +
-            '</div>' +
-            '<a class="vcard__book" href="' + BOOK + '" target="_blank" rel="noopener">Book this class &rsaquo;</a>' +
-          '</article>';
-        }).join('');
+        return;
       }
-    }
 
-    function focusVenue(id) {
-      var venue = null;
-      listMount.querySelectorAll('.vcard').forEach(function (c) {
-        c.classList.toggle('is-active', c.getAttribute('data-venue') === id);
-      });
-      D.classes.forEach(function (v) { if (v.venueId === id) venue = v; });
-      if (mapFrame && venue && venue.lat && venue.lng) {
-        mapFrame.src = gmapsEmbedForVenue(venue);
-      }
-      var card = listMount.querySelector('[data-venue="' + id + '"]');
-      if (card) {
-        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+      listMount.innerHTML = rows.map(function (v) {
+        return '<article class="vcard" id="venue-' + esc(v.venueId) + '">' +
+          '<div class="vcard__top"><h3>' + esc(v.venue) + sampleTag(v) + '</h3>' +
+            '<span class="vcard__region">' + esc(v.region) + '</span></div>' +
+          '<p class="vcard__addr">' + esc(v.addr) + (v.mrt ? ' · Nearest MRT: ' + esc(v.mrt) : '') + '</p>' +
+          '<ul class="vcard__sessions">' + sessionsFor(v).map(function (s) {
+            return '<li><span class="vcard__day">' + esc(s.day) + '</span>' +
+              '<span class="vcard__time">' + esc(s.time) + '</span>' +
+              '<span class="vcard__lvl vcard__lvl--' + esc(s.level.toLowerCase()) + '">' + esc(s.level) + '</span></li>';
+          }).join('') + '</ul>' +
+          '<div class="vcard__actions">' +
+            '<a class="vcard__book" href="' + BOOK + '" target="_blank" rel="noopener">Book this class &rsaquo;</a>' +
+            '<a class="vcard__gmaps" href="' + gmapsSearchUrl(v) + '" target="_blank" rel="noopener">Open in Google Maps &#8599;</a>' +
+          '</div>' +
+        '</article>';
+      }).join('');
     }
 
     if (filterWrap) {
@@ -190,28 +156,22 @@
       });
     }
 
-    if (toggleWrap && layout) {
+    if (toggleWrap && mapView && listView) {
       toggleWrap.addEventListener('click', function (e) {
         var b = e.target.closest('button');
         if (!b) return;
         var view = b.getAttribute('data-view');
-        toggleWrap.querySelectorAll('button').forEach(function (x) { x.classList.toggle('is-active', x === b); });
-        layout.style.gridTemplateColumns = view === 'list' ? '1fr' : '';
-        layout.classList.toggle('sched__layout--listonly', view === 'list');
-        var mw = el('schedMapWrap');
-        if (mw) mw.style.display = view === 'list' ? 'none' : '';
+        toggleWrap.querySelectorAll('button').forEach(function (x) {
+          var on = x === b;
+          x.classList.toggle('is-active', on);
+          x.setAttribute('aria-pressed', String(on));
+        });
+        listView.classList.toggle('is-active', view === 'list');
+        mapView.classList.toggle('is-active', view === 'map');
+        if (view === 'map') drawMap();
       });
     }
 
-    if (listMount) {
-      listMount.addEventListener('click', function (e) {
-        var b = e.target.closest('.vcard__showmap');
-        if (!b) return;
-        focusVenue(b.getAttribute('data-venue'));
-      });
-    }
-
-    drawMap();
     render();
   })();
 
@@ -224,45 +184,41 @@
     var c = D.camps;
 
     if (!c.upcoming.length) {
-      up.innerHTML = '<div class="camp"><div class="camp__head"><h3>No camp on sale right now</h3>' +
+      up.innerHTML = '<article class="camp"><div class="camp__head"><h3>No camp on sale right now</h3>' +
         '<p class="camp__dates">Our next Exploration camp runs in the school holidays.</p></div>' +
-        '<div class="camp__body"><p style="color:var(--muted);margin-bottom:1.2rem">' +
-        'Camps open for registration a few weeks before each MOE school holiday. Leave your email and we will tell you the day the next one opens.</p></div></div>';
+        '<div class="camp__body"><p style="color:var(--muted);font-size:.9rem">' +
+        'Camps open for registration a few weeks before each MOE school holiday. Leave your email and we will tell you the day the next one opens.</p></div></article>';
     } else {
       up.innerHTML = c.upcoming.map(function (m) {
         return '<article class="camp">' +
           '<div class="camp__head"><h3>' + esc(m.title) + sampleTag(m) + '</h3>' +
-            '<p class="camp__dates">' + esc(m.dates) + ' · ' + esc(m.time) + '</p></div>' +
+            '<p class="camp__dates">' + esc(m.dates) + '</p></div>' +
           '<div class="camp__body">' +
+            (m.venues && m.venues.length
+              ? '<h4 class="camp__fact"><span>Venues</span></h4><ul class="camp__venues">' +
+                m.venues.map(function (v) { return '<li>' + esc(v) + '</li>'; }).join('') + '</ul>'
+              : '') +
             '<div class="camp__facts">' +
-              '<div class="camp__fact"><span>Venue</span><b>' + esc(m.venue) + '</b></div>' +
-              '<div class="camp__fact"><span>Ages</span><b>' + esc(m.ages) + '</b></div>' +
               '<div class="camp__fact"><span>Coach ratio</span><b>' + esc(m.ratio) + '</b></div>' +
-              '<div class="camp__fact"><span>Price</span><b>' + esc(m.price) + '</b></div>' +
             '</div>' +
-            '<h4 style="font-size:.8rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:.6rem">What to bring</h4>' +
-            '<ul class="camp__bring">' + m.bring.map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') + '</ul>' +
-            '<a class="btn btn--primary magnetic" href="' + esc(m.signup || BOOK) + '" target="_blank" rel="noopener">Register for this camp</a>' +
+            (m.pricing && m.pricing.length
+              ? '<div class="camp__price">' + m.pricing.map(function (p) {
+                  return '<div><span>' + esc(p.label) + ' <em style="color:var(--faint)">' + esc(p.note) + '</em></span><b>' + esc(p.price) + '</b></div>';
+                }).join('') + '</div>'
+              : '') +
+            (m.bring && m.bring.length
+              ? '<ul class="camp__bring">' + m.bring.map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') + '</ul>'
+              : '') +
+            '<a class="btn btn--primary" href="' + esc(m.signup || BOOK) + '" target="_blank" rel="noopener">Register for this camp</a>' +
           '</div>' +
         '</article>';
       }).join('');
     }
 
     var tt = el('campTimetable');
-    if (tt) {
+    if (tt && c.timetable) {
       tt.innerHTML = c.timetable.map(function (r) {
         return '<li><b>' + esc(r.time) + '</b><span>' + esc(r.what) + '</span></li>';
-      }).join('');
-    }
-
-    var past = el('campPast');
-    if (past) {
-      past.innerHTML = c.past.map(function (p) {
-        return '<article class="pastcard">' +
-          '<h3>' + esc(p.title) + sampleTag(p) + '</h3>' +
-          '<p class="pastcard__meta">' + esc(p.when) + ' · ' + esc(p.venue) + '</p>' +
-          '<p>' + esc(p.note) + '</p>' +
-        '</article>';
       }).join('');
     }
   })();
@@ -274,62 +230,57 @@
     var types = el('eventTypes');
     if (types) {
       types.innerHTML = D.eventTypes.map(function (t) {
-        return '<article class="etype reveal" id="' + t.key + '">' +
+        return '<article class="etype" id="' + t.key + '">' +
           '<span class="etype__num">' + t.num + '</span>' +
           '<h3>' + esc(t.name) + '</h3>' +
-          '<p class="etype__who"><strong>Who it’s for:</strong> ' + esc(t.who) + '</p>' +
           '<p class="etype__what">' + esc(t.what) + '</p>' +
-          '<div class="etype__spec">' +
-            '<div><span>Group size</span><b>' + esc(t.size) + '</b></div>' +
-            '<div><span>Duration</span><b>' + esc(t.duration) + '</b></div>' +
-            '<div><span>Lead time</span><b>' + esc(t.lead) + '</b></div>' +
-          '</div>' +
           '<ul class="etype__prov">' + t.provides.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ul>' +
-          '<a class="btn btn--primary magnetic" href="#proposal">Request a proposal</a>' +
+          '<a class="btn btn--ghost" href="#proposal">Request a proposal</a>' +
         '</article>';
       }).join('');
     }
 
-    var uses = el('eventUses');
-    if (uses) uses.innerHTML = D.eventUses.map(function (u) { return '<span>' + esc(u) + '</span>'; }).join('');
-
-    var proc = el('eventProcess');
-    if (proc) {
-      proc.innerHTML = D.eventProcess.map(function (s, i) {
-        return '<div class="process__step reveal" data-delay="' + (i * 60) + '">' +
-          '<div class="process__n">' + (i + 1) + '</div>' +
-          '<b>' + esc(s.step) + '</b><small>' + esc(s.note) + '</small></div>';
-      }).join('');
-    }
-
-    function eventCard(e, past) {
-      return '<article class="ecard">' +
-        '<span class="ecard__type">' + esc(e.type) + '</span>' +
-        '<h3>' + esc(e.title) + sampleTag(e) + '</h3>' +
-        '<ul class="ecard__meta">' +
-          '<li><b>Partner:</b> ' + esc(e.partner) + '</li>' +
-          '<li><b>When:</b> ' + esc(e.when) + '</li>' +
-          '<li><b>Where:</b> ' + esc(e.where) + '</li>' +
-        '</ul>' +
-        '<p>' + esc(e.note) + '</p>' +
-        (past && e.stats ? '<p class="ecard__stats">' + esc(e.stats) + '</p>' : '') +
-      '</article>';
+    var services = el('eventServices');
+    if (services && D.eventServices) {
+      services.innerHTML = D.eventServices.map(function (s) { return '<div>' + esc(s) + '</div>'; }).join('');
     }
 
     var upc = el('eventsUpcoming');
     if (upc) {
       upc.innerHTML = D.eventsUpcoming.length
-        ? D.eventsUpcoming.map(function (e) { return eventCard(e, false); }).join('')
+        ? D.eventsUpcoming.map(function (e) {
+            return '<article class="ecard' + (e.feature ? ' ecard--feature' : '') + '">' +
+              '<span class="ecard__type">' + esc(e.type) + '</span>' +
+              '<h3>' + esc(e.title) + sampleTag(e) + '</h3>' +
+              (e.client ? '<ul class="ecard__meta"><li><b>Client:</b> ' + esc(e.client) + '</li></ul>' : '') +
+              (e.scope && e.scope.length
+                ? '<ul class="ecard__scope">' + e.scope.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>'
+                : '') +
+            '</article>';
+          }).join('')
         : '<p class="sched__empty">No public events on the calendar right now — <a href="#proposal">talk to us about running one</a>.</p>';
     }
+
     var pst = el('eventsPast');
-    if (pst) pst.innerHTML = D.eventsPast.map(function (e) { return eventCard(e, true); }).join('');
+    if (pst) {
+      var groups = D.eventsPast || {};
+      var labels = D.eventGroupLabel || {};
+      pst.innerHTML = Object.keys(groups).filter(function (k) { return groups[k].length; }).map(function (k) {
+        return '<section class="elog__group">' +
+          '<h3>' + esc(labels[k] || k) + '</h3>' +
+          '<ul class="elog__list">' + groups[k].map(function (e) {
+            return '<li><span class="elog__name">' + esc(e.title) + '</span>' +
+              '<span class="elog__where">' + esc(e.when) + ' · ' + esc(e.where) + '</span></li>';
+          }).join('') + '</ul>' +
+        '</section>';
+      }).join('');
+    }
 
     var partners = el('eventPartners');
     if (partners) {
       partners.innerHTML = D.partners.map(function (p) {
         return p.logo
-          ? '<a href="#" class="partners__chip"><img src="' + esc(p.logo) + '" alt="' + esc(p.name) + '" loading="lazy" decoding="async"></a>'
+          ? '<span class="partners__chip"><img src="' + esc(p.logo) + '" alt="' + esc(p.name) + '" loading="lazy" decoding="async"></span>'
           : '<span class="partners__chip">' + esc(p.name) + '</span>';
       }).join('');
     }
@@ -342,10 +293,10 @@
     var founders = el('coachFounders');
     var team = el('coachTeam');
     if (!founders && !team) return;
-    var base = (window.ELEVER_SITE && window.ELEVER_SITE.base) || '';
+    var base = SITE.base || '';
 
     function card(c, i) {
-      return '<a class="coach reveal" data-delay="' + ((i % 6) * 60) + '" href="' + base + 'coaches/' + esc(c.slug) + '.html">' +
+      return '<a class="coach" href="' + base + 'coaches/' + esc(c.slug) + '.html">' +
         '<div class="coach__img"><img src="' + base + esc(c.photo) + '" alt="' + esc(c.name) + '" width="640" height="640" loading="lazy" decoding="async"></div>' +
         '<div class="coach__body"><h3>' + esc(c.name) + '</h3>' +
           '<p class="coach__role">' + esc(c.role) + '</p>' +
@@ -407,20 +358,14 @@
     render();
   })();
 
-
   /* =================================================================
      RACKET RATINGS + RECREATIONAL PLAY GROUPS  (SG Hub → Groups tab)
-     Racket Ratings Clubs is the live directory of recreational groups
-     and maintains itself, so it leads. The curated list below it is
-     only for groups that ask Élever to feature them.
      ================================================================= */
   (function racketRatings() {
     var mount = el('rrFeatures');
     if (!mount) return;
-    var rr = D.racketRatings;
-
-    mount.innerHTML = rr.features.map(function (f, i) {
-      return '<a class="rrcard' + (f.primary ? ' rrcard--primary' : '') + ' reveal" data-delay="' + (i * 70) + '"' +
+    mount.innerHTML = D.racketRatings.features.map(function (f, i) {
+      return '<a class="rrcard' + (f.primary ? ' rrcard--primary' : '') + '"' +
         ' href="' + esc(f.href) + '" target="_blank" rel="noopener">' +
         '<span class="rrcard__icon" aria-hidden="true">' + f.icon + '</span>' +
         '<h4>' + esc(f.name) + (f.primary ? '<span class="rrcard__flag">Start here for groups</span>' : '') + '</h4>' +
@@ -444,7 +389,7 @@
     function emptyState(msg) {
       return '<div class="grpempty">' +
         '<p>' + esc(msg) + '</p>' +
-        '<a class="btn btn--primary magnetic" href="' + esc(clubsHref) + '" target="_blank" rel="noopener">Browse clubs on Racket Ratings</a>' +
+        '<a class="btn btn--primary" href="' + esc(clubsHref) + '" target="_blank" rel="noopener">Browse clubs on Racket Ratings</a>' +
       '</div>';
     }
 
@@ -554,12 +499,7 @@
           firstInvalid.focus();
           return;
         }
-        var consent = form.querySelector('input[name="consent"]');
-        if (consent && !consent.checked) {
-          if (status) { status.textContent = 'Please tick the consent box so we know we may reply to you.'; status.className = 'lead__status lead__status--err'; }
-          return;
-        }
-        var to = form.getAttribute('data-to') || 'hello@eleverbadminton.com';
+        var to = form.getAttribute('data-to') || EMAIL;
         var subject = form.getAttribute('data-subject') || 'Website enquiry';
         var lines = [];
         new FormData(form).forEach(function (v, k) {

@@ -53,8 +53,8 @@ function page(c) {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../assets/css/style.css?v=8" />
-  <link rel="stylesheet" href="../assets/css/pages.css?v=10" />
+  <link rel="stylesheet" href="../assets/css/style.css?v=11" />
+  <link rel="stylesheet" href="../assets/css/pages.css?v=11" />
   <script type="application/ld+json">${jsonld}</script>
 </head>
 <body data-page="about" data-nav="solid" data-base="../">
@@ -85,10 +85,10 @@ function page(c) {
           </ul>
         </div>
         <div>
-          <h2 style="font-size:.8rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:.9rem">About ${esc(c.name.split(' ')[0])}${sample}</h2>
+          <h2 style="font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.9rem">About ${esc(c.name.split(' ')[0])}${sample}</h2>
           <p class="profile__bio">${esc(c.bio)}</p>
 
-          <h2 style="font-size:.8rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:2.4rem 0 1rem">On court</h2>
+          <h2 style="font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:2.4rem 0 1rem">On court</h2>
           <div class="gallery">
             <div class="gallery__ph">Add action photos for ${esc(c.name)}<br>to <code>assets/img/coaches/${esc(c.slug)}/</code></div>
             <div class="gallery__ph">Photo 2</div>
@@ -96,7 +96,7 @@ function page(c) {
           </div>
 
           <div style="margin-top:2.4rem;display:flex;gap:.8rem;flex-wrap:wrap">
-            <a class="btn btn--primary magnetic" href="../classes.html#schedule">See classes</a>
+            <a class="btn btn--primary" href="../classes.html#locations">See classes</a>
             <a class="btn btn--ghost" href="../about.html">All coaches</a>
           </div>
         </div>
@@ -106,11 +106,10 @@ function page(c) {
 
   <footer id="siteFooter"></footer>
 
-  <script src="../assets/js/data.js"></script>
-  <script src="../assets/js/site.js?v=8"></script>
-  <script src="../assets/js/i18n.js"></script>
-  <script src="../assets/js/pages.js?v=10"></script>
-  <script src="../assets/js/main.js?v=8"></script>
+  <script src="../assets/js/data.js?v=11"></script>
+  <script src="../assets/js/site.js?v=11"></script>
+  <script src="../assets/js/pages.js?v=11"></script>
+  <script src="../assets/js/main.js?v=11"></script>
 </body>
 </html>
 `;

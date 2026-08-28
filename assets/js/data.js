@@ -41,7 +41,7 @@
       bio: 'Keng Yang runs Élever’s strength and conditioning. He builds the off-court work — movement, speed, injury resilience — that lets technique hold up over a long match and a long season.',
       placeholder: true
     },
-    { slug: 'shawn-wong', name: 'Shawn Wong', photo: 'assets/img/team-shawn-wong.jpg', role: 'Senior Coach', cert: 'BWF Level 1', group: 'team', coaching: ['Essentials', 'Emergence'], languages: ['English', 'Mandarin'], bio: 'Shawn coaches across the Essentials and Emergence pillars, and mentors newer coaches on the Élever curriculum.', placeholder: true },
+    { slug: 'shawn-wong', name: 'Shawn Wong', photo: 'assets/img/team-shawn-wong.jpg', role: 'Senior Coach', cert: 'BWF Level 1', group: 'team', coaching: ['Essentials', 'Emergence'], languages: ['English', 'Mandarin'], bio: 'Shawn coaches across the Essentials and Emergence pathways, and mentors newer coaches on the Élever curriculum.', placeholder: true },
     { slug: 'torance-jng', name: 'Torance Jng', photo: 'assets/img/team-torance-jng.jpg', role: 'Development Coach', cert: 'BWF Level 1', group: 'team', coaching: ['Exploration', 'Essentials'], languages: ['English', 'Mandarin'], bio: 'Torance works with players building their first foundations, keeping sessions game-based so beginners leave wanting the next one.', placeholder: true },
     { slug: 'lim-su-qi', name: 'Lim Su Qi', photo: 'assets/img/team-lim-su-qi.jpg', role: 'Development Coach', cert: 'BWF Level 1', group: 'team', coaching: ['Exploration', 'Essentials'], languages: ['English', 'Mandarin'], bio: 'Su Qi coaches junior development groups with a focus on footwork and consistency before power.', placeholder: true },
     { slug: 'grace-tan', name: 'Grace Tan', photo: 'assets/img/team-grace-tan.jpg', role: 'Development Coach', cert: 'BWF Level 1', group: 'team', coaching: ['Exploration', 'Essentials'], languages: ['English', 'Mandarin'], bio: 'Grace coaches beginner and junior groups, and is a regular lead coach at Élever holiday camps.', placeholder: true },
@@ -56,49 +56,42 @@
 
   /* ---------------------------------------------------------------
      DEVELOPMENT PATHWAYS — the four E's (Classes page, 4 columns)
+     Age ranges, ability levels and grading checkpoints are still to be
+     decided — they are deliberately not stated here rather than guessed.
      --------------------------------------------------------------- */
   var PATHWAYS = [
     {
       key: 'exploration', name: 'Exploration', num: '01',
       tag: 'Start here · little to no experience',
-      ages: '5–12', commitment: '1 camp or 1 session / week',
-      blurb: 'The first taste of the sport. Game-based sessions that build coordination, movement and racket familiarity while keeping it fun enough that they ask to come back. No experience needed, and no expectation of any.',
-      learn: ['Grip, ready position and basic racket control', 'Movement and coordination through games', 'Court awareness and simple rallying', 'Enjoying the sport enough to continue'],
-      next: 'Move up to Essentials once a player can rally consistently and wants structured training.',
-      cta: { label: 'See our holiday camps', href: 'camps.html' }
+      blurb: 'The first taste of the sport. Game-based sessions that build coordination, movement and racket familiarity — no experience needed, and none expected.',
+      learn: ['Grip, ready position and basic racket control', 'Movement and coordination through games', 'Court awareness and simple rallying'],
+      cta: { label: 'See our camps', href: 'camps.html' }
     },
     {
       key: 'essentials', name: 'Essentials', num: '02',
       tag: 'Building the foundation',
-      ages: '7–16', commitment: '1–2 sessions / week',
-      blurb: 'Where technique gets built properly. Players learn the core strokes and footwork patterns that everything later depends on — done slowly and correctly rather than quickly and roughly.',
-      learn: ['Full stroke set — clear, drop, net, lift, drive', 'Six-corner footwork and recovery', 'Singles and doubles basics', 'Consistency under simple pressure'],
-      next: 'Move up to Emergence when technique holds under match pressure.',
-      cta: { label: 'Find an Essentials class', href: 'classes.html#schedule' }
+      blurb: 'Where technique gets built properly. Players learn the core strokes and footwork patterns that everything later depends on.',
+      learn: ['Full stroke set — clear, drop, net, lift, drive', 'Six-corner footwork and recovery', 'Singles and doubles basics'],
+      cta: { label: 'Find an Essentials class', href: 'classes.html#locations' }
     },
     {
       key: 'emergence', name: 'Emergence', num: '03',
       tag: 'Competitive development',
-      ages: '10–18', commitment: '2–3 sessions / week',
-      blurb: 'For players who have the strokes and now want to win with them. Training shifts toward tactics, match play, physical conditioning and the habits that competition demands.',
-      learn: ['Tactical patterns for singles and doubles', 'Deception, pace change and shot selection', 'Match play and competition routines', 'Strength, speed and injury resilience'],
-      next: 'Move up to Elite by invitation, based on training standard and competition results.',
-      cta: { label: 'Find an Emergence class', href: 'classes.html#schedule' }
+      blurb: 'For players who have the strokes and now want to win with them. Training shifts toward tactics, match play and physical conditioning.',
+      learn: ['Tactical patterns for singles and doubles', 'Deception, pace change and shot selection', 'Match play and competition routines'],
+      cta: { label: 'Find an Emergence class', href: 'classes.html#locations' }
     },
     {
       key: 'elite', name: 'Elite', num: '04',
-      tag: 'By invitation · performance squad',
-      ages: '12+', commitment: '3+ sessions / week',
-      blurb: 'Our performance squad. Individualised programmes, a competition calendar, strength and conditioning, and video review — built around players targeting national age-group and open competition.',
-      learn: ['Individual technical and tactical programme', 'Planned competition calendar and periodisation', 'Dedicated strength & conditioning', 'Video analysis and performance review'],
-      next: 'Squad places are reviewed each season.',
+      tag: 'Performance squad',
+      blurb: 'Our performance squad. Individualised programmes, a competition calendar, strength and conditioning, and video review.',
+      learn: ['Individual technical and tactical programme', 'Planned competition calendar', 'Dedicated strength & conditioning', 'Video analysis and performance review'],
       cta: { label: 'Enquire about Elite', href: 'contact.html' }
     }
   ];
 
   /* ---------------------------------------------------------------
      REGULAR CLASS SCHEDULE
-     venueId links to the SG Hub venue directory in main.js (VENUES).
      level: 'Essentials' | 'Emergence'
      --------------------------------------------------------------- */
   var CLASSES = [
@@ -119,16 +112,16 @@
   var CAMPS = {
     upcoming: [
       {
-        title: 'December Holiday Exploration Camp',
-        dates: '15 – 18 December 2026',
-        time: '9.00am – 12.00pm daily',
-        venue: 'Wyse Active Hub, Jurong East',
-        ages: '6–12',
-        ratio: '1 coach : 8 players',
-        price: 'S$280 for 4 days',
-        bring: ['Court shoes (non-marking)', 'Water bottle', 'A racket if you have one — we lend one if not', 'A small snack'],
-        signup: 'https://app.eleverbadminton.com/',
-        placeholder: true
+        title: 'Holiday Exploration Camp',
+        dates: '7 – 11 September 2026',
+        venues: ['Aljunied', 'Novena', 'Sengkang', 'Serangoon'],
+        ratio: '6 students : 1 coach',
+        pricing: [
+          { label: 'Standard pricing', note: 'until 31 Aug', price: 'S$228' },
+          { label: 'Closing pricing', note: 'until 6 Sep', price: 'S$248' }
+        ],
+        bring: ['Court shoes (non-marking)', 'Water bottle', 'A racket if you have one — we lend one if not'],
+        signup: 'https://www.eleverbadminton.com/hec202609'
       }
     ],
     timetable: [
@@ -138,68 +131,85 @@
       { time: '10.30am', what: 'Game-based practice' },
       { time: '11.15am', what: 'Mini-tournament and cool-down' },
       { time: '12.00pm', what: 'Pick-up' }
-    ],
-    past: [
-      { title: 'June Holiday Camp 2026', when: 'June 2026', venue: 'Wyse Active Hub', note: 'Four days of game-based sessions for first-time players.', placeholder: true },
-      { title: 'March Holiday Camp 2026', when: 'March 2026', venue: 'Fernvale Village', note: 'Our largest March intake to date across two age groups.', placeholder: true }
     ]
   };
 
   /* ---------------------------------------------------------------
-     EVENTS — the corporate / community service line
+     EVENTS — the service line we deliver for other organisations
      type: 'carnival' | 'clinic' | 'competition'
      --------------------------------------------------------------- */
   var EVENT_TYPES = [
     {
       key: 'carnival', name: 'Carnivals', num: '01',
-      who: 'Companies, schools, condos and community groups who want a lot of people playing at once.',
       what: 'A mass-participation event day. Rotating stations, coach-led games, fun formats and prizes — designed so complete beginners and regular players both have a good time on the same floor.',
-      size: '50 – 300+ participants', duration: 'Half or full day', lead: '6–8 weeks',
-      provides: ['Event coaches and marshals', 'Rackets, shuttles and all equipment', 'Court and station setup', 'Scoring, prizes and medals', 'Event photography', 'First aid on site']
+      provides: ['Event coaches and marshals', 'Rackets, shuttles and all equipment', 'Court and station setup', 'Scoring, prizes and medals']
     },
     {
       key: 'clinic', name: 'Clinics', num: '02',
-      who: 'Corporate teams, school CCAs and interest groups who want to actually get better.',
       what: 'A focused coaching workshop. One topic — footwork, doubles rotation, serve and return — taught properly in a short block, scaled to whatever level walks in.',
-      size: '10 – 60 participants', duration: '2 – 3 hours, or a short series', lead: '3–4 weeks',
-      provides: ['BWF-certified coaches', 'Structured session plan for the level', 'Shuttles and training equipment', 'Loan rackets if needed', 'Take-home practice notes']
+      provides: ['BWF-certified coaches', 'Structured session plan for the level', 'Shuttles and training equipment', 'Loan rackets if needed']
     },
     {
       key: 'competition', name: 'Competitions', num: '03',
-      who: 'Organisations running an internal tournament, an inter-school meet or an open event.',
       what: 'A properly run tournament. We handle draws, formats, scheduling, umpiring and results so the host organisation can concentrate on their people rather than the spreadsheet.',
-      size: '16 – 128 entries', duration: 'One or multiple days', lead: '8–10 weeks',
-      provides: ['Format design and seeding', 'Draws, scheduling and results', 'Umpires and court marshals', 'Trophies, medals and prize ceremony', 'Live results board', 'Event photography']
+      provides: ['Format design and seeding', 'Draws, scheduling and results', 'Umpires and court marshals', 'Trophies, medals and prize ceremony']
     }
   ];
 
-  var EVENT_USES = [
-    'Company D&D or family day', 'Team bonding', 'CSR / community day',
-    'School CCA enrichment', 'Inter-class or inter-school meet',
-    'Condo community day', 'Brand activation', 'Charity fundraiser'
-  ];
-
-  var EVENT_PROCESS = [
-    { step: 'Enquire', note: 'Tell us the date, headcount and what you are trying to achieve.' },
-    { step: 'Proposal & quote', note: 'We come back with a format, a run sheet and a fixed price.' },
-    { step: 'Site recce', note: 'We check the venue, courts, power and access.' },
-    { step: 'Event day', note: 'Our coaches and marshals run it end to end.' },
-    { step: 'Recap', note: 'You get the photos, results and a short report.' }
+  /* All-in-one suite of event management services. */
+  var EVENT_SERVICES = [
+    'Coaches and marshals', 'Scoring and results', 'Procurement of equipment',
+    'Medals, trophies and prizes', 'Emcee and event hosting', 'Media and photography',
+    'Court and venue setup', 'First aid on site'
   ];
 
   var EVENTS_UPCOMING = [
-    { title: 'Community Badminton Carnival', type: 'carnival', partner: 'Partner to be announced', when: 'Q1 2027', where: 'To be confirmed', note: 'A community open day bringing first-time players onto court.', placeholder: true }
+    {
+      title: 'SingHealth Presidents’ Challenge Sports Day 2026',
+      type: 'carnival',
+      client: 'SingHealth Community Hospitals',
+      scope: [
+        'Badminton and Pickleball Tournament',
+        'Badminton and Pickleball Clinics'
+      ],
+      feature: true
+    }
   ];
 
-  var EVENTS_PAST = [
-    { title: 'Corporate Badminton Carnival', type: 'carnival', partner: 'Partner name', when: '2026', where: 'Singapore', stats: '', note: 'Replace this entry with a real past event — date, venue, partner, headcount and a short write-up.', placeholder: true },
-    { title: 'School Coaching Clinic', type: 'clinic', partner: 'Partner name', when: '2026', where: 'Singapore', stats: '', note: 'Replace this entry with a real past event — date, venue, partner, headcount and a short write-up.', placeholder: true }
-  ];
+  /* Previous events, grouped by pillar. Write-ups and photos to follow. */
+  var EVENTS_PAST = {
+    carnival: [
+      { title: 'Joo Chiat Badminton Carnival 2026', when: '23 Jul 2026', where: 'St. Patrick’s School' },
+      { title: 'ÉB @ KFF Singapore Badminton Open 2025', when: '30 May – 1 Jun 2025', where: 'OCBC Square' }
+    ],
+    clinic: [
+      { title: 'ASICS Badminton Summit 2026', when: '5 Jul 2026', where: 'The Sports Arina @ Jalan Kayu' },
+      { title: 'Serangoon-Paya Lebar Badminton Clinic 2026', when: '4 Apr 2026', where: 'Paya Lebar Kovan Community Club' },
+      { title: 'Bukit Gombak Sports Clinic 2026', when: '8 Feb 2026', where: 'Hillview Community Club' },
+      { title: 'ÉB @ Northbrooks Secondary School', when: '23 Oct 2025', where: 'Northbrooks Secondary School' },
+      { title: 'Pesta Sukan Clinic 2025', when: '6 & 10 Jul 2025', where: 'Singapore Badminton Stadium' },
+      { title: 'Joo Chiat Badminton Clinic 2025', when: '11 May 2025', where: 'Joo Chiat Community Club' },
+      { title: 'Siglap South Badminton Clinic 2025', when: '10 May 2025', where: 'Siglap South Community Centre' },
+      { title: 'Bukit Gombak Sports Clinic 2025', when: '26 Jan 2025', where: 'Hillview Community Club' },
+      { title: 'Kolam Ayer Badminton Clinic 2024', when: '23 Nov 2024', where: 'Kolam Ayer Community Club' },
+      { title: 'Paya Lebar Badminton Clinic 2024', when: '18 May 2024', where: 'Paya Lebar Kovan Community Club' }
+    ],
+    competition: []
+  };
+
+  var EVENT_GROUP_LABEL = { carnival: 'Carnivals', clinic: 'Clinics', competition: 'Competitions' };
 
   /* Partner logos: drop files in assets/img/partners/ and set `logo`.
      Entries with no logo render as a name chip rather than a fake mark. */
   var PARTNERS = [
-    { name: 'Add your partners in assets/js/data.js', logo: '', placeholder: true }
+    { name: 'SingHealth Community Hospitals', logo: '' },
+    { name: 'ASICS', logo: '' },
+    { name: 'Joo Chiat CC', logo: '' },
+    { name: 'Bukit Gombak CC', logo: '' },
+    { name: 'Siglap South CC', logo: '' },
+    { name: 'Paya Lebar Kovan CC', logo: '' },
+    { name: 'Kolam Ayer CC', logo: '' },
+    { name: 'Northbrooks Secondary School', logo: '' }
   ];
 
   /* ---------------------------------------------------------------
@@ -211,12 +221,8 @@
     { slug: 'first-five-sessions', title: 'Badminton for beginners: your first five sessions', category: 'Coaching tips', date: '2026-07-02', read: '6 min', excerpt: 'What a complete beginner should expect to learn, in order, and how to tell whether it is going well.', placeholder: true }
   ];
 
-
   /* ---------------------------------------------------------------
      RACKET RATINGS — the free rating platform we point players at
-     https://www.racketratings.net/badminton
-     Two separate metrics: Rating = how strong you are;
-     Ranking = what you have won. Formats: Singles, Doubles, 3v3.
      --------------------------------------------------------------- */
   var RACKET_RATINGS = {
     home: 'https://www.racketratings.net/badminton',
@@ -238,20 +244,11 @@
 
   /* ---------------------------------------------------------------
      RECREATIONAL PLAY GROUPS
-     A small curated list of local groups that welcome new players.
      Racket Ratings Clubs is the live, self-maintaining directory —
      this list is only for groups that ask us to feature them.
-     Leave the array empty and the page falls back to a clean empty
-     state that points at Racket Ratings Clubs instead.
+     Leave it empty and the page falls back to a clean empty state.
      --------------------------------------------------------------- */
-  var REC_GROUPS = [
-    { name: 'Sample social group', region: 'East', day: 'Tuesday', time: '8.00pm – 10.00pm',
-      venue: 'Add the hall name', level: 'All levels', contact: 'Add a contact', rrClub: '', placeholder: true },
-    { name: 'Sample weekend kakis', region: 'West', day: 'Saturday', time: '10.00am – 12.00pm',
-      venue: 'Add the hall name', level: 'Intermediate', contact: 'Add a contact', rrClub: '', placeholder: true },
-    { name: 'Sample beginners meet', region: 'Central', day: 'Sunday', time: '4.00pm – 6.00pm',
-      venue: 'Add the hall name', level: 'Beginner friendly', contact: 'Add a contact', rrClub: '', placeholder: true }
-  ];
+  var REC_GROUPS = [];
 
   window.ELEVER_DATA = {
     coaches: COACHES,
@@ -259,10 +256,10 @@
     classes: CLASSES,
     camps: CAMPS,
     eventTypes: EVENT_TYPES,
-    eventUses: EVENT_USES,
-    eventProcess: EVENT_PROCESS,
+    eventServices: EVENT_SERVICES,
     eventsUpcoming: EVENTS_UPCOMING,
     eventsPast: EVENTS_PAST,
+    eventGroupLabel: EVENT_GROUP_LABEL,
     partners: PARTNERS,
     articles: ARTICLES,
     racketRatings: RACKET_RATINGS,

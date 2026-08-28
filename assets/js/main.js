@@ -1,9 +1,9 @@
 /* =====================================================================
-   ÉLEVER BADMINTON — Interactive Experience Engine
+   ÉLEVER BADMINTON — Interactive layer
    - Cinematic canvas intro (physics shuttlecock + racket smash)
-   - Live hero shuttle-field that reacts to the cursor
-   - Custom cursor, magnetic buttons, 3D tilt, scroll reveals
-   - Interactive "Smash Speed" meter, draggable news timeline
+   - Live hero shuttle-field
+   - Nav behaviour, magnetic buttons, 3D tilt, scroll reveals
+   - SG Badminton Hub venue directory + world-tour calendar
    ===================================================================== */
 (function () {
   'use strict';
@@ -117,6 +117,10 @@
     initHero(); startReveals();
   } else {
     runIntro();
+    /* Safety net: the intro is a full-screen overlay, so if its
+       requestAnimationFrame loop ever stalls (background tab, canvas
+       failure) the site would be unreachable. Force it closed. */
+    setTimeout(finishIntro, 6000);
   }
 
   
@@ -157,7 +161,7 @@
           x: px, y: py,
           vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 2,
           life: 1, size: 1 + Math.random() * 3,
-          hue: Math.random() < 0.6 ? '47,92,240' : '255,255,255'
+          hue: Math.random() < 0.6 ? '33,81,209' : '255,255,255'
         });
       }
     }
@@ -180,7 +184,7 @@
       ctx.save();
       ctx.globalAlpha = 0.12;
       for (var i = 0; i < 6; i++) {
-        ctx.strokeStyle = '#2f5cf0';
+        ctx.strokeStyle = '#2151D1';
         ctx.lineWidth = 1;
         var yy = cy() + Math.sin(e / 600 + i) * 4 + (i - 3) * 40;
         ctx.beginPath(); ctx.moveTo(0, yy); ctx.lineTo(W, yy + 20); ctx.stroke();
@@ -230,7 +234,7 @@
         var tr = trail[k]; tr.life -= 0.04;
         if (tr.life <= 0) { trail.splice(k, 1); continue; }
         ctx.globalAlpha = tr.life * 0.5;
-        ctx.fillStyle = '#2f5cf0';
+        ctx.fillStyle = '#2151D1';
         ctx.beginPath(); ctx.arc(tr.x, tr.y, tr.life * 6, 0, Math.PI * 2); ctx.fill();
       }
       ctx.globalAlpha = 1;
@@ -275,102 +279,11 @@
       ctx.beginPath(); ctx.moveTo(-30, -70 + i * 11); ctx.lineTo(30, -70 + i * 11); ctx.stroke();
     }
     // shaft + grip
-    ctx.strokeStyle = 'rgba(47,92,240,.9)'; ctx.lineWidth = 7; ctx.lineCap = 'round';
+    ctx.strokeStyle = 'rgba(33,81,209,.9)'; ctx.lineWidth = 7; ctx.lineCap = 'round';
     ctx.beginPath(); ctx.moveTo(0, -24); ctx.lineTo(0, 70); ctx.stroke();
     ctx.restore();
   }
 
-  /* =====================================================================
-     2. LIVE HERO SHUTTLE FIELD (reacts to cursor)
-     ===================================================================== */
-  function initHero() {
-    var canvas = document.getElementById('heroCanvas');
-    if (!canvas || reduce) return;
-    var ctx = canvas.getContext ? canvas.getContext('2d') : null;
-    if (!ctx) return;
-    var W, H, DPR = Math.min(window.devicePixelRatio || 1, 2);
-    var shuttles = [];
-    var mouse = { x: -9999, y: -9999, active: false };
-
-    function size() {
-      W = canvas.clientWidth; H = canvas.clientHeight;
-      canvas.width = W * DPR; canvas.height = H * DPR;
-      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    }
-    size(); window.addEventListener('resize', size);
-
-    var COUNT = window.innerWidth < 700 ? 7 : 16;
-    for (var i = 0; i < COUNT; i++) {
-      shuttles.push({
-        x: Math.random() * W, y: Math.random() * H,
-        vx: (Math.random() - 0.5) * 0.6, vy: (Math.random() - 0.5) * 0.6,
-        s: 0.28 + Math.random() * 0.5, a: Math.random() * Math.PI * 2,
-        spin: (Math.random() - 0.5) * 0.02
-      });
-    }
-
-    canvas.parentElement.addEventListener('mousemove', function (ev) {
-      var r = canvas.getBoundingClientRect();
-      mouse.x = ev.clientX - r.left; mouse.y = ev.clientY - r.top; mouse.active = true;
-    });
-    canvas.parentElement.addEventListener('mouseleave', function () { mouse.active = false; });
-
-    function loop() {
-      ctx.clearRect(0, 0, W, H);
-      for (var i = 0; i < shuttles.length; i++) {
-        var s = shuttles[i];
-        // cursor repulsion (like hitting the shuttle)
-        if (mouse.active) {
-          var dx = s.x - mouse.x, dy = s.y - mouse.y;
-          var d2 = dx * dx + dy * dy;
-          if (d2 < 26000) {
-            var d = Math.sqrt(d2) || 1;
-            var f = (1 - d / 161) * 1.4;
-            s.vx += (dx / d) * f; s.vy += (dy / d) * f;
-            s.spin += 0.01;
-          }
-        }
-        s.x += s.vx; s.y += s.vy;
-        s.vx *= 0.985; s.vy *= 0.985;
-        // gentle drift back
-        s.vy += 0.002;
-        s.a = Math.atan2(s.vy, s.vx) + Math.PI / 2 + Math.sin(Date.now() / 900 + i) * 0.05;
-        // wrap
-        var m = 80;
-        if (s.x < -m) s.x = W + m; if (s.x > W + m) s.x = -m;
-        if (s.y < -m) s.y = H + m; if (s.y > H + m) s.y = -m;
-        ctx.globalAlpha = 0.5;
-        drawShuttle(ctx, s.x, s.y, s.s, s.a);
-      }
-      ctx.globalAlpha = 1;
-      requestAnimationFrame(loop);
-    }
-    loop();
-  }
-
-  /* =====================================================================
-     3. CUSTOM CURSOR
-     ===================================================================== */
-  if (!isTouch && !reduce) {
-    var dot = document.createElement('div');
-    var ring = document.createElement('div');
-    dot.className = 'cursor-dot'; ring.className = 'cursor-ring';
-    document.body.appendChild(dot); document.body.appendChild(ring);
-    var mx = 0, my = 0, rx = 0, ry = 0;
-    window.addEventListener('mousemove', function (e) {
-      mx = e.clientX; my = e.clientY;
-      dot.style.transform = 'translate(' + mx + 'px,' + my + 'px)';
-    });
-    (function follow() {
-      rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18;
-      ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px)';
-      requestAnimationFrame(follow);
-    })();
-    document.querySelectorAll('a,button,.tilt,.magnetic').forEach(function (el) {
-      el.addEventListener('mouseenter', function () { document.body.classList.add('cursor-hover'); });
-      el.addEventListener('mouseleave', function () { document.body.classList.remove('cursor-hover'); });
-    });
-  }
 
   /* =====================================================================
      4. NAV
@@ -424,14 +337,28 @@
     });
   }
 
+
   /* =====================================================================
      6. SCROLL REVEALS + COUNTERS + PARALLAX
      ===================================================================== */
   var revealObserver;
+
+  /* Observe every .reveal not already handled. Safe to call repeatedly —
+     pages.js injects content, so we re-scan rather than assuming the DOM
+     was complete on first run. */
+  function observeReveals() {
+    document.querySelectorAll('.reveal:not(.in)').forEach(function (el) {
+      if (el.dataset.revealed) return;
+      el.dataset.revealed = '1';
+      revealObserver.observe(el);
+    });
+  }
+
   function startReveals() {
-    var items = document.querySelectorAll('.reveal');
-    if (!('IntersectionObserver' in window)) {
-      items.forEach(function (el) { el.classList.add('in'); }); runCounters(); return;
+    if (!('IntersectionObserver' in window) || reduce) {
+      document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+      runCounters();
+      return;
     }
     revealObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
@@ -441,8 +368,11 @@
           revealObserver.unobserve(en.target);
         }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-    items.forEach(function (el) { revealObserver.observe(el); });
+    }, { threshold: 0, rootMargin: '0px 0px -5% 0px' });
+    observeReveals();
+    // Catch anything rendered after this tick (pages.js, late images).
+    setTimeout(observeReveals, 0);
+    window.addEventListener('load', observeReveals);
     runCounters();
 
     // section-tag parallax
@@ -480,318 +410,6 @@
       io.observe(el);
     });
   }
-
-  /* =====================================================================
-     7. "FIND YOUR BADMINTON TWIN" PERSONALITY QUIZ
-     ===================================================================== */
-  (function twinQuiz() {
-    var root = document.getElementById('quiz');
-    if (!root) return;
-
-    var IMG = 'assets/img/players/';
-    // Language-independent data: image path, flag, licence, and the option
-    // weight maps. All display text (name/role/tag/desc, questions, options)
-    // comes from window.I18N so the quiz can switch language live.
-    var PLAYER_META = {
-      an:       { img: IMG + 'an-se-young.jpg', flag: '🇰🇷', lic: 'CC BY-SA 2.0' },
-      tai:      { img: IMG + 'tai-tzu-ying.jpg', flag: '🇹🇼', lic: 'CC BY 2.0' },
-      akane:    { img: IMG + 'akane-yamaguchi.jpg', flag: '🇯🇵', lic: 'CC BY 3.0' },
-      yeo:      { img: IMG + 'yeo-jia-min.jpg', flag: '🇸🇬', lic: 'CC BY-SA 4.0' },
-      axelsen:  { img: IMG + 'viktor-axelsen.jpg', flag: '🇩🇰', lic: 'CC BY 4.0' },
-      kunlavut: { img: IMG + 'kunlavut-vitidsarn.jpg', flag: '🇹🇭', lic: 'CC BY 3.0' },
-      loh:      { img: IMG + 'loh-kean-yew.jpg', flag: '🇸🇬', lic: 'CC BY 4.0' },
-      antonsen: { img: IMG + 'anders-antonsen.jpg', flag: '🇩🇰', lic: 'CC BY-SA 4.0' },
-      chou:     { img: IMG + 'chou-tien-chen.jpg', flag: '🇹🇼', lic: 'Attribution' },
-      naraoka:  { img: IMG + 'kodai-naraoka.jpg', flag: '🇯🇵', lic: 'CC BY-SA 4.0' },
-      shi:      { img: IMG + 'shi-yuqi.jpg', flag: '🇨🇳', lic: 'CC BY 4.0' },
-      jonatan:  { img: IMG + 'jonatan-christie.jpg', flag: '🇮🇩', lic: 'CC BY 2.0' },
-      lakshya:  { img: IMG + 'lakshya-sen.jpg', flag: '🇮🇳', lic: 'CC BY-SA 4.0' },
-      chenyf:   { img: IMG + 'chen-yufei.jpg', flag: '🇨🇳', lic: 'CC BY-SA 4.0' },
-      marin:    { img: IMG + 'carolina-mar-n.jpg', flag: '🇪🇸', lic: 'CC BY-SA 2.0' },
-      sindhu:   { img: IMG + 'p-v-sindhu.jpg', flag: '🇮🇳', lic: 'CC BY-SA 3.0' },
-      ratchanok:{ img: IMG + 'ratchanok-intanon.jpg', flag: '🇹🇭', lic: 'CC BY 3.0' },
-      wangzy:   { img: IMG + 'wang-zhiyi.jpg', flag: '🇨🇳', lic: 'CC BY-SA 4.0' },
-      leezii:   { img: IMG + 'lee-zii-jia.jpg', flag: '🇲🇾', lic: 'CC BY-SA 4.0' },
-      ginting:  { img: IMG + 'anthony-sinisuka-ginting.jpg', flag: '🇮🇩', lic: 'CC BY 4.0' },
-      gregoria: { img: IMG + 'gregoria-mariska-tunjung.jpg', flag: '🇮🇩', lic: 'Public domain' },
-      lindan:   { img: IMG + 'lin-dan.jpg', flag: '🇨🇳', lic: 'CC BY-SA 4.0' },
-      lcw:      { img: IMG + 'lee-chong-wei.jpg', flag: '🇲🇾', lic: 'CC BY-SA 2.0' },
-      okuhara:  { img: IMG + 'nozomi-okuhara.jpg', flag: '🇯🇵', lic: 'CC BY 4.0' },
-      momota:   { img: IMG + 'kento-momota.png', flag: '🇯🇵', lic: 'CC BY 3.0' },
-      saina:    { img: IMG + 'saina-nehwal.jpg', flag: '🇮🇳', lic: 'GODL-India' },
-      tommy:    { img: IMG + 'tommy-sugiarto.jpg', flag: '🇮🇩', lic: 'CC BY-SA 4.0' }
-    };
-
-    // Option weight maps (parallel to the localized questions in I18N.data.quiz).
-    var WEIGHTS = [
-      [ { an: 2, kunlavut: 2, momota: 1, wangzy: 1 }, { tai: 2, loh: 2, leezii: 1 }, { axelsen: 2, momota: 1, shi: 1 }, { akane: 2, naraoka: 2, okuhara: 1 } ],
-      [ { loh: 2, axelsen: 1, sindhu: 1, leezii: 1 }, { tai: 2, ratchanok: 2, antonsen: 1, tommy: 1 }, { akane: 2, okuhara: 2, naraoka: 1 }, { ginting: 2, jonatan: 1, lakshya: 1 } ],
-      [ { an: 2, axelsen: 1, chou: 2 }, { tai: 2, ratchanok: 1, lindan: 1 }, { naraoka: 2, okuhara: 2, chou: 1 }, { yeo: 2, kunlavut: 1, wangzy: 1, shi: 1 } ],
-      [ { marin: 2, lindan: 1, jonatan: 1 }, { chenyf: 2, momota: 1, an: 1 }, { yeo: 2, okuhara: 1, gregoria: 1, tommy: 1 }, { lindan: 2, jonatan: 2, leezii: 1 } ],
-      [ { loh: 2, lakshya: 2, gregoria: 1 }, { marin: 1, saina: 2, sindhu: 1, lcw: 1 }, { chou: 2, naraoka: 1, okuhara: 1 }, { shi: 2, axelsen: 1, wangzy: 1, kunlavut: 1 } ],
-      [ { loh: 1, sindhu: 2, ginting: 2, leezii: 1 }, { tai: 2, ratchanok: 1, tommy: 1, antonsen: 2 }, { an: 1, akane: 2, naraoka: 1, okuhara: 1 }, { sindhu: 1, lcw: 2, lindan: 1, saina: 1, momota: 1 } ]
-    ];
-
-    // Little stick-figure mascots — one per answer, each posed to act out the
-    // choice. Drawn in white so they knock out of the colour-gradient chip.
-    function fig(inner) {
-      return '<svg viewBox="0 0 40 42" fill="none" stroke="currentColor" stroke-width="2.6" ' +
-        'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + inner + '</svg>';
-    }
-    var HEAD = function (x, y) { return '<circle cx="' + x + '" cy="' + y + '" r="4" fill="currentColor" stroke="none"/>'; };
-    var ICONS = {
-      // athletic ready stance (bent knees, arms up)
-      ready:   fig(HEAD(20, 8) + '<path d="M20 12v9M20 21l-5 6v9M20 21l5 6v9M20 15l-5 4M20 15l5 4"/>'),
-      // jump smash — airborne, racket overhead
-      smash:   fig(HEAD(17, 10) + '<path d="M17 14v8M17 22l-4 7M17 22l5 6M17 17l-6 3M17 17l7-7M24 10l5-5"/><circle cx="30" cy="4" r="2.6"/>'),
-      // arms crossed, locked-in focus
-      focus:   fig(HEAD(20, 8) + '<path d="M20 12v10M20 22l-4 15M20 22l4 15M13 16l14 5M27 16l-13 5"/>'),
-      // sprinting to chase every shot
-      run:     fig(HEAD(23, 8) + '<path d="M22 12l-3 8M19 20l-6 5M19 20l7 5-2 8M20 15l7 1M20 15l-6 5"/>'),
-      // crouched, sneaky fake
-      sneaky:  fig(HEAD(16, 12) + '<path d="M16 16l3 8M19 24l-5 5M19 24l6 4M16 18l-5 1M16 18l5-3 3 2"/>'),
-      // full-stretch diving save
-      dive:    fig(HEAD(9, 15) + '<path d="M12 17l16 6M28 23l6-2M28 23l2 6M16 18l-3 8M22 20l7-5"/><circle cx="31" cy="12" r="2.4"/>'),
-      // reaching forward for a quick net shot
-      net:     fig(HEAD(13, 9) + '<path d="M14 13l1 9M15 22l-4 14M15 22l5 13M14 16l14-2M14 16l-4 5"/><circle cx="30" cy="13.5" r="2.4"/>'),
-      // grooving a repeat drill (motion arc)
-      drill:   fig(HEAD(18, 9) + '<path d="M18 13v9M18 22l-4 14M18 22l4 14M18 16l6-4M24 12l5-3"/><circle cx="31" cy="7.5" r="2.3"/><path d="M9 11q-2 4 0 8" stroke-dasharray="1.5 3"/>'),
-      // playful, juggling for fun
-      playful: fig(HEAD(20, 9) + '<path d="M20 13v9M20 22l-6 6M20 22l6 6M20 15l-6-3M20 15l6-3"/><circle cx="12" cy="9" r="1.8" fill="currentColor" stroke="none"/><circle cx="28" cy="9" r="1.8" fill="currentColor" stroke="none"/>'),
-      // flexing — pure fitness
-      fitness: fig(HEAD(20, 10) + '<path d="M20 14v9M20 23l-5 13M20 23l5 13M20 16l-5-2-2 3M20 16l5-2 2 3"/>'),
-      // adjusting the racket — fixing weak spots
-      tune:    fig(HEAD(15, 10) + '<path d="M15 14l3 8M18 22l-5 4M18 22l6 3v6M15 17l9 3"/><circle cx="27" cy="21" r="2.4"/>'),
-      // arms-up victory / fired up
-      celeb:   fig(HEAD(20, 10) + '<path d="M20 14v9M20 23l-5 13M20 23l5 13M20 16l-6-6M20 16l6-6"/>'),
-      // calm, relaxed and composed
-      calm:    fig(HEAD(20, 9) + '<path d="M20 13v11M20 24l-4 13M20 24l4 13M20 16l-4 8M20 16l4 8"/>'),
-      // low-key, hands behind head
-      chill:   fig(HEAD(20, 10) + '<path d="M20 14v10M20 24l-4 13M20 24l4 13M20 16l-6-3 2 5M20 16l6-3-2 5"/>'),
-      // showman, arms wide to the crowd
-      show:    fig(HEAD(20, 9) + '<path d="M20 13v10M20 23l-5 14M20 23l5 14M20 15l-9-1M20 15l9-1"/>'),
-      // boxing guard — underdog fighter
-      fighter: fig(HEAD(19, 10) + '<path d="M19 14v8M19 22l-4 15M19 22l5 14M19 16l-4-2M19 16l5-1"/><circle cx="14" cy="13" r="2" fill="currentColor" stroke="none"/><circle cx="24" cy="14" r="2" fill="currentColor" stroke="none"/>'),
-      // planting a flag — trailblazer
-      flag:    fig(HEAD(15, 11) + '<path d="M15 15v8M15 23l-4 14M15 23l4 14M15 17l-5 4M15 17l11-8M26 4v13M26 5l7 2-7 3"/>'),
-      // hunched, grinding it out to outlast
-      endure:  fig(HEAD(20, 12) + '<path d="M20 16l-2 8M18 24l-3 13M18 24l4 13M18 19l-5 6M18 19l7 6"/>'),
-      // star pose — solid all-round
-      allround:fig(HEAD(20, 8) + '<path d="M20 12v8M20 20l-6 17M20 20l6 17M20 14l-9-3M20 14l9-3"/>')
-    };
-    // Which mascot acts out each option (parallel to the localized questions).
-    var OPTION_ICON_NAMES = [
-      ['ready', 'smash', 'focus', 'run'],
-      ['smash', 'sneaky', 'dive', 'net'],
-      ['drill', 'playful', 'fitness', 'tune'],
-      ['celeb', 'calm', 'chill', 'show'],
-      ['fighter', 'flag', 'endure', 'allround'],
-      ['smash', 'sneaky', 'endure', 'celeb']
-    ];
-
-    var I18N = window.I18N;
-    function lang() { return I18N ? I18N.lang() : 'en'; }
-    function players() { return (I18N && I18N.data.players[lang()]) || I18N.data.players.en; }
-    function questions() { return (I18N && I18N.data.quiz[lang()]) || I18N.data.quiz.en; }
-    function player(key) {
-      var p = players()[key] || {};
-      var m = PLAYER_META[key] || {};
-      return { name: p.name, role: p.role, tag: p.tag, desc: p.desc, img: m.img, flag: m.flag, lic: m.lic };
-    }
-
-    var scores = {}, current = 0, lastResult = null, view = 'intro';
-    var qWrap = document.getElementById('quizQ');
-    var progress = document.getElementById('quizProgress');
-    var progressBar = document.getElementById('quizProgressBar');
-    var result = document.getElementById('quizResult');
-    var stage = document.getElementById('quizStage');
-    var startBtn = document.getElementById('quizStart');
-    var intro = document.getElementById('quizIntro');
-
-    function setProgress(pct) {
-      progress.style.width = pct + '%';
-      if (progressBar) progressBar.setAttribute('aria-valuenow', String(Math.round(pct)));
-    }
-
-    function reset() {
-      scores = {}; current = 0;
-      Object.keys(PLAYER_META).forEach(function (k) { scores[k] = 0; });
-    }
-
-    function renderQuestion() {
-      view = 'question';
-      var QS = questions();
-      var Q = QS[current];
-      setProgress(current / QS.length * 100);
-      var html = '<p class="quiz__count">' + I18N.t('quiz.count', { n: current + 1, total: QS.length }) + '</p>';
-      html += '<h3 class="quiz__q">' + Q.q + '</h3><div class="quiz__opts">';
-      Q.a.forEach(function (optText, i) {
-        var names = OPTION_ICON_NAMES[current] || [];
-        var mark = ICONS[names[i]] || ICONS.target;
-        html += '<button class="quiz__opt quiz__opt--' + i + '" data-i="' + i + '"><span class="quiz__opt-icon" aria-hidden="true">' + mark + '</span><span class="quiz__opt-text">' + optText + '</span></button>';
-      });
-      html += '</div>';
-      qWrap.innerHTML = html;
-      qWrap.classList.remove('fade'); void qWrap.offsetWidth; qWrap.classList.add('fade');
-      qWrap.querySelectorAll('.quiz__opt').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          var w = WEIGHTS[current][+btn.dataset.i];
-          Object.keys(w).forEach(function (k) { scores[k] += w[k]; });
-          current++;
-          if (current < QS.length) renderQuestion();
-          else showResult();
-        });
-      });
-    }
-
-    function showResult() {
-      view = 'result';
-      setProgress(100);
-      if (!lastResult) {
-        var bestScore = -1;
-        Object.keys(scores).forEach(function (k) { if (scores[k] > bestScore) bestScore = scores[k]; });
-        var top = Object.keys(scores).filter(function (k) { return scores[k] === bestScore; });
-        lastResult = top[Math.floor(Math.random() * top.length)];
-      }
-      renderResult();
-      quizConfetti();     // celebrate the reveal (only on completion, not on language re-render)
-    }
-
-    // Lightweight confetti burst contained inside the result card.
-    function quizConfetti() {
-      if (reduce || !result) return;
-      var layer = document.createElement('div');
-      layer.className = 'quiz__confetti-layer';
-      result.appendChild(layer);
-      var fall = result.offsetHeight + 40;
-      var colors = ['#2f5cf0', '#8fb0ff', '#ff7a9c', '#ffd166', '#00c2a8'];
-      var emojis = ['🏸', '✨', '🎉', '⭐', '💫'];
-      for (var i = 0; i < 46; i++) {
-        var bit = document.createElement('span');
-        bit.className = 'quiz__confetti';
-        if (Math.random() < 0.28) {
-          bit.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-          bit.style.fontSize = (12 + Math.random() * 12) + 'px';
-        } else {
-          bit.style.background = colors[Math.floor(Math.random() * colors.length)];
-          bit.style.width = (6 + Math.random() * 6) + 'px';
-          bit.style.height = (9 + Math.random() * 8) + 'px';
-        }
-        var dur = 1.7 + Math.random() * 1.7, delay = Math.random() * 0.35;
-        bit.style.left = (Math.random() * 100) + '%';
-        bit.style.setProperty('--dx', ((Math.random() * 2 - 1) * 90) + 'px');
-        bit.style.setProperty('--fall', fall + 'px');
-        bit.style.setProperty('--rot', ((Math.random() * 2 - 1) * 540) + 'deg');
-        bit.style.animationDuration = dur + 's';
-        bit.style.animationDelay = delay + 's';
-        layer.appendChild(bit);
-      }
-      setTimeout(function () { if (layer.parentNode) layer.parentNode.removeChild(layer); }, 4200);
-    }
-
-    function renderResult() {
-      var p = player(lastResult);
-      qWrap.style.display = 'none';
-      result.style.display = 'block';
-      result.innerHTML =
-        '<p class="quiz__count">' + I18N.t('quiz.resultLead') + '</p>' +
-        '<div class="quiz__photo"><img src="' + p.img + '" alt="' + p.name + '" loading="lazy"><span class="quiz__flagbadge" aria-hidden="true">' + p.flag + '</span></div>' +
-        '<h3 class="quiz__name">' + p.name + '</h3>' +
-        '<p class="quiz__role">' + p.role + '</p>' +
-        '<p class="quiz__playertag">\u201C' + p.tag + '\u201D</p>' +
-        '<p class="quiz__desc">' + p.desc + '</p>' +
-        '<div class="quiz__result-actions">' +
-          '<button class="btn btn--share magnetic" id="quizShare"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;margin-right:.4em"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5 15.4 17.5M15.4 6.5 8.6 10.5"/></svg>' + I18N.t('quiz.share') + '</button>' +
-          '<button class="btn btn--ghost" id="quizAgain">' + I18N.t('quiz.again') + '</button>' +
-        '</div>' +
-        '<p class="quiz__rr">' + I18N.t('quiz.rrPrompt') + '</p>' +
-        '<a class="btn btn--primary magnetic quiz__rrbtn" href="https://www.racketratings.net/badminton" target="_blank" rel="noopener">' + I18N.t('quiz.rrCta') + '</a>' +
-        '<p class="quiz__credit">' + I18N.t('quiz.credit', { lic: p.lic }) + '</p>';
-      result.classList.remove('fade'); void result.offsetWidth; result.classList.add('fade');
-      document.getElementById('quizAgain').addEventListener('click', function () {
-        result.style.display = 'none'; qWrap.style.display = 'block';
-        lastResult = null; reset(); renderQuestion();
-      });
-      var shareBtn = document.getElementById('quizShare');
-      if (shareBtn) shareBtn.addEventListener('click', shareResult);
-    }
-
-    // Fit a bold line to a max width by shrinking the font.
-    function fitFont(g, text, maxW, startPx, weight) {
-      var px = startPx;
-      do { g.font = weight + ' ' + px + 'px Montserrat, Arial, sans-serif'; px -= 4; }
-      while (g.measureText(text).width > maxW && px > 30);
-    }
-
-    // Build a shareable 9:16 image of the result (great for IG / TikTok stories).
-    function shareResult() {
-      var p = player(lastResult);
-      var srcImg = result.querySelector('.quiz__photo img');
-      var W = 1080, H = 1920, cx = W / 2;
-      var c = document.createElement('canvas'); c.width = W; c.height = H;
-      var g = c.getContext('2d');
-      var bg = g.createLinearGradient(0, 0, 0, H);
-      bg.addColorStop(0, '#0b1330'); bg.addColorStop(0.55, '#152e78'); bg.addColorStop(1, '#2f5cf0');
-      g.fillStyle = bg; g.fillRect(0, 0, W, H);
-      var glow = g.createRadialGradient(cx, 660, 40, cx, 660, 680);
-      glow.addColorStop(0, 'rgba(143,176,255,.4)'); glow.addColorStop(1, 'rgba(143,176,255,0)');
-      g.fillStyle = glow; g.fillRect(0, 0, W, H);
-      g.textAlign = 'center';
-      g.fillStyle = '#aecbff'; g.font = '700 42px Montserrat, Arial, sans-serif';
-      g.fillText((I18N.t('quiz.resultLead') || 'MY BADMINTON TWIN').toUpperCase(), cx, 300);
-      // circular photo
-      var cy = 660, r = 300;
-      g.save(); g.beginPath(); g.arc(cx, cy, r, 0, Math.PI * 2); g.clip();
-      if (srcImg && srcImg.complete && srcImg.naturalWidth) {
-        var iw = srcImg.naturalWidth, ih = srcImg.naturalHeight, s = Math.max(2 * r / iw, 2 * r / ih);
-        var dw = iw * s, dh = ih * s;
-        g.drawImage(srcImg, cx - dw / 2, cy - r, dw, dh);   // top-aligned cover
-      } else { g.fillStyle = '#26314f'; g.fillRect(cx - r, cy - r, 2 * r, 2 * r); }
-      g.restore();
-      g.lineWidth = 16; g.strokeStyle = '#ffffff'; g.beginPath(); g.arc(cx, cy, r, 0, Math.PI * 2); g.stroke();
-      g.lineWidth = 6; g.strokeStyle = '#8fb0ff'; g.beginPath(); g.arc(cx, cy, r + 12, 0, Math.PI * 2); g.stroke();
-      if (p.flag) { g.font = '120px Arial'; g.fillText(p.flag, cx + r * 0.72, cy + r * 0.86); }
-      // name + tag + role
-      var name = (p.name || '').toUpperCase();
-      g.fillStyle = '#ffffff'; fitFont(g, name, W - 150, 96, '900'); g.fillText(name, cx, 1160);
-      g.fillStyle = '#d6e0f2'; g.font = '600 48px Montserrat, Arial, sans-serif';
-      g.fillText('“' + (p.tag || '') + '”', cx, 1240);
-      g.fillStyle = '#9fb0c9'; g.font = '500 36px Montserrat, Arial, sans-serif';
-      g.fillText(p.role || '', cx, 1300);
-      // footer brand + CTA
-      g.fillStyle = '#ffffff'; g.font = '800 50px Montserrat, Arial, sans-serif';
-      g.fillText('ÉLEVER · BADMINTON', cx, 1720);
-      g.fillStyle = '#aecbff'; g.font = '500 38px Montserrat, Arial, sans-serif';
-      g.fillText("What's your badminton twin? · eleverbadminton.com", cx, 1786);
-      c.toBlob(function (blob) {
-        if (!blob) return;
-        var fname = 'my-badminton-twin.png';
-        try {
-          var file = new File([blob], fname, { type: 'image/png' });
-          if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            navigator.share({ files: [file], title: 'My badminton twin', text: 'I got ' + p.name + ' as my badminton twin! 🏸' }).catch(function () {});
-            return;
-          }
-        } catch (e) {}
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement('a'); a.href = url; a.download = fname;
-        document.body.appendChild(a); a.click(); a.remove();
-        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
-      }, 'image/png');
-    }
-
-    startBtn.addEventListener('click', function () {
-      intro.style.display = 'none';
-      stage.style.display = 'block';
-      lastResult = null; reset(); renderQuestion();
-    });
-
-    // Re-render whatever is on screen when the language changes.
-    document.addEventListener('i18n:change', function () {
-      if (view === 'question') renderQuestion();
-      else if (view === 'result') renderResult();
-    });
-  })();
 
   /* =====================================================================
      8. FULL 2026 SEASON — every tournament, grouped by month
@@ -867,29 +485,10 @@
 
     function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
 
-    var I18N = window.I18N;
-    function lang() { return I18N ? I18N.lang() : 'en'; }
-    // Look up translated fields for an event; fall back to the English source.
-    function tr(ev) {
-      var over = (I18N && I18N.data.news[lang()] && I18N.data.news[lang()][ev.name]) || null;
-      return {
-        name: (over && over.name) || ev.name,
-        grade: (over && over.grade) || ev.grade,
-        result: over && over.result ? over.result : (lang() === 'en' ? ev.result : null)
-        // For zh, only show a result if we have a translated one; otherwise use the muted fallback.
-      };
-    }
-    function monthLabel(m) {
-      var map = (I18N && I18N.data.months[lang()]) || {};
-      return map[m] || m;
-    }
     function dateLabel(ev) {
-      // ev.date already carries the month (e.g. "6–11 Jan", "Jul", "May–Jun"),
-      // so we must NOT append the month again — that produced "Jul Jul 2026".
-      // English keeps the descriptive date range; Chinese uses the month label
-      // (the English ranges like "6–11 Jan" are not localised to avoid errors).
-      if (lang() === 'en') return ev.date + ' 2026';
-      return monthLabel(ev.m) + ' · 2026';
+      // ev.date already carries the month (e.g. "6–11 Jan"), so we must NOT
+      // append the month again — that produced "Jul Jul 2026".
+      return ev.date + ' 2026';
     }
 
     var VISIBLE = 4;              // most-recent shown by default
@@ -906,15 +505,15 @@
       var shown = expanded ? list : list.slice(0, VISIBLE);
       var html = '';
       shown.forEach(function (ev) {
-        var x = tr(ev);
+        var x = ev;
         var cls = 'ncard' + (ev.latest ? ' ncard--latest' : '') + (ev.status === 'upcoming' ? ' ncard--next' : '');
-        var badge = ev.latest ? ' · ' + I18N.t('news.latest') : (ev.status === 'upcoming' ? ' · ' + I18N.t('news.upcoming') : '');
+        var badge = ev.latest ? ' · Latest' : (ev.status === 'upcoming' ? ' · Upcoming' : '');
         html += '<article class="' + cls + '">';
         html += '<div class="ncard__head"><span class="ncard__date">' + dateLabel(ev) + badge + '</span>';
         html += '<span class="ncard__grade">' + esc(x.grade) + '</span></div>';
         html += '<h4 class="ncard__name">' + esc(x.name) + '</h4>';
         if (x.result) html += '<p class="ncard__result">' + esc(x.result) + '</p>';
-        else html += '<p class="ncard__result ncard__result--muted">' + (ev.status === 'upcoming' ? I18N.t('news.tbdUpcoming') : I18N.t('news.tbdDone')) + '</p>';
+        else html += '<p class="ncard__result ncard__result--muted">' + (ev.status === 'upcoming' ? 'Draw and results to come.' : 'Results to be confirmed.') + '</p>';
         html += '</article>';
       });
       mount.innerHTML = html;
@@ -923,7 +522,7 @@
       if (toggleBtn) {
         if (extra > 0) {
           toggleBtn.style.display = '';
-          toggleBtn.textContent = expanded ? I18N.t('news.showLess') : I18N.t('news.showAllN', { n: list.length });
+          toggleBtn.textContent = expanded ? 'Show less' : 'Show all ' + list.length + ' tournaments';
           toggleBtn.setAttribute('aria-expanded', String(expanded));
         } else {
           toggleBtn.style.display = 'none';
@@ -951,384 +550,8 @@
     }
 
     // Re-render on language change.
-    document.addEventListener('i18n:change', render);
   })();
 
-  /* =====================================================================
-     9. INTERACTIVE BADMINTON RALLY — play a point vs a dummy opponent
-        Perspective court, cursor-controlled racket, projectile shuttle
-        with height (scale + shadow), AI opponent, particles, scoreboard.
-     ===================================================================== */
-  (function rallyGame() {
-    var canvas = document.getElementById('gameCanvas');
-    if (!canvas) return;
-    var ctx = canvas.getContext ? canvas.getContext('2d') : null;
-    if (!ctx) return;
-    var DPR = Math.min(window.devicePixelRatio || 1, 2);
-    var W = 0, H = 0;
-
-    var elStart = document.getElementById('gameStart');
-    var elYou = document.getElementById('scoreYou');
-    var elCpu = document.getElementById('scoreCpu');
-    var elMsg = document.getElementById('gameMsg');
-    var elRally = document.getElementById('gameRally');
-    var elShot = document.getElementById('gameShot');
-
-    var I18N = window.I18N;
-    function T(key, vars) { return I18N ? I18N.t(key, vars) : key; }
-
-    function size() { W = canvas.clientWidth; H = canvas.clientHeight; canvas.width = W * DPR; canvas.height = H * DPR; ctx.setTransform(DPR, 0, 0, DPR, 0, 0); }
-
-    /* ================= real-time side-view physics =================
-       Original implementation (own code/art/physics) in the classic
-       "move + jump + swing" stick badminton style.
-       Screen pixels used directly; ground line near the bottom. =========== */
-    var GROUND, NET_X, NET_TOP, GRAV = 0.42, PLAYER_W = 26, RACKET = 66;
-    var TARGET = 7;
-    // shuttle feel: high-drag / floaty (like the classic stick badminton games)
-    var BIRD_GRAV = 0.10;      // gentle fall
-    var BIRD_DRAG = 0.988;     // strong air drag so it slows & floats
-    var BIRD_R = 7;            // small shuttle
-
-    var you, cpu, bird, particles = [], keys = {};
-    var state = 'idle';    // idle | play | point | over
-    var scoreYou = 0, scoreCpu = 0, rally = 0, server = 'you', pointTimer = 0;
-
-    function layout() {
-      GROUND = H * 0.86; NET_X = W * 0.5; NET_TOP = GROUND - H * 0.32;
-    }
-
-    function resetPositions() {
-      you = { x: W * 0.25, y: GROUND, vy: 0, onGround: true, swing: 0, facing: 1 };
-      cpu = { x: W * 0.75, y: GROUND, vy: 0, onGround: true, swing: 0, facing: -1, think: 0, aim: W * 0.75 };
-    }
-
-    function setMsg(t) { if (elMsg) elMsg.textContent = t; }
-    function setShot(t) { if (elShot) elShot.textContent = t; }
-    function updateScore() { if (elYou) elYou.textContent = scoreYou; if (elCpu) elCpu.textContent = scoreCpu; if (elRally) elRally.textContent = rally; }
-    function burst(x, y, c, n) { n = n || 18; for (var i = 0; i < n; i++) { var a = Math.random() * 6.28, s = 1 + Math.random() * 5; particles.push({ x: x, y: y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: 1, c: c }); } }
-
-    // Launch the shuttle from (x0,y0) so it arcs high over the net and lands near landX.
-    // Apex clearance scales with court height; vx solved from the true drag sum so it
-    // lands accurately at any screen size. Guarantees the bird clears the net.
-    function launchTo(x0, y0, landX, clearFrac) {
-      var g = BIRD_GRAV;
-      // apex sits a fraction of the net's height ABOVE the tape, so it always clears
-      var netH = GROUND - NET_TOP;
-      var apexY = NET_TOP - netH * (clearFrac || 0.45);
-      if (apexY > y0 - 40) apexY = y0 - 40;             // must actually rise from contact point
-      var riseH = Math.max(40, y0 - apexY);
-      var vUp = Math.sqrt(2 * g * riseH);
-      var tUp = vUp / g;
-      var tDown = Math.sqrt(2 * (GROUND - apexY) / g);
-      var totalT = Math.max(1, Math.round(tUp + tDown));
-      // horizontal distance a starting vx of 1 would cover under drag over totalT frames:
-      // sum_{t=0..totalT-1} DRAG^t = (1 - DRAG^totalT) / (1 - DRAG)
-      var reachPerVx = (1 - Math.pow(BIRD_DRAG, totalT)) / (1 - BIRD_DRAG);
-      var vx = (landX - x0) / reachPerVx;
-      return { vx: Math.max(-12, Math.min(12, vx)), vy: -vUp };
-    }
-
-    function serveBird(byWho) {
-      rally = 0; updateScore(); setShot(T('play.shotServe'));
-      var fromLeft = byWho === 'you';
-      var x0 = fromLeft ? (NET_X - W * 0.20) : (NET_X + W * 0.20);
-      var y0 = GROUND - 60;
-      // land in the receiver's mid court (keeps a safe, high clearance over the net)
-      var landX = fromLeft ? (NET_X + W * 0.14 + Math.random() * W * 0.14)
-                           : (NET_X - W * 0.14 - Math.random() * W * 0.14);
-      var v = launchTo(x0, y0, landX, 0.9);
-      bird = { x: x0, y: y0, vx: v.vx, vy: v.vy, live: true, last: byWho, cool: 0 };
-      state = 'play';
-      setMsg(byWho === 'you' ? T('play.serveYou') : T('play.serveCpu'));
-    }
-
-    function startGame() {
-      scoreYou = 0; scoreCpu = 0; updateScore(); server = 'you';
-      elStart.style.display = 'none';
-      if (elStart.blur) elStart.blur();        // so Space doesn't re-trigger the button
-      layout(); resetPositions();
-      serveBird('you');
-    }
-
-    function awardPoint(who, reason) {
-      if (state === 'point') return;
-      state = 'point'; pointTimer = 90;
-      if (who === 'you') scoreYou++; else scoreCpu++;
-      server = who;
-      updateScore();
-      burst(bird ? bird.x : W / 2, bird ? bird.y : GROUND, who === 'you' ? '47,92,240' : '255,90,90', 26);
-      setMsg((who === 'you' ? T('play.pointYou') : T('play.pointCpu')) + ' — ' + reason + '.  ' + scoreYou + '\u2013' + scoreCpu);
-      if (bird) bird.live = false;
-      if (scoreYou >= TARGET || scoreCpu >= TARGET) {
-        state = 'over';
-        setTimeout(function () {
-          elStart.style.display = ''; elStart.textContent = T('play.again');
-          setMsg(scoreYou > scoreCpu ? T('play.win', { a: scoreYou, b: scoreCpu }) : T('play.lose', { a: scoreCpu, b: scoreYou }));
-          state = 'idle';
-        }, 1200);
-      }
-    }
-
-    /* ---------- input ---------- */
-    // only capture keys when the game is active (armed) so the page still scrolls normally otherwise
-    function armed() { return state === 'play' || state === 'point'; }
-    document.addEventListener('keydown', function (e) {
-      if (!armed()) return;
-      keys[e.key.toLowerCase()] = true;
-      // stop Space / arrows from scrolling the page while playing
-      if (e.key === ' ' || e.key === 'Spacebar' || e.key.indexOf('Arrow') === 0) e.preventDefault();
-    });
-    document.addEventListener('keyup', function (e) { keys[e.key.toLowerCase()] = false; });
-    // --- Mobile: on-screen control buttons (Left / Right / Jump / Swing) ---
-    // Held state so movement buttons work like keys.
-    var touch = { left: false, right: false };
-    function bindHold(el, on, off) {
-      if (!el) return;
-      var down = function (e) { e.preventDefault(); on(); };
-      var up = function (e) { e.preventDefault(); if (off) off(); };
-      el.addEventListener('touchstart', down, { passive: false });
-      el.addEventListener('touchend', up, { passive: false });
-      el.addEventListener('touchcancel', up, { passive: false });
-      el.addEventListener('mousedown', down);
-      el.addEventListener('mouseup', up);
-      el.addEventListener('mouseleave', up);
-    }
-    bindHold(document.getElementById('padLeft'), function () { touch.left = true; }, function () { touch.left = false; });
-    bindHold(document.getElementById('padRight'), function () { touch.right = true; }, function () { touch.right = false; });
-    bindHold(document.getElementById('padJump'), function () { if (armed()) doJump(you); });
-    bindHold(document.getElementById('padSwing'), function () { if (armed()) doSwing(you); });
-    // tapping the court also swings (quick, forgiving)
-    canvas.addEventListener('touchstart', function (e) { if (armed()) { doSwing(you); e.preventDefault(); } }, { passive: false });
-    if (elStart) elStart.addEventListener('click', startGame);
-
-    function doJump(p) { if (p.onGround) { p.vy = -11.5; p.onGround = false; } }
-    function doSwing(p) { if (p.swing <= 0) p.swing = 16; }
-
-    /* ---------- shuttle hit ---------- */
-    function racketTip(p) {
-      // tip is up-and-in-front during a swing
-      var prog = p.swing > 0 ? (16 - p.swing) / 16 : 0;         // 0..1
-      var ang = -1.15 + prog * 1.9;                             // sweeps overhead to front
-      var hx = p.x + Math.cos(ang) * RACKET * p.facing * 0.6 + RACKET * 0.2 * p.facing;
-      var hy = (p.y - 60) - Math.sin(ang) * RACKET * 0.85;
-      return { x: hx, y: hy, prog: prog };
-    }
-
-    function tryHit(p, who) {
-      if (!bird || !bird.live || p.swing <= 0) return;
-      if (bird.last === who) return;         // you can't hit your own shot twice — opponent must touch it first
-      // shuttle must be on the striker's own side (can't reach across the net)
-      if (who === 'you' && bird.x > NET_X - 4) return;
-      if (who === 'cpu' && bird.x < NET_X + 4) return;
-      var tip = racketTip(p);
-      var dx = bird.x - tip.x, dy = bird.y - tip.y;
-      if (dx * dx + dy * dy > 60 * 60) return;
-
-      var dir = who === 'you' ? 1 : -1;
-      var netH = GROUND - NET_TOP;
-      var aboveTape = NET_TOP - bird.y;        // > 0 when the shuttle is above the net tape
-      var SMASH_OK = netH * 0.16;              // contact must be this far above the tape to smash cleanly
-      var label = (who === 'you' ? T('play.you') : T('play.cpu'));
-      bird.smashByYou = false;   // reset each hit; set true only for a genuine player smash below
-
-      if (aboveTape > SMASH_OK) {
-        // ---- SMASH (contact comfortably above the net) ----
-        // Aim the shuttle to pass just above the tape, then let physics dive it into
-        // the far court. Because it is aimed above the tape it ALWAYS clears the net.
-        // The flight is fast, so the receiver has little time to react — a clean high
-        // smash wins the point most of the time.
-        var aimY = NET_TOP - Math.max(12, netH * 0.10);      // a hair above the tape
-        var aimX = NET_X + dir * 10;
-        var tx = aimX - bird.x, ty = aimY - bird.y;
-        var len = Math.hypot(tx, ty) || 1;
-        var SPEED = 11 + Math.random() * 2;                  // fast → hard to reach
-        bird.vx = tx / len * SPEED;
-        bird.vy = ty / len * SPEED;
-        if (bird.vy < 0.5) bird.vy = 0.5;                    // keep a real smash descending
-        setShot(label + ': ' + T('play.shotSmash'));
-        burst(tip.x, tip.y, '255,90,90', 28);
-        // The computer only digs out ~half of the player's smashes: roll it now.
-        if (who === 'you') { bird.smashByYou = true; bird.cpuCanReturn = (Math.random() < 0.5); }
-      } else if (aboveTape > 0) {
-        // ---- SMASH TOO LOW ----
-        // The shuttle isn't high enough to angle down safely, so the attempted smash
-        // is driven straight into the net — the smasher loses the point (handled when
-        // the net collision / own-side landing is resolved in update()).
-        bird.vx = dir * 4.2;
-        bird.vy = 3.4;
-        setShot(label + ': ' + T('play.shotSmash'));
-        burst(tip.x, tip.y, '255,90,90', 18);
-      } else {
-        // ---- LIFT / CLEAR (shuttle at or below the tape) ----
-        // A safe, high, floaty arc that sails deep toward the far baseline and clears the net.
-        var landX = who === 'you' ? (NET_X + W * 0.34 + Math.random() * W * 0.13) : (NET_X - W * 0.34 - Math.random() * W * 0.13);
-        var v = launchTo(bird.x, bird.y, landX, 1.05 + Math.random() * 0.35);
-        bird.vx = v.vx; bird.vy = v.vy;
-        setShot(label + ': ' + T('play.shotClear'));
-        burst(tip.x, tip.y, '150,220,255', 16);
-      }
-      bird.last = who; bird.cool = 14; rally++; updateScore();
-      p.swing = Math.min(p.swing, 8);
-    }
-
-    /* ---------- update ---------- */
-    function update() {
-      // ----- YOU -----
-      var mv = 0;
-      if (keys['arrowleft'] || keys['a'] || touch.left) mv -= 1;
-      if (keys['arrowright'] || keys['d'] || touch.right) mv += 1;
-      you.x += mv * 4.6;
-      you.facing = 1;                                                 // always face the net (front)
-      you.x = Math.max(PLAYER_W, Math.min(NET_X - PLAYER_W, you.x));   // stay on your side
-      if (keys['arrowup'] || keys['w']) doJump(you);
-      if (keys[' '] || keys['arrowdown'] || keys['s']) doSwing(you);
-      physicsPlayer(you);
-      if (state === 'play') tryHit(you, 'you');
-
-      // ----- CPU (fair, readable AI) -----
-      cpuAI();
-      physicsPlayer(cpu);
-      if (state === 'play') tryHit(cpu, 'cpu');
-
-      // ----- shuttle -----
-      if (bird && bird.live) {
-        bird.vy += BIRD_GRAV; bird.vx *= BIRD_DRAG; bird.vy *= BIRD_DRAG;
-        bird.x += bird.vx; bird.y += bird.vy; if (bird.cool > 0) bird.cool--;
-        // net: block low crossings
-        if (bird.x > NET_X - 6 && bird.x < NET_X + 6 && bird.y > NET_TOP) {
-          bird.vx *= -0.3; bird.x += bird.vx * 2;
-          awardPoint(bird.last === 'you' ? 'cpu' : 'you', T('play.reasonNet', { who: bird.last === 'you' ? T('play.whoYou') : T('play.whoCpu') }));
-        }
-        // side walls: shuttle bounces back in (arena style, no side-out)
-        if (bird.x < BIRD_R + 2) { bird.x = BIRD_R + 2; bird.vx = Math.abs(bird.vx) * 0.7; }
-        if (bird.x > W - BIRD_R - 2) { bird.x = W - BIRD_R - 2; bird.vx = -Math.abs(bird.vx) * 0.7; }
-        // ceiling
-        if (bird.y < BIRD_R + 2) { bird.y = BIRD_R + 2; bird.vy = Math.abs(bird.vy) * 0.5; }
-        // floor
-        if (bird.y >= GROUND) {
-          bird.y = GROUND;
-          if (bird.x < NET_X) awardPoint('cpu', T('play.reasonYourSide'));
-          else awardPoint('you', T('play.reasonCpuSide'));
-        }
-      }
-
-      // decay swings & particles
-      if (you.swing > 0) you.swing--; if (cpu.swing > 0) cpu.swing--;
-      for (var i = particles.length - 1; i >= 0; i--) { var pt = particles[i]; pt.x += pt.vx; pt.y += pt.vy; pt.vy += 0.3; pt.life -= 0.03; if (pt.life <= 0) particles.splice(i, 1); }
-
-      if (state === 'point') { if (--pointTimer <= 0) { resetPositions(); serveBird(server); } }
-    }
-
-    function physicsPlayer(p) {
-      if (!p.onGround) { p.vy += GRAV; p.y += p.vy; if (p.y >= GROUND) { p.y = GROUND; p.vy = 0; p.onGround = true; } }
-    }
-
-    function cpuAI() {
-      // move toward where the shuttle will be on its side; jump & swing when close
-      if (!bird || !bird.live) { cpu.x += (W * 0.75 - cpu.x) * 0.05; return; }
-      // The player's smash is too fast to dig out every time — on the ~half rolled
-      // unreturnable, the computer can't get there, so it doesn't chase or swing.
-      if (bird.smashByYou && bird.cpuCanReturn === false) return;
-      var target = W * 0.75;
-      var comingToCpu = (bird.x > NET_X) || (bird.vx > 0);
-      if (comingToCpu) {
-        // predict landing x on the CPU side (uses the same floaty physics)
-        var x = bird.x, y = bird.y, vx = bird.vx, vy = bird.vy, g = 0;
-        while (y < GROUND && g < 400) {
-          vy += BIRD_GRAV; vx *= BIRD_DRAG; vy *= BIRD_DRAG; x += vx; y += vy;
-          if (x < BIRD_R + 2) { x = BIRD_R + 2; vx = Math.abs(vx) * 0.7; }
-          if (x > W - BIRD_R - 2) { x = W - BIRD_R - 2; vx = -Math.abs(vx) * 0.7; }
-          g++;
-        }
-        target = Math.max(NET_X + PLAYER_W + 10, Math.min(W - PLAYER_W, x));
-      }
-      var d = target - cpu.x;
-      cpu.x += Math.max(-4.4, Math.min(4.4, d * 0.14));
-      cpu.x = Math.max(NET_X + PLAYER_W, Math.min(W - PLAYER_W, cpu.x));
-      cpu.facing = -1;
-
-      if (!comingToCpu || bird.x < NET_X) return;   // nothing to do until it's on our side
-      if (bird.last === 'cpu') return;              // already returned it; wait for the player
-
-      var overhead = bird.y < NET_TOP - 10;          // high enough to smash
-      var nearX = Math.abs(bird.x - cpu.x) < 44;     // lined up horizontally
-      var racketY = cpu.y - 60;                      // approx racket height when standing
-
-      // jump to reach a high shuttle that's close
-      if (overhead && Math.abs(bird.x - cpu.x) < 80 && cpu.onGround) doJump(cpu);
-
-      // swing when the shuttle is within the racket's reach (so the hit actually connects & clears)
-      var reachable = nearX && bird.y > racketY - 80 && bird.y < GROUND - 6;
-      if (reachable && cpu.swing <= 0) doSwing(cpu);
-    }
-
-    /* ---------- drawing ---------- */
-    function drawCourt() {
-      var bg = ctx.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#0b1330'); bg.addColorStop(1, '#0e1838');
-      ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-      var fg = ctx.createLinearGradient(0, GROUND, 0, H); fg.addColorStop(0, '#1c455c'); fg.addColorStop(1, '#123246');
-      ctx.fillStyle = fg; ctx.fillRect(0, GROUND, W, H - GROUND);
-      ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 3;
-      ctx.beginPath(); ctx.moveTo(W * 0.03, GROUND); ctx.lineTo(W * 0.97, GROUND); ctx.stroke();
-      // net
-      ctx.strokeStyle = 'rgba(255,255,255,.4)'; ctx.lineWidth = 1;
-      for (var y = NET_TOP; y < GROUND; y += 8) { ctx.beginPath(); ctx.moveTo(NET_X - 10, y); ctx.lineTo(NET_X + 10, y); ctx.stroke(); }
-      ctx.fillStyle = '#fff'; ctx.fillRect(NET_X - 11, NET_TOP - 3, 22, 4);
-      ctx.fillStyle = '#cfd8e2'; ctx.fillRect(NET_X - 13, NET_TOP - 4, 3, GROUND - NET_TOP + 6); ctx.fillRect(NET_X + 10, NET_TOP - 4, 3, GROUND - NET_TOP + 6);
-    }
-
-    function drawStick(p, color) {
-      ctx.save(); ctx.translate(p.x, p.y);
-      ctx.fillStyle = 'rgba(0,0,0,.3)'; ctx.beginPath(); ctx.ellipse(0, 2, 16, 5, 0, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 4; ctx.lineCap = 'round';
-      var crouch = p.onGround ? 0 : -4;
-      // legs
-      ctx.beginPath(); ctx.moveTo(-2, -22 + crouch); ctx.lineTo(-9, 0); ctx.moveTo(2, -22 + crouch); ctx.lineTo(9, 0); ctx.stroke();
-      // torso
-      ctx.beginPath(); ctx.moveTo(0, -22 + crouch); ctx.lineTo(0, -50 + crouch); ctx.stroke();
-      // head
-      ctx.beginPath(); ctx.arc(0, -58 + crouch, 8, 0, Math.PI * 2); ctx.fill();
-      // racket arm
-      var prog = p.swing > 0 ? (16 - p.swing) / 16 : 0;
-      var ang = -1.15 + prog * 1.9;
-      var ex = Math.cos(ang) * RACKET * p.facing * 0.6 + RACKET * 0.2 * p.facing;
-      var ey = -60 + crouch - Math.sin(ang) * RACKET * 0.55;
-      ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(0, -46 + crouch); ctx.lineTo(ex, ey); ctx.stroke();
-      // racket head at tip
-      ctx.lineWidth = 2.5; ctx.beginPath(); ctx.ellipse(ex + p.facing * 6, ey - 4, 8, 12, p.facing * (ang), 0, Math.PI * 2); ctx.stroke();
-      ctx.restore();
-    }
-
-    function drawBird() {
-      if (!bird) return;
-      var sx = bird.x, sy = bird.y;
-      ctx.fillStyle = 'rgba(0,0,0,.28)'; ctx.beginPath(); ctx.ellipse(sx, GROUND, 8, 3, 0, 0, Math.PI * 2); ctx.fill();
-      var sp = Math.hypot(bird.vx, bird.vy);
-      if (sp > 5) { ctx.strokeStyle = 'rgba(255,120,90,.35)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(sx - bird.vx * 3, sy - bird.vy * 3); ctx.lineTo(sx, sy); ctx.stroke(); }
-      var ang = Math.atan2(bird.vy, bird.vx) + Math.PI / 2;
-      drawShuttle(ctx, sx, sy, 0.42, ang);
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, W, H);
-      drawCourt();
-      if (you) drawStick(you, '#6a8dff');
-      if (cpu) drawStick(cpu, '#8fd0ff');
-      if (state === 'play' || state === 'point') drawBird();
-      for (var i = 0; i < particles.length; i++) { var pt = particles[i]; ctx.globalAlpha = pt.life; ctx.fillStyle = 'rgba(' + pt.c + ',' + pt.life + ')'; ctx.beginPath(); ctx.arc(pt.x, pt.y, 2 + pt.life * 2.5, 0, Math.PI * 2); ctx.fill(); }
-      ctx.globalAlpha = 1;
-    }
-
-    function loop() { if (state !== 'idle') update(); draw(); requestAnimationFrame(loop); }
-
-    size(); layout(); resetPositions();
-    window.addEventListener('resize', function () { size(); layout(); if (state === 'idle') resetPositions(); });
-    setMsg(T('play.msgStart'));
-    // When idle (not mid-game), refresh the start prompt on language change.
-    document.addEventListener('i18n:change', function () { if (state === 'idle') setMsg(T('play.msgStart')); });
-    loop();
-  })();
 
   /* =====================================================================
      10. SG BADMINTON HUB — venue directory, booking guide, groups
@@ -1339,7 +562,6 @@
     var hub = document.getElementById('hub');
     if (!hub) return;
 
-    // id: stable key used to look up translated name/area/meta in I18N.data.venues.
     // type: 'private' | 'activesg' | 'club' | 'elever'
     // elever: true on any venue where Élever runs regular classes (cross-cutting).
     // book: direct booking URL where publicly available; otherwise omitted.
@@ -1402,18 +624,12 @@
 
     var ACTIVESG_BOOK = 'https://activesg.gov.sg/facility-bookings/activities/YLONatwvqJfikKOmB5N9U/venues';
 
-    var I18N = window.I18N;
-    function T(key, vars) { return I18N ? I18N.t(key, vars) : key; }
-    function lang() { return I18N ? I18N.lang() : 'en'; }
-    // Merge English defaults with any translated name/area/meta for the language.
-    function loc(v) {
-      var over = (I18N && I18N.data.venues[lang()] && I18N.data.venues[lang()][v.id]) || null;
-      return {
-        name: (over && over.name) || v.name,
-        area: (over && over.area) || v.area,
-        meta: over && over.meta ? over.meta : v.meta
-      };
-    }
+    function loc(v) { return { name: v.name, area: v.area, meta: v.meta }; }
+
+    var TYPE_LABEL = {
+      private: 'Private hall', activesg: 'ActiveSG', dus: 'ActiveSG DUS',
+      club: 'Club / CC', elever: 'Élever venue'
+    };
 
     var grid = document.getElementById('hallGrid');
     var countEl = document.getElementById('hallCount');
@@ -1434,7 +650,6 @@
     }
 
     function render() {
-      // Search matches both English and translated name/area so it works in any language.
       var list = VENUES.filter(function (v) {
         // "Élever classes" is a cross-cutting flag (a hall can be both a private
         // venue and an Élever class venue), so it filters on v.elever, not v.type.
@@ -1448,25 +663,25 @@
         return true;
       });
 
-      if (countEl) countEl.textContent = list.length === 1 ? T('hub.countOne') : T('hub.count', { n: list.length });
+      if (countEl) countEl.textContent = list.length + (list.length === 1 ? ' venue' : ' venues');
 
       if (!list.length) {
-        grid.innerHTML = '<p class="hub__empty">' + T('hub.empty') + '</p>';
+        grid.innerHTML = '<p class="hub__empty">No venues match that search. Try a different area or clear the filters.</p>';
         return;
       }
 
       grid.innerHTML = list.map(function (v) {
         var l = loc(v);
         var book = v.book || (v.type === 'activesg' ? ACTIVESG_BOOK : '');
-        var bookLabel = v.type === 'activesg' ? T('hub.bookActivesg') : T('hub.book');
-        var actions = '<a class="hcard__link" href="' + mapsUrl(v) + '" target="_blank" rel="noopener" aria-label="' + attr(T('hub.mapAria', { name: l.name })) + '">' + T('hub.map') + ' \u2197</a>';
-        if (book) actions += '<a class="hcard__link hcard__link--book" href="' + book + '" target="_blank" rel="noopener" aria-label="' + attr(T('hub.bookAria', { name: l.name })) + '">' + bookLabel + ' \u2197</a>';
+        var bookLabel = v.type === 'activesg' ? 'Book on ActiveSG' : 'Book';
+        var actions = '<a class="hcard__link" href="' + mapsUrl(v) + '" target="_blank" rel="noopener" aria-label="' + attr('Open ' + l.name + ' in Google Maps') + '">Map \u2197</a>';
+        if (book) actions += '<a class="hcard__link hcard__link--book" href="' + book + '" target="_blank" rel="noopener" aria-label="' + attr('Book a court at ' + l.name) + '">' + bookLabel + ' \u2197</a>';
         return '<article class="hcard">' +
           '<div class="hcard__head">' +
             '<h3 class="hcard__name">' + esc(l.name) + '</h3>' +
             '<div class="hcard__tags">' +
-              '<span class="hcard__tag hcard__tag--' + v.type + '">' + T('tag.' + v.type) + '</span>' +
-              (v.elever && v.type !== 'elever' ? '<span class="hcard__tag hcard__tag--elever">' + T('tag.elever') + '</span>' : '') +
+              '<span class="hcard__tag hcard__tag--' + v.type + '">' + (TYPE_LABEL[v.type] || v.type) + '</span>' +
+              (v.elever && v.type !== 'elever' ? '<span class="hcard__tag hcard__tag--elever">Élever venue</span>' : '') +
             '</div>' +
           '</div>' +
           '<p class="hcard__area">' + esc(l.area) + '</p>' +
@@ -1535,232 +750,8 @@
 
     render();
     // Re-render the venue list when the language changes (static text in the
-    // book/groups panels is handled by the i18n engine directly).
-    document.addEventListener('i18n:change', render);
+    // book/groups panels is static markup).
   })();
 
-  /* =====================================================================
-     11. REFLEX / REACTION TEST — tap when the shuttle drops
-     ===================================================================== */
-  (function reflexTest() {
-    var pad = document.getElementById('reflexPad');
-    if (!pad) return;
-    var msg = document.getElementById('reflexMsg'), sub = document.getElementById('reflexSub');
-    var lastEl = document.getElementById('reflexLast'), bestEl = document.getElementById('reflexBest'), marker = document.getElementById('reflexMarker');
-    var I18N = window.I18N;
-    function T(k, v) { return I18N ? I18N.t(k, v) : k; }
-    var state = 'idle', timer = null, dropAt = 0;
-    var best = parseInt(localStorage.getItem('elever-reflex-best') || '0', 10) || 0;
-    function rank(ms) { return ms < 150 ? T('reflex.rankF1') : ms < 250 ? T('reflex.rankPro') : ms < 350 ? T('reflex.rankNormal') : T('reflex.rankSlow'); }
-    function setPad(c) { pad.className = 'reflex__pad reflex__pad--' + c; }
-    function paintBest() { bestEl.textContent = best ? best + ' ms' : '—'; }
-    function updateMarker(ms) {
-      if (!marker) return;
-      var pct = Math.min(Math.max(ms / 500 * 100, 0), 100);
-      marker.style.left = pct + '%';
-      marker.style.opacity = '1';
-    }
-    paintBest();
-    if (best) updateMarker(best);
-    function arm() {
-      state = 'wait'; setPad('wait'); msg.textContent = T('reflex.wait'); sub.textContent = T('reflex.waitSub');
-      timer = setTimeout(function () { state = 'go'; setPad('go'); dropAt = performance.now(); msg.textContent = T('reflex.tap'); sub.textContent = ''; }, 1400 + Math.random() * 2600);
-    }
-    function result(ms) {
-      state = 'result'; setPad('result'); msg.textContent = ms + ' ms'; sub.textContent = rank(ms);
-      lastEl.textContent = ms + ' ms';
-      if (!best || ms < best) { best = ms; try { localStorage.setItem('elever-reflex-best', String(best)); } catch (e) {} }
-      paintBest();
-      updateMarker(ms);
-    }
-    function tooSoon() { if (timer) { clearTimeout(timer); timer = null; } state = 'early'; setPad('early'); msg.textContent = T('reflex.early'); sub.textContent = T('reflex.earlySub'); }
-    function handleAction(e) {
-      if (e && e.type === 'keydown') {
-        if (e.code !== 'Space' && e.key !== ' ') return;
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-        var rect = pad.getBoundingClientRect();
-        if (rect.top > window.innerHeight || rect.bottom < 0) return;
-        e.preventDefault();
-        // If it's a keydown from the pad itself, it will also trigger click.
-        // We prevent default so it doesn't scroll, but we don't want double firing if it also fires click.
-        // Actually preventDefault on keydown for space stops the click from firing on the button.
-      }
-      if (state === 'idle' || state === 'result' || state === 'early') { arm(); }
-      else if (state === 'wait') { tooSoon(); }
-      else if (state === 'go') { result(Math.round(performance.now() - dropAt)); }
-    }
-    pad.addEventListener('click', handleAction);
-    window.addEventListener('keydown', handleAction);
-    document.addEventListener('i18n:change', function () {
-      if (state === 'idle') { msg.textContent = T('reflex.start'); sub.textContent = T('reflex.sub'); }
-      else if (state === 'result') { sub.textContent = rank(parseInt(lastEl.textContent, 10)); }
-      paintBest();
-    });
-  })();
-
-
-
-  /* =====================================================================
-     13. TESTIMONIALS CAROUSEL
-        NOTE: sample/placeholder testimonials — swap in real reviews.
-     ===================================================================== */
-  (function reviewsCarousel() {
-    var track = document.getElementById('revTrack');
-    if (!track) return;
-    var dotsEl = document.getElementById('revDots'), prev = document.getElementById('revPrev'), next = document.getElementById('revNext');
-    var I18N = window.I18N;
-    function lang() { return I18N ? I18N.lang() : 'en'; }
-    var DATA = [
-      { n: 'Rachel T.', c: '#2f5cf0', en: { r: 'Parent of a P4 player', q: 'My daughter went from a shy beginner to competing for her school team in under a year. The coaches make every session something she looks forward to.' }, zh: { r: '小四学员家长', q: '不到一年，我女儿从害羞的新手成长为校队选手。教练让每一节课都充满乐趣，她每次都很期待。' } },
-      { n: 'Marcus L.', c: '#e5487a', en: { r: 'Student, 15', q: 'The drills are tough but I can actually feel myself getting faster and sharper. Training here made me fall in love with badminton again.' }, zh: { r: '15 岁学员', q: '训练很有挑战，但我能明显感觉到自己变得更快更敏捷。在这里训练让我重新爱上了羽毛球。' } },
-      { n: 'Priya S.', c: '#0d9488', en: { r: 'Parent', q: 'Small groups, patient coaches and real, visible progress. Booking is simple and the communication with parents is excellent.' }, zh: { r: '家长', q: '小班教学、耐心的教练，进步看得见。约课方便，与家长的沟通也非常到位。' } },
-      { n: 'Daniel W.', c: '#e08a0b', en: { r: 'Adult beginner', q: 'I started at 30 with zero experience. Three months in and I’m rallying with confidence. The clinics are perfect for adults.' }, zh: { r: '成人初学者', q: '我 30 岁零基础开始学。三个月后已经能自信地打多拍回合。这里的训练营很适合成年人。' } },
-      { n: 'Jia Hui', c: '#7c3aed', en: { r: 'Parent of twins', q: 'Both my kids count down to camp every holiday. It’s safe, high-energy, and they’ve made real friends on court.' }, zh: { r: '双胞胎家长', q: '每个假期我两个孩子都盼着来训练营。安全、充满活力，他们还在球场上交到了真正的朋友。' } }
-    ];
-    var i = 0, timer = null;
-    function render() {
-      track.innerHTML = DATA.map(function (d) {
-        var L = lang() === 'zh' ? d.zh : d.en;
-        return '<article class="reviews__card"><div class="reviews__stars" aria-label="5 out of 5 stars">★★★★★</div>' +
-          '<p class="reviews__quote">' + L.q + '</p><div class="reviews__who">' +
-          '<span class="reviews__avatar" style="background:' + d.c + '">' + d.n.charAt(0) + '</span>' +
-          '<span class="reviews__meta"><span class="reviews__name">' + d.n + '</span><br><span class="reviews__role">' + L.r + '</span></span></div></article>';
-      }).join('');
-      dotsEl.innerHTML = DATA.map(function (_, k) { return '<button class="reviews__dot' + (k === i ? ' is-active' : '') + '" data-k="' + k + '" aria-label="Review ' + (k + 1) + '"></button>'; }).join('');
-      dotsEl.querySelectorAll('.reviews__dot').forEach(function (b) { b.addEventListener('click', function () { go(+b.dataset.k); restart(); }); });
-      go(i);
-    }
-    function go(n) { i = (n + DATA.length) % DATA.length; track.style.transform = 'translateX(-' + (i * 100) + '%)'; dotsEl.querySelectorAll('.reviews__dot').forEach(function (b, k) { b.classList.toggle('is-active', k === i); }); }
-    function restart() { if (timer) clearInterval(timer); timer = setInterval(function () { go(i + 1); }, 5000); }
-    if (prev) prev.addEventListener('click', function () { go(i - 1); restart(); });
-    if (next) next.addEventListener('click', function () { go(i + 1); restart(); });
-    var wrap = document.querySelector('.reviews__carousel');
-    if (wrap) { wrap.addEventListener('mouseenter', function () { if (timer) clearInterval(timer); }); wrap.addEventListener('mouseleave', restart); }
-    render(); restart();
-    document.addEventListener('i18n:change', render);
-  })();
 
 })();
-
-/* =====================================================================
-   SEARCH, BREADCRUMBS, AND SCROLLSPY
-   ===================================================================== */
-document.addEventListener('DOMContentLoaded', function() {
-  // --- 1. Search Overlay ---
-  const searchToggle = document.getElementById('searchToggle');
-  const searchOverlay = document.getElementById('searchOverlay');
-  const searchClose = document.getElementById('searchClose');
-  const searchInput = document.getElementById('searchInput');
-  const searchResults = document.getElementById('searchResults');
-
-  // Simple searchable content index
-  const searchIndex = [
-    { title: 'About Élever', id: 'about', keywords: 'about, mission, vision, meaning' },
-    { title: 'Programs: Camps', id: 'programs', keywords: 'camps, kids, holiday, beginner' },
-    { title: 'Programs: Classes', id: 'programs', keywords: 'classes, regular, structured' },
-    { title: 'Programs: Clinics', id: 'programs', keywords: 'clinics, specialized, technical' },
-    { title: 'Programs: Carnivals', id: 'programs', keywords: 'carnivals, fun, community' },
-    { title: 'Our Coaches', id: 'team', keywords: 'team, coaches, founders, loh kean hean, eng chin an' },
-    { title: 'SG Badminton Hub', id: 'hub', keywords: 'hub, where to play, active sg, cc courts, racket ratings' },
-    { title: 'News & Tournaments', id: 'news', keywords: 'news, bwf, world tour, tournaments' },
-    { title: 'Interactive Play', id: 'play', keywords: 'play, game, rally, smash' },
-    { title: 'Reaction Test', id: 'reflex', keywords: 'reflex, reaction, test' },
-    { title: 'Reviews', id: 'reviews', keywords: 'reviews, testimonials, feedback' },
-    { title: 'Contact / Join Us', id: 'contact', keywords: 'contact, join, email, enquire' }
-  ];
-
-  function openSearch() {
-    if (!searchOverlay || !searchToggle || !searchInput) return;
-    searchOverlay.hidden = false;
-    searchToggle.setAttribute('aria-expanded', 'true');
-    setTimeout(() => { searchInput.focus(); }, 100);
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeSearch() {
-    if (!searchOverlay || !searchToggle) return;
-    searchOverlay.hidden = true;
-    searchToggle.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-  }
-
-  if (searchToggle) searchToggle.addEventListener('click', openSearch);
-  if (searchClose) searchClose.addEventListener('click', closeSearch);
-
-  // Close on Esc
-  document.addEventListener('keydown', function(e) {
-    if (searchOverlay && e.key === 'Escape' && !searchOverlay.hidden) closeSearch();
-  });
-
-  // Autocomplete search
-  if (searchInput) {
-    searchInput.addEventListener('input', function(e) {
-      const query = e.target.value.toLowerCase();
-      if (!searchResults) return;
-      searchResults.innerHTML = '';
-      if (!query.trim()) return;
-      
-      const results = searchIndex.filter(item => 
-        item.title.toLowerCase().includes(query) || 
-        item.keywords.includes(query)
-      );
-
-      results.forEach(res => {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = '#' + res.id;
-        a.textContent = res.title;
-        a.addEventListener('click', () => {
-          closeSearch();
-        });
-        li.appendChild(a);
-        searchResults.appendChild(li);
-      });
-    });
-  }
-
-  // --- 2. Scrollspy & Breadcrumbs ---
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav__links a[href^="#"], .nav__links .nav__link');
-  const breadcrumbCurrent = document.getElementById('breadcrumbCurrent');
-
-  function onScroll() {
-    let currentId = '';
-    let currentTitle = 'Welcome';
-
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.clientHeight;
-      if (window.scrollY >= (sectionTop - 150)) {
-        currentId = section.getAttribute('id');
-        // Try to find a section title
-        const titleEl = section.querySelector('.section-title');
-        if (titleEl) {
-          currentTitle = titleEl.textContent;
-        } else if (currentId === 'top') {
-          currentTitle = 'Welcome';
-        } else {
-          currentTitle = currentId.charAt(0).toUpperCase() + currentId.slice(1);
-        }
-      }
-    });
-
-    // Update active nav link
-    navLinks.forEach(link => {
-      link.classList.remove('is-active');
-      if (link.getAttribute('href') === '#' + currentId) {
-        link.classList.add('is-active');
-      }
-    });
-
-    // Update breadcrumb
-    if (breadcrumbCurrent && currentId !== 'top') {
-      breadcrumbCurrent.textContent = currentTitle;
-    } else if (breadcrumbCurrent) {
-      breadcrumbCurrent.textContent = 'Welcome';
-    }
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-});

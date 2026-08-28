@@ -1,8 +1,7 @@
 /* =====================================================================
    ÉLEVER BADMINTON — SHARED SITE CHROME
    Injects the nav and footer into every page so there is exactly one
-   copy to maintain. Runs before i18n.js so injected markup still gets
-   translated on first paint.
+   copy to maintain.
 
    Each page sets  <body data-page="classes">  to light its nav item.
    ===================================================================== */
@@ -10,16 +9,32 @@
   'use strict';
 
   var BOOK_URL = 'https://app.eleverbadminton.com/';
+  var WHATSAPP = 'https://wa.me/6589214221';
+  var EMAIL = 'info@eleverbadminton.com';
 
+  /* A nav item with `children` renders as a hover/focus dropdown
+     (ElevenLabs-style). `key` matches <body data-page> to mark current. */
   var NAV = [
-    { key: 'about', href: 'about.html', label: 'About', i18n: 'nav.about' },
-    { key: 'classes', href: 'classes.html', label: 'Classes', i18n: 'nav.classes' },
-    { key: 'camps', href: 'camps.html', label: 'Camps', i18n: 'nav.camps' },
-    { key: 'events', href: 'events.html', label: 'Events', i18n: 'nav.events' },
-    { key: 'hub', href: 'hub.html', label: 'SG Hub', i18n: 'nav.hub' },
-    { key: 'news', href: 'news.html', label: 'News', i18n: 'nav.news' },
-    { key: 'play', href: 'play.html', label: 'Play', i18n: 'nav.play' },
-    { key: 'contact', href: 'contact.html', label: 'Contact', i18n: 'nav.contact' },
+    {
+      key: 'classes', href: 'classes.html', label: 'Classes',
+      children: [
+        { key: 'classes', href: 'classes.html', label: 'Regular classes', note: 'Weekly group and private coaching' },
+        { key: 'camps', href: 'camps.html', label: 'Camps', note: 'Holiday Exploration camps' }
+      ]
+    },
+    { key: 'events', href: 'events.html', label: 'Events' },
+    { key: 'lab', href: 'lab.html', label: 'Performance Lab' },
+    { key: 'hub', href: 'hub.html', label: 'SG Hub' },
+    { key: 'news', href: 'news.html', label: 'News' },
+    { key: 'about', href: 'about.html', label: 'About' },
+    { key: 'contact', href: 'contact.html', label: 'Contact' }
+  ];
+
+  var SOCIALS = [
+    { label: 'Instagram', href: 'https://www.instagram.com/eleverbadminton/' },
+    { label: 'Facebook', href: 'https://www.facebook.com/eleverbadminton/' },
+    { label: 'TikTok', href: 'https://www.tiktok.com/@eleverbadminton' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/company/eleverbadminton' }
   ];
 
   // Pages live either at the root or in /coaches/ — fix relative links.
@@ -30,30 +45,38 @@
 
   var page = document.body.getAttribute('data-page') || '';
 
-  function navLinks() {
-    return NAV.map(function (item) {
-      var active = item.key === page;
-      return '<a href="' + url(item.href) + '" class="nav__link' + (active ? ' is-current' : '') + '"' +
-        (active ? ' aria-current="page"' : '') +
-        (item.i18n ? ' data-i18n="' + item.i18n + '"' : '') +
-        '>' + item.label + '</a>';
-    }).join('');
+  function isCurrent(item) {
+    if (item.key === page) return true;
+    return !!(item.children && item.children.some(function (c) { return c.key === page; }));
   }
 
-  var LANG_MENU =
-    '<div class="lang" id="langMenu">' +
-      '<button class="lang__toggle" id="langToggle" aria-haspopup="true" aria-expanded="false" aria-label="Language">' +
-        '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.8 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.8-3.8-9S9.5 5.6 12 3z"/></svg>' +
-        '<span id="langCurrent">EN</span><span class="lang__chev" aria-hidden="true">&#9662;</span>' +
-      '</button>' +
-      '<ul class="lang__list" role="menu" aria-label="Choose language">' +
-        '<li role="none"><button class="lang__opt is-active" role="menuitemradio" aria-checked="true" data-lang="en" lang="en">English</button></li>' +
-        '<li role="none"><button class="lang__opt" role="menuitemradio" aria-checked="false" data-lang="zh" lang="zh">中文</button></li>' +
-        '<li role="none"><button class="lang__opt" role="menuitemradio" aria-checked="false" data-lang="hi" lang="hi">हिन्दी</button></li>' +
-        '<li role="none"><button class="lang__opt" role="menuitemradio" aria-checked="false" data-lang="ta" lang="ta">தமிழ்</button></li>' +
-        '<li role="none"><button class="lang__opt" role="menuitemradio" aria-checked="false" data-lang="ms" lang="ms">Bahasa Melayu</button></li>' +
-      '</ul>' +
-    '</div>';
+  function navLinks() {
+    return NAV.map(function (item) {
+      var active = isCurrent(item);
+      var cls = 'nav__link' + (active ? ' is-current' : '');
+
+      if (!item.children) {
+        return '<a href="' + url(item.href) + '" class="' + cls + '"' +
+          (active ? ' aria-current="page"' : '') + '>' + item.label + '</a>';
+      }
+
+      return '<div class="nav__group">' +
+        '<a href="' + url(item.href) + '" class="' + cls + ' nav__link--parent"' +
+          (active ? ' aria-current="page"' : '') + '>' + item.label +
+          '<svg class="nav__chev" viewBox="0 0 12 8" width="10" height="7" aria-hidden="true">' +
+            '<path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '</svg>' +
+        '</a>' +
+        '<div class="nav__menu">' +
+          item.children.map(function (c) {
+            return '<a href="' + url(c.href) + '" class="nav__menu-item' +
+              (c.key === page ? ' is-current' : '') + '">' +
+              '<b>' + c.label + '</b><small>' + c.note + '</small></a>';
+          }).join('') +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
 
   var header = document.getElementById('siteHeader');
   if (header) {
@@ -63,8 +86,7 @@
       '<a href="' + url('index.html') + '" class="nav__logo" aria-label="Élever Badminton — home">ÉLEVER<span aria-hidden="true">·</span>BADMINTON</a>' +
       '<nav class="nav__links" id="navLinks" aria-label="Primary">' +
         navLinks() +
-        '<a href="' + BOOK_URL + '" target="_blank" rel="noopener" class="nav__cta magnetic" data-i18n="nav.book">Book a class</a>' +
-        LANG_MENU +
+        '<a href="' + BOOK_URL + '" target="_blank" rel="noopener" class="nav__cta">Book a class</a>' +
       '</nav>' +
       '<button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span></span></button>';
   }
@@ -73,28 +95,69 @@
   if (footer) {
     footer.className = 'footer';
     footer.innerHTML =
-      '<div class="footer__brand">ÉLEVER<span aria-hidden="true">·</span>BADMINTON</div>' +
-      '<p class="footer__tag" data-i18n="footer.tag">To build. To raise. To rise higher.</p>' +
-      '<nav class="footer__links" aria-label="Footer">' +
-        '<a href="' + url('about.html') + '" data-i18n="nav.about">About</a>' +
-        '<a href="' + url('classes.html') + '" data-i18n="nav.classes">Classes</a>' +
-        '<a href="' + url('camps.html') + '" data-i18n="nav.camps">Camps</a>' +
-        '<a href="' + url('events.html') + '" data-i18n="nav.events">Events</a>' +
-        '<a href="' + url('hub.html') + '" data-i18n="nav.hub">SG Hub</a>' +
-        '<a href="' + url('news.html') + '" data-i18n="nav.news">News</a>' +
-        '<a href="' + url('contact.html') + '" data-i18n="nav.contact">Contact</a>' +
-        '<a href="https://www.instagram.com/eleverbadminton/" target="_blank" rel="noopener" data-i18n="footer.instagram">Instagram</a>' +
-      '</nav>' +
-      '<p class="footer__note" data-i18n="footer.note">Concept redesign · Built for Élever Badminton. Photography © Élever Badminton.</p>';
+      '<div class="footer__inner">' +
+        '<div class="footer__col footer__col--brand">' +
+          '<div class="footer__brand">ÉLEVER<span aria-hidden="true">·</span>BADMINTON</div>' +
+          '<p class="footer__tag">Enhance your skills. Enjoy the process. Elevate your experience.</p>' +
+          '<div class="footer__socials">' +
+            SOCIALS.map(function (s) {
+              return '<a href="' + s.href + '" target="_blank" rel="noopener">' + s.label + '</a>';
+            }).join('') +
+          '</div>' +
+        '</div>' +
+
+        '<div class="footer__col">' +
+          '<h4>Train</h4>' +
+          '<a href="' + url('classes.html') + '">Regular classes</a>' +
+          '<a href="' + url('camps.html') + '">Camps</a>' +
+          '<a href="' + BOOK_URL + '" target="_blank" rel="noopener">Book a class</a>' +
+        '</div>' +
+
+        '<div class="footer__col">' +
+          '<h4>Élever</h4>' +
+          '<a href="' + url('events.html') + '">Events</a>' +
+          '<a href="' + url('lab.html') + '">Performance Lab</a>' +
+          '<a href="' + url('about.html') + '">About</a>' +
+          '<a href="' + url('news.html') + '">News</a>' +
+          '<a href="' + url('hub.html') + '">SG Badminton Hub</a>' +
+        '</div>' +
+
+        '<div class="footer__col">' +
+          '<h4>Contact</h4>' +
+          '<a href="mailto:' + EMAIL + '">' + EMAIL + '</a>' +
+          '<a href="' + WHATSAPP + '" target="_blank" rel="noopener">WhatsApp +65 8921 4221</a>' +
+          '<address class="footer__addr">767 Upper Serangoon Road<br>#01-03<br>Singapore 534635</address>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="footer__base">' +
+        '<p>Elever Sports Pte. Ltd. · UEN 202501591C</p>' +
+        '<p><a href="' + url('privacy.html') + '">Privacy notice</a> · <a href="' + url('privacy.html') + '#terms">Terms &amp; conditions</a></p>' +
+        '<p>© ' + new Date().getFullYear() + ' Élever Badminton. Photography © Élever Badminton.</p>' +
+      '</div>';
   }
 
   /* Interior pages have no dark hero behind the nav, so they opt into the
      solid treatment permanently via  <body data-nav="solid">.
-     Burger + scroll behaviour stay in main.js (section 4) — one owner. */
+     Burger + scroll behaviour stay in main.js — one owner. */
   var navEl = document.getElementById('nav');
   if (navEl && document.body.getAttribute('data-nav') === 'solid') {
     navEl.classList.add('nav--solid', 'scrolled');
   }
 
-  window.ELEVER_SITE = { bookUrl: BOOK_URL, base: base, url: url };
+  /* Mobile: tapping a parent item opens its submenu rather than navigating. */
+  if (navEl) {
+    navEl.addEventListener('click', function (e) {
+      var parent = e.target.closest ? e.target.closest('.nav__link--parent') : null;
+      if (!parent) return;
+      if (!window.matchMedia('(max-width:900px)').matches) return;
+      var group = parent.parentElement;
+      if (!group.classList.contains('is-open')) {
+        e.preventDefault();
+        group.classList.add('is-open');
+      }
+    });
+  }
+
+  window.ELEVER_SITE = { bookUrl: BOOK_URL, whatsapp: WHATSAPP, email: EMAIL, base: base, url: url };
 })();

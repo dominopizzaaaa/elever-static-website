@@ -8,16 +8,16 @@ rather than one long scrolling page.
 
 | Page | File | What's on it |
 |---|---|---|
-| Home | `index.html` | Intro animation, hero, "What is Élever" + definition, the 5 pillars (each clickable), find-a-class-near-you, reviews |
-| Classes | `classes.html` | The four development pathways, regular vs private coaching, class locations on a Singapore map **and** as a list, class enquiry form |
-| Camps | `camps.html` | What happens at an Exploration camp, a day's timetable, the next camp (or the waitlist capture when none is live), past camps and photos |
-| Events | `events.html` | Split into **Work with us** (the corporate offer — carnivals, clinics, competitions) and **Our work** (upcoming, past, partners), plus a proposal request form |
-| About | `about.html` | Definition, founder story, coaching approach, credentials, the coaching team, the 5 pillars |
+| Home | `index.html` | Intro animation, hero, the Élever definition + tagline, the 5 pillars |
+| Classes | `classes.html` | Development pathways, group vs private, trial & placement, class locations (list **or** map) |
+| Camps | `camps.html` | What happens at an Exploration camp, a day's timetable, the next camp, waitlist |
+| Events | `events.html` | Carnivals / clinics / competitions offered as a service, the all-in-one suite, our work, Trusted by, proposal form |
+| Performance Lab | `lab.html` | Black "OPENING SOON" holding page with the Upper Serangoon address |
+| About | `about.html` | Definition + tagline, founder write-up, the coaching team, the 5 pillars, contact |
 | Coaches | `coaches/<slug>.html` | One generated page per coach — photo, profile, stages coached, languages |
 | News | `news.html` | Articles, filterable by category, newsletter signup |
-| SG Badminton Hub | `hub.html` | Venue directory with filters, how to book each system, **Racket Ratings + recreational play groups**, world tour calendar |
-| Play | `play.html` | The interactive pieces — rally game, reflex test and badminton-twin quiz |
-| Contact | `contact.html` | Enquiry form, WhatsApp / email / events routing, FAQ |
+| SG Badminton Hub | `hub.html` | Venue directory with filters, how to book, Racket Ratings + play groups, world tour calendar |
+| Contact | `contact.html` | Enquiry form, WhatsApp / email routing, FAQ |
 | Privacy | `privacy.html` | PDPA privacy notice draft (needs completion — see below) |
 
 ## Editing content — start here
@@ -26,18 +26,6 @@ rather than one long scrolling page.
 camps, event types, upcoming/past events, partners, articles, the Racket Ratings links and the
 recreational play groups all live there. Nothing is baked into the markup, so changing a class
 time does not require touching HTML.
-
-### Recreational play groups & Racket Ratings
-
-The SG Hub's **Groups & ratings** tab leads with [Racket Ratings](https://www.racketratings.net/badminton),
-deep-linked to the four places that matter — Leaderboard, **Clubs**, Tournaments and Head to Head.
-Clubs is flagged as the starting point because it is effectively a live directory of recreational
-groups that the groups themselves keep current, which no hand-maintained list can match.
-
-Below it, `REC_GROUPS` in `data.js` is a small curated list for groups that ask Élever to feature
-them (day, time, venue, level, contact, optional Racket Ratings club link). Empty the array and the
-section falls back to a clean empty state pointing at Racket Ratings Clubs — it never shows a
-broken or stale list.
 
 Entries flagged `placeholder: true` are structural samples so pages can be seen working. They
 render with a small **sample** tag on the page. Replace the content and delete the flag.
@@ -48,42 +36,53 @@ After editing the coach list, regenerate their pages:
 node tools/build-coaches.js
 ```
 
+## Brand
+
+| | |
+|---|---|
+| White | `#FFFFFF` |
+| Black | `#000000` |
+| Blue | `#2151D1` |
+| Type | Montserrat 400–900 |
+
+Registered company: **Elever Sports Pte. Ltd.** · UEN **202501591C**
+767 Upper Serangoon Road, #01-03, Singapore 534635
+info@eleverbadminton.com · WhatsApp +65 8921 4221
+
 ## Still needed from Élever
 
-- Real class days, times, levels and venues (currently sample data)
-- Real camp dates, prices and photos
-- Real past events, partners and partner logo files
-- Confirmed wording for the four credential claims on the About page
+- Real class days, times, levels and venues (currently sample data in `CLASSES`)
+- Age ranges, ability levels and grading checkpoints for the four pathways (deliberately
+  omitted rather than guessed)
+- Camp photos (`assets/img/camps/`) and event photos (`assets/img/events/`)
+- Partner logo files — drop them in `assets/img/partners/` and set `logo` in `PARTNERS`
+- Write-ups for the previous events listed on the Events page
+- Completion of the bracketed fields in `privacy.html` (DPO, retention period) and the
+  Terms & Conditions page the footer links to
 - The make-up/cancellation policy and insurance wording in the Contact FAQ
-- Completion of the bracketed fields in `privacy.html` (DPO, UEN, retention period)
 - A form endpoint — forms currently open a pre-filled email; point them at Formspree, Netlify
   Forms or the CRM to capture leads properly
-- The academy WhatsApp number for click-to-chat on the Contact page
-- Real recreational groups for `REC_GROUPS` (currently three sample rows), or leave it empty and
-  let Racket Ratings Clubs carry it
+- Real coach bios (all are currently flagged `placeholder`)
 
 ## Structure
 
 ```
-index.html  classes.html  camps.html  events.html  about.html
-news.html   hub.html      play.html   contact.html privacy.html
+index.html  classes.html  camps.html  events.html  lab.html
+about.html  news.html     hub.html    contact.html privacy.html
 sitemap.xml robots.txt
 coaches/          generated — one page per coach
 tools/            build-coaches.js
 assets/
-  css/style.css   base design system (royal blue #2f5cf0 / soft-cloud neutrals / deep navy, Montserrat)
+  css/style.css   design system (white / black / #2151D1, Montserrat)
   css/pages.css   layout layer for the standalone pages
   js/data.js      >>> site content lives here
   js/site.js      shared nav + footer injection
   js/pages.js     renders the data-driven blocks on each page
-  js/main.js      intro, hero, games, hub directory, carousel
-  js/i18n.js      5-language switcher (EN / 中文 / हिन्दी / தமிழ் / Bahasa Melayu)
+  js/main.js      intro, hero canvas, nav, reveals, hub directory
   img/            team photos, hero, player portraits
 ```
 
-Scripts load in the order `data → site → i18n → pages → main`. `pages.js` must run before
-`main.js`: `startReveals()` collects `.reveal` elements once, so anything injected afterwards
-would never become visible.
+Scripts load in the order `data → site → pages → main`.
 
 ## Run locally
 
