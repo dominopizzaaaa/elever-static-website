@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=13" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=13" />
+  <link rel="stylesheet" href="assets/css/style.css?v=14" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=14" />
 </head>
 <body data-page="hub" data-nav="solid" data-base="">
 
@@ -163,46 +163,35 @@
       <section class="teamhub">
         <div class="teamhub__head">
           <span class="rr__eyebrow">Know the national team</span>
-          <h3>Singapore players to follow</h3>
-          <p class="rr__lead">Quick links to live rankings, upcoming competitions and current news for Singapore's national team players.</p>
+          <h3>Team Singapore</h3>
+          <p class="rr__lead">Who represents Singapore on the world tour, where they stand in the world rankings, what they are playing next, and where to read the latest on them.</p>
         </div>
-        <div class="teamhub__grid">
-          <article class="teamcard">
-            <span class="teamcard__role">Men's singles</span>
-            <h4>Loh Kean Yew</h4>
-            <p>Former world champion and Singapore's leading men's singles player.</p>
-            <div class="teamcard__links">
-              <a href="https://bwf.tournamentsoftware.com/ranking/ranking.aspx" target="_blank" rel="noopener">Live ranking</a>
-              <a href="https://www.google.com/search?q=Loh+Kean+Yew+badminton+news&tbm=nws" target="_blank" rel="noopener">Latest news</a>
-            </div>
-          </article>
-          <article class="teamcard">
-            <span class="teamcard__role">Women's singles</span>
-            <h4>Yeo Jia Min</h4>
-            <p>Singapore's leading women's singles player on the world tour.</p>
-            <div class="teamcard__links">
-              <a href="https://bwf.tournamentsoftware.com/ranking/ranking.aspx" target="_blank" rel="noopener">Live ranking</a>
-              <a href="https://www.google.com/search?q=Yeo+Jia+Min+badminton+news&tbm=nws" target="_blank" rel="noopener">Latest news</a>
-            </div>
-          </article>
-          <article class="teamcard">
-            <span class="teamcard__role">Team updates</span>
-            <h4>Singapore Badminton Association</h4>
-            <p>Official announcements, team selection, national squad updates and competition news.</p>
-            <div class="teamcard__links">
-              <a href="https://singaporebadminton.org.sg/" target="_blank" rel="noopener">SBA website</a>
-              <a href="https://www.google.com/search?q=Singapore+national+badminton+team+news&tbm=nws" target="_blank" rel="noopener">Team news</a>
-            </div>
-          </article>
+
+        <div class="teamhub__grid" id="teamGrid"></div>
+
+        <div class="teamhub__cols">
+          <section class="tpanel">
+            <h4 class="tpanel__title">Next on the calendar</h4>
+            <p class="tpanel__lead">The next stops on the 2026 world tour, taken from the season tracker further down this page.</p>
+            <ul class="tnext" id="teamNext"></ul>
+            <a class="tpanel__more" href="https://corporate.bwfbadminton.com/events/calendar/2026/all/0/-1" target="_blank" rel="noopener">Full BWF calendar &#8599;</a>
+          </section>
+
+          <section class="tpanel">
+            <h4 class="tpanel__title">Latest news</h4>
+            <p class="tpanel__lead">Current stories on Singapore's players and the national squad. Each opens a live news search, so it is never out of date.</p>
+            <div class="tnews" id="teamNews"></div>
+          </section>
         </div>
+
         <div class="teamhub__live">
           <div>
-            <h4>Live rankings and tournament entries</h4>
-            <p>Rankings and upcoming competitions change every week, so this hub points users to the live BWF pages instead of freezing old numbers.</p>
+            <h4>Rankings move every week</h4>
+            <p>The numbers on the cards are the last figures we verified, with the month they were true. For today's position, open the official BWF world rankings — they are republished every Tuesday.</p>
           </div>
           <div class="teamhub__links">
-            <a class="btn btn--primary" href="https://bwf.tournamentsoftware.com/ranking/ranking.aspx" target="_blank" rel="noopener">Open BWF rankings</a>
-            <a class="btn btn--ghost" href="https://corporate.bwfbadminton.com/events/calendar/2026/all/0/-1" target="_blank" rel="noopener">Open BWF calendar</a>
+            <a class="btn btn--primary" href="https://bwf.tournamentsoftware.com/ranking/ranking.aspx?rid=70" target="_blank" rel="noopener">Open BWF rankings</a>
+            <a class="btn btn--ghost" href="https://singaporebadminton.org.sg/" target="_blank" rel="noopener">Singapore Badminton Association</a>
           </div>
         </div>
       </section>
@@ -212,7 +201,8 @@
     <div class="section-head">
       <span class="kicker reveal">The 2026 Season</span>
       <h2 class="section-title reveal" id="newsTitle">Every stop on the <em>world tour</em>.</h2>
-      <p class="news__hint reveal" data-delay="120">Date-aware tracker for the 2026 HSBC BWF World Tour. Completed events link to official results; upcoming events link to tournament details.</p>
+      <p class="news__hint reveal" data-delay="120">Every stop on the 2026 HSBC BWF World Tour, with the champions in all five disciplines for each completed event. Results refresh themselves — the page checks for newly published winners each day.</p>
+      <p class="news__stamp reveal" data-delay="140" id="newsStamp" aria-live="polite"></p>
       <div class="news__filters reveal" data-delay="160" id="newsFilters" role="group" aria-label="Filter tournaments">
         <button class="news__filter is-active" data-filter="all" aria-pressed="true">All</button>
         <button class="news__filter" data-filter="done" aria-pressed="false">Completed</button>
@@ -221,15 +211,15 @@
     </div>
     <div class="news__timeline" id="newsTimeline" aria-live="polite"></div>
     <div class="news__more"><button class="btn btn--ghost" id="newsToggle" aria-expanded="false">Show all tournaments</button></div>
-    <p class="news__source reveal">Schedule links point to the official BWF corporate calendar and results pages where available. Status updates automatically from each event date; use the official result link for live draws, match scores and final winners.</p>
+    <p class="news__source reveal">Calendar and champions are compiled from the Badminton World Federation calendar and the 2026 BWF World Tour record, and refresh automatically as new results are published. Completed / upcoming status is worked out from each event's own dates. For live draws and match-by-match scores, open the official BWF link on any card.</p>
   </section>
   </main>
 
   <footer id="siteFooter"></footer>
 
-  <script src="assets/js/data.js?v=13"></script>
-  <script src="assets/js/site.js?v=13"></script>
-  <script src="assets/js/pages.js?v=13"></script>
-  <script src="assets/js/main.js?v=13"></script>
+  <script src="assets/js/data.js?v=14"></script>
+  <script src="assets/js/site.js?v=14"></script>
+  <script src="assets/js/pages.js?v=14"></script>
+  <script src="assets/js/main.js?v=14"></script>
 </body>
 </html>

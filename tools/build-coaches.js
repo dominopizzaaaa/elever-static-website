@@ -65,8 +65,8 @@ function page(c) {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../assets/css/style.css?v=11" />
-  <link rel="stylesheet" href="../assets/css/pages.css?v=11" />
+  <link rel="stylesheet" href="../assets/css/style.css?v=14" />
+  <link rel="stylesheet" href="../assets/css/pages.css?v=14" />
   <script type="application/ld+json">${jsonld}</script>
 </head>
 <body data-page="about" data-nav="solid" data-base="../">
@@ -119,10 +119,10 @@ function page(c) {
 
   <footer id="siteFooter"></footer>
 
-  <script src="../assets/js/data.js?v=11"></script>
-  <script src="../assets/js/site.js?v=11"></script>
-  <script src="../assets/js/pages.js?v=11"></script>
-  <script src="../assets/js/main.js?v=11"></script>
+  <script src="../assets/js/data.js?v=14"></script>
+  <script src="../assets/js/site.js?v=14"></script>
+  <script src="../assets/js/pages.js?v=14"></script>
+  <script src="../assets/js/main.js?v=14"></script>
 </body>
 </html>
 `;

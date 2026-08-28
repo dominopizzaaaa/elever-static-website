@@ -236,14 +236,14 @@
      status: 'Available' when a class has slots
      --------------------------------------------------------------- */
   var CLASSES = [
-    { venueId: 'sbhaljunied', venue: 'Singapore Badminton Hall', area: 'Aljunied', region: 'East', addr: 'Singapore Badminton Hall, Singapore', mrt: 'Aljunied', lat: 1.3168, lng: 103.8869, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Friday', time: '16:00 - 18:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
-    { venueId: 'sbstadium', venue: 'Singapore Badminton Stadium', area: 'Aljunied', region: 'East', addr: 'Singapore Badminton Stadium, Singapore', mrt: 'Aljunied', lat: 1.3106, lng: 103.8845, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Saturday', time: '12:00 - 14:00', level: 'Emergence', status: 'Available' }, { day: 'Saturday', time: '14:00 - 16:00', level: 'Essentials', status: 'Available' }, { day: 'Saturday', time: '16:00 - 18:00', level: 'Essentials', status: 'Available' }, { day: 'Sunday', time: '12:00 - 14:00', level: 'Essentials', status: 'Available' }, { day: 'Sunday', time: '14:00 - 16:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
-    { venueId: 'scgs', venue: 'Singapore Chinese Girls’ School', area: 'Novena', region: 'Central', addr: 'Singapore Chinese Girls’ School, Singapore', mrt: 'Novena', lat: 1.3200, lng: 103.8279, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Sunday', time: '15:00 - 17:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
-    { venueId: 'sbhexpo', venue: 'SBH East Coast @ Expo', area: 'Expo', region: 'East', addr: 'SBH East Coast @ Expo, Singapore', mrt: 'Expo', lat: 1.3346, lng: 103.9614, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Saturday', time: '10:00 - 12:00', level: 'Essentials', status: 'Available' }, { day: 'Saturday', time: '15:00 - 17:00', level: 'Essentials', status: 'Available' }, { day: 'Sunday', time: '14:00 - 16:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
-    { venueId: 'wyse', venue: 'Wyse Active Hub', area: 'Jurong', region: 'West', addr: 'Wyse Active Hub, Singapore', mrt: 'Jurong East', lat: 1.3331, lng: 103.7429, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Saturday', time: '15:00 - 17:00', level: 'Essentials', status: 'Available' }, { day: 'Sunday', time: '09:00 - 11:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
-    { venueId: 'fernvale', venue: 'Fernvale Village', area: 'Sengkang', region: 'North-East', addr: 'Fernvale Village, Singapore', mrt: 'Layar LRT', lat: 1.3917, lng: 103.8760, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Tuesday', time: '16:00 - 18:00', level: 'Essentials', status: 'Available' }, { day: 'Thursday', time: '16:00 - 18:00', level: 'Essentials', status: 'Available' }, { day: 'Saturday', time: '10:00 - 12:00', level: 'Essentials', status: 'Available' }, { day: 'Saturday', time: '13:00 - 15:00', level: 'Essentials', status: 'Available' }, { day: 'Saturday', time: '15:00 - 17:00', level: 'Essentials', status: 'Available' }, { day: 'Saturday', time: '15:00 - 18:00', level: 'Emergence', status: 'Available' }, { day: 'Sunday', time: '11:00 - 13:00', level: 'Essentials', status: 'Available' }, { day: 'Sunday', time: '13:00 - 15:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
-    { venueId: 'cantonment-primary', venue: 'Cantonment Primary School', area: 'Cantonment', region: 'Central', addr: 'Cantonment Primary School, Singapore', mrt: 'Cantonment', lat: 1.2763, lng: 103.8397, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Sunday', time: '09:00 - 11:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
-    { venueId: 'bidadari', venue: 'Bidadari Community Club', area: 'Woodleigh', region: 'Central', addr: 'Bidadari Community Club, Singapore', mrt: 'Woodleigh', lat: 1.3376, lng: 103.8703, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Monday', time: '15:30 - 17:30', level: 'Essentials', status: 'Available' }, { day: 'Tuesday', time: '15:30 - 17:30', level: 'Essentials', status: 'Available' } ], placeholder: true }
+    { venueId: 'sbhaljunied', venue: 'Singapore Badminton Hall', area: 'Aljunied', region: 'East', addr: '1 Lorong 23 Geylang, S388352', mrt: 'Aljunied', lat: 1.313938, lng: 103.880708, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Friday', time: '16:00 - 18:00', level: 'Essentials' } ] },
+    { venueId: 'sbstadium', venue: 'Singapore Badminton Stadium', area: 'Aljunied', region: 'East', addr: '100 Guillemard Road, S399718', mrt: 'Aljunied', lat: 1.309908, lng: 103.881842, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Saturday', time: '12:00 - 14:00', level: 'Emergence' }, { day: 'Saturday', time: '14:00 - 16:00', level: 'Essentials' }, { day: 'Saturday', time: '16:00 - 18:00', level: 'Essentials' }, { day: 'Sunday', time: '12:00 - 14:00', level: 'Essentials' }, { day: 'Sunday', time: '14:00 - 16:00', level: 'Essentials' } ] },
+    { venueId: 'scgs', venue: 'Singapore Chinese Girls’ School', area: 'Novena', region: 'Central', addr: '190 Dunearn Road, S309437', mrt: 'Novena', lat: 1.320634, lng: 103.828165, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Sunday', time: '15:00 - 17:00', level: 'Essentials' } ] },
+    { venueId: 'sbhexpo', venue: 'SBH East Coast @ Expo', area: 'Expo', region: 'East', addr: 'Singapore Expo, 1 Expo Drive, S486150', mrt: 'Expo', lat: 1.334402, lng: 103.96036, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Saturday', time: '10:00 - 12:00', level: 'Essentials' }, { day: 'Saturday', time: '15:00 - 17:00', level: 'Essentials' }, { day: 'Sunday', time: '14:00 - 16:00', level: 'Essentials' } ] },
+    { venueId: 'wyse', venue: 'Wyse Active Hub', area: 'Jurong', region: 'West', addr: '1 Venture Avenue, #03-01 Perennial Business City, S608521', mrt: 'Jurong East', lat: 1.331865, lng: 103.744882, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Saturday', time: '15:00 - 17:00', level: 'Essentials' }, { day: 'Sunday', time: '09:00 - 11:00', level: 'Essentials' } ] },
+    { venueId: 'fernvale', venue: 'Fernvale Village', area: 'Sengkang', region: 'North-East', addr: '61 Fernvale Link, S799956', mrt: 'Layar LRT', lat: 1.396193, lng: 103.878618, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Tuesday', time: '16:00 - 18:00', level: 'Essentials' }, { day: 'Thursday', time: '16:00 - 18:00', level: 'Essentials' }, { day: 'Saturday', time: '10:00 - 12:00', level: 'Essentials' }, { day: 'Saturday', time: '13:00 - 15:00', level: 'Essentials' }, { day: 'Saturday', time: '15:00 - 17:00', level: 'Essentials' }, { day: 'Saturday', time: '15:00 - 18:00', level: 'Emergence' }, { day: 'Sunday', time: '11:00 - 13:00', level: 'Essentials' }, { day: 'Sunday', time: '13:00 - 15:00', level: 'Essentials' } ] },
+    { venueId: 'cantonment-primary', venue: 'Cantonment Primary School', area: 'Cantonment', region: 'Central', addr: '1 Cantonment Close, S088256', mrt: 'Cantonment', lat: 1.275473, lng: 103.839963, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Sunday', time: '09:00 - 11:00', level: 'Essentials' } ] },
+    { venueId: 'bidadari', venue: 'Bidadari Community Club', area: 'Woodleigh', region: 'Central', addr: '11 Bidadari Park Drive, S367905', mrt: 'Woodleigh', lat: 1.338694, lng: 103.87175, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Monday', time: '15:30 - 17:30', level: 'Essentials' }, { day: 'Tuesday', time: '15:30 - 17:30', level: 'Essentials' } ] }
   ];
 
   /* ---------------------------------------------------------------
@@ -331,17 +331,31 @@
     competition: []
   };
 
+  /* EVENT_SHOWCASE photos are filenames only. `eventPhotoBase` (full size,
+     used in the lightbox) and `eventThumbBase` (grid thumbnails) supply the
+     directories, so both sets stay in sync. Regenerate both from the
+     originals in assets/img/Photos/Events/ with:
+         bash tools/build-event-photos.sh                              */
+  var EVENT_PHOTO_BASE = 'assets/img/events/';
+  var EVENT_THUMB_BASE = 'assets/img/events/thumb/';
+
   var EVENT_SHOWCASE = [
     {
       title: 'ASICS Badminton Summit 2026',
       type: 'Clinic',
       when: '5 Jul 2026',
       where: 'The Sports Arina @ Jalan Kayu',
+      slug: 'asics-summit-2026',
       photos: [
-        'assets/img/events/asics-summit-2026-1.jpg',
-        'assets/img/events/asics-summit-2026-2.jpg',
-        'assets/img/events/asics-summit-2026-3.jpg',
-        'assets/img/events/asics-summit-2026-4.jpg'
+        'asics-summit-2026-1.jpg',
+        'asics-summit-2026-2.jpg',
+        'asics-summit-2026-3.jpg',
+        'asics-summit-2026-4.jpg',
+        'asics-summit-2026-5.jpg',
+        'asics-summit-2026-6.jpg',
+        'asics-summit-2026-7.jpg',
+        'asics-summit-2026-8.jpg',
+        'asics-summit-2026-9.jpg'
       ]
     },
     {
@@ -349,11 +363,26 @@
       type: 'Carnival',
       when: '23 Jul 2026',
       where: 'St. Patrick’s School',
+      slug: 'joo-chiat-carnival-2026',
       photos: [
-        'assets/img/events/joo-chiat-carnival-2026-1.jpg',
-        'assets/img/events/joo-chiat-carnival-2026-2.jpg',
-        'assets/img/events/joo-chiat-carnival-2026-3.jpg',
-        'assets/img/events/joo-chiat-carnival-2026-4.jpg'
+        'joo-chiat-carnival-2026-1.jpg',
+        'joo-chiat-carnival-2026-2.jpg',
+        'joo-chiat-carnival-2026-3.jpg',
+        'joo-chiat-carnival-2026-4.jpg',
+        'joo-chiat-carnival-2026-5.jpg',
+        'joo-chiat-carnival-2026-6.jpg',
+        'joo-chiat-carnival-2026-7.jpg',
+        'joo-chiat-carnival-2026-8.jpg',
+        'joo-chiat-carnival-2026-9.jpg',
+        'joo-chiat-carnival-2026-10.jpg',
+        'joo-chiat-carnival-2026-11.jpg',
+        'joo-chiat-carnival-2026-12.jpg',
+        'joo-chiat-carnival-2026-13.jpg',
+        'joo-chiat-carnival-2026-14.jpg',
+        'joo-chiat-carnival-2026-15.jpg',
+        'joo-chiat-carnival-2026-16.jpg',
+        'joo-chiat-carnival-2026-17.jpg',
+        'joo-chiat-carnival-2026-18.jpg'
       ]
     },
     {
@@ -361,11 +390,17 @@
       type: 'Clinic',
       when: '4 Apr 2026',
       where: 'Paya Lebar Kovan Community Club',
+      slug: 'serangoon-paya-lebar-clinic-2026',
       photos: [
-        'assets/img/events/serangoon-paya-lebar-clinic-2026-1.jpg',
-        'assets/img/events/serangoon-paya-lebar-clinic-2026-2.jpg',
-        'assets/img/events/serangoon-paya-lebar-clinic-2026-3.jpg',
-        'assets/img/events/serangoon-paya-lebar-clinic-2026-4.jpg'
+        'serangoon-paya-lebar-clinic-2026-1.jpg',
+        'serangoon-paya-lebar-clinic-2026-2.jpg',
+        'serangoon-paya-lebar-clinic-2026-3.jpg',
+        'serangoon-paya-lebar-clinic-2026-4.jpg',
+        'serangoon-paya-lebar-clinic-2026-5.jpg',
+        'serangoon-paya-lebar-clinic-2026-6.jpg',
+        'serangoon-paya-lebar-clinic-2026-7.jpg',
+        'serangoon-paya-lebar-clinic-2026-8.jpg',
+        'serangoon-paya-lebar-clinic-2026-9.jpg'
       ]
     },
     {
@@ -373,11 +408,17 @@
       type: 'Clinic',
       when: '8 Feb 2026',
       where: 'Hillview Community Club',
+      slug: 'bukit-gombak-clinic-2026',
       photos: [
-        'assets/img/events/bukit-gombak-clinic-2026-1.jpg',
-        'assets/img/events/bukit-gombak-clinic-2026-2.jpg',
-        'assets/img/events/bukit-gombak-clinic-2026-3.jpg',
-        'assets/img/events/bukit-gombak-clinic-2026-4.jpg'
+        'bukit-gombak-clinic-2026-1.jpg',
+        'bukit-gombak-clinic-2026-2.jpg',
+        'bukit-gombak-clinic-2026-3.jpg',
+        'bukit-gombak-clinic-2026-4.jpg',
+        'bukit-gombak-clinic-2026-5.jpg',
+        'bukit-gombak-clinic-2026-6.jpg',
+        'bukit-gombak-clinic-2026-7.jpg',
+        'bukit-gombak-clinic-2026-8.jpg',
+        'bukit-gombak-clinic-2026-9.jpg'
       ]
     },
     {
@@ -385,11 +426,17 @@
       type: 'School clinic',
       when: '23 Oct 2025',
       where: 'Northbrooks Secondary School',
+      slug: 'northbrooks-school-2025',
       photos: [
-        'assets/img/events/northbrooks-school-2025-1.jpg',
-        'assets/img/events/northbrooks-school-2025-2.jpg',
-        'assets/img/events/northbrooks-school-2025-3.jpg',
-        'assets/img/events/northbrooks-school-2025-4.jpg'
+        'northbrooks-school-2025-1.jpg',
+        'northbrooks-school-2025-2.jpg',
+        'northbrooks-school-2025-3.jpg',
+        'northbrooks-school-2025-4.jpg',
+        'northbrooks-school-2025-5.jpg',
+        'northbrooks-school-2025-6.jpg',
+        'northbrooks-school-2025-7.jpg',
+        'northbrooks-school-2025-8.jpg',
+        'northbrooks-school-2025-9.jpg'
       ]
     },
     {
@@ -397,11 +444,24 @@
       type: 'Festival activation',
       when: '30 May – 1 Jun 2025',
       where: 'OCBC Square',
+      slug: 'kff-singapore-open-2025',
       photos: [
-        'assets/img/events/kff-singapore-open-2025-1.jpg',
-        'assets/img/events/kff-singapore-open-2025-2.jpg',
-        'assets/img/events/kff-singapore-open-2025-3.jpg',
-        'assets/img/events/kff-singapore-open-2025-4.jpg'
+        'kff-singapore-open-2025-1.jpg',
+        'kff-singapore-open-2025-2.jpg',
+        'kff-singapore-open-2025-3.jpg',
+        'kff-singapore-open-2025-4.jpg',
+        'kff-singapore-open-2025-5.jpg',
+        'kff-singapore-open-2025-6.jpg',
+        'kff-singapore-open-2025-7.jpg',
+        'kff-singapore-open-2025-8.jpg',
+        'kff-singapore-open-2025-9.jpg',
+        'kff-singapore-open-2025-10.jpg',
+        'kff-singapore-open-2025-11.jpg',
+        'kff-singapore-open-2025-12.jpg',
+        'kff-singapore-open-2025-13.jpg',
+        'kff-singapore-open-2025-14.jpg',
+        'kff-singapore-open-2025-15.jpg',
+        'kff-singapore-open-2025-16.jpg'
       ]
     }
   ];
@@ -451,6 +511,61 @@
     ]
   };
 
+
+  /* ---------------------------------------------------------------
+     TEAM SINGAPORE — SG Hub "Team Singapore" tab
+     ---------------------------------------------------------------
+     `rank` is a LAST-KNOWN figure with the date it was true (`rankAs`),
+     never presented as live. The panel links to the official BWF ranking
+     page for the current number, and the news feed pulls current stories
+     per player at page load.
+     Update `rank`/`rankAs` when you refresh these by hand; the site never
+     claims a stale number is today's.
+     --------------------------------------------------------------- */
+  var TEAM_SG = {
+    rankingUrl: 'https://bwf.tournamentsoftware.com/ranking/ranking.aspx?rid=70',
+    calendarUrl: 'https://corporate.bwfbadminton.com/events/calendar/2026/all/0/-1',
+    sbaUrl: 'https://singaporebadminton.org.sg/',
+    players: [
+      {
+        name: 'Loh Kean Yew', discipline: 'Men’s singles', code: 'MS',
+        rank: 14, rankAs: 'May 2026',
+        note: 'World champion in 2021 — the first Singaporean to win a BWF world title.',
+        highlights: ['2021 World Champion', 'Olympian (Tokyo 2020, Paris 2024)'],
+        news: 'Loh Kean Yew badminton'
+      },
+      {
+        name: 'Yeo Jia Min', discipline: 'Women’s singles', code: 'WS',
+        rank: 38, rankAs: 'May 2026',
+        note: 'Former World Junior No. 1 and Singapore’s lead women’s singles player.',
+        highlights: ['Former World Junior No. 1', 'Paris 2024 round of 16'],
+        news: 'Yeo Jia Min badminton'
+      },
+      {
+        name: 'Jason Teh', discipline: 'Men’s singles', code: 'MS',
+        note: 'Singapore’s second men’s singles representative on the world tour.',
+        highlights: ['SEA Games team medallist', '2022 Commonwealth Games team bronze'],
+        news: 'Jason Teh badminton Singapore'
+      },
+      {
+        name: 'Terry Hee', discipline: 'Doubles', code: 'MD',
+        note: 'Commonwealth Games mixed doubles champion, now competing in men’s doubles.',
+        highlights: ['2022 Commonwealth Games gold (XD)', '2022 India Open champion'],
+        news: 'Terry Hee badminton'
+      },
+      {
+        name: 'Andy Kwek', discipline: 'Men’s doubles', code: 'MD',
+        note: 'Men’s doubles regular on the world tour and in Singapore’s team events.',
+        highlights: ['Swedish Open champion', 'Asia Team Championships bronze'],
+        news: 'Andy Kwek badminton'
+      }
+    ],
+    /* Where the national team's next competitions come from. The hub reads
+       the same 2026 calendar the season tracker uses, so this list can never
+       drift out of step with it. */
+    watchFor: ['Singapore Open', 'BWF World Tour Finals', 'World Championships']
+  };
+
   window.ELEVER_DATA = {
     coaches: COACHES,
     pathways: PATHWAYS,
@@ -461,9 +576,12 @@
     eventsUpcoming: EVENTS_UPCOMING,
     eventsPast: EVENTS_PAST,
     eventShowcase: EVENT_SHOWCASE,
+    eventPhotoBase: EVENT_PHOTO_BASE,
+    eventThumbBase: EVENT_THUMB_BASE,
     eventGroupLabel: EVENT_GROUP_LABEL,
     partners: PARTNERS,
     articles: ARTICLES,
-    racketRatings: RACKET_RATINGS
+    racketRatings: RACKET_RATINGS,
+    teamSg: TEAM_SG
   };
 })();

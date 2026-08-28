@@ -19,8 +19,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=13" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=13" />
+  <link rel="stylesheet" href="assets/css/style.css?v=14" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=14" />
+  <!-- Leaflet powers the class-location map (OpenStreetMap tiles, no API key). -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"
+        integrity="sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2okopSAcSUIUOseddDm0cxnGQzxIR7vJgsLZbdLE3w=="
+        crossorigin="" referrerpolicy="no-referrer" />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -61,8 +65,9 @@
       <div class="psec__head">
         <span class="psec__kicker">The four E's</span>
         <h2>Development pathways</h2>
-        <p class="psec__sub">Every player starts at the right step, then moves upward when the fundamentals are ready.</p>
+        <p class="psec__sub">A staircase, not a menu. Every beginner starts on step&nbsp;1 at Exploration and climbs one step at a time — each level is only unlocked once the fundamentals below it are ready.</p>
       </div>
+      <nav class="prail" id="pathsRail" aria-label="Development pathway order"></nav>
       <div class="paths" id="pathsGrid"></div>
     </section>
 
@@ -139,8 +144,13 @@
 
         <div class="sched__view" id="schedMapView">
           <div class="sched__mapwrap">
+            <div class="sched__legend" role="list" aria-label="Map pin colours">
+              <span role="listitem"><i class="pin-dot pin-dot--essentials"></i>Essentials</span>
+              <span role="listitem"><i class="pin-dot pin-dot--emergence"></i>Emergence</span>
+              <span role="listitem"><i class="pin-dot pin-dot--mixed"></i>Both levels</span>
+            </div>
             <div class="sched__map" id="schedMap"></div>
-            <p class="sched__maphint">Pins are colour-coded by level. Select a pin to open that venue in Google Maps.</p>
+            <p class="sched__maphint">Pins are colour-coded by level — select one for the venue's days, times and booking link.</p>
           </div>
         </div>
       </div>
@@ -150,9 +160,12 @@
 
   <footer id="siteFooter"></footer>
 
-  <script src="assets/js/data.js?v=13"></script>
-  <script src="assets/js/site.js?v=13"></script>
-  <script src="assets/js/pages.js?v=13"></script>
-  <script src="assets/js/main.js?v=13"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"
+          integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg=="
+          crossorigin="" referrerpolicy="no-referrer"></script>
+  <script src="assets/js/data.js?v=14"></script>
+  <script src="assets/js/site.js?v=14"></script>
+  <script src="assets/js/pages.js?v=14"></script>
+  <script src="assets/js/main.js?v=14"></script>
 </body>
 </html>

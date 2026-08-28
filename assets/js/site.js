@@ -108,7 +108,7 @@
       '<div class="footer__inner">' +
         '<div class="footer__col footer__col--brand">' +
           '<div class="footer__brand">' + brandLogo('footer__brand') + '</div>' +
-          '<p class="footer__tag">Enhance your skills. Enjoy the process. Elevate your experience.</p>' +
+          '<p class="footer__tag">Enhance your skills.<br>Enjoy the process.<br>Elevate your experience.</p>' +
           '<div class="footer__socials">' +
             SOCIALS.map(function (s) {
               return '<a href="' + s.href + '" target="_blank" rel="noopener">' + s.label + '</a>';

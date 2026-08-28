@@ -21,78 +21,168 @@
   function el(id) { return document.getElementById(id); }
   function sampleTag(item) { return item && item.placeholder ? ' <span class="sample" title="Sample content — replace in assets/js/data.js">sample</span>' : ''; }
 
+  /* Photo path helpers. data.js stores bare filenames; the base directories
+     live alongside so the full-size and thumbnail sets cannot drift apart. */
+  var PHOTO_BASE = D.eventPhotoBase || 'assets/img/events/';
+  var THUMB_BASE = D.eventThumbBase || 'assets/img/events/thumb/';
+  function fullSrc(file) { return (SITE.base || '') + PHOTO_BASE + file; }
+  function thumbSrc(file) { return (SITE.base || '') + THUMB_BASE + file; }
+
+  /* Full-screen gallery viewer for the event showcase.
+     Shows the full-size image, a thumbnail strip, a counter and keyboard,
+     swipe and button navigation. */
   function initEventLightbox(scope) {
     if (!scope || scope.dataset.lightboxReady) return;
     scope.dataset.lightboxReady = '1';
 
     var activeGallery = 0;
     var activePhoto = 0;
+    var lastTrigger = null;
+
     var modal = document.createElement('div');
     modal.className = 'lightbox';
     modal.setAttribute('role', 'dialog');
     modal.setAttribute('aria-modal', 'true');
     modal.setAttribute('aria-label', 'Event photo viewer');
     modal.hidden = true;
-    modal.innerHTML = '<button class="lightbox__close" type="button" aria-label="Close gallery">Close</button>' +
-      '<button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="Previous photo">‹</button>' +
-      '<figure class="lightbox__figure"><img class="lightbox__img" alt=""><figcaption class="lightbox__cap"></figcaption></figure>' +
-      '<button class="lightbox__nav lightbox__nav--next" type="button" aria-label="Next photo">›</button>';
+    modal.innerHTML =
+      '<div class="lightbox__bar">' +
+        '<div class="lightbox__meta"><b class="lightbox__title"></b><span class="lightbox__count"></span></div>' +
+        '<button class="lightbox__close" type="button" aria-label="Close gallery">Close &times;</button>' +
+      '</div>' +
+      '<div class="lightbox__stage">' +
+        '<button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="Previous photo">&lsaquo;</button>' +
+        '<figure class="lightbox__figure"><img class="lightbox__img" alt=""></figure>' +
+        '<button class="lightbox__nav lightbox__nav--next" type="button" aria-label="Next photo">&rsaquo;</button>' +
+      '</div>' +
+      '<div class="lightbox__strip" role="tablist" aria-label="Choose a photo"></div>';
     document.body.appendChild(modal);
 
     var img = modal.querySelector('.lightbox__img');
-    var cap = modal.querySelector('.lightbox__cap');
+    var titleEl = modal.querySelector('.lightbox__title');
+    var countEl = modal.querySelector('.lightbox__count');
+    var stripEl = modal.querySelector('.lightbox__strip');
+    var closeBtn = modal.querySelector('.lightbox__close');
 
-    function show() {
-      var gallery = D.eventShowcase[activeGallery];
-      if (!gallery) return;
-      var photos = gallery.photos || [];
-      var src = photos[activePhoto];
-      if (!src) return;
-      img.src = src;
-      img.alt = gallery.title + ' photo ' + (activePhoto + 1);
-      cap.textContent = gallery.title + ' · ' + (activePhoto + 1) + ' of ' + photos.length;
+    function gallery() { return D.eventShowcase[activeGallery] || null; }
+    function photos() { var g = gallery(); return (g && g.photos) || []; }
+
+    /* Fetching the neighbours keeps stepping through a gallery instant. */
+    function preloadNeighbours() {
+      var list = photos();
+      if (list.length < 2) return;
+      [1, -1].forEach(function (d) {
+        var i = (activePhoto + d + list.length) % list.length;
+        var pre = new Image();
+        pre.src = fullSrc(list[i]);
+      });
     }
 
-    function open(galleryIndex, photoIndex) {
+    function buildStrip() {
+      var g = gallery();
+      if (!g) return;
+      stripEl.innerHTML = photos().map(function (file, i) {
+        return '<button class="lightbox__stripitem" type="button" role="tab" data-idx="' + i + '"' +
+          ' aria-label="' + esc('Photo ' + (i + 1) + ' of ' + photos().length) + '">' +
+          '<img src="' + esc(thumbSrc(file)) + '" alt="" loading="lazy" decoding="async"></button>';
+      }).join('');
+    }
+
+    function show() {
+      var g = gallery();
+      var list = photos();
+      var file = list[activePhoto];
+      if (!g || !file) return;
+      img.src = fullSrc(file);
+      img.alt = g.title + ' — photo ' + (activePhoto + 1) + ' of ' + list.length;
+      titleEl.textContent = g.title;
+      countEl.textContent = (activePhoto + 1) + ' / ' + list.length;
+
+      var items = stripEl.querySelectorAll('.lightbox__stripitem');
+      items.forEach(function (b, i) {
+        var on = i === activePhoto;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-selected', String(on));
+        if (on && b.scrollIntoView) b.scrollIntoView({ block: 'nearest', inline: 'center' });
+      });
+
+      // A one-photo gallery has nothing to step to.
+      modal.classList.toggle('lightbox--single', list.length < 2);
+      preloadNeighbours();
+    }
+
+    function open(galleryIndex, photoIndex, trigger) {
       activeGallery = galleryIndex;
       activePhoto = photoIndex;
+      lastTrigger = trigger || null;
+      buildStrip();
       show();
       modal.hidden = false;
       document.body.classList.add('has-lightbox');
-      modal.querySelector('.lightbox__close').focus();
+      closeBtn.focus();
     }
 
     function close() {
       modal.hidden = true;
       document.body.classList.remove('has-lightbox');
+      // Send focus back where it came from so the keyboard user is not lost.
+      if (lastTrigger && lastTrigger.focus) lastTrigger.focus();
+      lastTrigger = null;
     }
 
     function step(dir) {
-      var gallery = D.eventShowcase[activeGallery];
-      var photos = gallery && gallery.photos ? gallery.photos : [];
-      if (!photos.length) return;
-      activePhoto = (activePhoto + dir + photos.length) % photos.length;
+      var list = photos();
+      if (list.length < 2) return;
+      activePhoto = (activePhoto + dir + list.length) % list.length;
       show();
     }
 
     scope.addEventListener('click', function (e) {
       var trigger = e.target.closest('[data-gallery]');
       if (!trigger) return;
-      open(Number(trigger.dataset.gallery), Number(trigger.dataset.photo || 0));
+      open(Number(trigger.dataset.gallery), Number(trigger.dataset.photo || 0), trigger);
     });
 
     modal.addEventListener('click', function (e) {
-      if (e.target === modal || e.target.closest('.lightbox__close')) close();
-      else if (e.target.closest('.lightbox__nav--prev')) step(-1);
-      else if (e.target.closest('.lightbox__nav--next')) step(1);
+      var strip = e.target.closest('.lightbox__stripitem');
+      if (strip) { activePhoto = Number(strip.dataset.idx); show(); return; }
+      if (e.target.closest('.lightbox__close')) { close(); return; }
+      if (e.target.closest('.lightbox__nav--prev')) { step(-1); return; }
+      if (e.target.closest('.lightbox__nav--next')) { step(1); return; }
+      // A click on the backdrop (not the image, strip or controls) closes.
+      if (e.target === modal || e.target.classList.contains('lightbox__stage') ||
+          e.target.classList.contains('lightbox__figure')) close();
     });
 
     document.addEventListener('keydown', function (e) {
       if (modal.hidden) return;
-      if (e.key === 'Escape') close();
-      if (e.key === 'ArrowLeft') step(-1);
-      if (e.key === 'ArrowRight') step(1);
+      if (e.key === 'Escape') { close(); return; }
+      if (e.key === 'ArrowLeft') { step(-1); return; }
+      if (e.key === 'ArrowRight') { step(1); return; }
+      if (e.key === 'Home') { activePhoto = 0; show(); return; }
+      if (e.key === 'End') { activePhoto = photos().length - 1; show(); return; }
+      // Trap Tab inside the dialog while it is open.
+      if (e.key === 'Tab') {
+        var f = modal.querySelectorAll('button');
+        if (!f.length) return;
+        var first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
     });
+
+    /* Horizontal swipe steps photos on touch devices. */
+    var touchX = 0, touchY = 0;
+    modal.addEventListener('touchstart', function (e) {
+      touchX = e.changedTouches[0].clientX;
+      touchY = e.changedTouches[0].clientY;
+    }, { passive: true });
+    modal.addEventListener('touchend', function (e) {
+      var dx = e.changedTouches[0].clientX - touchX;
+      var dy = e.changedTouches[0].clientY - touchY;
+      // Ignore mostly-vertical drags so scrolling the strip still works.
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) step(dx < 0 ? 1 : -1);
+    }, { passive: true });
   }
 
   /* =================================================================
@@ -126,14 +216,45 @@
   (function pathways() {
     var mount = el('pathsGrid');
     if (!mount) return;
-    mount.innerHTML = D.pathways.map(function (p, i) {
-      return '<article class="path" id="' + p.key + '" style="--step:' + i + '">' +
-        '<div class="path__rise"><span class="path__num">' + p.num + '</span><span class="path__step">Step ' + (i + 1) + '</span></div>' +
-        '<h3>' + esc(p.name) + '</h3>' +
-        '<span class="path__tag">' + esc(p.tag) + '</span>' +
-        '<p class="path__blurb">' + esc(p.blurb) + '</p>' +
-        '<ul class="path__learn">' + p.learn.map(function (l) { return '<li>' + esc(l) + '</li>'; }).join('') + '</ul>' +
-        '<a class="path__cta" href="' + esc(p.cta.href) + '">' + esc(p.cta.label) + ' &rsaquo;</a>' +
+    var steps = D.pathways;
+    var last = steps.length - 1;
+
+    /* A compact rail above the cards states the progression in one line,
+       so the order is obvious before anyone reads a single card. */
+    var railMount = el('pathsRail');
+    if (railMount) {
+      railMount.innerHTML = steps.map(function (p, i) {
+        return '<a class="prail__step" href="#' + esc(p.key) + '" style="--step:' + i + '">' +
+          '<span class="prail__num">' + esc(p.num) + '</span>' +
+          '<span class="prail__name">' + esc(p.name) + '</span>' +
+        '</a>' + (i < last ? '<span class="prail__arrow" aria-hidden="true">&rarr;</span>' : '');
+      }).join('');
+    }
+
+    mount.innerHTML = steps.map(function (p, i) {
+      var next = steps[i + 1];
+      /* Each card names the step it leads to, so progression is stated in
+         words as well as shown in the layout. */
+      var onward = next
+        ? '<p class="path__next"><span class="path__nextlabel">Progresses to</span> ' +
+            '<a href="#' + esc(next.key) + '">' + esc(next.name) + ' &rarr;</a></p>'
+        : '<p class="path__next path__next--top"><span class="path__nextlabel">Top of the pathway</span></p>';
+
+      return '<article class="path" id="' + esc(p.key) + '" style="--step:' + i + '"' +
+          ' aria-label="' + esc('Step ' + (i + 1) + ' of ' + steps.length + ': ' + p.name) + '">' +
+        '<div class="path__riser" aria-hidden="true"></div>' +
+        '<div class="path__card">' +
+          '<div class="path__rise">' +
+            '<span class="path__num">' + esc(p.num) + '</span>' +
+            '<span class="path__step">Step ' + (i + 1) + ' of ' + steps.length + '</span>' +
+          '</div>' +
+          '<h3>' + esc(p.name) + '</h3>' +
+          '<span class="path__tag">' + esc(p.tag) + '</span>' +
+          '<p class="path__blurb">' + esc(p.blurb) + '</p>' +
+          '<ul class="path__learn">' + p.learn.map(function (l) { return '<li>' + esc(l) + '</li>'; }).join('') + '</ul>' +
+          onward +
+          '<a class="path__cta" href="' + esc(p.cta.href) + '">' + esc(p.cta.label) + ' &rsaquo;</a>' +
+        '</div>' +
       '</article>';
     }).join('');
   })();
@@ -168,33 +289,95 @@
       return hasEmergence ? 'emergence' : 'essentials';
     }
 
-    function mapPosition(v) {
-      var bounds = { minLat: 1.24, maxLat: 1.45, minLng: 103.62, maxLng: 104.02 };
-      var x = ((v.lng - bounds.minLng) / (bounds.maxLng - bounds.minLng)) * 100;
-      var y = (1 - ((v.lat - bounds.minLat) / (bounds.maxLat - bounds.minLat))) * 100;
-      return {
-        left: Math.max(5, Math.min(95, x)),
-        top: Math.max(8, Math.min(92, y))
-      };
+    /* ---- Real map (Leaflet + OpenStreetMap tiles, no API key) ----
+       Pins are colour-coded by the level(s) taught at that venue:
+       Essentials = blue, Emergence = green, both = split marker. */
+    var LEVEL_COLOR = { essentials: '#2151d1', emergence: '#13a65b' };
+    var map = null;
+    var markerLayer = null;
+
+    function pinIcon(lvl) {
+      var a = LEVEL_COLOR.essentials, b = LEVEL_COLOR.emergence;
+      var fill = lvl === 'mixed'
+        ? '<path d="M14 0a14 14 0 0 0-14 14c0 9 14 26 14 26V0z" fill="' + a + '"/>' +
+          '<path d="M14 0a14 14 0 0 1 14 14c0 9-14 26-14 26V0z" fill="' + b + '"/>'
+        : '<path d="M14 0a14 14 0 0 0 0 28 14 14 0 0 0 0-28zM14 0a14 14 0 0 1 14 14c0 9-14 26-14 26S0 23 0 14A14 14 0 0 1 14 0z" fill="' +
+          (lvl === 'emergence' ? b : a) + '"/>';
+      var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="40" viewBox="0 0 28 40">' +
+        fill + '<circle cx="14" cy="14" r="5.2" fill="#fff"/></svg>';
+      return L.divIcon({
+        className: 'sched__leafpin',
+        html: svg,
+        iconSize: [28, 40],
+        iconAnchor: [14, 40],
+        popupAnchor: [0, -34]
+      });
     }
 
+    function popupHtml(v) {
+      var rows = sessionsFor(v).map(function (s) {
+        return '<li><b>' + esc(s.day) + '</b> ' + esc(s.time) +
+          ' <span class="mpop__lvl mpop__lvl--' + esc(s.level.toLowerCase()) + '">' + esc(s.level) + '</span></li>';
+      }).join('');
+      return '<div class="mpop">' +
+        '<h4 class="mpop__name">' + esc(v.venue) + '</h4>' +
+        '<p class="mpop__addr">' + esc(v.addr) + (v.mrt ? '<br>Nearest MRT: ' + esc(v.mrt) : '') + '</p>' +
+        '<ul class="mpop__sessions">' + rows + '</ul>' +
+        '<div class="mpop__actions">' +
+          '<a href="' + esc(v.book || BOOK) + '" target="_blank" rel="noopener">Book this class &rsaquo;</a>' +
+          '<a href="' + gmapsSearchUrl(v) + '" target="_blank" rel="noopener">Directions &#8599;</a>' +
+        '</div>' +
+      '</div>';
+    }
+
+    /* Rendered only when the Map view is first opened, so the tile request
+       never runs for visitors who stay on the list. */
     function drawMap() {
       if (!mapMount) return;
       var rows = visible();
+
+      // Leaflet blocked or offline: say so rather than showing an empty box.
+      if (typeof L === 'undefined') {
+        mapMount.innerHTML = '<p class="sched__mapfail">The map could not load. ' +
+          '<button type="button" class="sched__mapfail-btn" data-view="list">Use the list view</button> ' +
+          'for every venue, day and time.</p>';
+        mapDrawn = false;
+        return;
+      }
+
+      if (!map) {
+        map = L.map(mapMount, { scrollWheelZoom: false, attributionControl: true });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        // Wheel-zoom only after a deliberate click, so the page still scrolls.
+        map.on('click', function () { map.scrollWheelZoom.enable(); });
+        map.on('mouseout', function () { map.scrollWheelZoom.disable(); });
+        markerLayer = L.layerGroup().addTo(map);
+      }
+
+      markerLayer.clearLayers();
+      var pts = [];
+      rows.forEach(function (v) {
+        if (typeof v.lat !== 'number' || typeof v.lng !== 'number') return;
+        var m = L.marker([v.lat, v.lng], {
+          icon: pinIcon(venueLevel(v)),
+          title: v.venue,
+          alt: v.venue + ' — ' + sessionsFor(v).length + ' classes'
+        });
+        m.bindPopup(popupHtml(v), { maxWidth: 280 });
+        m.addTo(markerLayer);
+        pts.push([v.lat, v.lng]);
+      });
+
+      if (pts.length > 1) map.fitBounds(pts, { padding: [38, 38], maxZoom: 15 });
+      else if (pts.length === 1) map.setView(pts[0], 15);
+      else map.setView([1.3521, 103.8198], 11);   // whole island when nothing matches
+
+      // The container is sized by CSS after the tab switches; recalc once.
+      setTimeout(function () { map.invalidateSize(); }, 60);
       mapDrawn = true;
-      mapMount.innerHTML = '<div class="sched__mapbase" role="img" aria-label="Approximate Singapore map with class venue pins">' +
-        '<span class="sched__island"></span>' +
-        '<div class="sched__legend"><span><i class="pin-dot pin-dot--essentials"></i>Essentials</span><span><i class="pin-dot pin-dot--emergence"></i>Emergence</span><span><i class="pin-dot pin-dot--mixed"></i>Both</span></div>' +
-        rows.map(function (v) {
-          var pos = mapPosition(v);
-          var lvl = venueLevel(v);
-          var sessionText = sessionsFor(v).map(function (s) { return s.day + ' ' + s.time + ' ' + s.level; }).join(', ');
-          return '<a class="sched__pin sched__pin--' + lvl + '" href="' + gmapsSearchUrl(v) + '" target="_blank" rel="noopener"' +
-            ' style="left:' + pos.left.toFixed(2) + '%;top:' + pos.top.toFixed(2) + '%"' +
-            ' aria-label="' + esc(v.venue + ', ' + sessionText + '. Open in Google Maps') + '">' +
-            '<span class="sched__pinlabel">' + esc(v.venue) + '</span></a>';
-        }).join('') +
-      '</div>';
     }
 
     function visible() {
@@ -232,7 +415,7 @@
             return '<li><span class="vcard__day">' + esc(s.day) + '</span>' +
               '<span class="vcard__time">' + esc(s.time) + '</span>' +
               '<span class="vcard__lvl vcard__lvl--' + esc(s.level.toLowerCase()) + '">' + esc(s.level) + '</span>' +
-              (s.status ? '<span class="vcard__status">' + esc(s.status) + '</span>' : '') + '</li>';
+              '</li>';
           }).join('') + '</ul>' +
           '<div class="vcard__actions">' +
             '<a class="vcard__book" href="' + esc(v.book || BOOK) + '" target="_blank" rel="noopener">Book this class &rsaquo;</a>' +
@@ -253,6 +436,25 @@
           x.setAttribute('aria-pressed', String(on));
         });
         render();
+      });
+    }
+
+    function setView(view) {
+      if (!toggleWrap || !mapView || !listView) return;
+      toggleWrap.querySelectorAll('button').forEach(function (x) {
+        var on = x.getAttribute('data-view') === view;
+        x.classList.toggle('is-active', on);
+        x.setAttribute('aria-pressed', String(on));
+      });
+      listView.classList.toggle('is-active', view === 'list');
+      mapView.classList.toggle('is-active', view === 'map');
+      if (view === 'map') drawMap();
+    }
+
+    // The map's own failure message offers a way back to the list.
+    if (mapMount) {
+      mapMount.addEventListener('click', function (e) {
+        if (e.target.closest('.sched__mapfail-btn')) setView('list');
       });
     }
 
@@ -368,17 +570,35 @@
       showcase.innerHTML = D.eventShowcase.map(function (e, eIndex) {
         var photos = e.photos || [];
         var cover = photos[0] || '';
+        var total = photos.length;
+        // Three thumbs under the cover; the rest are reachable in the viewer.
+        var strip = photos.slice(1, 4);
+        var hidden = total - 1 - strip.length;
+
         return '<article class="eshow">' +
-          (cover ? '<button class="eshow__photo" type="button" data-gallery="' + eIndex + '" data-photo="0" aria-label="' + esc('View photos from ' + e.title) + '"><img class="eshow__cover" src="' + esc(cover) + '" alt="' + esc(e.title) + '" loading="lazy" decoding="async"></button>' : '') +
+          (cover
+            ? '<button class="eshow__photo" type="button" data-gallery="' + eIndex + '" data-photo="0"' +
+                ' aria-label="' + esc('View all ' + total + ' photos from ' + e.title) + '">' +
+                '<img class="eshow__cover" src="' + esc(thumbSrc(cover)) + '" alt="' + esc(e.title) + '"' +
+                  ' loading="lazy" decoding="async">' +
+                '<span class="eshow__badge">' + total + ' photos</span>' +
+              '</button>'
+            : '') +
           '<div class="eshow__body">' +
             '<span class="eshow__type">' + esc(e.type) + '</span>' +
             '<h3>' + esc(e.title) + '</h3>' +
-            '<p>' + esc(e.when) + ' · ' + esc(e.where) + '</p>' +
-            '<div class="eshow__thumbs">' + photos.slice(1, 4).map(function (p, idx) {
-              return '<button class="eshow__thumb" type="button" data-gallery="' + eIndex + '" data-photo="' + (idx + 1) + '" aria-label="' + esc('View ' + e.title + ' photo ' + (idx + 2)) + '">' +
-                '<img src="' + esc(p) + '" alt="' + esc(e.title) + ' photo ' + (idx + 2) + '" loading="lazy" decoding="async"></button>';
+            '<p>' + esc(e.when) + ' \u00b7 ' + esc(e.where) + '</p>' +
+            '<div class="eshow__thumbs">' + strip.map(function (file, idx) {
+              var isLast = hidden > 0 && idx === strip.length - 1;
+              return '<button class="eshow__thumb' + (isLast ? ' eshow__thumb--more' : '') + '" type="button"' +
+                ' data-gallery="' + eIndex + '" data-photo="' + (idx + 1) + '"' +
+                ' aria-label="' + esc('View ' + e.title + ' photo ' + (idx + 2) + ' of ' + total) + '">' +
+                '<img src="' + esc(thumbSrc(file)) + '" alt="" loading="lazy" decoding="async">' +
+                (isLast ? '<span class="eshow__thumbmore">+' + hidden + '</span>' : '') +
+              '</button>';
             }).join('') + '</div>' +
-            '<button class="eshow__more" type="button" data-gallery="' + eIndex + '" data-photo="0">View gallery</button>' +
+            '<button class="eshow__more" type="button" data-gallery="' + eIndex + '" data-photo="0">' +
+              'View all ' + total + ' photos &rsaquo;</button>' +
           '</div>' +
         '</article>';
       }).join('');
@@ -506,6 +726,111 @@
         '<span class="rrcard__go">Open on Racket Ratings &rsaquo;</span>' +
       '</a>';
     }).join('');
+  })();
+
+
+  /* =================================================================
+     TEAM SINGAPORE  (SG Hub → Team Singapore tab)
+     Player cards with last-known world ranking, the squad's next
+     competitions read off the same 2026 calendar the season tracker
+     uses, and a news panel that pulls current stories per player.
+     ================================================================= */
+  (function teamSingapore() {
+    var mount = el('teamGrid');
+    if (!mount || !D.teamSg) return;
+    var T = D.teamSg;
+
+    function newsUrl(q) {
+      return 'https://news.google.com/search?q=' + encodeURIComponent(q) + '&hl=en-SG&gl=SG&ceid=SG:en';
+    }
+
+    /* ---- player cards ---- */
+    mount.innerHTML = T.players.map(function (p) {
+      var rank = p.rank
+        ? '<div class="tcard__rank"><b>#' + p.rank + '</b><span>World ranking<br>' + esc(p.rankAs) + '</span></div>'
+        : '<div class="tcard__rank tcard__rank--none"><b>—</b><span>See live<br>BWF ranking</span></div>';
+
+      return '<article class="tcard">' +
+        '<div class="tcard__top">' +
+          '<div>' +
+            '<span class="tcard__disc">' + esc(p.discipline) + '</span>' +
+            '<h4 class="tcard__name">' + esc(p.name) + '</h4>' +
+          '</div>' + rank +
+        '</div>' +
+        '<p class="tcard__note">' + esc(p.note) + '</p>' +
+        (p.highlights && p.highlights.length
+          ? '<ul class="tcard__highlights">' + p.highlights.map(function (h) {
+              return '<li>' + esc(h) + '</li>'; }).join('') + '</ul>'
+          : '') +
+        '<div class="tcard__links">' +
+          '<a href="' + esc(T.rankingUrl) + '" target="_blank" rel="noopener">Live ranking &#8599;</a>' +
+          '<a href="' + esc(newsUrl(p.news)) + '" target="_blank" rel="noopener">News &#8599;</a>' +
+        '</div>' +
+      '</article>';
+    }).join('');
+
+    /* ---- next competitions ----
+       Read from the season calendar that main.js renders, so the two can
+       never disagree. main.js publishes it on window as ELEVER_SEASON —
+       but main.js loads AFTER this file, so wait for the DOM to be ready
+       before reading it rather than racing the script order. */
+    var nextMount = el('teamNext');
+    function renderNext() {
+      var cal = window.ELEVER_SEASON || [];
+      var today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      function stamp(iso) {
+        var a = String(iso).split('-');
+        return new Date(Number(a[0]), Number(a[1]) - 1, Number(a[2]));
+      }
+
+      var upcoming = cal.filter(function (e) { return stamp(e.end) >= today; })
+        .sort(function (a, b) { return stamp(a.start) - stamp(b.start); })
+        .slice(0, 4);
+
+      if (!upcoming.length) {
+        nextMount.innerHTML = '<li class="tnext__empty">The 2026 season is complete. ' +
+          '<a href="' + esc(T.calendarUrl) + '" target="_blank" rel="noopener">See the next calendar &#8599;</a></li>';
+      } else {
+        nextMount.innerHTML = upcoming.map(function (e) {
+          var live = stamp(e.start) <= today;
+          return '<li class="tnext__item' + (live ? ' is-live' : '') + '">' +
+            '<span class="tnext__when">' + esc(e.date) + (live ? ' · on now' : '') + '</span>' +
+            '<span class="tnext__name">' + esc(e.name) + '</span>' +
+            '<span class="tnext__grade">' + esc(e.grade) + '</span>' +
+          '</li>';
+        }).join('');
+      }
+    }
+    if (nextMount) {
+      if (window.ELEVER_SEASON) renderNext();
+      else if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', renderNext);
+      } else {
+        // Every script tag has already run — the calendar is there or never.
+        setTimeout(renderNext, 0);
+      }
+    }
+
+    /* ---- news ----
+       Google News has no CORS-open JSON feed, so rather than fake a live
+       feed we give one clearly-labelled search link per player plus the
+       squad as a whole. Every link opens the current stories. */
+    var newsMount = el('teamNews');
+    if (newsMount) {
+      var feeds = [
+        { label: 'Singapore national team', q: 'Singapore national badminton team' },
+        { label: 'Singapore Badminton Association', q: 'Singapore Badminton Association' }
+      ].concat(T.players.map(function (p) {
+        return { label: p.name, q: p.news };
+      }));
+
+      newsMount.innerHTML = feeds.map(function (f) {
+        return '<a class="tnews__chip" href="' + esc(newsUrl(f.q)) + '" target="_blank" rel="noopener">' +
+          esc(f.label) + ' &#8599;</a>';
+      }).join('');
+    }
   })();
 
   /* =================================================================
