@@ -42,7 +42,6 @@ body{
   overflow-x:hidden;-webkit-font-smoothing:antialiased;
   letter-spacing:-.005em;
 }
-body.intro-lock{overflow:hidden;height:100vh}
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none;text-underline-offset:.18em}
 em{font-style:normal;color:var(--accent)}
@@ -66,30 +65,6 @@ em{font-style:normal;color:var(--accent)}
 .btn--ghost{border:1px solid var(--line-2);color:var(--ink);background:#fff}
 .btn--ghost:hover{border-color:var(--ink);background:var(--bg-2)}
 .btn:active{transform:scale(.98)}
-
-/* ===================== CINEMATIC INTRO ===================== */
-.intro{position:fixed;inset:0;z-index:9999;background:radial-gradient(130% 130% at 50% 35%,#101731 0%,#000 72%);overflow:hidden;display:flex;align-items:center;justify-content:center}
-.intro__canvas{position:absolute;inset:0;width:100%;height:100%}
-.intro.flash::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 52%,rgba(33,81,209,.9),transparent 22%);animation:introFlash .26s ease-out}
-@keyframes introFlash{0%{opacity:0;transform:scale(.4)}30%{opacity:1}100%{opacity:0;transform:scale(2)}}
-.intro__center{position:relative;z-index:3;text-align:center;pointer-events:none}
-.intro__word{display:flex;gap:.04em;justify-content:center;font-weight:800;font-size:clamp(2.6rem,11vw,7.5rem);line-height:1;letter-spacing:-.02em}
-.intro__word span{display:inline-block;opacity:0;transform:translateY(120%);background:linear-gradient(180deg,#fff,#5f89ee);-webkit-background-clip:text;background-clip:text;color:transparent}
-.intro__word.show span{animation:letterUp .7s var(--ease) forwards}
-.intro__word.show span:nth-child(1){animation-delay:.00s}
-.intro__word.show span:nth-child(2){animation-delay:.06s}
-.intro__word.show span:nth-child(3){animation-delay:.12s}
-.intro__word.show span:nth-child(4){animation-delay:.18s}
-.intro__word.show span:nth-child(5){animation-delay:.24s}
-.intro__word.show span:nth-child(6){animation-delay:.30s}
-@keyframes letterUp{to{opacity:1;transform:translateY(0)}}
-.intro__tag{color:#8d94a8;letter-spacing:.45em;font-size:.66rem;text-transform:uppercase;margin-top:.9rem;opacity:0;transform:translateY(14px)}
-.intro__tag.show{animation:fadeUp .6s ease forwards}
-@keyframes fadeUp{to{opacity:1;transform:none}}
-.intro__skip{position:absolute;bottom:2rem;right:2rem;background:none;border:1px solid rgba(255,255,255,.26);color:#c8cdda;padding:.6rem 1.1rem;border-radius:100px;font-family:inherit;font-weight:600;font-size:.85rem;transition:.25s;z-index:5;min-height:44px;cursor:pointer}
-.intro__skip:hover{color:#fff;border-color:#fff}
-.intro.done{animation:introOut .9s var(--ease) forwards}
-@keyframes introOut{to{opacity:0;visibility:hidden;transform:scale(1.04)}}
 
 /* ===================== NAV ===================== */
 .nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;
@@ -141,7 +116,6 @@ em{font-style:normal;color:var(--accent)}
 .hero__bg{position:absolute;inset:0;background-size:cover;background-position:center 30%;transform:scale(1.06);animation:kenburns 22s ease-in-out infinite alternate}
 @keyframes kenburns{to{transform:scale(1.14) translateY(-2%)}}
 .hero__overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.62) 48%,rgba(0,0,0,.3) 100%),linear-gradient(0deg,#000 2%,transparent 40%)}
-.hero__canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1;opacity:.75}
 .hero__content{position:relative;z-index:2;max-width:820px;margin:0 auto;width:100%;pointer-events:none}
 .hero__inner{max-width:var(--maxw);margin:0 auto;width:100%}
 .hero__content a{pointer-events:auto}
