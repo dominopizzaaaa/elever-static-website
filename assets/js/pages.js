@@ -295,14 +295,23 @@
     if (!founders && !team) return;
     var base = SITE.base || '';
 
+    function initials(name) {
+      return String(name || '').split(/\s+/).filter(Boolean).map(function (part) { return part.charAt(0); }).join('').slice(0, 2).toUpperCase();
+    }
+
     function card(c, i) {
-      return '<a class="coach" href="' + base + 'coaches/' + esc(c.slug) + '.html">' +
-        '<div class="coach__img"><img src="' + base + esc(c.photo) + '" alt="' + esc(c.name) + '" width="640" height="640" loading="lazy" decoding="async"></div>' +
+      var tag = c.profilePage === false ? 'div' : 'a';
+      var href = c.profilePage === false ? '' : ' href="' + base + 'coaches/' + esc(c.slug) + '.html"';
+      var photo = c.photo
+        ? '<img src="' + base + esc(c.photo) + '" alt="' + esc(c.name) + '" width="640" height="640" loading="lazy" decoding="async">'
+        : '<span class="coach__initials">' + esc(initials(c.name)) + '</span>';
+      return '<' + tag + ' class="coach coach--' + (c.profilePage === false ? 'static' : 'linked') + '"' + href + '>' +
+        '<div class="coach__img">' + photo + '</div>' +
         '<div class="coach__body"><h3>' + esc(c.name) + '</h3>' +
           '<p class="coach__role">' + esc(c.role) + '</p>' +
           (c.cert ? '<span class="coach__cert">' + esc(c.cert) + '</span>' : '') +
-          '<p class="coach__more">View profile &rsaquo;</p>' +
-        '</div></a>';
+          (c.profilePage === false ? '<p class="coach__more">Profile coming soon</p>' : '<p class="coach__more">View profile &rsaquo;</p>') +
+        '</div></' + tag + '>';
     }
 
     if (founders) founders.innerHTML = D.coaches.filter(function (c) { return c.group === 'founder'; }).map(card).join('');

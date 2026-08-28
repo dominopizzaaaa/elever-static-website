@@ -278,9 +278,11 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .coach{display:block;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;
   transition:transform .25s var(--ease),box-shadow .25s,border-color .25s}
 .coach:hover{transform:translateY(-3px);box-shadow:var(--shadow-sm);border-color:var(--line-2)}
+.coach--static:hover{transform:none;box-shadow:none;border-color:var(--line)}
 .coach__img{aspect-ratio:1/1;overflow:hidden;background:var(--panel-2)}
 .coach__img img{width:100%;height:100%;object-fit:cover;object-position:top center;transition:transform .5s var(--ease)}
 .coach:hover .coach__img img{transform:scale(1.04)}
+.coach__initials{display:grid;place-items:center;width:100%;height:100%;font-size:2rem;font-weight:800;letter-spacing:.04em;color:var(--accent);background:var(--accent-soft)}
 .coach__body{padding:.85rem .95rem 1rem}
 .coach__body h3{font-size:.92rem;font-weight:700;margin-bottom:.15rem;letter-spacing:-.015em}
 .coach__role{font-size:.74rem;color:var(--muted);line-height:1.4}
@@ -299,6 +301,8 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .profile__meta span{color:var(--faint);font-weight:600}
 .profile__meta b{font-weight:700;text-align:right}
 .profile__bio{font-size:.98rem;color:var(--muted);line-height:1.75;max-width:60ch}
+.profile__bio+.profile__bio{margin-top:1rem}
+.profile__achievements{display:grid;gap:.55rem;margin:0;max-width:60ch;padding-left:1.1rem;color:var(--muted);line-height:1.6}
 
 /* ---------- NEWS ARTICLES ---------- */
 .articles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:.8rem}

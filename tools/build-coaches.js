@@ -18,13 +18,25 @@ const esc = s => String(s == null ? '' : s)
 
 function page(c) {
   const title = `${c.name} — Coach at Élever Badminton`;
-  const bio = String(c.bio || '');
+  const bioParagraphs = Array.isArray(c.bio) ? c.bio : [c.bio || ''];
+  const bio = bioParagraphs.join(' ');
   const excerpt = bio.length > 130 ? bio.slice(0, 130).replace(/\s+\S*$/, '') + '...' : bio;
   const desc = `${c.name}, ${c.role} at Élever Badminton Singapore. ${excerpt}`;
   const canonical = `https://www.eleverbadminton.com/coaches/${c.slug}.html`;
   const image = `https://www.eleverbadminton.com/${c.photo}`;
   const sample = c.placeholder
     ? ' <span class="sample" title="Sample content — replace in assets/js/data.js">sample bio</span>' : '';
+  const achievements = Array.isArray(c.achievements) ? c.achievements : [];
+  const bioHtml = bioParagraphs
+    .filter(Boolean)
+    .map(p => `<p class="profile__bio">${esc(p)}</p>`)
+    .join('\n          ');
+  const achievementHtml = achievements.length
+    ? `<h2 style="font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:2.4rem 0 1rem">Achievements</h2>
+          <ul class="profile__achievements">
+            ${achievements.map(a => `<li>${esc(a)}</li>`).join('\n            ')}
+          </ul>`
+    : '';
 
   const jsonld = JSON.stringify({
     '@context': 'https://schema.org', '@type': 'Person',
@@ -86,7 +98,8 @@ function page(c) {
         </div>
         <div>
           <h2 style="font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.9rem">About ${esc(c.name.split(' ')[0])}${sample}</h2>
-          <p class="profile__bio">${esc(c.bio)}</p>
+          ${bioHtml}
+          ${achievementHtml}
 
           <h2 style="font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:2.4rem 0 1rem">On court</h2>
           <div class="gallery">
@@ -117,7 +130,7 @@ function page(c) {
 
 const outDir = path.join(root, 'coaches');
 fs.mkdirSync(outDir, { recursive: true });
-COACHES.forEach(c => {
+COACHES.filter(c => c.profilePage !== false).forEach(c => {
   fs.writeFileSync(path.join(outDir, c.slug + '.html'), page(c));
 });
-console.log(`Generated ${COACHES.length} coach pages in coaches/`);
+console.log(`Generated ${COACHES.filter(c => c.profilePage !== false).length} coach pages in coaches/`);
