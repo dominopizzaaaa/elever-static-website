@@ -111,4 +111,4 @@ Status: `[ ]` todo · `[x]` done
 - [x] E3. Bump `?v=` cache-busting on css/js across every page
 - [x] E4. Regenerate coach pages (`node tools/build-coaches.js`)
 - [x] E5. Verify every page loads with no console errors, no dead links
-- [ ] E6. Commit + push to `main`
+- [x] E6. Commit + push to `main`
