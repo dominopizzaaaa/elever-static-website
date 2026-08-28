@@ -99,23 +99,7 @@
 @media(max-width:940px){.sched__mapwrap{position:static}}
 .sched__map{position:relative;width:100%;aspect-ratio:1.55/1;overflow:hidden;border-radius:14px;
   background:#f5f7fb;border:0}
-.sched__map .maplibregl-canvas{outline:none;border-radius:14px}
-.sched__map .maplibregl-ctrl-group{border-radius:10px!important;box-shadow:0 2px 8px rgba(0,0,0,.12)!important;overflow:hidden}
-.sched__map .maplibregl-ctrl-group button{width:48px!important;height:48px!important}
-.sched__map .maplibregl-ctrl-attrib{font-size:10px;background:rgba(255,255,255,.85);border-radius:6px}
-.sched__pin{position:relative;background:transparent;color:#fff;border:0;
-  width:34px;height:48px;cursor:pointer;transition:transform .25s var(--ease);
-  display:flex;align-items:flex-start;justify-content:center;padding-top:5px}
-.sched__pin::before{content:'';position:absolute;left:50%;top:0;transform:translateX(-50%);
-  width:28px;height:28px;border-radius:50%;background:var(--accent);
-  box-shadow:0 4px 14px -2px rgba(47,92,240,.55),inset 0 -2px 6px rgba(0,0,0,.12)}
-.sched__pin::after{content:'';position:absolute;left:50%;top:22px;transform:translateX(-50%);
-  width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;
-  border-top:26px solid var(--accent)}
-.sched__pin span{position:relative;z-index:1;font-size:.76rem;font-weight:800;line-height:1;color:#fff;padding-top:1px}
-.sched__pin:hover,.sched__pin.is-active{transform:translateY(-2px) scale(1.12);z-index:2}
-.sched__pin:hover::before,.sched__pin.is-active::before{background:var(--ink)}
-.sched__pin:hover::after,.sched__pin.is-active::after{border-top-color:var(--ink)}
+.sched__mapframe{width:100%;height:100%;border:0;border-radius:14px;display:block}
 .sched__maphint{margin-top:.7rem;font-size:.95rem;color:var(--muted);text-align:center}
 
 .sched__list{display:flex;flex-direction:column;gap:.8rem}
@@ -138,6 +122,12 @@
 .vcard__lvl--emergence{background:#e9f7ee;color:#1c6b3d}
 .vcard__book{margin-top:.9rem;display:inline-flex;align-items:center;font-size:.95rem;font-weight:800;color:var(--accent)}
 .vcard__book:hover{text-decoration:underline}
+.vcard__actions{display:flex;flex-wrap:wrap;gap:.6rem 1rem;align-items:center;margin-top:.9rem}
+.vcard__showmap{background:transparent;border:1px solid var(--line);border-radius:999px;padding:.4rem .85rem;
+  font-size:.85rem;font-weight:700;color:var(--ink);cursor:pointer;transition:border-color .2s,color .2s}
+.vcard__showmap:hover{border-color:var(--accent);color:var(--accent)}
+.vcard__gmaps{font-size:.85rem;font-weight:700;color:var(--muted)}
+.vcard__gmaps:hover{color:var(--accent);text-decoration:underline}
 .sched__empty{padding:2rem;text-align:center;color:var(--faint);font-size:.9rem}
 
 /* ---------- CAMPS ---------- */

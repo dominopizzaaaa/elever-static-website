@@ -82,24 +82,39 @@
 
     var level = 'all';
 
-    // Interactive Map via MapLibre GL JS (vector tiles — OpenFreeMap, no API key needed)
-    var maplibreMap = null;
-    var markers = [];
+    // Interactive Map via Google Maps Embed (iframe, no API key required)
+    var mapFrame = null;
+
+    function gmapsSearchUrl(v) {
+      var q = v.name || v.venue || '';
+      var addr = (v.addr || '').replace(/,?\s*S\d{6}.*/, '');
+      return 'https://www.google.com/maps/search/?api=1&query=' +
+        encodeURIComponent((q + ' ' + addr + ' Singapore').trim());
+    }
+
+    function gmapsEmbedForVenue(v) {
+      // Centre on the venue coordinates with a marker; keyless embed endpoint.
+      return 'https://maps.google.com/maps?q=' + encodeURIComponent(v.lat + ',' + v.lng) +
+        '&hl=en&z=16&output=embed';
+    }
+
+    function gmapsEmbedAll() {
+      // Whole-of-Singapore overview when no single venue is selected.
+      return 'https://maps.google.com/maps?q=' + encodeURIComponent('Singapore') +
+        '&hl=en&z=11&output=embed';
+    }
 
     function drawMap() {
-      if (!mapMount || !window.maplibregl) return;
+      if (!mapMount) return;
       mapMount.innerHTML = '';
-
-      maplibreMap = new maplibregl.Map({
-        container: mapMount,
-        style: 'https://tiles.openfreemap.org/styles/positron',
-        center: [103.8198, 1.3521],
-        zoom: 11,
-        scrollZoom: false,
-        attributionControl: { compact: true }
-      });
-
-      maplibreMap.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left');
+      mapFrame = document.createElement('iframe');
+      mapFrame.className = 'sched__mapframe';
+      mapFrame.setAttribute('title', 'Map of Élever class venues on Google Maps');
+      mapFrame.setAttribute('loading', 'lazy');
+      mapFrame.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+      mapFrame.setAttribute('allowfullscreen', '');
+      mapFrame.src = gmapsEmbedAll();
+      mapMount.appendChild(mapFrame);
     }
 
     function visible() {
@@ -126,7 +141,7 @@
         listMount.innerHTML = '<p class="sched__empty">No classes match that level yet. Try “All levels”, or ' +
           '<a href="contact.html">ask us about a venue near you</a>.</p>';
       } else {
-        listMount.innerHTML = rows.map(function (v, i) {
+        listMount.innerHTML = rows.map(function (v) {
           return '<article class="vcard" id="venue-' + esc(v.venueId) + '" data-venue="' + esc(v.venueId) + '">' +
             '<div class="vcard__top"><h3>' + esc(v.venue) + sampleTag(v) + '</h3>' +
               '<span class="vcard__region">' + esc(v.region) + '</span></div>' +
@@ -136,55 +151,24 @@
                 '<span class="vcard__time">' + esc(s.time) + '</span>' +
                 '<span class="vcard__lvl vcard__lvl--' + esc(s.level.toLowerCase()) + '">' + esc(s.level) + '</span></li>';
             }).join('') + '</ul>' +
+            '<div class="vcard__actions">' +
+              '<button type="button" class="vcard__showmap" data-venue="' + esc(v.venueId) + '">Show on map</button>' +
+              '<a class="vcard__gmaps" href="' + gmapsSearchUrl(v) + '" target="_blank" rel="noopener">Open in Google Maps &#8599;</a>' +
+            '</div>' +
             '<a class="vcard__book" href="' + BOOK + '" target="_blank" rel="noopener">Book this class &rsaquo;</a>' +
           '</article>';
         }).join('');
       }
-
-      // MapLibre markers
-      if (maplibreMap) {
-        markers.forEach(function(m) { m.remove(); });
-        markers = [];
-        var bounds = new maplibregl.LngLatBounds();
-        var hasMarkers = false;
-
-        rows.forEach(function (v, i) {
-          if (!v.lat || !v.lng) return;
-          var el = document.createElement('div');
-          el.className = 'sched__pin';
-          el.setAttribute('data-venue', v.venueId);
-          el.setAttribute('aria-label', v.venue + ' — ' + (v.region || v.area || ''));
-          el.innerHTML = '<span>' + (i + 1) + '</span>';
-          el.addEventListener('click', function () { focusVenue(v.venueId); });
-
-          var marker = new maplibregl.Marker({ element: el, anchor: 'bottom' })
-            .setLngLat([v.lng, v.lat])
-            .addTo(maplibreMap);
-
-          marker._venueId = v.venueId;
-          markers.push(marker);
-          bounds.extend([v.lng, v.lat]);
-          hasMarkers = true;
-        });
-
-        if (hasMarkers) {
-          maplibreMap.fitBounds(bounds, { padding: { top: 40, bottom: 40, left: 40, right: 40 }, maxZoom: 14, duration: 600 });
-        }
-      }
     }
 
     function focusVenue(id) {
+      var venue = null;
       listMount.querySelectorAll('.vcard').forEach(function (c) {
         c.classList.toggle('is-active', c.getAttribute('data-venue') === id);
       });
-      if (maplibreMap) {
-        markers.forEach(function(m) {
-          var active = m._venueId === id;
-          if (m.getElement()) m.getElement().classList.toggle('is-active', active);
-          if (active) {
-            maplibreMap.flyTo({ center: m.getLngLat(), zoom: Math.max(maplibreMap.getZoom(), 13), duration: 500 });
-          }
-        });
+      D.classes.forEach(function (v) { if (v.venueId === id) venue = v; });
+      if (mapFrame && venue && venue.lat && venue.lng) {
+        mapFrame.src = gmapsEmbedForVenue(venue);
       }
       var card = listMount.querySelector('[data-venue="' + id + '"]');
       if (card) {
@@ -215,6 +199,14 @@
         layout.style.gridTemplateColumns = view === 'list' ? '1fr' : '';
         var mw = el('schedMapWrap');
         if (mw) mw.style.display = view === 'list' ? 'none' : '';
+      });
+    }
+
+    if (listMount) {
+      listMount.addEventListener('click', function (e) {
+        var b = e.target.closest('.vcard__showmap');
+        if (!b) return;
+        focusVenue(b.getAttribute('data-venue'));
       });
     }
 
