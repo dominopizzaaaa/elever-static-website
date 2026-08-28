@@ -202,28 +202,28 @@
   var PATHWAYS = [
     {
       key: 'exploration', name: 'Exploration', num: '01',
-      tag: 'Discover the game · new to badminton? start here',
+      tag: 'Start here · first experience',
       blurb: 'Our entry programme for new students. It introduces badminton in a safe, engaging and structured environment, helping players build confidence while experiencing Élever\u2019s coaching approach. Recommended progression into Essentials.',
       learn: ['Grip, ready position and basic racket control', 'Movement and coordination through games', 'Court awareness and simple rallying'],
       cta: { label: 'See our camps', href: 'camps.html' }
     },
     {
       key: 'essentials', name: 'Essentials', num: '02',
-      tag: 'Build the foundation · master the basics',
+      tag: 'Step up · build the base',
       blurb: 'For players who have grasped the basics and are ready to strengthen their foundations. The programme focuses on solid footwork, proper grips and reliable technique, helping players play with confidence and consistency. Progression into Emergence upon assessment.',
       learn: ['Full stroke set — clear, drop, net, lift, drive', 'Six-corner footwork and recovery', 'Singles and doubles basics'],
       cta: { label: 'Find an Essentials class', href: 'classes.html#locations' }
     },
     {
       key: 'emergence', name: 'Emergence', num: '03',
-      tag: 'Refine your skills · raise your game',
+      tag: 'Step up · play with purpose',
       blurb: 'Helps players move beyond the basics and explore the tactical side of the game. Through structured drills, guided match scenarios and focused coaching, players develop greater consistency, strategic thinking and adaptability on court. Selection into Elite based on readiness.',
       learn: ['Tactical patterns for singles and doubles', 'Deception, pace change and shot selection', 'Match play and competition routines'],
       cta: { label: 'Find an Emergence class', href: 'classes.html#locations' }
     },
     {
       key: 'elite', name: 'Elite', num: '04',
-      tag: 'Perform with purpose · compete with confidence',
+      tag: 'Top step · train to compete',
       blurb: 'For athletes aiming to reach their highest potential, Elite focuses on advanced skills, tactical understanding, mental preparation and competitive performance. Players experience high-intensity training, match simulations and individualised guidance to maximise growth and readiness for tournaments.',
       learn: ['Individual technical and tactical programme', 'Planned competition calendar', 'Dedicated strength & conditioning', 'Video analysis and performance review'],
       cta: { label: 'Enquire about Elite', href: 'contact.html' }
@@ -236,14 +236,14 @@
      status: 'Available' when a class has slots
      --------------------------------------------------------------- */
   var CLASSES = [
-    { venueId: 'sbhaljunied', venue: 'Singapore Badminton Hall', area: 'Aljunied', region: 'East', addr: 'Singapore Badminton Hall, Singapore', mrt: 'Aljunied', lat: 1.3168, lng: 103.8869, sessions: [ { day: 'Friday', time: '16:00 – 18:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
-    { venueId: 'sbstadium', venue: 'Singapore Badminton Stadium', area: 'Aljunied', region: 'East', addr: 'Singapore Badminton Stadium, Singapore', mrt: 'Aljunied', lat: 1.3106, lng: 103.8845, sessions: [ { day: 'Saturday', time: '12:00 – 14:00', level: 'Emergence', status: 'Available' }, { day: 'Saturday', time: '14:00 – 16:00', level: 'Essentials', status: 'Available' }, { day: 'Saturday', time: '16:00 – 18:00', level: 'Essentials', status: 'Available' }, { day: 'Sunday', time: '12:00 – 14:00', level: 'Essentials', status: 'Available' }, { day: 'Sunday', time: '14:00 – 16:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
-    { venueId: 'scgs', venue: 'Singapore Chinese Girls’ School', area: 'Novena', region: 'Central', addr: 'Singapore Chinese Girls’ School, Singapore', mrt: 'Novena', lat: 1.3200, lng: 103.8279, sessions: [ { day: 'Sunday', time: '15:00 – 17:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
-    { venueId: 'sbhexpo', venue: 'SBH East Coast @ Expo', area: 'Expo', region: 'East', addr: 'SBH East Coast @ Expo, Singapore', mrt: 'Expo', lat: 1.3346, lng: 103.9614, sessions: [ { day: 'Saturday', time: '10:00 – 12:00', level: 'Essentials', status: 'Available' }, { day: 'Saturday', time: '15:00 – 17:00', level: 'Essentials', status: 'Available' }, { day: 'Sunday', time: '14:00 – 16:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
-    { venueId: 'wyse', venue: 'Wyse Active Hub', area: 'Jurong', region: 'West', addr: 'Wyse Active Hub, Singapore', mrt: 'Jurong East', lat: 1.3331, lng: 103.7429, sessions: [ { day: 'Saturday', time: '15:00 – 17:00', level: 'Essentials', status: 'Available' }, { day: 'Sunday', time: '09:00 – 11:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
-    { venueId: 'fernvale', venue: 'Fernvale Village', area: 'Sengkang', region: 'North-East', addr: 'Fernvale Village, Singapore', mrt: 'Layar LRT', lat: 1.3917, lng: 103.8760, sessions: [ { day: 'Tuesday', time: '16:00 – 18:00', level: 'Essentials', status: 'Available' }, { day: 'Thursday', time: '16:00 – 18:00', level: 'Essentials', status: 'Available' }, { day: 'Saturday', time: '10:00 – 12:00', level: 'Essentials', status: 'Available' }, { day: 'Saturday', time: '13:00 – 15:00', level: 'Essentials', status: 'Available' }, { day: 'Saturday', time: '15:00 – 17:00', level: 'Essentials', status: 'Available' }, { day: 'Saturday', time: '15:00 – 18:00', level: 'Emergence', status: 'Available' }, { day: 'Sunday', time: '11:00 – 13:00', level: 'Essentials', status: 'Available' }, { day: 'Sunday', time: '13:00 – 15:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
-    { venueId: 'cantonment-primary', venue: 'Cantonment Primary School', area: 'Cantonment', region: 'Central', addr: 'Cantonment Primary School, Singapore', mrt: 'Cantonment', lat: 1.2763, lng: 103.8397, sessions: [ { day: 'Sunday', time: '09:00 – 11:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
-    { venueId: 'bidadari', venue: 'Bidadari Community Club', area: 'Woodleigh', region: 'Central', addr: 'Bidadari Community Club, Singapore', mrt: 'Woodleigh', lat: 1.3376, lng: 103.8703, sessions: [ { day: 'Monday', time: '15:30 – 17:30', level: 'Essentials', status: 'Available' }, { day: 'Tuesday', time: '15:30 – 17:30', level: 'Essentials', status: 'Available' } ], placeholder: true }
+    { venueId: 'sbhaljunied', venue: 'Singapore Badminton Hall', area: 'Aljunied', region: 'East', addr: 'Singapore Badminton Hall, Singapore', mrt: 'Aljunied', lat: 1.3168, lng: 103.8869, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Friday', time: '16:00 - 18:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
+    { venueId: 'sbstadium', venue: 'Singapore Badminton Stadium', area: 'Aljunied', region: 'East', addr: 'Singapore Badminton Stadium, Singapore', mrt: 'Aljunied', lat: 1.3106, lng: 103.8845, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Saturday', time: '12:00 - 14:00', level: 'Emergence', status: 'Available' }, { day: 'Saturday', time: '14:00 - 16:00', level: 'Essentials', status: 'Available' }, { day: 'Saturday', time: '16:00 - 18:00', level: 'Essentials', status: 'Available' }, { day: 'Sunday', time: '12:00 - 14:00', level: 'Essentials', status: 'Available' }, { day: 'Sunday', time: '14:00 - 16:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
+    { venueId: 'scgs', venue: 'Singapore Chinese Girls’ School', area: 'Novena', region: 'Central', addr: 'Singapore Chinese Girls’ School, Singapore', mrt: 'Novena', lat: 1.3200, lng: 103.8279, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Sunday', time: '15:00 - 17:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
+    { venueId: 'sbhexpo', venue: 'SBH East Coast @ Expo', area: 'Expo', region: 'East', addr: 'SBH East Coast @ Expo, Singapore', mrt: 'Expo', lat: 1.3346, lng: 103.9614, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Saturday', time: '10:00 - 12:00', level: 'Essentials', status: 'Available' }, { day: 'Saturday', time: '15:00 - 17:00', level: 'Essentials', status: 'Available' }, { day: 'Sunday', time: '14:00 - 16:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
+    { venueId: 'wyse', venue: 'Wyse Active Hub', area: 'Jurong', region: 'West', addr: 'Wyse Active Hub, Singapore', mrt: 'Jurong East', lat: 1.3331, lng: 103.7429, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Saturday', time: '15:00 - 17:00', level: 'Essentials', status: 'Available' }, { day: 'Sunday', time: '09:00 - 11:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
+    { venueId: 'fernvale', venue: 'Fernvale Village', area: 'Sengkang', region: 'North-East', addr: 'Fernvale Village, Singapore', mrt: 'Layar LRT', lat: 1.3917, lng: 103.8760, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Tuesday', time: '16:00 - 18:00', level: 'Essentials', status: 'Available' }, { day: 'Thursday', time: '16:00 - 18:00', level: 'Essentials', status: 'Available' }, { day: 'Saturday', time: '10:00 - 12:00', level: 'Essentials', status: 'Available' }, { day: 'Saturday', time: '13:00 - 15:00', level: 'Essentials', status: 'Available' }, { day: 'Saturday', time: '15:00 - 17:00', level: 'Essentials', status: 'Available' }, { day: 'Saturday', time: '15:00 - 18:00', level: 'Emergence', status: 'Available' }, { day: 'Sunday', time: '11:00 - 13:00', level: 'Essentials', status: 'Available' }, { day: 'Sunday', time: '13:00 - 15:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
+    { venueId: 'cantonment-primary', venue: 'Cantonment Primary School', area: 'Cantonment', region: 'Central', addr: 'Cantonment Primary School, Singapore', mrt: 'Cantonment', lat: 1.2763, lng: 103.8397, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Sunday', time: '09:00 - 11:00', level: 'Essentials', status: 'Available' } ], placeholder: true },
+    { venueId: 'bidadari', venue: 'Bidadari Community Club', area: 'Woodleigh', region: 'Central', addr: 'Bidadari Community Club, Singapore', mrt: 'Woodleigh', lat: 1.3376, lng: 103.8703, book: 'https://app.eleverbadminton.com/', sessions: [ { day: 'Monday', time: '15:30 - 17:30', level: 'Essentials', status: 'Available' }, { day: 'Tuesday', time: '15:30 - 17:30', level: 'Essentials', status: 'Available' } ], placeholder: true }
   ];
 
   /* ---------------------------------------------------------------
@@ -262,17 +262,8 @@
           { label: 'Standard pricing', note: 'until 31 Aug', price: 'S$228' },
           { label: 'Closing pricing', note: 'until 6 Sep', price: 'S$248' }
         ],
-        bring: ['Court shoes (non-marking)', 'Water bottle', 'A racket if you have one — we lend one if not'],
         signup: 'https://www.eleverbadminton.com/hec202609'
       }
-    ],
-    timetable: [
-      { time: '9.00am', what: 'Warm-up games and movement' },
-      { time: '9.30am', what: 'Skill block — the day’s focus stroke' },
-      { time: '10.15am', what: 'Break and hydration' },
-      { time: '10.30am', what: 'Game-based practice' },
-      { time: '11.15am', what: 'Mini-tournament and cool-down' },
-      { time: '12.00pm', what: 'Pick-up' }
     ]
   };
 
@@ -283,31 +274,27 @@
   var EVENT_TYPES = [
     {
       key: 'carnival', name: 'Carnivals', num: '01',
-      what: 'A mass-participation event day. Rotating stations, coach-led games, fun formats and prizes — designed so complete beginners and regular players both have a good time on the same floor.',
+      what: 'Big, energetic play days with stations, games, prizes and coaches keeping everyone moving.',
       provides: ['Event coaches and marshals', 'Rackets, shuttles and all equipment', 'Court and station setup', 'Scoring, prizes and medals']
     },
     {
       key: 'clinic', name: 'Clinics', num: '02',
-      what: 'A focused coaching workshop. One topic — footwork, doubles rotation, serve and return — taught properly in a short block, scaled to whatever level walks in.',
+      what: 'Focused coaching workshops built around one clear skill or theme.',
       provides: ['BWF-certified coaches', 'Structured session plan for the level', 'Shuttles and training equipment', 'Loan rackets if needed']
     },
     {
       key: 'competition', name: 'Competitions', num: '03',
-      what: 'A properly run tournament. We handle draws, formats, scheduling, umpiring and results so the host organisation can concentrate on their people rather than the spreadsheet.',
+      what: 'Tournament formats, draws, scoring and court flow handled end to end.',
       provides: ['Format design and seeding', 'Draws, scheduling and results', 'Umpires and court marshals', 'Trophies, medals and prize ceremony']
     }
   ];
 
   /* All-in-one suite of event management services. */
   var EVENT_SERVICES = [
-    { title: 'Event concept and format', copy: 'Carnival, clinic or tournament formats designed around your audience, venue and run time.' },
-    { title: 'Coaches and marshals', copy: 'A trained on-court team to lead stations, guide beginners, manage flow and keep participants safe.' },
-    { title: 'Operations and run sheet', copy: 'Clear schedules, court allocation, participant movement and briefing notes for every stakeholder.' },
-    { title: 'Scoring and results', copy: 'Draws, fixtures, scorekeeping, leaderboards and results handling for competitive formats.' },
-    { title: 'Equipment and setup', copy: 'Rackets, shuttles, station equipment, signage, prizes and court setup prepared before the first serve.' },
-    { title: 'Hosting and media', copy: 'Emcee support, prize presentation flow, photography coordination and event-day content moments.' },
-    { title: 'Safety and support', copy: 'First-aid readiness, participant guidance and escalation plans for a smooth event day.' },
-    { title: 'One point of contact', copy: 'Planning, vendors, event-day delivery and post-event wrap-up managed through a single Élever lead.' }
+    { title: 'Plan', copy: 'Format, run sheet and court flow.' },
+    { title: 'Run', copy: 'Coaches, marshals and hosting.' },
+    { title: 'Equip', copy: 'Rackets, shuttles, stations and prizes.' },
+    { title: 'Score', copy: 'Draws, fixtures, leaderboards and results.' }
   ];
 
   var EVENTS_UPCOMING = [
@@ -464,14 +451,6 @@
     ]
   };
 
-  /* ---------------------------------------------------------------
-     RECREATIONAL PLAY GROUPS
-     Racket Ratings Clubs is the live, self-maintaining directory —
-     this list is only for groups that ask us to feature them.
-     Leave it empty and the page falls back to a clean empty state.
-     --------------------------------------------------------------- */
-  var REC_GROUPS = [];
-
   window.ELEVER_DATA = {
     coaches: COACHES,
     pathways: PATHWAYS,
@@ -485,7 +464,6 @@
     eventGroupLabel: EVENT_GROUP_LABEL,
     partners: PARTNERS,
     articles: ARTICLES,
-    racketRatings: RACKET_RATINGS,
-    recGroups: REC_GROUPS
+    racketRatings: RACKET_RATINGS
   };
 })();

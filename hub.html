@@ -35,7 +35,6 @@
         <p class="phead__lead">Nowhere in Singapore lists every place to play, how to book it, and who to play with — so we built it. Compare private halls, ActiveSG and community club courts island-wide, then find a group at your level. <strong>Free, for everyone, whether or not you ever train with us.</strong></p>
         <dl class="phead__stats">
           <div><dt>Venues listed</dt><dd id="statVenues">43</dd></div>
-          <div><dt>Regions covered</dt><dd>5</dd></div>
           <div><dt>Cost to use</dt><dd>Free</dd></div>
         </dl>
       </div>
@@ -50,6 +49,7 @@
         <button class="hub__tab is-active" data-tab="halls" role="tab" id="tab-halls" aria-selected="true" aria-controls="panel-halls">Where to play</button>
         <button class="hub__tab" data-tab="book" role="tab" id="tab-book" aria-selected="false" aria-controls="panel-book" tabindex="-1">How to book</button>
         <button class="hub__tab" data-tab="groups" role="tab" id="tab-groups" aria-selected="false" aria-controls="panel-groups" tabindex="-1">Groups &amp; ratings</button>
+        <button class="hub__tab" data-tab="team" role="tab" id="tab-team" aria-selected="false" aria-controls="panel-team" tabindex="-1">Team Singapore</button>
       </div>
     </div>
 
@@ -134,27 +134,6 @@
         </div>
       </section>
 
-      <!-- ===== RECREATIONAL PLAY GROUPS ===== -->
-      <section class="grp">
-        <div class="grp__head">
-          <span class="rr__eyebrow">Recreational play</span>
-          <h3>Find a group to play with</h3>
-          <p class="rr__lead">The fastest route to a regular game is Racket Ratings Clubs above — it is kept current by the groups themselves. Below are local groups that have asked us to feature them and are happy to take new players.</p>
-        </div>
-        <div class="sched__controls">
-          <div id="groupFilters" role="group" aria-label="Filter groups by region"></div>
-        </div>
-        <p class="hub__count" id="groupCount" aria-live="polite"></p>
-        <div class="grp__grid" id="groupDir"></div>
-        <div class="grp__add">
-          <div>
-            <b>Run a group that welcomes new players?</b>
-            <span>Tell us the day, time, venue and level and we will list it here — free, whether or not you train with Élever.</span>
-          </div>
-          <a class="btn btn--ghost" href="mailto:info@eleverbadminton.com?subject=Add%20our%20badminton%20group%20to%20the%20SG%20Hub">Add your group</a>
-        </div>
-      </section>
-
       <!-- ===== OTHER ROUTES ===== -->
       <div class="hub__groups">
         <article class="gcard reveal">
@@ -179,12 +158,61 @@
         </article>
       </div>
     </div>
+    <!-- ===== PANEL: TEAM SINGAPORE ===== -->
+    <div class="hub__panel" data-panel="team" id="panel-team" role="tabpanel" aria-labelledby="tab-team" tabindex="0" hidden>
+      <section class="teamhub">
+        <div class="teamhub__head">
+          <span class="rr__eyebrow">Know the national team</span>
+          <h3>Singapore players to follow</h3>
+          <p class="rr__lead">Quick links to live rankings, upcoming competitions and current news for Singapore's national team players.</p>
+        </div>
+        <div class="teamhub__grid">
+          <article class="teamcard">
+            <span class="teamcard__role">Men's singles</span>
+            <h4>Loh Kean Yew</h4>
+            <p>Former world champion and Singapore's leading men's singles player.</p>
+            <div class="teamcard__links">
+              <a href="https://bwf.tournamentsoftware.com/ranking/ranking.aspx" target="_blank" rel="noopener">Live ranking</a>
+              <a href="https://www.google.com/search?q=Loh+Kean+Yew+badminton+news&tbm=nws" target="_blank" rel="noopener">Latest news</a>
+            </div>
+          </article>
+          <article class="teamcard">
+            <span class="teamcard__role">Women's singles</span>
+            <h4>Yeo Jia Min</h4>
+            <p>Singapore's leading women's singles player on the world tour.</p>
+            <div class="teamcard__links">
+              <a href="https://bwf.tournamentsoftware.com/ranking/ranking.aspx" target="_blank" rel="noopener">Live ranking</a>
+              <a href="https://www.google.com/search?q=Yeo+Jia+Min+badminton+news&tbm=nws" target="_blank" rel="noopener">Latest news</a>
+            </div>
+          </article>
+          <article class="teamcard">
+            <span class="teamcard__role">Team updates</span>
+            <h4>Singapore Badminton Association</h4>
+            <p>Official announcements, team selection, national squad updates and competition news.</p>
+            <div class="teamcard__links">
+              <a href="https://singaporebadminton.org.sg/" target="_blank" rel="noopener">SBA website</a>
+              <a href="https://www.google.com/search?q=Singapore+national+badminton+team+news&tbm=nws" target="_blank" rel="noopener">Team news</a>
+            </div>
+          </article>
+        </div>
+        <div class="teamhub__live">
+          <div>
+            <h4>Live rankings and tournament entries</h4>
+            <p>Rankings and upcoming competitions change every week, so this hub points users to the live BWF pages instead of freezing old numbers.</p>
+          </div>
+          <div class="teamhub__links">
+            <a class="btn btn--primary" href="https://bwf.tournamentsoftware.com/ranking/ranking.aspx" target="_blank" rel="noopener">Open BWF rankings</a>
+            <a class="btn btn--ghost" href="https://corporate.bwfbadminton.com/events/calendar/2026/all/0/-1" target="_blank" rel="noopener">Open BWF calendar</a>
+          </div>
+        </div>
+      </section>
+    </div>
   </section>
   <section class="news" id="news" aria-labelledby="newsTitle">
     <div class="section-head">
       <span class="kicker reveal">The 2026 Season</span>
       <h2 class="section-title reveal" id="newsTitle">Every stop on the <em>world tour</em>.</h2>
-      <p class="news__hint reveal" data-delay="120">The four most recent results from the 2026 HSBC BWF World Tour. Select “Show all” for the full season. Updated 7 Aug 2026.</p>
+      <p class="news__hint reveal" data-delay="120">Date-aware tracker for the 2026 HSBC BWF World Tour. Completed events link to official results; upcoming events link to tournament details.</p>
       <div class="news__filters reveal" data-delay="160" id="newsFilters" role="group" aria-label="Filter tournaments">
         <button class="news__filter is-active" data-filter="all" aria-pressed="true">All</button>
         <button class="news__filter" data-filter="done" aria-pressed="false">Completed</button>
@@ -193,7 +221,7 @@
     </div>
     <div class="news__timeline" id="newsTimeline" aria-live="polite"></div>
     <div class="news__more"><button class="btn btn--ghost" id="newsToggle" aria-expanded="false">Show all tournaments</button></div>
-    <p class="news__source reveal">Full schedule and results sourced from the BWF World Tour, Wikipedia and wire reports (AFP/Xinhua). Completed events up to 7 Aug 2026 show verified singles and doubles champions where available; later events list date and grade. No images used.</p>
+    <p class="news__source reveal">Schedule links point to the official BWF corporate calendar and results pages where available. Status updates automatically from each event date; use the official result link for live draws, match scores and final winners.</p>
   </section>
   </main>
 

@@ -21,6 +21,80 @@
   function el(id) { return document.getElementById(id); }
   function sampleTag(item) { return item && item.placeholder ? ' <span class="sample" title="Sample content — replace in assets/js/data.js">sample</span>' : ''; }
 
+  function initEventLightbox(scope) {
+    if (!scope || scope.dataset.lightboxReady) return;
+    scope.dataset.lightboxReady = '1';
+
+    var activeGallery = 0;
+    var activePhoto = 0;
+    var modal = document.createElement('div');
+    modal.className = 'lightbox';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Event photo viewer');
+    modal.hidden = true;
+    modal.innerHTML = '<button class="lightbox__close" type="button" aria-label="Close gallery">Close</button>' +
+      '<button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="Previous photo">‹</button>' +
+      '<figure class="lightbox__figure"><img class="lightbox__img" alt=""><figcaption class="lightbox__cap"></figcaption></figure>' +
+      '<button class="lightbox__nav lightbox__nav--next" type="button" aria-label="Next photo">›</button>';
+    document.body.appendChild(modal);
+
+    var img = modal.querySelector('.lightbox__img');
+    var cap = modal.querySelector('.lightbox__cap');
+
+    function show() {
+      var gallery = D.eventShowcase[activeGallery];
+      if (!gallery) return;
+      var photos = gallery.photos || [];
+      var src = photos[activePhoto];
+      if (!src) return;
+      img.src = src;
+      img.alt = gallery.title + ' photo ' + (activePhoto + 1);
+      cap.textContent = gallery.title + ' · ' + (activePhoto + 1) + ' of ' + photos.length;
+    }
+
+    function open(galleryIndex, photoIndex) {
+      activeGallery = galleryIndex;
+      activePhoto = photoIndex;
+      show();
+      modal.hidden = false;
+      document.body.classList.add('has-lightbox');
+      modal.querySelector('.lightbox__close').focus();
+    }
+
+    function close() {
+      modal.hidden = true;
+      document.body.classList.remove('has-lightbox');
+    }
+
+    function step(dir) {
+      var gallery = D.eventShowcase[activeGallery];
+      var photos = gallery && gallery.photos ? gallery.photos : [];
+      if (!photos.length) return;
+      activePhoto = (activePhoto + dir + photos.length) % photos.length;
+      show();
+    }
+
+    scope.addEventListener('click', function (e) {
+      var trigger = e.target.closest('[data-gallery]');
+      if (!trigger) return;
+      open(Number(trigger.dataset.gallery), Number(trigger.dataset.photo || 0));
+    });
+
+    modal.addEventListener('click', function (e) {
+      if (e.target === modal || e.target.closest('.lightbox__close')) close();
+      else if (e.target.closest('.lightbox__nav--prev')) step(-1);
+      else if (e.target.closest('.lightbox__nav--next')) step(1);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (modal.hidden) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') step(-1);
+      if (e.key === 'ArrowRight') step(1);
+    });
+  }
+
   /* =================================================================
      THE FIVE PILLARS — Home + About
      ================================================================= */
@@ -53,8 +127,8 @@
     var mount = el('pathsGrid');
     if (!mount) return;
     mount.innerHTML = D.pathways.map(function (p, i) {
-      return '<article class="path" id="' + p.key + '">' +
-        '<span class="path__num">' + p.num + '</span>' +
+      return '<article class="path" id="' + p.key + '" style="--step:' + i + '">' +
+        '<div class="path__rise"><span class="path__num">' + p.num + '</span><span class="path__step">Step ' + (i + 1) + '</span></div>' +
         '<h3>' + esc(p.name) + '</h3>' +
         '<span class="path__tag">' + esc(p.tag) + '</span>' +
         '<p class="path__blurb">' + esc(p.blurb) + '</p>' +
@@ -79,7 +153,7 @@
     var listView = el('schedListView');
 
     var level = 'all';
-    var mapFrame = null;
+    var mapDrawn = false;
 
     function gmapsSearchUrl(v) {
       var addr = (v.addr || '').replace(/,?\s*S\d{6}.*/, '');
@@ -87,16 +161,40 @@
         encodeURIComponent((v.venue + ' ' + addr + ' Singapore').trim());
     }
 
+    function venueLevel(v) {
+      var hasEmergence = v.sessions.some(function (s) { return s.level === 'Emergence'; });
+      var hasEssentials = v.sessions.some(function (s) { return s.level === 'Essentials'; });
+      if (hasEmergence && hasEssentials) return 'mixed';
+      return hasEmergence ? 'emergence' : 'essentials';
+    }
+
+    function mapPosition(v) {
+      var bounds = { minLat: 1.24, maxLat: 1.45, minLng: 103.62, maxLng: 104.02 };
+      var x = ((v.lng - bounds.minLng) / (bounds.maxLng - bounds.minLng)) * 100;
+      var y = (1 - ((v.lat - bounds.minLat) / (bounds.maxLat - bounds.minLat))) * 100;
+      return {
+        left: Math.max(5, Math.min(95, x)),
+        top: Math.max(8, Math.min(92, y))
+      };
+    }
+
     function drawMap() {
-      if (!mapMount || mapFrame) return;
-      mapFrame = document.createElement('iframe');
-      mapFrame.className = 'sched__mapframe';
-      mapFrame.setAttribute('title', 'Map of Élever class venues');
-      mapFrame.setAttribute('loading', 'lazy');
-      mapFrame.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
-      mapFrame.setAttribute('allowfullscreen', '');
-      mapFrame.src = 'https://maps.google.com/maps?q=' + encodeURIComponent('Singapore') + '&hl=en&z=11&output=embed';
-      mapMount.appendChild(mapFrame);
+      if (!mapMount) return;
+      var rows = visible();
+      mapDrawn = true;
+      mapMount.innerHTML = '<div class="sched__mapbase" role="img" aria-label="Approximate Singapore map with class venue pins">' +
+        '<span class="sched__island"></span>' +
+        '<div class="sched__legend"><span><i class="pin-dot pin-dot--essentials"></i>Essentials</span><span><i class="pin-dot pin-dot--emergence"></i>Emergence</span><span><i class="pin-dot pin-dot--mixed"></i>Both</span></div>' +
+        rows.map(function (v) {
+          var pos = mapPosition(v);
+          var lvl = venueLevel(v);
+          var sessionText = sessionsFor(v).map(function (s) { return s.day + ' ' + s.time + ' ' + s.level; }).join(', ');
+          return '<a class="sched__pin sched__pin--' + lvl + '" href="' + gmapsSearchUrl(v) + '" target="_blank" rel="noopener"' +
+            ' style="left:' + pos.left.toFixed(2) + '%;top:' + pos.top.toFixed(2) + '%"' +
+            ' aria-label="' + esc(v.venue + ', ' + sessionText + '. Open in Google Maps') + '">' +
+            '<span class="sched__pinlabel">' + esc(v.venue) + '</span></a>';
+        }).join('') +
+      '</div>';
     }
 
     function visible() {
@@ -117,6 +215,7 @@
         countEl.textContent = rows.length + (rows.length === 1 ? ' venue' : ' venues') +
           ' · ' + n + (n === 1 ? ' class' : ' classes');
       }
+      if (mapDrawn) drawMap();
 
       if (!rows.length) {
         listMount.innerHTML = '<p class="sched__empty">No classes match that level yet. Try “All levels”, or ' +
@@ -136,7 +235,7 @@
               (s.status ? '<span class="vcard__status">' + esc(s.status) + '</span>' : '') + '</li>';
           }).join('') + '</ul>' +
           '<div class="vcard__actions">' +
-            '<a class="vcard__book" href="' + BOOK + '" target="_blank" rel="noopener">Book this class &rsaquo;</a>' +
+            '<a class="vcard__book" href="' + esc(v.book || BOOK) + '" target="_blank" rel="noopener">Book this class &rsaquo;</a>' +
             '<a class="vcard__gmaps" href="' + gmapsSearchUrl(v) + '" target="_blank" rel="noopener">Open in Google Maps &#8599;</a>' +
           '</div>' +
         '</article>';
@@ -216,12 +315,6 @@
       }).join('');
     }
 
-    var tt = el('campTimetable');
-    if (tt && c.timetable) {
-      tt.innerHTML = c.timetable.map(function (r) {
-        return '<li><b>' + esc(r.time) + '</b><span>' + esc(r.what) + '</span></li>';
-      }).join('');
-    }
   })();
 
   /* =================================================================
@@ -272,21 +365,24 @@
 
     var showcase = el('eventShowcase');
     if (showcase && D.eventShowcase) {
-      showcase.innerHTML = D.eventShowcase.map(function (e) {
+      showcase.innerHTML = D.eventShowcase.map(function (e, eIndex) {
         var photos = e.photos || [];
         var cover = photos[0] || '';
         return '<article class="eshow">' +
-          (cover ? '<img class="eshow__cover" src="' + esc(cover) + '" alt="' + esc(e.title) + '" loading="lazy" decoding="async">' : '') +
+          (cover ? '<button class="eshow__photo" type="button" data-gallery="' + eIndex + '" data-photo="0" aria-label="' + esc('View photos from ' + e.title) + '"><img class="eshow__cover" src="' + esc(cover) + '" alt="' + esc(e.title) + '" loading="lazy" decoding="async"></button>' : '') +
           '<div class="eshow__body">' +
             '<span class="eshow__type">' + esc(e.type) + '</span>' +
             '<h3>' + esc(e.title) + '</h3>' +
             '<p>' + esc(e.when) + ' · ' + esc(e.where) + '</p>' +
             '<div class="eshow__thumbs">' + photos.slice(1, 4).map(function (p, idx) {
-              return '<img src="' + esc(p) + '" alt="' + esc(e.title) + ' photo ' + (idx + 2) + '" loading="lazy" decoding="async">';
+              return '<button class="eshow__thumb" type="button" data-gallery="' + eIndex + '" data-photo="' + (idx + 1) + '" aria-label="' + esc('View ' + e.title + ' photo ' + (idx + 2)) + '">' +
+                '<img src="' + esc(p) + '" alt="' + esc(e.title) + ' photo ' + (idx + 2) + '" loading="lazy" decoding="async"></button>';
             }).join('') + '</div>' +
+            '<button class="eshow__more" type="button" data-gallery="' + eIndex + '" data-photo="0">View gallery</button>' +
           '</div>' +
         '</article>';
       }).join('');
+      initEventLightbox(showcase);
     }
 
     var pst = el('eventsPast');
@@ -410,76 +506,6 @@
         '<span class="rrcard__go">Open on Racket Ratings &rsaquo;</span>' +
       '</a>';
     }).join('');
-  })();
-
-  (function recGroups() {
-    var mount = el('groupDir');
-    if (!mount) return;
-    var filters = el('groupFilters');
-    var countEl = el('groupCount');
-    var rows = D.recGroups || [];
-    var region = 'all';
-
-    var CLUBS = (D.racketRatings && D.racketRatings.features.filter(function (f) { return f.key === 'clubs'; })[0]) || null;
-    var clubsHref = CLUBS ? CLUBS.href : 'https://www.racketratings.net/badminton/clubs';
-
-    function emptyState(msg) {
-      return '<div class="grpempty">' +
-        '<p>' + esc(msg) + '</p>' +
-        '<a class="btn btn--primary" href="' + esc(clubsHref) + '" target="_blank" rel="noopener">Browse clubs on Racket Ratings</a>' +
-      '</div>';
-    }
-
-    function render() {
-      var list = rows.filter(function (g) { return region === 'all' || g.region === region; });
-      if (countEl) countEl.textContent = list.length + (list.length === 1 ? ' group' : ' groups');
-
-      if (!rows.length) {
-        mount.innerHTML = emptyState('We are not featuring any local groups just yet — Racket Ratings Clubs has the live list, kept up to date by the groups themselves.');
-        return;
-      }
-      if (!list.length) {
-        mount.innerHTML = emptyState('No featured groups in that region yet. Racket Ratings Clubs lists many more across Singapore.');
-        return;
-      }
-
-      mount.innerHTML = list.map(function (g) {
-        return '<article class="grpcard">' +
-          '<div class="grpcard__top">' +
-            '<h4>' + esc(g.name) + sampleTag(g) + '</h4>' +
-            '<span class="grpcard__region">' + esc(g.region) + '</span>' +
-          '</div>' +
-          '<dl class="grpcard__meta">' +
-            '<div><dt>When</dt><dd>' + esc(g.day) + ' · ' + esc(g.time) + '</dd></div>' +
-            '<div><dt>Where</dt><dd>' + esc(g.venue) + '</dd></div>' +
-            '<div><dt>Level</dt><dd>' + esc(g.level) + '</dd></div>' +
-            '<div><dt>Contact</dt><dd>' + esc(g.contact) + '</dd></div>' +
-          '</dl>' +
-          (g.rrClub ? '<a class="grpcard__rr" href="' + esc(g.rrClub) + '" target="_blank" rel="noopener">View this club on Racket Ratings &rsaquo;</a>' : '') +
-        '</article>';
-      }).join('');
-    }
-
-    if (filters) {
-      var regions = ['all'].concat(rows.map(function (g) { return g.region; })
-        .filter(function (v, i, a) { return a.indexOf(v) === i; }).sort());
-      filters.innerHTML = regions.map(function (r, i) {
-        return '<button class="sched__filter' + (i === 0 ? ' is-active' : '') + '" data-region="' + esc(r) + '"' +
-          ' aria-pressed="' + (i === 0) + '">' + (r === 'all' ? 'All regions' : esc(r)) + '</button>';
-      }).join('');
-      filters.addEventListener('click', function (e) {
-        var b = e.target.closest('.sched__filter');
-        if (!b) return;
-        region = b.getAttribute('data-region');
-        filters.querySelectorAll('.sched__filter').forEach(function (x) {
-          var on = x === b;
-          x.classList.toggle('is-active', on);
-          x.setAttribute('aria-pressed', String(on));
-        });
-        render();
-      });
-    }
-    render();
   })();
 
   /* =================================================================
