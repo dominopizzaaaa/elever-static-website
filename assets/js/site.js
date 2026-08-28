@@ -137,12 +137,18 @@
       '</div>';
   }
 
-  /* Interior pages have no dark hero behind the nav, so they opt into the
-     solid treatment permanently via  <body data-nav="solid">.
-     Burger + scroll behaviour stay in main.js — one owner. */
+  /* Interior pages opt into the solid nav via  <body data-nav="solid">.
+     Where the page opens on a dark .phead band the nav starts transparent
+     over it and only turns solid once scrolled past — same as the home
+     hero. Burger + scroll behaviour stay in main.js — one owner. */
   var navEl = document.getElementById('nav');
   if (navEl && document.body.getAttribute('data-nav') === 'solid') {
-    navEl.classList.add('nav--solid', 'scrolled');
+    navEl.classList.add('nav--solid');
+    if (document.querySelector('.phead')) {
+      document.body.classList.add('has-dark-head');
+    } else {
+      navEl.classList.add('scrolled');
+    }
   }
 
   /* Mobile: tapping a parent item opens its submenu rather than navigating. */

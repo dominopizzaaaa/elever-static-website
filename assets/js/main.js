@@ -18,8 +18,11 @@
   var nav = document.getElementById('nav');
   var burger = document.getElementById('burger');
   var navLinks = document.getElementById('navLinks');
-  // Interior pages keep the solid treatment at all scroll positions.
-  var navSolid = nav && nav.classList.contains('nav--solid');
+  // Interior pages keep the solid treatment at all scroll positions —
+  // unless they open on a dark .phead band, where the nav rides over it
+  // transparently and only solidifies once scrolled past.
+  var navSolid = nav && nav.classList.contains('nav--solid') &&
+    !document.body.classList.contains('has-dark-head');
   if (nav) {
     window.addEventListener('scroll', function () {
       nav.classList.toggle('scrolled', navSolid || window.scrollY > 40);
@@ -369,6 +372,11 @@
     var currentType = 'all';
     var query = '';
 
+    /* Header stat: keep the headline number honest by reading it off the
+       venue list rather than hardcoding it in the markup. */
+    var statVenues = document.getElementById('statVenues');
+    if (statVenues) statVenues.textContent = VENUES.length;
+
     function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
     function attr(s) { return esc(s); }
 
@@ -472,8 +480,33 @@
     // inline "go to Where to play" links inside the How-to-book panel
     hub.addEventListener('click', function (e) {
       var link = e.target.closest('.hub__inline-link');
-      if (link && link.dataset.goto) activateTab(link.dataset.goto);
+      if (link && link.dataset.goto) {
+        activateTab(link.dataset.goto);
+        if (history.replaceState) history.replaceState(null, '', '#' + link.dataset.goto);
+      }
     });
+
+    /* Deep-link the tabs (#book, #groups) so a panel can be shared,
+       bookmarked and linked to from elsewhere on the site. */
+    var TAB_NAMES = Array.prototype.map.call(tabs, function (b) { return b.dataset.tab; });
+    function tabFromHash() {
+      var name = (location.hash || '').replace('#', '');
+      return TAB_NAMES.indexOf(name) > -1 ? name : '';
+    }
+    if (tabsEl) {
+      tabsEl.addEventListener('click', function (e) {
+        var btn = e.target.closest('.hub__tab');
+        // history.replaceState keeps the URL shareable without adding a
+        // back-button entry for every tab press.
+        if (btn && history.replaceState) history.replaceState(null, '', '#' + btn.dataset.tab);
+      });
+      window.addEventListener('hashchange', function () {
+        var name = tabFromHash();
+        if (name) activateTab(name);
+      });
+    }
+    var initial = tabFromHash();
+    if (initial) activateTab(initial);
 
     render();
     // Re-render the venue list when the language changes (static text in the

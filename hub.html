@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=12" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=12" />
+  <link rel="stylesheet" href="assets/css/style.css?v=13" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=13" />
 </head>
 <body data-page="hub" data-nav="solid" data-base="">
 
@@ -28,34 +28,34 @@
   <header id="siteHeader"></header>
 
   <main id="main">
-    <section class="phead">
+    <section class="phead phead--hub">
       <div class="phead__inner">
         <p class="phead__crumbs"><a href="index.html">Home</a> · SG Badminton Hub</p>
         <h1>The home of <em>badminton</em> in Singapore.</h1>
-        <p class="phead__lead">There is nowhere in Singapore that lists every place to play, how to book it, and who to play with — so we built it. Free, for everyone, whether or not you ever train with us.</p>
+        <p class="phead__lead">Nowhere in Singapore lists every place to play, how to book it, and who to play with — so we built it. Compare private halls, ActiveSG and community club courts island-wide, then find a group at your level. <strong>Free, for everyone, whether or not you ever train with us.</strong></p>
+        <dl class="phead__stats">
+          <div><dt>Venues listed</dt><dd id="statVenues">43</dd></div>
+          <div><dt>Regions covered</dt><dd>5</dd></div>
+          <div><dt>Cost to use</dt><dd>Free</dd></div>
+        </dl>
       </div>
     </section>
 
-    <section class="psec psec--tight">
-      <p class="hub__intro"><strong>Singapore badminton court guide:</strong> Use this hub to compare badminton courts for rent in Singapore, including public ActiveSG halls, private badminton halls, community club courts and family-friendly places to play in Central, North, North-East, East and West Singapore.</p>
-    </section>
-
   <section class="hub" id="hub" aria-labelledby="hubTitle">
-    <div class="section-head">
-      <span class="kicker reveal">Singapore Badminton Hub</span>
-      <h2 class="section-title reveal" id="hubTitle">Everything <em>badminton</em>, one place.</h2>
-      <p class="hub__hint reveal" data-delay="120">There's nowhere in Singapore to find every place to play — so we built it. Browse the halls, learn how to book a court, and find people to hit with. <strong>Not just an academy — the home of badminton in Singapore.</strong></p>
-    </div>
+    <h2 class="sr-only" id="hubTitle">Singapore Badminton Hub</h2>
 
     <!-- HUB TABS -->
-    <div class="hub__tabs reveal" data-delay="140" id="hubTabs" role="tablist" aria-label="Singapore Badminton Hub sections">
-      <button class="hub__tab is-active" data-tab="halls" role="tab" id="tab-halls" aria-selected="true" aria-controls="panel-halls">Where to play</button>
-      <button class="hub__tab" data-tab="book" role="tab" id="tab-book" aria-selected="false" aria-controls="panel-book" tabindex="-1">How to book</button>
-      <button class="hub__tab" data-tab="groups" role="tab" id="tab-groups" aria-selected="false" aria-controls="panel-groups" tabindex="-1">Groups &amp; ratings</button>
+    <div class="hub__tabs" id="hubTabs">
+      <div class="hub__tabs-inner" role="tablist" aria-label="Singapore Badminton Hub sections">
+        <button class="hub__tab is-active" data-tab="halls" role="tab" id="tab-halls" aria-selected="true" aria-controls="panel-halls">Where to play</button>
+        <button class="hub__tab" data-tab="book" role="tab" id="tab-book" aria-selected="false" aria-controls="panel-book" tabindex="-1">How to book</button>
+        <button class="hub__tab" data-tab="groups" role="tab" id="tab-groups" aria-selected="false" aria-controls="panel-groups" tabindex="-1">Groups &amp; ratings</button>
+      </div>
     </div>
 
     <!-- ===== PANEL: HALLS ===== -->
     <div class="hub__panel is-active" data-panel="halls" id="panel-halls" role="tabpanel" aria-labelledby="tab-halls" tabindex="0">
+      <div class="hub__toolbar">
       <div class="hub__controls reveal">
         <div class="hub__search">
           <label class="hub__search-label" for="hallSearch">Find a venue</label>
@@ -69,8 +69,10 @@
           <button class="hub__filter" data-type="club" aria-pressed="false">Country clubs</button>
         </div>
       </div>
+      </div>
       <p class="hub__count" id="hallCount" aria-live="polite"></p>
       <div class="hub__grid" id="hallGrid"></div>
+      <p class="hub__note reveal"><strong>Singapore badminton court guide:</strong> Use this hub to compare badminton courts for rent in Singapore, including public ActiveSG halls, private badminton halls, community club courts and family-friendly places to play in Central, North, North-East, East and West Singapore.</p>
       <p class="hub__note reveal">Addresses are compiled from Google Maps and the official SportSG facilities dataset. ActiveSG public halls can also be booked in the MyActiveSG app. Community Club (CC) courts are booked on <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a>. Spotted a mistake or a missing hall? <a href="mailto:info@eleverbadminton.com?subject=SG%20Badminton%20Hub%20—%20hall%20update">Tell us</a>.</p>
     </div>
 
@@ -197,9 +199,9 @@
 
   <footer id="siteFooter"></footer>
 
-  <script src="assets/js/data.js?v=12"></script>
-  <script src="assets/js/site.js?v=12"></script>
-  <script src="assets/js/pages.js?v=12"></script>
-  <script src="assets/js/main.js?v=12"></script>
+  <script src="assets/js/data.js?v=13"></script>
+  <script src="assets/js/site.js?v=13"></script>
+  <script src="assets/js/pages.js?v=13"></script>
+  <script src="assets/js/main.js?v=13"></script>
 </body>
 </html>
