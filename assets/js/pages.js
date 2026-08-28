@@ -132,7 +132,8 @@
           '<ul class="vcard__sessions">' + sessionsFor(v).map(function (s) {
             return '<li><span class="vcard__day">' + esc(s.day) + '</span>' +
               '<span class="vcard__time">' + esc(s.time) + '</span>' +
-              '<span class="vcard__lvl vcard__lvl--' + esc(s.level.toLowerCase()) + '">' + esc(s.level) + '</span></li>';
+              '<span class="vcard__lvl vcard__lvl--' + esc(s.level.toLowerCase()) + '">' + esc(s.level) + '</span>' +
+              (s.status ? '<span class="vcard__status">' + esc(s.status) + '</span>' : '') + '</li>';
           }).join('') + '</ul>' +
           '<div class="vcard__actions">' +
             '<a class="vcard__book" href="' + BOOK + '" target="_blank" rel="noopener">Book this class &rsaquo;</a>' +

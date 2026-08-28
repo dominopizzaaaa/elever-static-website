@@ -186,6 +186,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .vcard__lvl{margin-left:auto;font-size:.62rem;font-weight:700;padding:.16rem .45rem;border-radius:4px;letter-spacing:.04em}
 .vcard__lvl--essentials{background:#e8eefc;color:#17369b}
 .vcard__lvl--emergence{background:#e7f5ec;color:#1a6b3c}
+.vcard__status{font-size:.62rem;font-weight:700;padding:.16rem .45rem;border-radius:4px;letter-spacing:.04em;background:#fff7e6;color:#9a5800}
 .vcard__actions{display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;margin-top:auto;padding-top:.9rem}
 .vcard__gmaps{font-size:.78rem;font-weight:600;color:var(--muted)}
 .vcard__gmaps:hover{color:var(--accent);text-decoration:underline}
