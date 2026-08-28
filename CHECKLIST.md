@@ -1,114 +1,99 @@
-# Élever Badminton — Redesign Checklist
+# Élever Badminton — Requested Update Checklist
 
-Working from the Google Docs content page + the reference/comment list.
 Status: `[ ]` todo · `[x]` done
 
 ---
 
-## A. Removals (explicitly asked for)
+## A. Project Safety
 
-- [x] A1. Remove the **Play** page entirely (`play.html`, nav entry, footer entry, sitemap)
-- [x] A2. Remove the **custom cursor** — restore the normal system cursor
-      (main.js §3, `body{cursor:none}` rules in style.css)
-- [x] A3. Remove the **language switcher** / i18n (site.js LANG_MENU, `assets/js/i18n.js`,
-      all `data-i18n` / `data-i18n-html` attributes, `.lang*` CSS, `html.lang-*` font stacks)
-- [x] A4. Remove the dead **quiz / rally / reflex** CSS + JS left behind by A1
-- [x] A5. Remove the leftover **search overlay / breadcrumb / scrollspy** block in main.js
-      (no `#searchToggle` exists on any page — dead code)
-- [x] A6. Locations = **maps only or list only** — drop the side-by-side "Map + list"
-      default; ship a single clean toggle with list as the default view
+- [x] A1. Check git state before editing.
+- [x] A2. Identify all files that control Camps, Classes, Events, About, SG Hub, venue booking links, and styles.
+- [x] A3. Keep changes scoped to the user's requested sections.
+- [x] A4. Run a local static server and inspect key pages after edits.
+- [x] A5. Commit finished changes and push to the `frontend` branch.
 
-## B. Copy trim (too many AI descriptions)
+## B. Camps
 
-- [x] B1. Home: drop the "Two of them are how you train with us…" sub under *What we do*
-- [x] B2. Classes: drop the "Four progressive stages. Each one has a clear entry point…"
-      sub under *Development pathways*
-- [x] B3. Sweep every page for invented filler paragraphs not in the Google Doc;
-      keep the doc's wording verbatim where the doc supplies it
-- [x] B4. Remove all "For Élever:" note-strips (internal notes, not public copy)
-- [x] B5. Remove the sample-review carousel + disclaimer from Home (placeholder quotes)
+- [x] B1. Remove the upcoming camp `bring` list: court shoes, water bottle, and racket loan note.
+- [x] B2. Remove the paragraph beginning `Sessions are game-based...`.
+- [x] B3. Remove the full `A typical camp day` section and timetable from the Camps page.
+- [x] B4. Remove unused camp timetable rendering/data if it is no longer needed.
+- [x] B5. Re-check the Camps page spacing after the removals.
 
-## C. Content from the Google Doc
+## C. Home / What Is Élever
 
-### Home
-- [x] C1. "What is Élever" — definition block exactly as the doc:
-      `/eləve/ • v.` · (french translation of elevate) · to build or raise; bring
-      something to a higher position
-- [x] C2. Tagline: *Enhance your skills. Enjoy the process. Elevate your experience.*
-- [x] C3. Link to About page
-- [x] C4. Summary of what we do → 5 pillars (Classes, Camps, Carnivals, Clinics,
-      Competitions), each clickable to its page
+- [x] C1. Remove the headline `The name is the brief.`
+- [x] C2. Redesign the `What is Élever` section so the definition, translation, meaning, and tagline feel more intentional.
+- [x] C3. Keep the `Read more about us` call-to-action.
+- [x] C4. Verify the redesigned section works on mobile.
 
-### Classes
-- [x] C5. Two sections: **Regular Classes** and **Camps** (doc calls them Dropdown 1 / 2)
-- [x] C6. Regular classes intro — doc's two paragraphs verbatim
-- [x] C7. Development Pathways — Exploration / Essentials / Emergence / Elite;
-      Exploration CTA leads to the Camps page
-- [x] C8. Group Class vs Private Class — doc write-ups verbatim
-- [x] C9. Trial and Placement — doc write-up verbatim
-- [x] C10. Private class services — Trial, video analysis, competition prep
-- [x] C11. Locations: map **or** list (see A6), each pin/row = days, timings, level
+## D. Classes
 
-### Camps
-- [x] C12. What we do at an Exploration camp
-- [x] C13. Upcoming: 7–11 Sep 2026 · Aljunied, Novena, Sengkang, Serangoon
-      · signup www.eleverbadminton.com/hec202609
-      · Standard $228 until 31 Aug, Closing $248 until 6 Sep · 6 students : 1 coach
-- [x] C14. Photos of previous camps (placeholder frames, no fake data)
+- [x] D1. Make the Four E's feel progressive: Exploration -> Essentials -> Emergence -> Elite.
+- [x] D2. Add a stair/step visual or other clear progression treatment.
+- [x] D3. Keep beginner messaging clear: new players start with Exploration before moving up.
+- [x] D4. Reduce vertical space used by the `Group class or private class` section.
+- [x] D5. Remove the `Not sure where you fit? Tell us about the player and we'll place them.` enquiry section.
+- [x] D6. Update the Classes Google Map view to show one pin per venue.
+- [x] D7. Use different pin colours for Essentials and Emergence class venues.
+- [x] D8. Ensure list filtering and map filtering continue to work.
 
-### Events
-- [x] C15. Three event types we organise: Carnivals, Clinics, Competitions
-- [x] C16. Upcoming (card style): SingHealth Presidents' Challenge Sports Day 2026
-      — client SingHealth Community Hospitals; badminton + pickleball tournament
-      and clinics
-- [x] C17. Previous events — full real list from the doc (2 carnivals, 10 clinics)
-- [x] C18. Service provided: all-in-one event management suite
-- [x] C19. "Trusted by" partner logo strip
-- [x] C20. Frame the page as a **service for corporate**, not self-promotion
+## E. Events
 
-### Élever Performance Lab  (NEW PAGE, black)
-- [x] C21. New `lab.html` — black page, middle-aligned big **OPENING SOON**,
-      small address below: SEE YOU AT / 767 Upper Serangoon Road #01-03 /
-      Singapore 534635
-- [x] C22. Add to nav + footer + sitemap
+- [x] E1. Shorten descriptions for Carnivals, Clinics, and Competitions.
+- [x] E2. Make the `An all-in-one event management suite` section more concise.
+- [x] E3. Reduce vertical space in the event suite section.
+- [x] E4. Allow event photos to be clicked.
+- [x] E5. Add a full-size image viewer/lightbox with previous/next navigation.
+- [x] E6. Ensure gallery interactions work by keyboard and close cleanly.
 
-### About
-- [x] C23. Definition + tagline (same block as Home)
-- [x] C24. Founder write-up verbatim from the doc (founded June 2023 by
-      Loh Kean Hean and Eng Chin An…)
-- [x] C25. Team of coaches → clickable to their own pages
-- [x] C26. The 5 pillars
-- [x] C27. Contact info: info@eleverbadminton.com · WhatsApp +65 8921 4221
-      (wa.me/6589214221)
+## F. About
 
-### Global
-- [x] C28. Footer: registered name Elever Sports Pte. Ltd. · UEN 202501591C ·
-      address · socials (IG, FB, TikTok, LinkedIn) · Terms link
-- [x] C29. Contact page: real email + WhatsApp everywhere (replace
-      hello@ / empty wa.me links)
-- [x] C30. Colour codes locked to the brand: White #FFFFFF · Black #000000 ·
-      Blue #2151D1
-- [x] C31. Book A Class button → app.eleverbadminton.com (already correct — verify)
+- [x] F1. Redesign the `Get in touch` section to look more polished.
+- [x] F2. Keep Email, WhatsApp, and Book a class actions.
+- [x] F3. Make the contact cards visually cleaner and less plain.
 
-## D. Design pass (ElevenLabs / Catalyc / Protocol Health / Apple)
+## G. SG Hub Removals
 
-- [x] D1. Repalette to #2151D1 brand blue; white-based with black + blue details
-- [x] D2. **Smaller type, more space** — reduce heading clamps and body size,
-      widen breathing room (ElevenLabs sizing)
-- [x] D3. ElevenLabs-style curves + buttons — smaller radii on cards, pill buttons
-      kept but tightened
-- [x] D4. ElevenLabs-style **two-column page splits** as the recurring layout
-- [x] D5. Protocol-Health-style alternation of bright and dark sections
-      (dark band used deliberately, not everywhere)
-- [x] D6. Tone down the hero: keep it clean, drop the "move your cursor" hint
-      (cursor is gone) and the shuttle-field gimmick if it fights the clean look
-- [x] D7. Nav: simplify to the real page set, ElevenLabs-style dropdown for Classes
+- [x] G1. Remove the `Regions covered 5` stat from the SG Hub hero.
+- [x] G2. Remove the recreational play section under `Groups & ratings`.
+- [x] G3. Remove now-unused recreational groups rendering if no mount remains.
+- [x] G4. Make sure Racket Ratings and other useful group/rating cards still remain.
 
-## E. Housekeeping
+## H. SG Hub Season / National Team
 
-- [x] E1. Update `sitemap.xml` (remove play, add lab)
-- [x] E2. Update `README.md` to match the new structure
-- [x] E3. Bump `?v=` cache-busting on css/js across every page
-- [x] E4. Regenerate coach pages (`node tools/build-coaches.js`)
-- [x] E5. Verify every page loads with no console errors, no dead links
-- [x] E6. Commit + push to `main`
+- [x] H1. Replace stale hardcoded 2026 season text and avoid showing past tournaments as `Results to be confirmed`.
+- [x] H2. Implement a self-updating season section based on event dates relative to the current date.
+- [x] H3. Add better source links for BWF tournament schedule/results.
+- [x] H4. Add a Singapore National Team-focused section for users to know rankings, upcoming competitions, and news.
+- [x] H5. Include linked news/search entry points for Loh Kean Yew, Yeo Jia Min, and Singapore national team players.
+- [x] H6. Keep the SG Hub copy clear that live ranking/results links are external sources.
+
+## I. Venue Booking Links
+
+- [x] I1. Fix or add booking links for Wyse Active Hub.
+- [x] I2. Fix or add booking links for The Sports Arina @ Jalan Kayu.
+- [x] I3. Fix or add booking links for Singapore Badminton Hall (SBH @ Sims).
+- [x] I4. Fix or add booking links for SBH East Coast @ Expo.
+- [x] I5. Fix or add booking links for OBA Arena @ Punggol.
+- [x] I6. Fix or add booking links for KFF Badminton Arena / Singapore Badminton Stadium.
+- [x] I7. Fix or add booking links for Cereza Sports Hall.
+- [x] I8. Fix or add booking links for Kovan Sports Centre.
+- [x] I9. Fix or add booking links for Chinese Swimming Club.
+- [x] I10. Fix or add booking links for Singapore Swimming Club.
+- [x] I11. Fix or add booking links for Warren Golf & Country Club.
+- [x] I12. Fix or add booking links for Anglo-Chinese School (Barker Road).
+- [x] I13. Fix or add booking links for Bidadari Community Club.
+- [x] I14. Fix or add booking links for Cantonment Primary School.
+- [x] I15. Fix or add booking links for North Vista Primary School.
+- [x] I16. Fix or add booking links for Singapore Chinese Girls' School.
+- [x] I17. Use the Élever booking app for Élever class venues and provider booking pages where court hire is external.
+
+## J. Verification
+
+- [x] J1. Run static syntax checks where possible.
+- [x] J2. Run browser smoke checks for Home, Camps, Classes, Events, About, and SG Hub.
+- [x] J3. Check console errors after loading edited pages.
+- [x] J4. Review git diff before committing.
+- [x] J5. Commit with a clear message.
+- [x] J6. Push the commit to the `frontend` branch.

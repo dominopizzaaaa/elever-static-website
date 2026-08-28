@@ -150,100 +150,89 @@
     var mount = document.getElementById('newsTimeline');
     if (!mount) return;
 
+    var BWF_CAL = 'https://corporate.bwfbadminton.com/events/calendar/2026/all/0/-1';
     var EVENTS = [
-      // ---- JANUARY ----
-      { m: 'January', date: '6–11 Jan', name: 'India Open', grade: 'Super 750', status: 'done',
-        result: 'MS Lin Chun-yi · WS An Se-young · MD Liang Weikeng/Wang Chang · WD Liu Shengshu/Tan Ning · XD Dechapol Puavaranukroh/Supissara Paewsampran.' },
-      { m: 'January', date: '11–13 Jan', name: 'Malaysia Open', grade: 'Super 1000', status: 'done', latest: false,
-        result: 'MS Kunlavut Vitidsarn (maiden Super 1000) · WS An Se-young (three-peat) · MD Kim Won-ho/Seo Seung-jae · WD Liu Shengshu/Tan Ning · XD Feng Yanzhe/Huang Dongping.' },
-      { m: 'January', date: '20–25 Jan', name: 'Indonesia Masters', grade: 'Super 500', status: 'done' },
-      { m: 'January', date: '27 Jan–1 Feb', name: 'Thailand Masters', grade: 'Super 300', status: 'done' },
-      // ---- FEBRUARY ----
-      { m: 'February', date: 'Feb', name: 'German Open', grade: 'Super 300', status: 'done' },
-      // ---- MARCH ----
-      { m: 'March', date: '3–8 Mar', name: 'All England Open', grade: 'Super 1000', status: 'done',
-        result: 'MS Lin Chun-yi (def. Lakshya Sen) · WS Wang Zhiyi (def. An Se-young) · XD Ye Hong-wei/Nicole Gonzales Chan.' },
-      { m: 'March', date: 'Mar', name: 'Swiss Open', grade: 'Super 300', status: 'done' },
-      { m: 'March', date: 'Mar', name: 'Ruichang China Masters', grade: 'Super 100', status: 'done' },
-      { m: 'March', date: 'Mar', name: 'Orléans Masters', grade: 'Super 300', status: 'done' },
-      // ---- MAY ----
-      { m: 'May', date: 'May', name: 'Thailand Open', grade: 'Super 500', status: 'done' },
-      { m: 'May', date: 'May', name: 'Baoji China Masters', grade: 'Super 100', status: 'done' },
-      { m: 'May', date: 'May', name: 'Malaysia Masters', grade: 'Super 500', status: 'done' },
-      { m: 'May', date: 'May–Jun', name: 'Singapore Open', grade: 'Super 750', status: 'done',
-        result: 'MS Alex Lanier · MD Satwiksairaj Rankireddy/Chirag Shetty. Loh Kean Yew reached his first home final.' },
-      // ---- JUNE ----
-      { m: 'June', date: 'Jun', name: 'Indonesia Open', grade: 'Super 1000', status: 'done',
-        result: 'MS Victor Lai · WS An Se-young · MD Goh Sze Fei/Nur Izzuddin · WD Yuki Fukushima/Mayu Matsumoto · XD Mathias Christiansen/Alexandra Bøje.' },
-      { m: 'June', date: 'Jun', name: 'Australian Open', grade: 'Super 500', status: 'done' },
-      { m: 'June', date: 'Jun', name: 'Macau Open', grade: 'Super 300', status: 'done' },
-      { m: 'June', date: 'Jun', name: 'U.S. Open', grade: 'Super 300', status: 'done' },
-      { m: 'June', date: 'Jun', name: 'Canada Open', grade: 'Super 300', status: 'done' },
-      // ---- JULY ----
-      { m: 'July', date: '14–19 Jul', name: 'Japan Open', grade: 'Super 750', status: 'done',
-        result: 'MS Christo Popov · WS PV Sindhu · MD Fajar Alfian/Muhammad Shohibul Fikri · WD Kim Hye Jeong/Kong Hee Yong · XD Feng Yanzhe/Huang Dongping.' },
-      { m: 'July', date: '21–26 Jul', name: 'China Open', grade: 'Super 1000', status: 'done', latest: true,
-        result: 'MS Chou Tien-chen — at 36, the oldest Super 1000 champion ever (def. Toma Junior Popov) · WS Akane Yamaguchi (def. Chen Yufei) · MD Fajar Alfian/Muhammad Shohibul Fikri · WD Liu Shengshu/Tan Ning (defended) · XD Guo Xinwa/Chen Fanghui.' },
-      { m: 'July', date: 'Jul', name: 'Taipei Open', grade: 'Super 300', status: 'done' },
-      // ---- AUGUST ----
-      { m: 'August', date: 'Aug', name: 'Korea Masters', grade: 'Super 300', status: 'upcoming' },
-      { m: 'August', date: '17–23 Aug', name: 'BWF World Championships', grade: 'New Delhi', status: 'upcoming',
-        result: 'The season\u2019s biggest prize. Akane Yamaguchi eyes back-to-back world titles; the field chases the rainbow jersey.' },
-      // ---- SEPTEMBER ----
-      { m: 'September', date: 'Sep', name: 'China Masters', grade: 'Super 750', status: 'upcoming' },
-      { m: 'September', date: 'Sep', name: 'Indonesia Masters Super 100 I', grade: 'Super 100', status: 'upcoming' },
-      { m: 'September', date: 'Sep', name: 'Vietnam Open', grade: 'Super 100', status: 'upcoming' },
-      // ---- OCTOBER ----
-      { m: 'October', date: 'Oct', name: 'Arctic Open', grade: 'Super 500', status: 'upcoming' },
-      { m: 'October', date: 'Oct', name: 'Denmark Open', grade: 'Super 750', status: 'upcoming' },
-      { m: 'October', date: 'Oct', name: 'Malaysia Super 100', grade: 'Super 100', status: 'upcoming' },
-      { m: 'October', date: 'Oct', name: 'French Open', grade: 'Super 750', status: 'upcoming' },
-      { m: 'October', date: 'Oct', name: 'Indonesia Masters Super 100 II', grade: 'Super 100', status: 'upcoming' },
-      { m: 'October', date: 'Oct', name: 'Hylo Open', grade: 'Super 500', status: 'upcoming' },
-      // ---- NOVEMBER ----
-      { m: 'November', date: 'Nov', name: 'Korea Open', grade: 'Super 500', status: 'upcoming' },
-      { m: 'November', date: 'Nov', name: 'Japan Masters', grade: 'Super 500', status: 'upcoming' },
-      { m: 'November', date: 'Nov', name: 'Kaohsiung Masters', grade: 'Super 100', status: 'upcoming' },
-      { m: 'November', date: 'Nov', name: 'Hong Kong Open', grade: 'Super 500', status: 'upcoming' },
-      { m: 'November', date: 'Nov', name: 'Syed Modi International', grade: 'Super 300', status: 'upcoming' },
-      // ---- DECEMBER ----
-      { m: 'December', date: 'Dec', name: 'Guwahati Masters', grade: 'Super 100', status: 'upcoming' },
-      { m: 'December', date: 'Dec', name: 'Odisha Masters', grade: 'Super 100', status: 'upcoming' },
-      { m: 'December', date: '9–13 Dec', name: 'BWF World Tour Finals', grade: 'Season finale', status: 'upcoming',
-        result: 'The top 8 in each discipline meet to close the 2026 season.' }
+      { date: '6-11 Jan', start: '2026-01-06', end: '2026-01-11', name: 'PETRONAS Malaysia Open', grade: 'Super 1000', href: 'https://corporate.bwfbadminton.com/results/5227/petronas-malaysia-open-2026' },
+      { date: '13-18 Jan', start: '2026-01-13', end: '2026-01-18', name: 'India Open', grade: 'Super 750', href: BWF_CAL },
+      { date: '20-25 Jan', start: '2026-01-20', end: '2026-01-25', name: 'Indonesia Masters', grade: 'Super 500', href: BWF_CAL },
+      { date: '27 Jan-1 Feb', start: '2026-01-27', end: '2026-02-01', name: 'Thailand Masters', grade: 'Super 300', href: BWF_CAL },
+      { date: '24 Feb-1 Mar', start: '2026-02-24', end: '2026-03-01', name: 'German Open', grade: 'Super 300', href: BWF_CAL },
+      { date: '3-8 Mar', start: '2026-03-03', end: '2026-03-08', name: 'All England Open', grade: 'Super 1000', href: BWF_CAL },
+      { date: '10-15 Mar', start: '2026-03-10', end: '2026-03-15', name: 'Swiss Open', grade: 'Super 300', href: BWF_CAL },
+      { date: '17-22 Mar', start: '2026-03-17', end: '2026-03-22', name: 'Orleans Masters', grade: 'Super 300', href: BWF_CAL },
+      { date: '12-17 May', start: '2026-05-12', end: '2026-05-17', name: 'Thailand Open', grade: 'Super 500', href: BWF_CAL },
+      { date: '19-24 May', start: '2026-05-19', end: '2026-05-24', name: 'Malaysia Masters', grade: 'Super 500', href: BWF_CAL },
+      { date: '26-31 May', start: '2026-05-26', end: '2026-05-31', name: 'Singapore Open', grade: 'Super 750', href: BWF_CAL, note: 'Watch for Singapore entries and home-crowd storylines.' },
+      { date: '2-7 Jun', start: '2026-06-02', end: '2026-06-07', name: 'Indonesia Open', grade: 'Super 1000', href: BWF_CAL },
+      { date: '9-14 Jun', start: '2026-06-09', end: '2026-06-14', name: 'Australian Open', grade: 'Super 500', href: BWF_CAL },
+      { date: '23-28 Jun', start: '2026-06-23', end: '2026-06-28', name: 'U.S. Open', grade: 'Super 300', href: BWF_CAL },
+      { date: '30 Jun-5 Jul', start: '2026-06-30', end: '2026-07-05', name: 'Canada Open', grade: 'Super 300', href: BWF_CAL },
+      { date: '14-19 Jul', start: '2026-07-14', end: '2026-07-19', name: 'Japan Open', grade: 'Super 750', href: BWF_CAL },
+      { date: '21-26 Jul', start: '2026-07-21', end: '2026-07-26', name: 'China Open', grade: 'Super 1000', href: BWF_CAL },
+      { date: '28 Jul-2 Aug', start: '2026-07-28', end: '2026-08-02', name: 'Taipei Open', grade: 'Super 300', href: BWF_CAL },
+      { date: '17-23 Aug', start: '2026-08-17', end: '2026-08-23', name: 'BWF World Championships', grade: 'Grade 1', href: 'https://corporate.bwfbadminton.com/results/5601/bwf-world-championships-2026' },
+      { date: '25-30 Aug', start: '2026-08-25', end: '2026-08-30', name: 'Korea Masters', grade: 'Super 300', href: BWF_CAL },
+      { date: '15-20 Sep', start: '2026-09-15', end: '2026-09-20', name: 'China Masters', grade: 'Super 750', href: BWF_CAL },
+      { date: '22-27 Sep', start: '2026-09-22', end: '2026-09-27', name: 'Vietnam Open', grade: 'Super 100', href: BWF_CAL },
+      { date: '6-11 Oct', start: '2026-10-06', end: '2026-10-11', name: 'Arctic Open', grade: 'Super 500', href: BWF_CAL },
+      { date: '13-18 Oct', start: '2026-10-13', end: '2026-10-18', name: 'Denmark Open', grade: 'Super 750', href: BWF_CAL },
+      { date: '20-25 Oct', start: '2026-10-20', end: '2026-10-25', name: 'French Open', grade: 'Super 750', href: BWF_CAL },
+      { date: '27 Oct-1 Nov', start: '2026-10-27', end: '2026-11-01', name: 'Hylo Open', grade: 'Super 500', href: BWF_CAL },
+      { date: '3-8 Nov', start: '2026-11-03', end: '2026-11-08', name: 'Korea Open', grade: 'Super 500', href: BWF_CAL },
+      { date: '10-15 Nov', start: '2026-11-10', end: '2026-11-15', name: 'Japan Masters', grade: 'Super 500', href: BWF_CAL },
+      { date: '17-22 Nov', start: '2026-11-17', end: '2026-11-22', name: 'Hong Kong Open', grade: 'Super 500', href: BWF_CAL },
+      { date: '24-29 Nov', start: '2026-11-24', end: '2026-11-29', name: 'Syed Modi International', grade: 'Super 300', href: BWF_CAL },
+      { date: '9-13 Dec', start: '2026-12-09', end: '2026-12-13', name: 'BWF World Tour Finals', grade: 'Season finale', href: BWF_CAL, note: 'The top 8 in each discipline close the season.' }
     ];
 
     function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
 
+    function dayStamp(iso) {
+      var parts = String(iso).split('-');
+      return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+    }
+
+    function eventStatus(ev, today) {
+      if (today > dayStamp(ev.end)) return 'done';
+      if (today < dayStamp(ev.start)) return 'upcoming';
+      return 'live';
+    }
+
     function dateLabel(ev) {
-      // ev.date already carries the month (e.g. "6–11 Jan"), so we must NOT
-      // append the month again — that produced "Jul Jul 2026".
       return ev.date + ' 2026';
     }
 
     var VISIBLE = 4;              // most-recent shown by default
     var expanded = false;
     var currentFilter = 'all';
+    var today = new Date();
 
     function render() {
-      var done = EVENTS.filter(function (e) { return e.status === 'done'; }).reverse();   // most recent results first
-      var up = EVENTS.filter(function (e) { return e.status === 'upcoming'; });            // upcoming in date order
+      var normalised = EVENTS.map(function (ev) {
+        var copy = Object.assign({}, ev);
+        copy.status = eventStatus(copy, today);
+        return copy;
+      });
+      var done = normalised.filter(function (e) { return e.status === 'done'; }).sort(function (a, b) { return dayStamp(b.end) - dayStamp(a.end); });
+      var live = normalised.filter(function (e) { return e.status === 'live'; });
+      var up = normalised.filter(function (e) { return e.status === 'upcoming'; }).sort(function (a, b) { return dayStamp(a.start) - dayStamp(b.start); });
       var list;
       if (currentFilter === 'done') list = done;
-      else if (currentFilter === 'upcoming') list = up;
-      else list = done.concat(up);   // recent results first, then what's coming next
+      else if (currentFilter === 'upcoming') list = live.concat(up);
+      else list = live.concat(done).concat(up);
       var shown = expanded ? list : list.slice(0, VISIBLE);
       var html = '';
+      var latestDoneName = done.length ? done[0].name : '';
       shown.forEach(function (ev) {
         var x = ev;
-        var cls = 'ncard' + (ev.latest ? ' ncard--latest' : '') + (ev.status === 'upcoming' ? ' ncard--next' : '');
-        var badge = ev.latest ? ' · Latest' : (ev.status === 'upcoming' ? ' · Upcoming' : '');
+        var cls = 'ncard' + (ev.name === latestDoneName ? ' ncard--latest' : '') + (ev.status === 'upcoming' ? ' ncard--next' : '') + (ev.status === 'live' ? ' ncard--live' : '');
+        var badge = ev.status === 'live' ? ' · Live now' : (ev.name === latestDoneName ? ' · Latest result' : (ev.status === 'upcoming' ? ' · Upcoming' : ''));
         html += '<article class="' + cls + '">';
         html += '<div class="ncard__head"><span class="ncard__date">' + dateLabel(ev) + badge + '</span>';
         html += '<span class="ncard__grade">' + esc(x.grade) + '</span></div>';
         html += '<h4 class="ncard__name">' + esc(x.name) + '</h4>';
-        if (x.result) html += '<p class="ncard__result">' + esc(x.result) + '</p>';
-        else html += '<p class="ncard__result ncard__result--muted">' + (ev.status === 'upcoming' ? 'Draw and results to come.' : 'Results to be confirmed.') + '</p>';
+        html += '<p class="ncard__result">' + esc(x.note || (ev.status === 'done' ? 'Completed. Open the official BWF result page for winners, draws and match scores.' : (ev.status === 'live' ? 'In progress. Open BWF for live draws, scores and schedule changes.' : 'Upcoming. Open BWF for tournament details, draws and entry updates.'))) + '</p>';
+        html += '<a class="ncard__link" href="' + esc(x.href || BWF_CAL) + '" target="_blank" rel="noopener">' + (ev.status === 'done' ? 'View official results' : 'View tournament details') + ' \u2197</a>';
         html += '</article>';
       });
       mount.innerHTML = html;
@@ -298,18 +287,18 @@
     // The English name/area/meta below are the fallback / default-language values.
     var VENUES = [
       // ---------- PRIVATE HALLS ----------
-      { id: 'wyse', name: 'Wyse Active Hub', area: 'Jurong East', type: 'private', addr: '1 Venture Avenue, #03-01, Perennial Business City, S608521', meta: 'Air-conditioned · 32 courts (SG\u2019s largest)', book: 'https://wyseactive.rezerv.co/', elever: true },
+      { id: 'wyse', name: 'Wyse Active Hub', area: 'Jurong East', type: 'private', addr: '1 Venture Avenue, #03-01, Perennial Business City, S608521', meta: 'Air-conditioned · 32 courts (SG\u2019s largest)', book: 'https://www.wyseactivehub.com/', elever: true },
       { id: 'fernvale', name: 'Fernvale Village', area: 'Sengkang', type: 'private', addr: '61 Fernvale Link, S799956', meta: 'Air-conditioned · badminton & pickleball', book: 'https://booking.fernvalevillage.com/', elever: true },
-      { id: 'arina', name: 'The Sports Arina @ Jalan Kayu', area: 'Sengkang West', type: 'private', addr: '28 Fernvale Road, S799951', meta: 'Air-conditioned · multi-sport hub', book: 'https://thesportsarina.com/' },
-      { id: 'sbhsims', name: 'Singapore Badminton Hall (SBH @ Sims)', area: 'Geylang', type: 'private', addr: '1 Lorong 23 Geylang, S388352', meta: '16 courts + VIP · Tel 6744 4111', elever: true },
-      { id: 'sbhexpo', name: 'SBH East Coast @ Expo', area: 'Changi', type: 'private', addr: 'Singapore Expo, Carpark J, Changi South Ave 1, S486150', meta: 'SG\u2019s largest private hall · 22+ courts', elever: true },
+      { id: 'arina', name: 'The Sports Arina @ Jalan Kayu', area: 'Sengkang West', type: 'private', addr: '28 Fernvale Road, S799951', meta: 'Air-conditioned · book through Playtomic', book: 'https://playtomic.io/', bookLabel: 'Book on Playtomic' },
+      { id: 'sbhsims', name: 'Singapore Badminton Hall (SBH @ Sims)', area: 'Geylang', type: 'private', addr: '1 Lorong 23 Geylang, S388352', meta: '16 courts + VIP · Tel 6744 4111', book: 'https://booking.singaporebadminton.org.sg/', elever: true },
+      { id: 'sbhexpo', name: 'SBH East Coast @ Expo', area: 'Changi', type: 'private', addr: 'Singapore Expo, Carpark J, Changi South Ave 1, S486150', meta: 'SG\u2019s largest private hall · 22+ courts', book: 'https://booking.singaporebadminton.org.sg/', elever: true },
       { id: 'obapasirris', name: 'OBA Arena @ Pasir Ris', area: 'Pasir Ris', type: 'private', addr: '3A Pasir Ris Drive 6, S519422', meta: 'Academy-operated arena', book: 'https://www.optimumbadmintonacademy.com/' },
-      { id: 'obapunggol', name: 'OBA Arena @ Punggol', area: 'Punggol', type: 'private', addr: '11 Northshore Drive, S828670', meta: 'Covered arena', book: 'https://www.optimumbadmintonacademy.com/' },
+      { id: 'obapunggol', name: 'OBA Arena @ Punggol', area: 'Punggol', type: 'private', addr: '11 Northshore Drive, S828670', meta: 'Covered arena', book: 'https://optimumbadmintonacademy.com/court-booking' },
       { id: 'citysprouts', name: 'City Sprouts @ Bedok', area: 'Bedok', type: 'private', addr: '200 Bedok North Avenue 1', meta: 'Community hub · courts by XY Badminton', book: 'https://xyacademy.rezerv.co/' },
-      { id: 'kff', name: 'KFF Badminton Arena / Singapore Badminton Stadium', area: 'Geylang', type: 'private', addr: '100 Guillemard Road, S399718', meta: 'Historic SBA venue · 12 courts (reopened 2025)', elever: true },
+      { id: 'kff', name: 'KFF Badminton Arena / Singapore Badminton Stadium', area: 'Geylang', type: 'private', addr: '100 Guillemard Road, S399718', meta: 'Historic SBA venue · 12 courts (reopened 2025)', book: 'https://booking.singaporebadminton.org.sg/', elever: true },
       { id: 'smash', name: 'Smash Arena', area: 'Joo Koon', type: 'private', addr: '511 Upper Jurong Road, D\u2019Arena, Blk B L2, S638366', meta: '9 doubles + 1 single · Taraflex flooring', book: 'https://booking.smasharena.sg/' },
-      { id: 'cereza', name: 'Cereza Sports Hall', area: 'Eunos', type: 'private', addr: '3 Chin Cheng Avenue, S429401', meta: '~4 courts · rubber-mat flooring' },
-      { id: 'kovan', name: 'Kovan Sports Centre', area: 'Hougang', type: 'private', addr: '60 Hougang Street 21, S538738', meta: 'Indoor courts' },
+      { id: 'cereza', name: 'Cereza Sports Hall', area: 'Eunos', type: 'private', addr: '3 Chin Cheng Avenue, S429401', meta: '~4 courts · rubber-mat flooring', book: 'https://cereza.skedda.com/' },
+      { id: 'kovan', name: 'Kovan Sports Centre', area: 'Hougang', type: 'private', addr: '60 Hougang Street 21, S538738', meta: 'Indoor courts', book: 'https://www.google.com/search?q=Kovan+Sports+Centre+badminton+booking', bookLabel: 'Find booking info' },
 
       // ---------- ACTIVESG PUBLIC SPORT CENTRES ----------
       { id: 'ocbc', name: 'OCBC Arena', area: 'Kallang', type: 'activesg', addr: '5 Stadium Drive, S397631 (Singapore Sports Hub)', meta: 'Air-conditioned arena', book: 'https://www.sportshub.com.sg/' },
@@ -337,19 +326,19 @@
       { id: 'evans', name: 'MOE (Evans) Sport Hall', area: 'Bukit Timah', type: 'activesg', addr: '21 Evans Road, S259366' },
 
       // ---------- COUNTRY / SOCIAL CLUBS (members) ----------
-      { id: 'csc', name: 'Chinese Swimming Club', area: 'Katong', type: 'club', addr: '21 Amber Road, S439870', meta: 'Members only · est. 1909' },
-      { id: 'ssc', name: 'Singapore Swimming Club', area: 'Tanjong Rhu', type: 'club', addr: '45 Tanjong Rhu Road, S436899', meta: 'Members only · est. 1894' },
-      { id: 'warren', name: 'Warren Golf & Country Club', area: 'Dover', type: 'club', addr: '23 Folkestone Road, S139599', meta: 'Members only · Tel 6778 0127' },
+      { id: 'csc', name: 'Chinese Swimming Club', area: 'Katong', type: 'club', addr: '21 Amber Road, S439870', meta: 'Members only · online member booking', book: 'https://csc.iontone.com/#/login', bookLabel: 'Member booking' },
+      { id: 'ssc', name: 'Singapore Swimming Club', area: 'Tanjong Rhu', type: 'club', addr: '45 Tanjong Rhu Road, S436899', meta: 'Members only · book via member login', book: 'http://www.sswimclub.org.sg/MembersWeb/main/loginuser.asp', bookLabel: 'Member login' },
+      { id: 'warren', name: 'Warren Golf & Country Club', area: 'Dover', type: 'club', addr: '23 Folkestone Road, S139599', meta: 'Members only · Tel 6778 0127', book: 'https://warren.org.sg/sports-facilities/', bookLabel: 'Booking info' },
 
       // ---------- ÉLEVER REGULAR CLASS VENUES (schools & community clubs) ----------
       // Where Élever runs its regular coaching classes. Marked elever:true so they
       // surface under the "Élever classes" filter. The public halls listed above
       // that Élever also teaches at carry the same flag inline on their own entry.
-      { id: 'acsbarker', name: 'Anglo-Chinese School (Barker Road)', area: 'Newton', type: 'elever', addr: '60 Barker Road, S309919', meta: 'Élever class venue · school hall', elever: true },
-      { id: 'bidadari', name: 'Bidadari Community Club', area: 'Bidadari', type: 'elever', addr: 'Bidadari Park Drive, Singapore', meta: 'Élever class venue · community club', elever: true },
-      { id: 'cantonment', name: 'Cantonment Primary School', area: 'Tanjong Pagar', type: 'elever', addr: '1 Cantonment Close, Singapore', meta: 'Élever class venue · school hall', elever: true },
-      { id: 'northvista', name: 'North Vista Primary School', area: 'Sengkang', type: 'elever', addr: 'Rivervale Drive, Sengkang, Singapore', meta: 'Élever class venue · school hall', elever: true },
-      { id: 'scgs', name: "Singapore Chinese Girls' School", area: 'Bukit Timah', type: 'elever', addr: '190 Dunearn Road, S299521', meta: 'Élever class venue · school hall', elever: true }
+      { id: 'acsbarker', name: 'Anglo-Chinese School (Barker Road)', area: 'Newton', type: 'elever', addr: '60 Barker Road, S309919', meta: 'Élever class venue · school hall', book: 'https://app.eleverbadminton.com/', bookLabel: 'Book Élever class', elever: true },
+      { id: 'bidadari', name: 'Bidadari Community Club', area: 'Bidadari', type: 'elever', addr: 'Bidadari Park Drive, Singapore', meta: 'Élever class venue · community club', book: 'https://app.eleverbadminton.com/', bookLabel: 'Book Élever class', elever: true },
+      { id: 'cantonment', name: 'Cantonment Primary School', area: 'Tanjong Pagar', type: 'elever', addr: '1 Cantonment Close, Singapore', meta: 'Élever class venue · school hall', book: 'https://app.eleverbadminton.com/', bookLabel: 'Book Élever class', elever: true },
+      { id: 'northvista', name: 'North Vista Primary School', area: 'Sengkang', type: 'elever', addr: 'Rivervale Drive, Sengkang, Singapore', meta: 'Élever class venue · school hall', book: 'https://app.eleverbadminton.com/', bookLabel: 'Book Élever class', elever: true },
+      { id: 'scgs', name: "Singapore Chinese Girls' School", area: 'Bukit Timah', type: 'elever', addr: '190 Dunearn Road, S299521', meta: 'Élever class venue · school hall', book: 'https://app.eleverbadminton.com/', bookLabel: 'Book Élever class', elever: true }
     ];
 
     var ACTIVESG_BOOK = 'https://activesg.gov.sg/facility-bookings/activities/YLONatwvqJfikKOmB5N9U/venues';
@@ -408,7 +397,7 @@
       grid.innerHTML = list.map(function (v) {
         var l = loc(v);
         var book = v.book || (v.type === 'activesg' ? ACTIVESG_BOOK : '');
-        var bookLabel = v.type === 'activesg' ? 'Book on ActiveSG' : 'Book';
+        var bookLabel = v.bookLabel || (v.type === 'activesg' ? 'Book on ActiveSG' : 'Book');
         var actions = '<a class="hcard__link" href="' + mapsUrl(v) + '" target="_blank" rel="noopener" aria-label="' + attr('Open ' + l.name + ' in Google Maps') + '">Map \u2197</a>';
         if (book) actions += '<a class="hcard__link hcard__link--book" href="' + book + '" target="_blank" rel="noopener" aria-label="' + attr('Book a court at ' + l.name) + '">' + bookLabel + ' \u2197</a>';
         return '<article class="hcard">' +
