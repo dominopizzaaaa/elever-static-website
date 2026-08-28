@@ -95,6 +95,74 @@
   }
 
   /* =====================================================================
+     2. LIVE HERO SHUTTLE FIELD (reacts to cursor)
+     ===================================================================== */
+  function initHero() {
+    var canvas = document.getElementById('heroCanvas');
+    if (!canvas || reduce) return;
+    var ctx = canvas.getContext ? canvas.getContext('2d') : null;
+    if (!ctx) return;
+    var W, H, DPR = Math.min(window.devicePixelRatio || 1, 2);
+    var shuttles = [];
+    var mouse = { x: -9999, y: -9999, active: false };
+
+    function size() {
+      W = canvas.clientWidth; H = canvas.clientHeight;
+      canvas.width = W * DPR; canvas.height = H * DPR;
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    }
+    size(); window.addEventListener('resize', size);
+
+    var COUNT = window.innerWidth < 700 ? 7 : 16;
+    for (var i = 0; i < COUNT; i++) {
+      shuttles.push({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.6, vy: (Math.random() - 0.5) * 0.6,
+        s: 0.28 + Math.random() * 0.5, a: Math.random() * Math.PI * 2,
+        spin: (Math.random() - 0.5) * 0.02
+      });
+    }
+
+    canvas.parentElement.addEventListener('mousemove', function (ev) {
+      var r = canvas.getBoundingClientRect();
+      mouse.x = ev.clientX - r.left; mouse.y = ev.clientY - r.top; mouse.active = true;
+    });
+    canvas.parentElement.addEventListener('mouseleave', function () { mouse.active = false; });
+
+    function loop() {
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < shuttles.length; i++) {
+        var s = shuttles[i];
+        // cursor repulsion (like hitting the shuttle)
+        if (mouse.active) {
+          var dx = s.x - mouse.x, dy = s.y - mouse.y;
+          var d2 = dx * dx + dy * dy;
+          if (d2 < 26000) {
+            var d = Math.sqrt(d2) || 1;
+            var f = (1 - d / 161) * 1.4;
+            s.vx += (dx / d) * f; s.vy += (dy / d) * f;
+            s.spin += 0.01;
+          }
+        }
+        s.x += s.vx; s.y += s.vy;
+        s.vx *= 0.985; s.vy *= 0.985;
+        // gentle drift back
+        s.vy += 0.002;
+        s.a = Math.atan2(s.vy, s.vx) + Math.PI / 2 + Math.sin(Date.now() / 900 + i) * 0.05;
+        // wrap
+        var m = 80;
+        if (s.x < -m) s.x = W + m; if (s.x > W + m) s.x = -m;
+        if (s.y < -m) s.y = H + m; if (s.y > H + m) s.y = -m;
+        ctx.globalAlpha = 0.5;
+        drawShuttle(ctx, s.x, s.y, s.s, s.a);
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(loop);
+    }
+    loop();
+  }
+
+  /* =====================================================================
      1. CINEMATIC INTRO
      ===================================================================== */
   var intro = document.getElementById('intro');

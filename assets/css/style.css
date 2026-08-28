@@ -176,6 +176,11 @@ em{font-style:normal;color:var(--accent)}
 
 /* ===================== SG BADMINTON HUB ===================== */
 .hub{padding:4.5rem 0}
+.hub__intro{color:var(--muted);font-size:.92rem;line-height:1.7;max-width:78ch}
+.hub__intro strong{color:var(--ink);font-weight:600}
+.hub__hint{color:var(--muted);font-size:.92rem;line-height:1.7;margin-top:.9rem;max-width:64ch}
+.hub__hint strong{color:var(--ink);font-weight:600}
+.hub__hint a{color:var(--accent);font-weight:600;text-decoration:underline;text-underline-offset:3px}
 .hub__tabs{max-width:var(--maxw);margin:0 auto 1.6rem;padding:0 clamp(1.25rem,5vw,3rem);display:flex;gap:.4rem;flex-wrap:wrap}
 .hub__tab{padding:.55rem 1.1rem;min-height:40px;border-radius:100px;border:1px solid var(--line);background:#fff;
   color:var(--muted);font-family:inherit;font-size:.85rem;font-weight:600;transition:.2s;cursor:pointer}
