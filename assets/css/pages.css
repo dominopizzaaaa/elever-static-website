@@ -543,13 +543,12 @@ body.is-dark .footer{border-top:1px solid rgba(255,255,255,.09)}
 /* ---------- cards ---------- */
 .hub__grid{gap:1rem}
 .hcard{padding:1.35rem 1.4rem}
-/* accent rail on the venues we actually teach at */
+/* accent rail on all cards */
 .hcard{position:relative;overflow:hidden}
 .hcard::before{
   content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
-  background:var(--accent);opacity:0;transition:opacity .25s
+  background:var(--accent);opacity:1;transition:opacity .25s
 }
-.hcard:has(.hcard__tag--elever)::before{opacity:1}
 .hcard:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm)}
 
 
