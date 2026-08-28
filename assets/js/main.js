@@ -127,8 +127,6 @@
     var word = document.getElementById('introWord');
     var tag = document.getElementById('introTag');
     var skip = document.getElementById('skipIntro');
-    var smashBtn = document.getElementById('smashEnterBtn');
-    var introAction = document.getElementById('introAction');
     var W, H, DPR = Math.min(window.devicePixelRatio || 1, 2);
 
     function size() {
@@ -148,10 +146,8 @@
     var cx = function () { return W * 0.5; };
     var cy = function () { return H * 0.52; };
 
-    // Show button after a short delay
-    setTimeout(function() {
-      if(introAction) introAction.style.opacity = '1';
-    }, 300);
+    // Auto-play the smash transition after a short idle hover of the shuttle
+    setTimeout(startSmash, 900);
 
     function spawnBurst(px, py) {
       for (var i = 0; i < 90; i++) {
@@ -161,7 +157,7 @@
           x: px, y: py,
           vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 2,
           life: 1, size: 1 + Math.random() * 3,
-          hue: Math.random() < 0.6 ? '33,81,209' : '255,255,255'
+          hue: Math.random() < 0.6 ? '47,92,240' : '255,255,255'
         });
       }
     }
@@ -184,7 +180,7 @@
       ctx.save();
       ctx.globalAlpha = 0.12;
       for (var i = 0; i < 6; i++) {
-        ctx.strokeStyle = '#2151D1';
+        ctx.strokeStyle = '#2f5cf0';
         ctx.lineWidth = 1;
         var yy = cy() + Math.sin(e / 600 + i) * 4 + (i - 3) * 40;
         ctx.beginPath(); ctx.moveTo(0, yy); ctx.lineTo(W, yy + 20); ctx.stroke();
@@ -234,7 +230,7 @@
         var tr = trail[k]; tr.life -= 0.04;
         if (tr.life <= 0) { trail.splice(k, 1); continue; }
         ctx.globalAlpha = tr.life * 0.5;
-        ctx.fillStyle = '#2151D1';
+        ctx.fillStyle = '#2f5cf0';
         ctx.beginPath(); ctx.arc(tr.x, tr.y, tr.life * 6, 0, Math.PI * 2); ctx.fill();
       }
       ctx.globalAlpha = 1;
@@ -258,15 +254,7 @@
       if(started) return;
       started = true;
       t0 = performance.now();
-      if(introAction) introAction.style.display = 'none';
       if(skip) skip.style.display = 'none';
-    }
-
-    if(smashBtn) {
-      smashBtn.addEventListener('click', startSmash);
-    } else {
-      // Fallback
-      setTimeout(startSmash, 500);
     }
 
     if (skip) skip.addEventListener('click', finishIntro);
@@ -287,7 +275,7 @@
       ctx.beginPath(); ctx.moveTo(-30, -70 + i * 11); ctx.lineTo(30, -70 + i * 11); ctx.stroke();
     }
     // shaft + grip
-    ctx.strokeStyle = 'rgba(33,81,209,.9)'; ctx.lineWidth = 7; ctx.lineCap = 'round';
+    ctx.strokeStyle = 'rgba(47,92,240,.9)'; ctx.lineWidth = 7; ctx.lineCap = 'round';
     ctx.beginPath(); ctx.moveTo(0, -24); ctx.lineTo(0, 70); ctx.stroke();
     ctx.restore();
   }
@@ -676,7 +664,7 @@
       layer.className = 'quiz__confetti-layer';
       result.appendChild(layer);
       var fall = result.offsetHeight + 40;
-      var colors = ['#2151D1', '#7ea2f2', '#ff7a9c', '#ffd166', '#00c2a8'];
+      var colors = ['#2f5cf0', '#8fb0ff', '#ff7a9c', '#ffd166', '#00c2a8'];
       var emojis = ['🏸', '✨', '🎉', '⭐', '💫'];
       for (var i = 0; i < 46; i++) {
         var bit = document.createElement('span');
@@ -743,10 +731,10 @@
       var c = document.createElement('canvas'); c.width = W; c.height = H;
       var g = c.getContext('2d');
       var bg = g.createLinearGradient(0, 0, 0, H);
-      bg.addColorStop(0, '#0a1330'); bg.addColorStop(0.55, '#132a6b'); bg.addColorStop(1, '#2151d1');
+      bg.addColorStop(0, '#0b1330'); bg.addColorStop(0.55, '#152e78'); bg.addColorStop(1, '#2f5cf0');
       g.fillStyle = bg; g.fillRect(0, 0, W, H);
       var glow = g.createRadialGradient(cx, 660, 40, cx, 660, 680);
-      glow.addColorStop(0, 'rgba(126,162,242,.4)'); glow.addColorStop(1, 'rgba(126,162,242,0)');
+      glow.addColorStop(0, 'rgba(143,176,255,.4)'); glow.addColorStop(1, 'rgba(143,176,255,0)');
       g.fillStyle = glow; g.fillRect(0, 0, W, H);
       g.textAlign = 'center';
       g.fillStyle = '#aecbff'; g.font = '700 42px Montserrat, Arial, sans-serif';
@@ -761,7 +749,7 @@
       } else { g.fillStyle = '#26314f'; g.fillRect(cx - r, cy - r, 2 * r, 2 * r); }
       g.restore();
       g.lineWidth = 16; g.strokeStyle = '#ffffff'; g.beginPath(); g.arc(cx, cy, r, 0, Math.PI * 2); g.stroke();
-      g.lineWidth = 6; g.strokeStyle = '#7ea2f2'; g.beginPath(); g.arc(cx, cy, r + 12, 0, Math.PI * 2); g.stroke();
+      g.lineWidth = 6; g.strokeStyle = '#8fb0ff'; g.beginPath(); g.arc(cx, cy, r + 12, 0, Math.PI * 2); g.stroke();
       if (p.flag) { g.font = '120px Arial'; g.fillText(p.flag, cx + r * 0.72, cy + r * 0.86); }
       // name + tag + role
       var name = (p.name || '').toUpperCase();
@@ -1069,7 +1057,7 @@
       if (who === 'you') scoreYou++; else scoreCpu++;
       server = who;
       updateScore();
-      burst(bird ? bird.x : W / 2, bird ? bird.y : GROUND, who === 'you' ? '33,81,209' : '255,90,90', 26);
+      burst(bird ? bird.x : W / 2, bird ? bird.y : GROUND, who === 'you' ? '47,92,240' : '255,90,90', 26);
       setMsg((who === 'you' ? T('play.pointYou') : T('play.pointCpu')) + ' — ' + reason + '.  ' + scoreYou + '\u2013' + scoreCpu);
       if (bird) bird.live = false;
       if (scoreYou >= TARGET || scoreCpu >= TARGET) {
@@ -1277,7 +1265,7 @@
 
     /* ---------- drawing ---------- */
     function drawCourt() {
-      var bg = ctx.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#0a1220'); bg.addColorStop(1, '#0e1a28');
+      var bg = ctx.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#0b1330'); bg.addColorStop(1, '#0e1838');
       ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
       var fg = ctx.createLinearGradient(0, GROUND, 0, H); fg.addColorStop(0, '#1c455c'); fg.addColorStop(1, '#123246');
       ctx.fillStyle = fg; ctx.fillRect(0, GROUND, W, H - GROUND);
@@ -1325,7 +1313,7 @@
     function draw() {
       ctx.clearRect(0, 0, W, H);
       drawCourt();
-      if (you) drawStick(you, '#5b86ff');
+      if (you) drawStick(you, '#6a8dff');
       if (cpu) drawStick(cpu, '#8fd0ff');
       if (state === 'play' || state === 'point') drawBird();
       for (var i = 0; i < particles.length; i++) { var pt = particles[i]; ctx.globalAlpha = pt.life; ctx.fillStyle = 'rgba(' + pt.c + ',' + pt.life + ')'; ctx.beginPath(); ctx.arc(pt.x, pt.y, 2 + pt.life * 2.5, 0, Math.PI * 2); ctx.fill(); }
@@ -1623,7 +1611,7 @@
     var I18N = window.I18N;
     function lang() { return I18N ? I18N.lang() : 'en'; }
     var DATA = [
-      { n: 'Rachel T.', c: '#2151d1', en: { r: 'Parent of a P4 player', q: 'My daughter went from a shy beginner to competing for her school team in under a year. The coaches make every session something she looks forward to.' }, zh: { r: '小四学员家长', q: '不到一年，我女儿从害羞的新手成长为校队选手。教练让每一节课都充满乐趣，她每次都很期待。' } },
+      { n: 'Rachel T.', c: '#2f5cf0', en: { r: 'Parent of a P4 player', q: 'My daughter went from a shy beginner to competing for her school team in under a year. The coaches make every session something she looks forward to.' }, zh: { r: '小四学员家长', q: '不到一年，我女儿从害羞的新手成长为校队选手。教练让每一节课都充满乐趣，她每次都很期待。' } },
       { n: 'Marcus L.', c: '#e5487a', en: { r: 'Student, 15', q: 'The drills are tough but I can actually feel myself getting faster and sharper. Training here made me fall in love with badminton again.' }, zh: { r: '15 岁学员', q: '训练很有挑战，但我能明显感觉到自己变得更快更敏捷。在这里训练让我重新爱上了羽毛球。' } },
       { n: 'Priya S.', c: '#0d9488', en: { r: 'Parent', q: 'Small groups, patient coaches and real, visible progress. Booking is simple and the communication with parents is excellent.' }, zh: { r: '家长', q: '小班教学、耐心的教练，进步看得见。约课方便，与家长的沟通也非常到位。' } },
       { n: 'Daniel W.', c: '#e08a0b', en: { r: 'Adult beginner', q: 'I started at 30 with zero experience. Three months in and I’m rallying with confidence. The clinics are perfect for adults.' }, zh: { r: '成人初学者', q: '我 30 岁零基础开始学。三个月后已经能自信地打多拍回合。这里的训练营很适合成年人。' } },

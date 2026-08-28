@@ -71,7 +71,7 @@ sitemap.xml robots.txt
 coaches/          generated — one page per coach
 tools/            build-coaches.js
 assets/
-  css/style.css   base design system (brand blue #2151D1 / white / black, Montserrat)
+  css/style.css   base design system (royal blue #2f5cf0 / soft-cloud neutrals / deep navy, Montserrat)
   css/pages.css   layout layer for the standalone pages
   js/data.js      >>> site content lives here
   js/site.js      shared nav + footer injection

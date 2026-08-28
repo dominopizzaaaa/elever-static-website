@@ -108,7 +108,7 @@
   display:flex;align-items:flex-start;justify-content:center;padding-top:5px}
 .sched__pin::before{content:'';position:absolute;left:50%;top:0;transform:translateX(-50%);
   width:28px;height:28px;border-radius:50%;background:var(--accent);
-  box-shadow:0 4px 14px -2px rgba(33,81,209,.55),inset 0 -2px 6px rgba(0,0,0,.12)}
+  box-shadow:0 4px 14px -2px rgba(47,92,240,.55),inset 0 -2px 6px rgba(0,0,0,.12)}
 .sched__pin::after{content:'';position:absolute;left:50%;top:22px;transform:translateX(-50%);
   width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;
   border-top:26px solid var(--accent)}
@@ -134,7 +134,7 @@
 .vcard__day{font-weight:800;min-width:5.6rem}
 .vcard__time{color:var(--muted)}
 .vcard__lvl{margin-left:auto;font-size:.7rem;font-weight:800;padding:.18rem .5rem;border-radius:4px}
-.vcard__lvl--essentials{background:#e7f0ff;color:#1a3fa6}
+.vcard__lvl--essentials{background:#e7eeff;color:#1e3a9e}
 .vcard__lvl--emergence{background:#e9f7ee;color:#1c6b3d}
 .vcard__book{margin-top:.9rem;display:inline-flex;align-items:center;font-size:.95rem;font-weight:800;color:var(--accent)}
 .vcard__book:hover{text-decoration:underline}
@@ -324,7 +324,7 @@
 .rr__head h3{font-size:clamp(1.5rem,3vw,2.1rem);font-weight:900;letter-spacing:-.015em;margin-bottom:.7rem}
 .rr__lead{color:var(--muted);font-size:1rem;line-height:1.7}
 .rr__metrics{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.3rem}
-.rr__metric{background:var(--accent-soft);border:1px solid rgba(33,81,209,.18);border-radius:10px;
+.rr__metric{background:var(--accent-soft);border:1px solid rgba(47,92,240,.18);border-radius:10px;
   padding:.6rem .95rem;display:flex;flex-direction:column;gap:.1rem;min-width:150px}
 .rr__metric b{font-size:.86rem;font-weight:800;color:var(--accent-2)}
 .rr__metric span{font-size:.78rem;color:var(--muted)}
