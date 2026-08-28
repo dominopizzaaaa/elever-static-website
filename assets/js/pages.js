@@ -197,6 +197,7 @@
         var view = b.getAttribute('data-view');
         toggleWrap.querySelectorAll('button').forEach(function (x) { x.classList.toggle('is-active', x === b); });
         layout.style.gridTemplateColumns = view === 'list' ? '1fr' : '';
+        layout.classList.toggle('sched__layout--listonly', view === 'list');
         var mw = el('schedMapWrap');
         if (mw) mw.style.display = view === 'list' ? 'none' : '';
       });
