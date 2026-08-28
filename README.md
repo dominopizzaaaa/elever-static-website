@@ -16,7 +16,7 @@ rather than one long scrolling page.
 | Coaches | `coaches/<slug>.html` | One generated page per coach — photo, profile, stages coached, languages |
 | News | `news.html` | Articles, filterable by category, newsletter signup |
 | SG Badminton Hub | `hub.html` | Venue directory with filters, how to book each system, **Racket Ratings + recreational play groups**, world tour calendar |
-| Play | `play.html` | The interactive pieces — rally game, reflex test, badminton-twin quiz, guess-the-pro |
+| Play | `play.html` | The interactive pieces — rally game, reflex test and badminton-twin quiz |
 | Contact | `contact.html` | Enquiry form, WhatsApp / email / events routing, FAQ |
 | Privacy | `privacy.html` | PDPA privacy notice draft (needs completion — see below) |
 

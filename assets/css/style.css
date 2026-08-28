@@ -540,7 +540,6 @@ em{font-style:normal;color:var(--accent)}   /* highlight — brand blue, never i
   .news__filters button{flex:1 1 140px}
   .reflex__stats{flex-wrap:wrap}
   .reflex__stat{flex:1 1 140px}
-  .guess__opts{grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.001ms!important;animation-iteration-count:1!important}
@@ -582,25 +581,6 @@ em{font-style:normal;color:var(--accent)}   /* highlight — brand blue, never i
 .reflex__scale-zone span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px}
 .reflex__scale-ticks{position:relative;height:20px;margin-top:.4rem}
 .reflex__scale-ticks span{position:absolute;transform:translateX(-50%);font-size:.65rem;color:var(--muted);font-family:'Montserrat',sans-serif;font-weight:600}
-
-/* ===================== GUESS THE PRO ===================== */
-.guess{padding:7rem 0;background:var(--bg-2)}
-.guess__hint{color:var(--muted);font-size:.95rem;margin-top:1rem;max-width:560px}
-.guess__wrap{max-width:560px;margin:0 auto;padding:0 6vw;text-align:center}
-.guess__card{border:2px solid #fff;border-radius:26px;padding:1.6rem 1.5rem 1.8rem;background:linear-gradient(180deg,#fff,#f3f7ff);box-shadow:var(--shadow)}
-.guess__card.fade{animation:quizPopIn .45s var(--ease-bounce)}
-.guess__count{display:inline-block;color:var(--accent);background:var(--accent-soft);font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:.35rem .9rem;border-radius:100px;margin-bottom:1rem}
-.guess__count b{color:var(--accent-2)}
-.guess__photo{width:100%;max-width:300px;aspect-ratio:1/1;margin:0 auto 1.2rem;border-radius:20px;overflow:hidden;border:3px solid var(--accent);box-shadow:0 16px 40px -14px rgba(47,92,240,.5)}
-.guess__photo img{width:100%;height:100%;object-fit:cover;object-position:top center}
-.guess__opts{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
-.guess__opt{padding:.9rem 1rem;border:2px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);font-family:inherit;font-weight:700;font-size:.95rem;cursor:pointer;transition:border-color .2s,background .2s,transform .2s var(--ease)}
-.guess__opt:hover:not(:disabled){border-color:var(--accent);background:var(--accent-soft);transform:translateY(-2px)}
-.guess__opt--correct{border-color:#0d9488!important;background:#d7f6ee!important;color:#0a6b62!important}
-.guess__opt--wrong{border-color:#e5487a!important;background:#ffe6ef!important;color:#a32b52!important}
-.guess__opt:disabled{cursor:default}
-.guess__score{font-family:'Montserrat',sans-serif;font-weight:900;font-size:clamp(2.6rem,8vw,4.2rem);color:transparent;background:linear-gradient(100deg,var(--accent),var(--cute-pink));-webkit-background-clip:text;background-clip:text;line-height:1.1;margin-bottom:.4rem}
-.guess__scoremsg{color:var(--muted);margin-bottom:1.4rem;font-weight:600}
 
 /* ===================== REVIEWS / TESTIMONIALS ===================== */
 .reviews{padding:7rem 0;background:linear-gradient(180deg,var(--bg-2),var(--bg))}
