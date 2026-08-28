@@ -21,7 +21,7 @@
      --------------------------------------------------------------- */
   var COACHES = [
     {
-      slug: 'loh-kean-hean', name: 'Loh Kean Hean', photo: 'assets/img/team-loh-kean-hean.jpg',
+      slug: 'loh-kean-hean', name: 'Loh Kean Hean', photo: 'assets/img/coaches/loh-kean-hean.jpg',
       role: 'Co-Founder · Technical Director', cert: '', group: 'founder',
       coaching: ['Emergence', 'Elite'], languages: ['English', 'Mandarin'],
       bio: [
@@ -33,7 +33,7 @@
       achievements: ['Former Singapore National Team athlete', "Career-high world ranking of No. 22 in Men's Doubles", 'Bronze medallist at the 2022 Commonwealth Games', 'Six-time SEA Games medallist']
     },
     {
-      slug: 'eng-chin-an', name: 'Eng Chin An', photo: 'assets/img/team-eng-chin-an.jpg',
+      slug: 'eng-chin-an', name: 'Eng Chin An', photo: 'assets/img/coaches/eng-chin-an.jpg',
       role: 'Co-Founder', cert: '', group: 'founder',
       coaching: ['Essentials', 'Emergence'], languages: ['English', 'Mandarin'],
       bio: ['To write soon'],
@@ -53,7 +53,7 @@
       achievements: ['Graduate of Nanyang Technological University in Sports Science and Management', "Strength & Conditioning Coach for Singapore's National Team and National Training Squad"]
     },
     {
-      slug: 'shawn-wong', name: 'Shawn Wong', photo: 'assets/img/team-shawn-wong.jpg',
+      slug: 'shawn-wong', name: 'Shawn Wong', photo: 'assets/img/coaches/shawn-wong.jpg',
       role: 'Senior Coach', cert: '', group: 'team',
       coaching: ['Exploration', 'Essentials'], languages: ['English', 'Mandarin'],
       bio: [
@@ -65,7 +65,7 @@
       achievements: ['Over 25 years of coaching experience', "Led Singapore Chinese Girls' School to multiple National School Games titles", 'Coached at Rosyth, Montfort Secondary, and Presbyterian High']
     },
     {
-      slug: 'torance-jng', name: 'Torance Jng', photo: 'assets/img/team-torance-jng.jpg',
+      slug: 'torance-jng', name: 'Torance Jng', photo: 'assets/img/coaches/torance-jng.jpg',
       role: 'Development Coach', cert: 'BWF Level 1', group: 'team',
       coaching: ['Exploration', 'Essentials'], languages: ['English', 'Mandarin'],
       bio: [
@@ -77,7 +77,7 @@
       achievements: ['Former National Intermediate Squad player', 'Trained and competed with the National Intermediate Squad from 2016 to 2019', 'International title winner']
     },
     {
-      slug: 'lim-su-qi', name: 'Lim Su Qi', photo: 'assets/img/team-lim-su-qi.jpg',
+      slug: 'lim-su-qi', name: 'Lim Su Qi', photo: 'assets/img/coaches/lim-su-qi.jpg',
       role: 'Development Coach', cert: 'BWF Level 1', group: 'team',
       coaching: ['Exploration', 'Essentials'], languages: ['English', 'Mandarin'],
       bio: [
@@ -89,7 +89,7 @@
       achievements: ['Former Singapore National Team athlete', 'Badminton Asia Team Championship 2024 representative', 'ASEAN School Games 2019 representative', 'Top 16 in Women’s Doubles at the World University Games 2023', 'Women’s Doubles Champion at the Bravesword Series 2022', 'Runner-up at the Singapore National Open Championship 2024']
     },
     {
-      slug: 'grace-tan', name: 'Grace Tan', photo: 'assets/img/team-grace-tan.jpg',
+      slug: 'grace-tan', name: 'Grace Tan', photo: 'assets/img/coaches/grace-tan.jpg',
       role: 'Development Coach', cert: 'BWF Level 1', group: 'team',
       coaching: ['Exploration', 'Essentials'], languages: ['English', 'Mandarin'],
       bio: [
@@ -101,7 +101,7 @@
       achievements: ['Former National Intermediate Squad player', 'Local podium finisher across women’s singles, women’s doubles, and mixed doubles', 'Top 8 at the Asian University Badminton Championship']
     },
     {
-      slug: 'hassan', name: 'Hassan', photo: 'assets/img/team-hassan.jpg',
+      slug: 'hassan', name: 'Hassan', photo: 'assets/img/coaches/hassan.jpg',
       role: 'Development Coach', cert: 'BWF Level 1', group: 'team',
       coaching: ['Essentials'], languages: ['English', 'Malay'],
       bio: [
@@ -113,7 +113,7 @@
       achievements: ['16 years of coaching experience', 'Competitive player on Singapore’s community tournament circuit']
     },
     {
-      slug: 'jaren-ong', name: 'Jaren Ong', photo: 'assets/img/team-jaren-ong.jpg',
+      slug: 'jaren-ong', name: 'Jaren Ong', photo: 'assets/img/coaches/jaren-ong.jpg',
       role: 'Development Coach', cert: 'BWF Level 1', group: 'team',
       coaching: ['Essentials', 'Emergence'], languages: ['English', 'Mandarin'],
       bio: [
@@ -125,7 +125,7 @@
       achievements: ['Five years of coaching experience across schools, academies, and clubs', 'Prepared school teams for the National School Games', 'Trained national deaf players with the Singapore Deaf Sports Association for the 2022 ASEAN Games']
     },
     {
-      slug: 'uzair', name: 'Uzair', photo: 'assets/img/team-uzair.png',
+      slug: 'uzair', name: 'Uzair', photo: 'assets/img/coaches/uzair.jpg',
       role: 'Development Coach', cert: 'BWF Level 1', group: 'team',
       coaching: ['Exploration', 'Essentials'], languages: ['English', 'Malay'],
       bio: [
@@ -149,7 +149,7 @@
       achievements: ['Former Singapore National player', 'SEA Games 2023 representative', 'Uber Cup 2024 representative', 'World Junior Championship 2022 and 2023 representative']
     },
     {
-      slug: 'thong-kin-yu', name: 'Thong Kin Yu', photo: 'assets/img/team-thong-kin-yu.jpg',
+      slug: 'thong-kin-yu', name: 'Thong Kin Yu', photo: 'assets/img/coaches/thong-kin-yu.jpg',
       role: 'Development Coach', cert: '', group: 'team',
       coaching: ['Exploration', 'Essentials'], languages: ['English', 'Mandarin'],
       bio: [
@@ -161,7 +161,7 @@
       achievements: ['Competitive player with the SMU badminton team', 'Second at the Tampines Meridian Age Group Tournament 2018 (U17)']
     },
     {
-      slug: 'robin-chio', name: 'Robin Chio', photo: '',
+      slug: 'robin-chio', name: 'Robin Chio', photo: 'assets/img/coaches/robin-chio.jpg',
       role: 'Development Coach', cert: '', group: 'team',
       coaching: ['Exploration', 'Essentials'], languages: ['English'],
       bio: ['To be added'],
@@ -169,7 +169,7 @@
       profilePage: false
     },
     {
-      slug: 'ryan-lim', name: 'Ryan Lim', photo: 'assets/img/team-ryan-lim.jpg',
+      slug: 'ryan-lim', name: 'Ryan Lim', photo: 'assets/img/coaches/ryan-lim.jpg',
       role: 'Assistant Coach', cert: '', group: 'team',
       coaching: ['Exploration'], languages: ['English'],
       bio: [
@@ -181,7 +181,7 @@
       achievements: ['Four years of competitive playing experience']
     },
     {
-      slug: 'jaden-chiang', name: 'Jaden Chiang', photo: 'assets/img/team-jaden-chiang.jpg',
+      slug: 'jaden-chiang', name: 'Jaden Chiang', photo: 'assets/img/coaches/jaden-chiang.jpg',
       role: 'Assistant Coach', cert: '', group: 'team',
       coaching: ['Exploration'], languages: ['English', 'Mandarin'],
       bio: [
@@ -300,9 +300,14 @@
 
   /* All-in-one suite of event management services. */
   var EVENT_SERVICES = [
-    'Coaches and marshals', 'Scoring and results', 'Procurement of equipment',
-    'Medals, trophies and prizes', 'Emcee and event hosting', 'Media and photography',
-    'Court and venue setup', 'First aid on site'
+    { title: 'Event concept and format', copy: 'Carnival, clinic or tournament formats designed around your audience, venue and run time.' },
+    { title: 'Coaches and marshals', copy: 'A trained on-court team to lead stations, guide beginners, manage flow and keep participants safe.' },
+    { title: 'Operations and run sheet', copy: 'Clear schedules, court allocation, participant movement and briefing notes for every stakeholder.' },
+    { title: 'Scoring and results', copy: 'Draws, fixtures, scorekeeping, leaderboards and results handling for competitive formats.' },
+    { title: 'Equipment and setup', copy: 'Rackets, shuttles, station equipment, signage, prizes and court setup prepared before the first serve.' },
+    { title: 'Hosting and media', copy: 'Emcee support, prize presentation flow, photography coordination and event-day content moments.' },
+    { title: 'Safety and support', copy: 'First-aid readiness, participant guidance and escalation plans for a smooth event day.' },
+    { title: 'One point of contact', copy: 'Planning, vendors, event-day delivery and post-event wrap-up managed through a single Élever lead.' }
   ];
 
   var EVENTS_UPCOMING = [
@@ -338,6 +343,81 @@
     ],
     competition: []
   };
+
+  var EVENT_SHOWCASE = [
+    {
+      title: 'ASICS Badminton Summit 2026',
+      type: 'Clinic',
+      when: '5 Jul 2026',
+      where: 'The Sports Arina @ Jalan Kayu',
+      photos: [
+        'assets/img/events/asics-summit-2026-1.jpg',
+        'assets/img/events/asics-summit-2026-2.jpg',
+        'assets/img/events/asics-summit-2026-3.jpg',
+        'assets/img/events/asics-summit-2026-4.jpg'
+      ]
+    },
+    {
+      title: 'Joo Chiat Badminton Carnival 2026',
+      type: 'Carnival',
+      when: '23 Jul 2026',
+      where: 'St. Patrick’s School',
+      photos: [
+        'assets/img/events/joo-chiat-carnival-2026-1.jpg',
+        'assets/img/events/joo-chiat-carnival-2026-2.jpg',
+        'assets/img/events/joo-chiat-carnival-2026-3.jpg',
+        'assets/img/events/joo-chiat-carnival-2026-4.jpg'
+      ]
+    },
+    {
+      title: 'Serangoon-Paya Lebar Badminton Clinic 2026',
+      type: 'Clinic',
+      when: '4 Apr 2026',
+      where: 'Paya Lebar Kovan Community Club',
+      photos: [
+        'assets/img/events/serangoon-paya-lebar-clinic-2026-1.jpg',
+        'assets/img/events/serangoon-paya-lebar-clinic-2026-2.jpg',
+        'assets/img/events/serangoon-paya-lebar-clinic-2026-3.jpg',
+        'assets/img/events/serangoon-paya-lebar-clinic-2026-4.jpg'
+      ]
+    },
+    {
+      title: 'Bukit Gombak Sports Clinic 2026',
+      type: 'Clinic',
+      when: '8 Feb 2026',
+      where: 'Hillview Community Club',
+      photos: [
+        'assets/img/events/bukit-gombak-clinic-2026-1.jpg',
+        'assets/img/events/bukit-gombak-clinic-2026-2.jpg',
+        'assets/img/events/bukit-gombak-clinic-2026-3.jpg',
+        'assets/img/events/bukit-gombak-clinic-2026-4.jpg'
+      ]
+    },
+    {
+      title: 'ÉB @ Northbrooks Secondary School',
+      type: 'School clinic',
+      when: '23 Oct 2025',
+      where: 'Northbrooks Secondary School',
+      photos: [
+        'assets/img/events/northbrooks-school-2025-1.jpg',
+        'assets/img/events/northbrooks-school-2025-2.jpg',
+        'assets/img/events/northbrooks-school-2025-3.jpg',
+        'assets/img/events/northbrooks-school-2025-4.jpg'
+      ]
+    },
+    {
+      title: 'ÉB @ KFF Singapore Badminton Open 2025',
+      type: 'Festival activation',
+      when: '30 May – 1 Jun 2025',
+      where: 'OCBC Square',
+      photos: [
+        'assets/img/events/kff-singapore-open-2025-1.jpg',
+        'assets/img/events/kff-singapore-open-2025-2.jpg',
+        'assets/img/events/kff-singapore-open-2025-3.jpg',
+        'assets/img/events/kff-singapore-open-2025-4.jpg'
+      ]
+    }
+  ];
 
   var EVENT_GROUP_LABEL = { carnival: 'Carnivals', clinic: 'Clinics', competition: 'Competitions' };
 
@@ -401,6 +481,7 @@
     eventServices: EVENT_SERVICES,
     eventsUpcoming: EVENTS_UPCOMING,
     eventsPast: EVENTS_PAST,
+    eventShowcase: EVENT_SHOWCASE,
     eventGroupLabel: EVENT_GROUP_LABEL,
     partners: PARTNERS,
     articles: ARTICLES,

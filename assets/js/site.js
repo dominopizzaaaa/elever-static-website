@@ -11,6 +11,8 @@
   var BOOK_URL = 'https://app.eleverbadminton.com/';
   var WHATSAPP = 'https://wa.me/6589214221';
   var EMAIL = 'info@eleverbadminton.com';
+  var LOGO_BLACK = 'assets/img/brand/eb-logo-black.png';
+  var LOGO_WHITE = 'assets/img/brand/eb-logo-white.png';
 
   /* A nav item with `children` renders as a hover/focus dropdown
      (ElevenLabs-style). `key` matches <body data-page> to mark current. */
@@ -41,6 +43,14 @@
   var base = document.body.getAttribute('data-base') || '';
   function url(href) {
     return /^(https?:|mailto:|#)/.test(href) ? href : base + href;
+  }
+
+  function brandLogo(className) {
+    return '<span class="' + className + '__mark" aria-hidden="true">' +
+      '<img class="' + className + '__img ' + className + '__img--dark" src="' + url(LOGO_BLACK) + '" alt="" decoding="async">' +
+      '<img class="' + className + '__img ' + className + '__img--light" src="' + url(LOGO_WHITE) + '" alt="" decoding="async">' +
+    '</span>' +
+    '<span class="' + className + '__text">ÉLEVER<span aria-hidden="true">·</span>BADMINTON</span>';
   }
 
   var page = document.body.getAttribute('data-page') || '';
@@ -83,7 +93,7 @@
     header.className = 'nav';
     header.id = 'nav';
     header.innerHTML =
-      '<a href="' + url('index.html') + '" class="nav__logo" aria-label="Élever Badminton — home">ÉLEVER<span aria-hidden="true">·</span>BADMINTON</a>' +
+      '<a href="' + url('index.html') + '" class="nav__logo" aria-label="Élever Badminton — home">' + brandLogo('nav__logo') + '</a>' +
       '<nav class="nav__links" id="navLinks" aria-label="Primary">' +
         navLinks() +
         '<a href="' + BOOK_URL + '" target="_blank" rel="noopener" class="nav__cta">Book a class</a>' +
@@ -97,7 +107,7 @@
     footer.innerHTML =
       '<div class="footer__inner">' +
         '<div class="footer__col footer__col--brand">' +
-          '<div class="footer__brand">ÉLEVER<span aria-hidden="true">·</span>BADMINTON</div>' +
+          '<div class="footer__brand">' + brandLogo('footer__brand') + '</div>' +
           '<p class="footer__tag">Enhance your skills. Enjoy the process. Elevate your experience.</p>' +
           '<div class="footer__socials">' +
             SOCIALS.map(function (s) {

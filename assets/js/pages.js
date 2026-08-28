@@ -236,14 +236,22 @@
           '<h3>' + esc(t.name) + '</h3>' +
           '<p class="etype__what">' + esc(t.what) + '</p>' +
           '<ul class="etype__prov">' + t.provides.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ul>' +
-          '<a class="btn btn--ghost" href="#proposal">Request a proposal</a>' +
+          '<a class="btn btn--ghost" href="contact.html">Request a proposal</a>' +
         '</article>';
       }).join('');
     }
 
     var services = el('eventServices');
     if (services && D.eventServices) {
-      services.innerHTML = D.eventServices.map(function (s) { return '<div>' + esc(s) + '</div>'; }).join('');
+      services.innerHTML = D.eventServices.map(function (s, i) {
+        var title = typeof s === 'string' ? s : s.title;
+        var copy = typeof s === 'string' ? '' : s.copy;
+        return '<article class="suite__item">' +
+          '<span class="suite__num">' + String(i + 1).padStart(2, '0') + '</span>' +
+          '<h3>' + esc(title) + '</h3>' +
+          (copy ? '<p>' + esc(copy) + '</p>' : '') +
+        '</article>';
+      }).join('');
     }
 
     var upc = el('eventsUpcoming');
@@ -259,7 +267,26 @@
                 : '') +
             '</article>';
           }).join('')
-        : '<p class="sched__empty">No public events on the calendar right now — <a href="#proposal">talk to us about running one</a>.</p>';
+        : '<p class="sched__empty">No public events on the calendar right now — <a href="contact.html">talk to us about running one</a>.</p>';
+    }
+
+    var showcase = el('eventShowcase');
+    if (showcase && D.eventShowcase) {
+      showcase.innerHTML = D.eventShowcase.map(function (e) {
+        var photos = e.photos || [];
+        var cover = photos[0] || '';
+        return '<article class="eshow">' +
+          (cover ? '<img class="eshow__cover" src="' + esc(cover) + '" alt="' + esc(e.title) + '" loading="lazy" decoding="async">' : '') +
+          '<div class="eshow__body">' +
+            '<span class="eshow__type">' + esc(e.type) + '</span>' +
+            '<h3>' + esc(e.title) + '</h3>' +
+            '<p>' + esc(e.when) + ' · ' + esc(e.where) + '</p>' +
+            '<div class="eshow__thumbs">' + photos.slice(1, 4).map(function (p, idx) {
+              return '<img src="' + esc(p) + '" alt="' + esc(e.title) + ' photo ' + (idx + 2) + '" loading="lazy" decoding="async">';
+            }).join('') + '</div>' +
+          '</div>' +
+        '</article>';
+      }).join('');
     }
 
     var pst = el('eventsPast');

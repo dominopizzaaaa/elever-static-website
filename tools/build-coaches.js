@@ -61,7 +61,7 @@ function page(c) {
   <meta name="twitter:title" content="${esc(title)}" />
   <meta name="twitter:description" content="${esc(desc)}" />
   <meta name="twitter:image" content="${esc(image)}" />
-  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+  <link rel="icon" type="image/png" href="../assets/img/brand/eb-icon-black.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />

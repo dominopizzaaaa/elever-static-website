@@ -70,10 +70,17 @@ em{font-style:normal;color:var(--accent)}
 .nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;
   padding:1rem clamp(1.25rem,5vw,3rem);transition:background .3s,padding .3s,border-color .3s;border-bottom:1px solid transparent}
 .nav.scrolled{background:rgba(255,255,255,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:.7rem clamp(1.25rem,5vw,3rem);border-color:var(--line)}
-.nav__logo{font-weight:800;font-size:.98rem;letter-spacing:.03em;color:#fff;white-space:nowrap}
+.nav__logo{font-weight:800;font-size:.98rem;letter-spacing:.03em;color:#fff;white-space:nowrap;display:inline-flex;align-items:center;gap:.55rem}
 .nav.scrolled .nav__logo{color:var(--ink)}
 .nav__logo span{color:var(--accent-light);margin:0 .2em}
 .nav.scrolled .nav__logo span{color:var(--accent)}
+.nav__logo__mark{position:relative;display:block;width:142px;height:30px;margin:0}
+.nav__logo__img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:left center;transition:opacity .2s}
+.nav__logo__img--dark{opacity:0}
+.nav__logo__img--light{opacity:1}
+.nav.scrolled .nav__logo__img--dark{opacity:1}
+.nav.scrolled .nav__logo__img--light{opacity:0}
+.nav__logo__text{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 
 .nav__links{display:flex;align-items:center;gap:.25rem}
 .nav__link{font-size:.875rem;color:rgba(255,255,255,.85);font-weight:500;transition:color .2s,background .2s;
@@ -265,6 +272,11 @@ em{font-style:normal;color:var(--accent)}
 .footer__col a:hover{color:#fff}
 .footer__brand{font-weight:800;font-size:1.05rem;letter-spacing:.03em;color:#fff}
 .footer__brand span{color:var(--accent-light);margin:0 .2em}
+.footer__brand__mark{position:relative;display:block;width:170px;height:36px;margin:0}
+.footer__brand__img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:left center}
+.footer__brand__img--dark{opacity:0}
+.footer__brand__img--light{opacity:1}
+.footer__brand__text{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 .footer__tag{color:rgba(255,255,255,.55);font-size:.85rem;margin:.6rem 0 1.1rem;max-width:34ch;line-height:1.6}
 .footer__socials{display:flex;gap:1rem;flex-wrap:wrap}
 .footer__socials a{font-size:.8rem;color:rgba(255,255,255,.6)}
