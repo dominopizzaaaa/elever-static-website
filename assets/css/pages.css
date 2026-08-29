@@ -548,6 +548,7 @@ body.is-dark .footer{border-top:1px solid rgba(255,255,255,.09)}
 .lab__label{margin-top:3.2rem;font-size:.66rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.42)}
 .lab__addr{font-style:normal;margin-top:.9rem;font-size:.92rem;line-height:1.9;color:rgba(255,255,255,.72)}
 .lab__addr a{color:var(--accent-light);text-decoration:underline;text-underline-offset:3px}
+.lab__label + .lab__foot{margin-top:.9rem}
 .lab__foot{margin-top:3rem;display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
 .lab__social{display:grid;place-items:center;width:2.9rem;height:2.9rem;border-radius:50%;
   color:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.22);
