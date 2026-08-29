@@ -647,7 +647,8 @@
         '<div class="coach__body"><h3>' + esc(c.name) + '</h3>' +
           '<p class="coach__role">' + esc(c.role) + '</p>' +
           (c.cert ? '<span class="coach__cert">' + esc(c.cert) + '</span>' : '') +
-          (c.profilePage === false ? '<p class="coach__more">Profile coming soon</p>' : '<p class="coach__more">View profile &rsaquo;</p>') +
+          /* No profile page yet: the card simply does not link anywhere. */
+          (c.profilePage === false ? '' : '<p class="coach__more">View profile &rsaquo;</p>') +
         '</div></' + tag + '>';
     }
 

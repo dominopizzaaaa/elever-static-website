@@ -22,7 +22,7 @@
   var COACHES = [
     {
       slug: 'loh-kean-hean', name: 'Loh Kean Hean', photo: 'assets/img/coaches/loh-kean-hean.jpg',
-      role: 'Co-Founder · Technical Director', cert: '', group: 'founder',
+      role: 'Co-Founder · Technical Director', cert: 'BWF Level 1', group: 'founder',
       coaching: ['Emergence', 'Elite'], languages: ['English', 'Mandarin'],
       bio: [
         "Kean Hean is the Co-Founder and Technical Director of Élever Badminton, where he leads the academy's coaching philosophy and designs its training programmes for players of all ages and abilities.",
@@ -54,7 +54,7 @@
     },
     {
       slug: 'shawn-wong', name: 'Shawn Wong', photo: 'assets/img/coaches/shawn-wong.jpg',
-      role: 'Senior Coach', cert: '', group: 'team',
+      role: 'Senior Coach', cert: 'BWF Level 1', group: 'team',
       coaching: ['Exploration', 'Essentials'], languages: ['English', 'Mandarin'],
       bio: [
         'Shawn is a Senior Coach at Élever Badminton, bringing over 25 years of coaching experience across schools, recreational programmes, and competitive youth development.',
