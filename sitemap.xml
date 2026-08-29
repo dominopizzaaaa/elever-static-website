@@ -25,11 +25,8 @@
     <lastmod>2026-08-28</lastmod>
     <priority>0.9</priority>
   </url>
-  <url>
-    <loc>https://www.eleverbadminton.com/hub.html</loc>
-    <lastmod>2026-08-28</lastmod>
-    <priority>0.8</priority>
-  </url>
+  <!-- SG Badminton Hub is hidden from the site for now; restore this entry
+       when hub.html is linked from the nav again. -->
   <url>
     <loc>https://www.eleverbadminton.com/</loc>
     <lastmod>2026-08-28</lastmod>

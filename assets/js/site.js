@@ -15,21 +15,31 @@
   var LOGO_WHITE = 'assets/img/brand/eb-logo-white.png';
 
   /* A nav item with `children` renders as a hover/focus dropdown
-     (ElevenLabs-style). `key` matches <body data-page> to mark current. */
+     (ElevenLabs-style). `key` matches <body data-page> to mark current.
+
+     NAV sits on the LEFT, immediately beside the logo. NAV_END sits on the
+     right, next to the "Book a class" button.
+
+     SG Hub is hidden for now — the page (hub.html) is untouched and still
+     works if opened directly. To bring it back, restore this entry:
+         { key: 'hub', href: 'hub.html', label: 'SG Hub' }
+     and the footer link + sitemap entry that went with it. */
   var NAV = [
     {
       key: 'classes', href: 'classes.html', label: 'Classes',
       children: [
-        { key: 'classes', href: 'classes.html', label: 'Regular classes', note: 'Weekly group and private coaching' },
-        { key: 'camps', href: 'camps.html', label: 'Camps', note: 'Holiday Exploration camps' }
+        { key: 'classes', href: 'classes.html', label: 'Regular classes' },
+        { key: 'camps', href: 'camps.html', label: 'Camps' }
       ]
     },
     { key: 'events', href: 'events.html', label: 'Events' },
-    { key: 'lab', href: 'lab.html', label: 'Performance Lab' },
-    { key: 'hub', href: 'hub.html', label: 'SG Hub' },
     { key: 'news', href: 'news.html', label: 'News' },
     { key: 'about', href: 'about.html', label: 'About' },
     { key: 'contact', href: 'contact.html', label: 'Contact' }
+  ];
+
+  var NAV_END = [
+    { key: 'lab', href: 'lab.html', label: 'Élever Performance Lab' }
   ];
 
   var SOCIALS = [
@@ -60,8 +70,8 @@
     return !!(item.children && item.children.some(function (c) { return c.key === page; }));
   }
 
-  function navLinks() {
-    return NAV.map(function (item) {
+  function navLinks(items) {
+    return items.map(function (item) {
       var active = isCurrent(item);
       var cls = 'nav__link' + (active ? ' is-current' : '');
 
@@ -79,9 +89,11 @@
         '</a>' +
         '<div class="nav__menu">' +
           item.children.map(function (c) {
+            // `note` is optional — a child without one renders as a plain label.
             return '<a href="' + url(c.href) + '" class="nav__menu-item' +
               (c.key === page ? ' is-current' : '') + '">' +
-              '<b>' + c.label + '</b><small>' + c.note + '</small></a>';
+              '<b>' + c.label + '</b>' +
+              (c.note ? '<small>' + c.note + '</small>' : '') + '</a>';
           }).join('') +
         '</div>' +
       '</div>';
@@ -94,9 +106,14 @@
     header.id = 'nav';
     header.innerHTML =
       '<a href="' + url('index.html') + '" class="nav__logo" aria-label="Élever Badminton — home">' + brandLogo('nav__logo') + '</a>' +
+      /* One container for every link so the mobile burger panel stays a single
+         scrolling list; .nav__end is only pushed right on desktop. */
       '<nav class="nav__links" id="navLinks" aria-label="Primary">' +
-        navLinks() +
-        '<a href="' + BOOK_URL + '" target="_blank" rel="noopener" class="nav__cta">Book a class</a>' +
+        navLinks(NAV) +
+        '<div class="nav__end">' +
+          navLinks(NAV_END) +
+          '<a href="' + BOOK_URL + '" target="_blank" rel="noopener" class="nav__cta">Book a class</a>' +
+        '</div>' +
       '</nav>' +
       '<button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span></span></button>';
   }
@@ -129,7 +146,8 @@
           '<a href="' + url('lab.html') + '">Performance Lab</a>' +
           '<a href="' + url('about.html') + '">About</a>' +
           '<a href="' + url('news.html') + '">News</a>' +
-          '<a href="' + url('hub.html') + '">SG Badminton Hub</a>' +
+          /* SG Badminton Hub hidden for now — restore this line to bring it back:
+             '<a href="' + url('hub.html') + '">SG Badminton Hub</a>' */
         '</div>' +
 
         '<div class="footer__col">' +
