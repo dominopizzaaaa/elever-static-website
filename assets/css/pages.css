@@ -584,6 +584,11 @@ body.is-dark .footer{border-top:1px solid rgba(255,255,255,.09)}
 .lab__addr{font-style:normal;margin-top:.9rem;font-size:.92rem;line-height:1.9;color:rgba(255,255,255,.72)}
 .lab__addr a{color:var(--accent-light);text-decoration:underline;text-underline-offset:3px}
 .lab__foot{margin-top:3rem;display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
+.lab__social{display:grid;place-items:center;width:2.9rem;height:2.9rem;border-radius:50%;
+  color:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.22);
+  transition:color .2s,border-color .2s,background .2s}
+.lab__social:hover{color:#fff;border-color:#fff;background:rgba(255,255,255,.08)}
+.lab__social:focus-visible{outline:2px solid var(--accent-light);outline-offset:3px}
 .lab .btn--ghost{border-color:rgba(255,255,255,.28);color:#fff;background:transparent}
 .lab .btn--ghost:hover{border-color:#fff;background:rgba(255,255,255,.08)}
 
