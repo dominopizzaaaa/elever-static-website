@@ -496,6 +496,23 @@ body.has-lightbox{overflow:hidden}
 .article h3{font-size:1.02rem;font-weight:700;line-height:1.35;margin-bottom:.5rem;letter-spacing:-.015em}
 .article p{font-size:.84rem;color:var(--muted);line-height:1.6;margin-bottom:1rem}
 .article__foot{margin-top:auto;display:flex;gap:.7rem;font-size:.72rem;color:var(--faint);font-weight:600}
+.article__foot{justify-content:space-between;flex-wrap:wrap}
+.article h3{color:var(--ink)}
+.article:hover h3{color:var(--accent)}
+.article:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.article:hover{transform:none}}
+
+/* ---------- one article page ---------- */
+.post{max-width:66ch}
+.post__meta{display:flex;flex-wrap:wrap;gap:.5rem .9rem;font-size:.78rem;font-weight:600;color:var(--faint);margin-bottom:2rem}
+.post__cat{color:var(--accent);text-transform:uppercase;letter-spacing:.11em;font-size:.68rem;font-weight:700}
+.post p{font-size:1rem;color:var(--muted);line-height:1.8;margin-bottom:1.15rem}
+.post h2{font-size:1.25rem;font-weight:800;letter-spacing:-.02em;color:var(--ink);margin:2.2rem 0 .9rem}
+.post blockquote{margin:1.6rem 0;padding:.2rem 0 .2rem 1.2rem;border-left:3px solid var(--accent)}
+.post blockquote p{font-size:1.05rem;color:var(--ink);font-weight:600;line-height:1.7;margin:0}
+.post blockquote p+p{margin-top:.8rem}
+.post__back{display:inline-flex;align-items:center;margin-top:2.6rem;font-size:.84rem;font-weight:600;color:var(--accent)}
+.post__back:hover{text-decoration:underline}
 
 /* ---------- LEAD CAPTURE FORMS ---------- */
 .lead{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:1.7rem 1.6rem}

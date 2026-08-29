@@ -672,14 +672,17 @@
     }
 
     function render() {
+      var base = SITE.base || '';
       var rows = D.articles.filter(function (a) { return cat === 'all' || a.category === cat; });
       mount.innerHTML = rows.length ? rows.map(function (a) {
-        return '<article class="article">' +
+        return '<a class="article" href="' + base + 'news/' + esc(a.slug) + '.html">' +
           '<span class="article__cat">' + esc(a.category) + '</span>' +
           '<h3>' + esc(a.title) + sampleTag(a) + '</h3>' +
           '<p>' + esc(a.excerpt) + '</p>' +
-          '<div class="article__foot"><span>' + fmt(a.date) + '</span><span>' + esc(a.read) + ' read</span></div>' +
-        '</article>';
+          '<div class="article__foot"><span>' + fmt(a.date) +
+            (a.author ? ' · ' + esc(a.author) : '') + '</span>' +
+            '<span>' + esc(a.read) + ' read</span></div>' +
+        '</a>';
       }).join('') : '<p class="sched__empty">Nothing published in this category yet.</p>';
     }
 
