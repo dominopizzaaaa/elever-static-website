@@ -19,12 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=15" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=15" />
-  <!-- Leaflet powers the class-location map (OpenStreetMap tiles, no API key). -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"
-        integrity="sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2okopSAcSUIUOseddDm0cxnGQzxIR7vJgsLZbdLE3w=="
-        crossorigin="" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="assets/css/style.css?v=16" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=16" />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -101,28 +97,10 @@
             <button class="sched__filter" data-level="Essentials" aria-pressed="false">Essentials</button>
             <button class="sched__filter" data-level="Emergence" aria-pressed="false">Emergence</button>
           </div>
-          <div class="sched__toggle" id="schedToggle" role="group" aria-label="Choose list or map view">
-            <button type="button" data-view="list" class="is-active" aria-pressed="true">List</button>
-            <button type="button" data-view="map" aria-pressed="false">Map</button>
-          </div>
         </div>
         <p class="hub__count" id="schedCount" style="padding-left:0" aria-live="polite"></p>
 
-        <div class="sched__view is-active" id="schedListView">
-          <div class="sched__list" id="schedList"></div>
-        </div>
-
-        <div class="sched__view" id="schedMapView">
-          <div class="sched__mapwrap">
-            <div class="sched__legend" role="list" aria-label="Map pin colours">
-              <span role="listitem"><i class="pin-dot pin-dot--essentials"></i>Essentials</span>
-              <span role="listitem"><i class="pin-dot pin-dot--emergence"></i>Emergence</span>
-              <span role="listitem"><i class="pin-dot pin-dot--mixed"></i>Both levels</span>
-            </div>
-            <div class="sched__map" id="schedMap"></div>
-            <p class="sched__maphint">Pins are colour-coded by level — select one for the venue's days, times and booking link.</p>
-          </div>
-        </div>
+        <div class="sched__list" id="schedList"></div>
       </div>
     </section>
 
@@ -130,12 +108,9 @@
 
   <footer id="siteFooter"></footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"
-          integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg=="
-          crossorigin="" referrerpolicy="no-referrer"></script>
-  <script src="assets/js/data.js?v=15"></script>
-  <script src="assets/js/site.js?v=15"></script>
-  <script src="assets/js/pages.js?v=15"></script>
-  <script src="assets/js/main.js?v=15"></script>
+  <script src="assets/js/data.js?v=16"></script>
+  <script src="assets/js/site.js?v=16"></script>
+  <script src="assets/js/pages.js?v=16"></script>
+  <script src="assets/js/main.js?v=16"></script>
 </body>
 </html>
