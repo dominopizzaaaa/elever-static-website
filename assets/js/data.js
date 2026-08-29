@@ -195,37 +195,46 @@
   ];
 
   /* ---------------------------------------------------------------
-     DEVELOPMENT PATHWAYS — the four E's (Classes page, 4 columns)
+     DEVELOPMENT PATHWAYS — Exploration, Essentials, Emergence, Elite
+     ---------------------------------------------------------------
+     Copy is transcribed verbatim from the Google Doc
+     "EB Website for Dom" -> tab "Write-ups for Development Pathways",
+     including its capitalisation and paragraph breaks. Each stage is:
+        headline -> hook (optional) -> body -> closing
      Age ranges, ability levels and grading checkpoints are still to be
      decided — they are deliberately not stated here rather than guessed.
      --------------------------------------------------------------- */
   var PATHWAYS = [
     {
       key: 'exploration', name: 'Exploration', num: '01',
-      tag: 'Start here · first experience',
-      blurb: 'Our entry programme for new students. It introduces badminton in a safe, engaging and structured environment, helping players build confidence while experiencing Élever\u2019s coaching approach. Recommended progression into Essentials.',
-      learn: ['Grip, ready position and basic racket control', 'Movement and coordination through games', 'Court awareness and simple rallying'],
+      headline: 'DISCOVER THE GAME. EXPERIENCE \u00c9LEVER.',
+      hook: 'New to badminton? Start here.',
+      body: 'EXPLORATION is our entry programme for new students. It introduces badminton in a safe, engaging, and structured environment, helping players build confidence while experiencing \u00c9lever Badminton\u2019s coaching approach.',
+      closing: 'Recommended progression into ESSENTIALS.',
       cta: { label: 'See our camps', href: 'camps.html' }
     },
     {
       key: 'essentials', name: 'Essentials', num: '02',
-      tag: 'Step up · build the base',
-      blurb: 'For players who have grasped the basics and are ready to strengthen their foundations. The programme focuses on solid footwork, proper grips and reliable technique, helping players play with confidence and consistency. Progression into Emergence upon assessment.',
-      learn: ['Full stroke set — clear, drop, net, lift, drive', 'Six-corner footwork and recovery', 'Singles and doubles basics'],
+      headline: 'BUILD THE FOUNDATION. MASTER THE BASICS.',
+      hook: 'Ready to take your game further?',
+      body: 'ESSENTIALS is designed for players who have grasped the basics and are ready to strengthen their foundations. The programme focuses on solid footwork, proper grips, and reliable technique, helping players play with confidence and consistency.',
+      closing: 'Progression into EMERGENCE upon assessment.',
       cta: { label: 'Find an Essentials class', href: 'classes.html#locations' }
     },
     {
       key: 'emergence', name: 'Emergence', num: '03',
-      tag: 'Step up · play with purpose',
-      blurb: 'Helps players move beyond the basics and explore the tactical side of the game. Through structured drills, guided match scenarios and focused coaching, players develop greater consistency, strategic thinking and adaptability on court. Selection into Elite based on readiness.',
-      learn: ['Tactical patterns for singles and doubles', 'Deception, pace change and shot selection', 'Match play and competition routines'],
+      headline: 'REFINE YOUR SKILLS. RAISE YOUR GAME.',
+      hook: 'Take it to the next level.',
+      body: 'EMERGENCE helps players move beyond the basics and explore the tactical side of the game. Through structured drills, guided match scenarios, and focused coaching, players develop greater consistency, strategic thinking, and adaptability on court.',
+      closing: 'Selection into ELITE based on readiness.',
       cta: { label: 'Find an Emergence class', href: 'classes.html#locations' }
     },
     {
       key: 'elite', name: 'Elite', num: '04',
-      tag: 'Top step · train to compete',
-      blurb: 'For athletes aiming to reach their highest potential, Elite focuses on advanced skills, tactical understanding, mental preparation and competitive performance. Players experience high-intensity training, match simulations and individualised guidance to maximise growth and readiness for tournaments.',
-      learn: ['Individual technical and tactical programme', 'Planned competition calendar', 'Dedicated strength & conditioning', 'Video analysis and performance review'],
+      headline: 'PERFORM WITH PURPOSE. COMPETE WITH CONFIDENCE.',
+      hook: '',
+      body: 'For athletes aiming to reach their highest potential, ELITE focuses on advanced skills, tactical understanding, mental preparation, and competitive performance. Players experience high-intensity training, match simulations, and individualised guidance to maximise growth and readiness for tournaments.',
+      closing: 'Step into your full potential.',
       cta: { label: 'Enquire about Elite', href: 'contact.html' }
     }
   ];

@@ -212,6 +212,8 @@
 
   /* =================================================================
      CLASSES — development pathways
+     Four equal boxes in one row with an arrow between each pair.
+     Copy comes verbatim from data.js (see the Google Doc write-ups).
      ================================================================= */
   (function pathways() {
     var mount = el('pathsGrid');
@@ -219,43 +221,22 @@
     var steps = D.pathways;
     var last = steps.length - 1;
 
-    /* A compact rail above the cards states the progression in one line,
-       so the order is obvious before anyone reads a single card. */
-    var railMount = el('pathsRail');
-    if (railMount) {
-      railMount.innerHTML = steps.map(function (p, i) {
-        return '<a class="prail__step" href="#' + esc(p.key) + '" style="--step:' + i + '">' +
-          '<span class="prail__num">' + esc(p.num) + '</span>' +
-          '<span class="prail__name">' + esc(p.name) + '</span>' +
-        '</a>' + (i < last ? '<span class="prail__arrow" aria-hidden="true">&rarr;</span>' : '');
-      }).join('');
-    }
+    var ARROW = '<span class="path__arrow" aria-hidden="true">' +
+      '<svg viewBox="0 0 24 16" width="24" height="16" focusable="false">' +
+        '<path d="M1 8h20M15 2l6 6-6 6" fill="none" stroke="currentColor" ' +
+          'stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '</svg></span>';
 
     mount.innerHTML = steps.map(function (p, i) {
-      var next = steps[i + 1];
-      /* Each card names the step it leads to, so progression is stated in
-         words as well as shown in the layout. */
-      var onward = next
-        ? '<p class="path__next"><span class="path__nextlabel">Progresses to</span> ' +
-            '<a href="#' + esc(next.key) + '">' + esc(next.name) + ' &rarr;</a></p>'
-        : '<p class="path__next path__next--top"><span class="path__nextlabel">Top of the pathway</span></p>';
-
-      return '<article class="path" id="' + esc(p.key) + '" style="--step:' + i + '"' +
-          ' aria-label="' + esc('Step ' + (i + 1) + ' of ' + steps.length + ': ' + p.name) + '">' +
-        '<div class="path__riser" aria-hidden="true"></div>' +
-        '<div class="path__card">' +
-          '<div class="path__rise">' +
-            '<span class="path__num">' + esc(p.num) + '</span>' +
-            '<span class="path__step">Step ' + (i + 1) + ' of ' + steps.length + '</span>' +
-          '</div>' +
+      return '<article class="path" id="' + esc(p.key) + '">' +
+          '<span class="path__num">' + esc(p.num) + '</span>' +
           '<h3>' + esc(p.name) + '</h3>' +
-          '<span class="path__tag">' + esc(p.tag) + '</span>' +
-          '<p class="path__blurb">' + esc(p.blurb) + '</p>' +
-          '<ul class="path__learn">' + p.learn.map(function (l) { return '<li>' + esc(l) + '</li>'; }).join('') + '</ul>' +
-          onward +
+          '<p class="path__headline">' + esc(p.headline) + '</p>' +
+          (p.hook ? '<p class="path__hook">' + esc(p.hook) + '</p>' : '') +
+          '<p class="path__body">' + esc(p.body) + '</p>' +
+          '<p class="path__closing">' + esc(p.closing) + '</p>' +
           '<a class="path__cta" href="' + esc(p.cta.href) + '">' + esc(p.cta.label) + ' &rsaquo;</a>' +
-        '</div>' +
-      '</article>';
+        '</article>' + (i < last ? ARROW : '');
     }).join('');
   })();
 
@@ -321,11 +302,11 @@
       }).join('');
       return '<div class="mpop">' +
         '<h4 class="mpop__name">' + esc(v.venue) + '</h4>' +
-        '<p class="mpop__addr">' + esc(v.addr) + (v.mrt ? '<br>Nearest MRT: ' + esc(v.mrt) : '') + '</p>' +
+        '<p class="mpop__addr"><a href="' + gmapsSearchUrl(v) + '" target="_blank" rel="noopener">' +
+          esc(v.addr) + '</a></p>' +
         '<ul class="mpop__sessions">' + rows + '</ul>' +
         '<div class="mpop__actions">' +
           '<a href="' + esc(v.book || BOOK) + '" target="_blank" rel="noopener">Book this class &rsaquo;</a>' +
-          '<a href="' + gmapsSearchUrl(v) + '" target="_blank" rel="noopener">Directions &#8599;</a>' +
         '</div>' +
       '</div>';
     }
@@ -380,11 +361,16 @@
       mapDrawn = true;
     }
 
+    /* Venues read alphabetically. localeCompare so the curly apostrophe in
+       "Singapore Chinese Girls' School" does not sort it out of place. */
+    function byVenueName(a, b) {
+      return String(a.venue).localeCompare(String(b.venue), 'en', { sensitivity: 'base' });
+    }
     function visible() {
       return D.classes.filter(function (v) {
         if (level === 'all') return true;
         return v.sessions.some(function (s) { return s.level === level; });
-      });
+      }).sort(byVenueName);
     }
     function sessionsFor(v) {
       return v.sessions.filter(function (s) { return level === 'all' || s.level === level; });
@@ -410,7 +396,8 @@
         return '<article class="vcard" id="venue-' + esc(v.venueId) + '">' +
           '<div class="vcard__top"><h3>' + esc(v.venue) + sampleTag(v) + '</h3>' +
             '<span class="vcard__region">' + esc(v.region) + '</span></div>' +
-          '<p class="vcard__addr">' + esc(v.addr) + (v.mrt ? ' · Nearest MRT: ' + esc(v.mrt) : '') + '</p>' +
+          '<p class="vcard__addr"><a href="' + gmapsSearchUrl(v) + '" target="_blank" rel="noopener">' +
+            esc(v.addr) + '</a></p>' +
           '<ul class="vcard__sessions">' + sessionsFor(v).map(function (s) {
             return '<li><span class="vcard__day">' + esc(s.day) + '</span>' +
               '<span class="vcard__time">' + esc(s.time) + '</span>' +
@@ -419,7 +406,6 @@
           }).join('') + '</ul>' +
           '<div class="vcard__actions">' +
             '<a class="vcard__book" href="' + esc(v.book || BOOK) + '" target="_blank" rel="noopener">Book this class &rsaquo;</a>' +
-            '<a class="vcard__gmaps" href="' + gmapsSearchUrl(v) + '" target="_blank" rel="noopener">Open in Google Maps &#8599;</a>' +
           '</div>' +
         '</article>';
       }).join('');
