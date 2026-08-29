@@ -357,3 +357,169 @@ passes a tag-balance check.
 
 **Not machine-verified:** the visual result at 375 / 768 / 1280 / 1600.
 The CSS was written for those breakpoints but has not been seen rendered.
+
+---
+---
+
+# ROUND 2 — Client Comments (29 Aug 2026)
+
+Second comment list: Regular Classes / Camps / Events / Élever Performance
+Lab / About. Camp photos came from the client's Google Drive
+**Photos → Camps** folder.
+
+Legend: `[x]` done · `[!]` assumption made — client to confirm
+
+---
+
+## R2.1 REGULAR CLASSES
+
+### Nav dropdown
+- [x] R2.1.1 Capitalise the dropdown label `Regular classes` → **Regular Classes**
+      (`site.js` NAV children)
+- [x] R2.1.2 Match the footer "Train" column link so the label reads the same
+      in both places
+
+### Pathway arrows ("UI for arrows")
+- [x] R2.1.3 Replace the bare stroke arrow with a filled blue chip (a chevron
+      in a circle with a soft accent ring), so the connector reads as designed
+      rather than as a stray glyph in the gap
+- [x] R2.1.4 Chip rotates to point **down** where the layout stacks — use the
+      `rotate` property, not `transform`, so it does not fight the centring
+- [x] R2.1.5 Verify desktop (one row, 3 arrows right), tablet ≤1080px
+      (2×2, right / down / right) and mobile ≤700px (column, all down)
+
+### Inside each E card
+- [x] R2.1.6 Delete the closing pointer line from all four cards — this is the
+      "progresses to E***" line on Exploration / Essentials / Emergence
+      ("Recommended progression into ESSENTIALS.", "Progression into EMERGENCE
+      upon assessment.", "Selection into ELITE based on readiness.") **and**
+      the top-of-pathway line on Elite ("Step into your full potential.")
+- [x] R2.1.7 Drop the `closing` field from `PATHWAYS` in `data.js`, the
+      `.path__closing` render in `pages.js` and its CSS rule
+- [x] R2.1.8 Note in the data.js comment why the doc's closing line is not used
+- [x] R2.1.9 Keep the per-card CTA; stop the `›` orphaning onto its own line
+
+### Class Type
+- [x] R2.1.10 "Class Type" heading is now **secondary** to the card titles:
+      new `.psec__head--minor` drops the h2 to a quiet 0.86rem label
+- [x] R2.1.11 Raise `Group Class` / `Private Class` to 1.35rem so they carry
+      the section
+- [x] R2.1.12 Rule placed **after** `.psec h2` — same specificity, so source
+      order decides which wins
+
+### Content width
+- [x] R2.1.13 `.psec--alt > .psec__inner` was `--maxw` wide *inside* the band's
+      own padding, making every banded section ~2× padding wider than the plain
+      sections. Capped at `calc(var(--maxw) - 2 * <padding>)`
+- [x] R2.1.14 Verified: Development Pathways, Class Type and Class Locations
+      share the same left/right edge at 1600 / 1440 / 1024 / 768 / 375
+
+### View by map
+- [x] R2.1.15 Restore the List / Map toggle removed in `e9cad71`
+- [x] R2.1.16 Restore the Leaflet CSS + JS includes (cdnjs, SRI pinned)
+- [x] R2.1.17 Restore the map view, the level-coloured pins, the venue popups
+      and the legend
+- [x] R2.1.18 Restore the "Leaflet could not load" fallback with its link back
+      to the list
+- [x] R2.1.19 List stays the **default** view; the map only draws when opened
+- [x] R2.1.20 Level filter re-draws the map while it is open
+- [x] R2.1.21 Verified with a Leaflet stub: 8 pins, re-draws to 2 on the
+      Emergence filter, no thrown errors. The live tiles could not be loaded
+      from this sandbox (cdnjs and OpenStreetMap are both blocked here)
+
+---
+
+## R2.2 CAMPS
+
+- [x] R2.2.1 Capitalise `Upcoming camp` → **Upcoming Camp**
+- [x] R2.2.2 Content width now matches the rest of the page (same fix as
+      R2.1.13 — it is the same banded-section bug)
+- [x] R2.2.3 Pull the 7 camp photos from the client's Google Drive
+      **Photos → Camps** folder into `assets/img/Photos/Camps/`
+- [x] R2.2.4 New `tools/build-camp-photos.sh` exports them to
+      `assets/img/camps/` (1600px) + `assets/img/camps/thumb/` (640px),
+      matching the events pipeline
+- [x] R2.2.5 Add `CAMPS.gallery` + `campPhotoBase` / `campThumbBase` to
+      `data.js`, with real per-photo alt text
+- [x] R2.2.6 Replace the four "Camp photos coming soon" placeholders with the
+      real gallery
+- [x] R2.2.7 Generalise `initEventLightbox` → `initLightbox(scope, opts)` so
+      camps and events share one viewer with separate photo directories
+- [x] R2.2.8 The gallery section hides itself if no photos are supplied, rather
+      than showing empty boxes
+- [x] R2.2.9 Verified: 7 thumbs, lightbox opens on the clicked photo, arrows
+      and Escape work, no 404s
+
+---
+
+## R2.3 EVENTS
+
+- [x] R2.3.1 `Badminton events.` → **`Events.`** (page H1)
+
+---
+
+## R2.4 ÉLEVER PERFORMANCE LAB
+
+- [x] R2.4.1 The page is black, but `body.is-dark` forces the nav into its
+      `.scrolled` state, which swapped in the **black** logo — invisible.
+      Added `is-dark` rules pinning the white logo in both nav states
+- [x] R2.4.2 Verified at 1440 and 375: dark logo opacity 0, light logo 1
+
+---
+
+## R2.5 ABOUT
+
+### Square-crop the photos
+- [x] R2.5.1 Root cause found: the coach **profile pages** were never square.
+      The generated markup carries `width="640" height="640"`, and that
+      presentational height beat `aspect-ratio:1/1`, stretching the portrait
+      back to 298×640. Fixed with `height:auto`
+- [x] R2.5.2 The crop now lives in the file, not the stylesheet: new
+      `tools/build-coach-photos.sh` takes a **centred** square crop of each
+      2:3 studio headshot and exports 800×800 to `assets/img/coaches/`
+- [x] R2.5.3 All 15 coaches build from one place — Ong Keng Yang and Elsa Lai's
+      photos moved from `assets/img/team-*.jpg` into
+      `assets/img/Photos/Coaches/` and now follow the same convention
+- [x] R2.5.4 `data.js` points both of them at the new files; comment updated
+- [x] R2.5.5 Drop `object-position:top center` — with a square file there is
+      nothing left for `cover` to trim
+- [x] R2.5.6 Re-run `node tools/build-coaches.js`
+- [!] R2.5.7 **Assumption:** "like our current one on eleverbadminton.com" —
+      the live site is blocked from this sandbox, so the crop was chosen on
+      its merits (centred: head, shoulders and folded arms all in frame).
+      Say the word if you want it tighter or looser
+
+### One scrollable row
+- [x] R2.5.8 `Our team` is now a single row that scrolls right, not four
+      wrapped rows (`.coachgrid--rail`)
+- [x] R2.5.9 Scroll snapping, a styled thin scrollbar, and `tabindex="0"` +
+      an aria-label so the row is keyboard-scrollable
+- [x] R2.5.10 Prev / next arrows for mouse users, added by `pages.js` only
+      when the row overflows, disabled at each end, hidden on touch and ≤700px
+- [x] R2.5.11 Co-founders stay a plain 2-card grid (the comment was about
+      "our team")
+- [x] R2.5.12 Verified at 1440 / 1024 / 768 / 375: one row, 13 cards, no
+      horizontal page overflow, buttons enable and disable correctly
+
+---
+
+## R2.6 CROSS-CUTTING
+
+- [x] R2.6.1 Bump `?v=18` → `?v=19` on all 10 hand-written pages
+- [x] R2.6.2 `tools/build-coaches.js` hardcoded `?v=15` and had drifted three
+      versions behind — it now uses a `V` constant like `build-news.js`
+- [x] R2.6.3 Bump `V` to `'19'` in both generators and regenerate the 13 coach
+      pages and 2 article pages
+- [x] R2.6.4 README updated for the two new build scripts and the camp photos
+- [x] R2.6.5 Every page opened headless at 1600 / 1440 / 1024 / 768 / 375 —
+      no JS errors, no 404s, no horizontal overflow
+
+---
+
+## R2.7 NOTED, NOT CHANGED
+
+- The `ON COURT` placeholder on the coach profile pages renders its
+  `assets/img/coaches/<slug>/` hint one word per line. It pre-dates this round
+  and was not in the comments — say the word and it is a one-line fix.
+- `assets/img/team-*.jpg` still holds unreferenced older copies of the coach
+  photos. Left alone; safe to delete whenever you want.

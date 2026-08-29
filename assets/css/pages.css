@@ -71,7 +71,12 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 /* ---------- generic page section ---------- */
 .psec{padding:4.2rem clamp(1.25rem,5vw,3rem);max-width:var(--maxw);margin:0 auto}
 .psec--alt{background:var(--bg-2);max-width:none;border-block:1px solid var(--line)}
-.psec--alt > .psec__inner{max-width:var(--maxw);margin:0 auto;padding:0}
+/* The band runs edge to edge, but its content column has to line up with the
+   plain .psec sections above and below it. A plain .psec is `--maxw` wide
+   INCLUDING its side padding, so the inner column has to lose that padding
+   twice over — without this the banded sections sit ~2x padding wider than
+   the rest of the page. */
+.psec--alt > .psec__inner{max-width:calc(var(--maxw) - 2 * clamp(1.25rem,5vw,3rem));margin:0 auto;padding:0}
 .psec--tight{padding-top:2.4rem;padding-bottom:2.4rem}
 /* First section on a page with no dark .phead band: clear the fixed nav. */
 .psec--top{padding-top:8rem}
@@ -82,6 +87,11 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .psec h2{font-size:clamp(1.5rem,3vw,2.15rem);font-weight:800;line-height:1.12;letter-spacing:-.03em}
 .psec__sub{margin-top:.8rem;color:var(--muted);max-width:58ch;font-size:.95rem;line-height:1.7}
 .psec h3{font-size:1.05rem;font-weight:700;margin-bottom:.5rem}
+/* A section whose heading is meant to sit BELOW the card titles it labels
+   (Class Type over Group Class / Private Class) — the h2 drops to a quiet
+   label so the cards carry the weight. */
+.psec__head--minor{margin-bottom:1rem}
+.psec__head--minor h2{font-size:.86rem;font-weight:700;letter-spacing:.01em;color:var(--muted)}
 
 /* ---------- ElevenLabs-style two-column split ---------- */
 /* Sticky left column of headline + copy, scrolling content on the right. */
@@ -140,9 +150,15 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .path:hover{border-color:var(--accent);box-shadow:var(--shadow-sm);transform:translateY(-2px)}
 .path:target{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 
-/* The connector between two boxes. */
+/* The connector between two boxes — a small blue chip, so the progression
+   is a designed element rather than a loose glyph in the gap. `rotate` is
+   set separately from `transform` so the narrow layouts can turn the chip
+   without restating the centring. */
 .path__arrow{flex:0 0 auto;align-self:center;display:grid;place-items:center;
-  color:var(--accent);line-height:0}
+  width:1.65rem;height:1.65rem;border-radius:50%;line-height:0;
+  background:var(--accent);color:#fff;
+  box-shadow:0 0 0 4px var(--accent-soft)}
+.path__arrow svg{display:block}
 
 .path__num{display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--accent);
   color:#fff;font-size:.72rem;font-weight:800;letter-spacing:.02em;flex:none}
@@ -151,7 +167,6 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   line-height:1.5;margin-bottom:.75rem}
 .path__hook{font-size:.9rem;font-weight:700;color:var(--ink);line-height:1.55;margin-bottom:.6rem}
 .path__body{font-size:.88rem;color:var(--muted);line-height:1.65}
-.path__closing{margin-top:.85rem;font-size:.82rem;font-weight:600;color:var(--ink);line-height:1.55}
 
 .path__cta{margin-top:auto;padding-top:1rem;font-size:.84rem;font-weight:600;color:var(--accent);
   display:inline-flex;align-items:center;align-self:flex-start}
@@ -166,13 +181,13 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   .path:nth-of-type(4){grid-area:3/3}
   .path__arrow:nth-of-type(1){grid-area:1/2}
   .path__arrow:nth-of-type(3){grid-area:3/2}
-  .path__arrow:nth-of-type(2){grid-area:2/1/3/4;justify-self:center;transform:rotate(90deg)}
+  .path__arrow:nth-of-type(2){grid-area:2/1/3/4;justify-self:center;rotate:90deg}
 }
 
 /* Mobile: a single column, every arrow pointing down. */
 @media(max-width:700px){
   .paths{display:flex;flex-direction:column;flex-wrap:nowrap;gap:.65rem}
-  .path__arrow{transform:rotate(90deg);margin:.15rem 0}
+  .path__arrow{rotate:90deg;margin:.15rem 0}
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -183,19 +198,73 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .duo{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
 @media(max-width:820px){.duo{grid-template-columns:1fr}}
 .duo__card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:1.15rem 1.2rem;display:flex;flex-direction:column}
-.duo__card h3{font-size:1.02rem;font-weight:800;margin-bottom:.4rem;letter-spacing:-.025em}
-.duo__card p{color:var(--muted);font-size:.84rem;margin-bottom:.75rem;line-height:1.55}
+/* Deliberately larger than the "Class Type" heading above it — the two
+   class formats are the thing being compared, the label is not. */
+.duo__card h3{font-size:1.35rem;font-weight:800;margin-bottom:.5rem;letter-spacing:-.025em}
+.duo__card p{color:var(--muted);font-size:.88rem;margin-bottom:.75rem;line-height:1.6}
 .duo__list{list-style:none;display:flex;flex-wrap:wrap;gap:.35rem .55rem;font-size:.78rem;color:var(--muted);margin-bottom:.9rem}
 .duo__list li{padding-left:1.15rem;position:relative;line-height:1.55}
 .duo__list li::before{content:'✓';position:absolute;left:0;color:var(--accent);font-weight:700}
 .duo__card .btn{margin-top:auto;align-self:flex-start}
 
-/* ---------- CLASS LOCATIONS ---------- */
+/* ---------- CLASS LOCATIONS: list OR map ---------- */
 .sched__controls{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;margin-bottom:1.2rem}
 .sched__filter{background:#fff;border:1px solid var(--line);color:var(--muted);font-family:inherit;
   font-size:.82rem;font-weight:600;padding:.5rem .9rem;min-height:40px;border-radius:99px;cursor:pointer;transition:.2s}
 .sched__filter:hover{border-color:var(--line-2);color:var(--ink)}
 .sched__filter.is-active{background:var(--accent);border-color:var(--accent);color:#fff}
+.sched__toggle{margin-left:auto;display:flex;gap:.2rem;background:var(--panel-2);border:1px solid var(--line);border-radius:99px;padding:.2rem}
+.sched__toggle button{font-family:inherit;font-size:.82rem;font-weight:600;color:var(--muted);
+  padding:.45rem .9rem;min-height:36px;border-radius:99px;cursor:pointer;transition:.2s}
+.sched__toggle button.is-active{background:var(--ink);color:#fff}
+@media(max-width:640px){.sched__toggle{margin-left:0;width:100%}.sched__toggle button{flex:1}}
+
+/* One view at a time — never map and list side by side. */
+.sched__view{display:none}
+.sched__view.is-active{display:block}
+.sched__mapwrap{border:1px solid var(--line);border-radius:var(--r-lg);padding:.75rem;background:#fff}
+.sched__map{position:relative;width:100%;aspect-ratio:16/9;min-height:380px;overflow:hidden;
+  border-radius:var(--r-md);background:var(--panel-2);z-index:0}
+@media(max-width:700px){.sched__map{aspect-ratio:4/5;min-height:420px}}
+
+/* Legend sits above the map so it never covers a pin. */
+.sched__legend{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:.6rem}
+.sched__legend span{display:inline-flex;align-items:center;gap:.35rem;background:var(--panel);
+  border:1px solid var(--line);border-radius:99px;padding:.28rem .6rem;font-size:.72rem;
+  font-weight:700;color:var(--muted)}
+.pin-dot{width:.6rem;height:.6rem;border-radius:50%;display:inline-block;flex:none}
+.pin-dot--essentials{background:var(--accent)}
+.pin-dot--emergence{background:#13a65b}
+.pin-dot--mixed{background:linear-gradient(135deg,var(--accent) 0%,var(--accent) 50%,#13a65b 50%,#13a65b 100%)}
+
+/* Leaflet marker wrapper — the SVG carries the colour, so strip the default. */
+.sched__leafpin{background:none;border:0;filter:drop-shadow(0 6px 12px rgba(2,6,23,.3))}
+.sched__leafpin svg{display:block}
+
+/* Shown when the Leaflet CDN is unreachable. */
+.sched__mapfail{display:grid;place-content:center;height:100%;padding:2rem;text-align:center;
+  color:var(--muted);font-size:.88rem;line-height:1.6}
+.sched__mapfail-btn{font:inherit;font-weight:700;color:var(--accent);background:none;border:0;
+  padding:0;cursor:pointer;text-decoration:underline}
+
+/* Map popup — matches the venue cards rather than Leaflet's defaults. */
+.leaflet-popup-content-wrapper{border-radius:var(--r-md);box-shadow:var(--shadow-sm)}
+.leaflet-popup-content{margin:.85rem .95rem;font-family:inherit}
+.mpop__name{font-size:.95rem;font-weight:800;letter-spacing:-.02em;margin:0 0 .3rem}
+.mpop__addr{font-size:.76rem;color:var(--muted);line-height:1.5;margin:0 0 .6rem}
+.mpop__addr a{color:var(--muted);text-decoration:underline;text-underline-offset:2px;text-decoration-color:var(--line)}
+.mpop__addr a:hover,.mpop__addr a:focus-visible{color:var(--accent);text-decoration-color:currentColor}
+.mpop__sessions{list-style:none;margin:0 0 .7rem;padding:0;display:flex;flex-direction:column;gap:.3rem}
+.mpop__sessions li{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;font-size:.76rem;color:var(--muted)}
+.mpop__sessions b{color:var(--ink);font-weight:700}
+.mpop__lvl{margin-left:auto;font-size:.6rem;font-weight:700;padding:.14rem .4rem;border-radius:4px;letter-spacing:.03em}
+.mpop__lvl--essentials{background:#e8eefc;color:#17369b}
+.mpop__lvl--emergence{background:#e7f5ec;color:#1a6b3c}
+.mpop__actions{display:flex;flex-wrap:wrap;gap:.4rem .9rem;padding-top:.6rem;border-top:1px solid var(--line)}
+.mpop__actions a{font-size:.76rem;font-weight:700;color:var(--accent)}
+.mpop__actions a:hover{text-decoration:underline}
+.sched__maphint{margin-top:.65rem;font-size:.8rem;color:var(--faint);text-align:center}
+
 .sched__list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:.7rem}
 .vcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:1.1rem 1.2rem;
   transition:border-color .25s,box-shadow .25s;display:flex;flex-direction:column}
@@ -247,6 +316,18 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.65rem}
 .gallery__ph{aspect-ratio:4/3;background:var(--panel-2);border:1px dashed var(--line-2);border-radius:var(--r-md);
   display:flex;align-items:center;justify-content:center;text-align:center;padding:1rem;color:var(--faint);font-size:.8rem;line-height:1.5}
+/* A gallery thumbnail: a button, because it opens the lightbox. */
+.gallery__item{display:block;width:100%;aspect-ratio:4/3;padding:0;overflow:hidden;
+  border:1px solid var(--line);border-radius:var(--r-md);background:var(--panel-2);
+  cursor:pointer;transition:border-color .25s,box-shadow .25s,transform .25s var(--ease)}
+.gallery__item img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.gallery__item:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm);transform:translateY(-2px)}
+.gallery__item:hover img{transform:scale(1.04)}
+.gallery__item:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){
+  .gallery__item:hover{transform:none}
+  .gallery__item:hover img{transform:none}
+}
 
 /* ---------- EVENTS ---------- */
 .etypes{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem}
@@ -406,12 +487,44 @@ body.has-lightbox{overflow:hidden}
 
 /* ---------- COACHES ---------- */
 .coachgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.8rem}
+
+/* ---------- coach rail: one row that scrolls sideways ----------
+   The team is long enough that a grid wraps into four thin rows. As a rail
+   it stays one row and the reader pulls it along; .rail__nav gives mouse
+   users the same affordance a trackpad or touch already has. */
+.rail{position:relative}
+.coachgrid--rail{display:flex;grid-template-columns:none;flex-wrap:nowrap;
+  overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;
+  scroll-behavior:smooth;
+  /* The cards lift on hover — the top padding keeps that inside the scroller. */
+  padding:4px 0 .9rem;margin-top:-4px;
+  scrollbar-width:thin;scrollbar-color:var(--line-2) transparent}
+.coachgrid--rail::-webkit-scrollbar{height:8px}
+.coachgrid--rail::-webkit-scrollbar-track{background:transparent}
+.coachgrid--rail::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:99px}
+.coachgrid--rail > .coach{flex:0 0 200px;scroll-snap-align:start}
+.coachgrid--rail:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:var(--r-md)}
+
+/* 100px = half a card's square photo, so the arrows sit level with the faces. */
+.rail__nav{position:absolute;top:100px;transform:translateY(-50%);z-index:2;
+  width:2.4rem;height:2.4rem;border-radius:50%;display:grid;place-items:center;
+  background:#fff;border:1px solid var(--line-2);color:var(--ink);
+  box-shadow:var(--shadow-sm);cursor:pointer;transition:opacity .2s,background .2s,border-color .2s}
+.rail__nav:hover{background:var(--bg-2);border-color:var(--ink)}
+.rail__nav--prev{left:-.75rem}
+.rail__nav--next{right:-.75rem}
+.rail__nav[disabled]{opacity:0;pointer-events:none}
+/* Touch devices scroll the rail directly — the buttons would only cover cards. */
+@media(hover:none),(max-width:700px){.rail__nav{display:none}}
+@media(prefers-reduced-motion:reduce){.coachgrid--rail{scroll-behavior:auto}}
 .coach{display:block;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;
   transition:transform .25s var(--ease),box-shadow .25s,border-color .25s}
 .coach:hover{transform:translateY(-3px);box-shadow:var(--shadow-sm);border-color:var(--line-2)}
 .coach--static:hover{transform:none;box-shadow:none;border-color:var(--line)}
 .coach__img{aspect-ratio:1/1;overflow:hidden;background:var(--panel-2)}
-.coach__img img{width:100%;height:100%;object-fit:cover;object-position:top center;transition:transform .5s var(--ease)}
+/* The headshots are already square-cropped by tools/build-coach-photos.sh,
+   so `cover` has nothing left to trim — no focal-point nudge needed. */
+.coach__img img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .5s var(--ease)}
 .coach:hover .coach__img img{transform:scale(1.04)}
 .coach__initials{display:grid;place-items:center;width:100%;height:100%;font-size:2rem;font-weight:800;letter-spacing:.04em;color:var(--accent);background:var(--accent-soft)}
 .coach__body{padding:.85rem .95rem 1rem}
@@ -425,7 +538,10 @@ body.has-lightbox{overflow:hidden}
 @media(max-width:860px){.profile{grid-template-columns:1fr;gap:1.6rem}}
 .profile__photo{border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--line);position:sticky;top:96px}
 @media(max-width:860px){.profile__photo{position:static;max-width:300px}}
-.profile__photo img{width:100%;aspect-ratio:1/1;object-fit:cover;object-position:top center}
+/* height:auto is load-bearing — the generated markup carries width/height
+   attributes, and that presentational height would otherwise beat
+   aspect-ratio and stretch the portrait back out. */
+.profile__photo img{width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;object-position:center}
 .profile__meta{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin:1.4rem 0;
   border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:1.1rem 0}
 .profile__meta li{display:flex;gap:1rem;justify-content:space-between;font-size:.84rem}
@@ -533,6 +649,10 @@ body.is-dark{background:#000;color:#fff}
 body.is-dark .nav,body.is-dark .nav--solid{background:transparent;border-color:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
 body.is-dark .nav.scrolled{background:rgba(0,0,0,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-color:rgba(255,255,255,.09)}
 body.is-dark .nav__logo,body.is-dark .nav.scrolled .nav__logo{color:#fff}
+/* The page is black at every scroll position, so the logo stays the white
+   mark — .scrolled must not swap in the black one the light pages use. */
+body.is-dark .nav__logo__img--dark,body.is-dark .nav.scrolled .nav__logo__img--dark{opacity:0}
+body.is-dark .nav__logo__img--light,body.is-dark .nav.scrolled .nav__logo__img--light{opacity:1}
 body.is-dark .nav__logo span,body.is-dark .nav.scrolled .nav__logo span{color:var(--accent-light)}
 body.is-dark .nav__link,body.is-dark .nav.scrolled .nav__link{color:rgba(255,255,255,.7)}
 body.is-dark .nav__link:hover,body.is-dark .nav.scrolled .nav__link:hover{color:#fff;background:rgba(255,255,255,.08)}

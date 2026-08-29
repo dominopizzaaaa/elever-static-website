@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=18" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=18" />
+  <link rel="stylesheet" href="assets/css/style.css?v=19" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=19" />
 </head>
 <body data-page="about" data-nav="solid" data-base="">
 
@@ -65,7 +65,11 @@
         <h3 style="font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.9rem">Co-founders</h3>
         <div class="coachgrid" id="coachFounders" style="margin-bottom:2.4rem"></div>
         <h3 style="font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.9rem">Our team</h3>
-        <div class="coachgrid" id="coachTeam"></div>
+        <!-- One row that scrolls sideways rather than wrapping into four.
+             The arrows are added by pages.js only when the row overflows. -->
+        <div class="rail" id="coachTeamRail">
+          <div class="coachgrid coachgrid--rail" id="coachTeam" tabindex="0" role="group" aria-label="Our coaching team — scroll for more"></div>
+        </div>
       </div>
     </section>
 
@@ -115,9 +119,9 @@
 
   <footer id="siteFooter"></footer>
 
-  <script src="assets/js/data.js?v=18"></script>
-  <script src="assets/js/site.js?v=18"></script>
-  <script src="assets/js/pages.js?v=18"></script>
-  <script src="assets/js/main.js?v=18"></script>
+  <script src="assets/js/data.js?v=19"></script>
+  <script src="assets/js/site.js?v=19"></script>
+  <script src="assets/js/pages.js?v=19"></script>
+  <script src="assets/js/main.js?v=19"></script>
 </body>
 </html>

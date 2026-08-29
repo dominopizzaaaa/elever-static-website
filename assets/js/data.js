@@ -17,7 +17,8 @@
 
   /* ---------------------------------------------------------------
      COACHES  — About page grid + one generated page each
-     slug must match assets/img/team-<slug>.jpg (see `photo`)
+     `photo` is the square headshot built by tools/build-coach-photos.sh
+     from assets/img/Photos/Coaches/, so <slug> must match that file name.
      --------------------------------------------------------------- */
   var COACHES = [
     {
@@ -41,7 +42,7 @@
       profilePage: false
     },
     {
-      slug: 'ong-keng-yang', name: 'Ong Keng Yang', photo: 'assets/img/team-ong-keng-yang.jpg',
+      slug: 'ong-keng-yang', name: 'Ong Keng Yang', photo: 'assets/img/coaches/ong-keng-yang.jpg',
       role: 'Performance Manager · Strength & Conditioning Coach', cert: '', group: 'team',
       coaching: ['Emergence', 'Elite'], languages: ['English', 'Mandarin'],
       bio: [
@@ -137,7 +138,7 @@
       achievements: ['Over 20 years of coaching experience', 'More than 15 years as a competitive player', 'Champion and podium finisher in multiple local tournaments', 'International competition experience in Taiwan, Australia, and Malaysia']
     },
     {
-      slug: 'elsa-lai', name: 'Elsa Lai', photo: 'assets/img/team-elsa-lai.jpg',
+      slug: 'elsa-lai', name: 'Elsa Lai', photo: 'assets/img/coaches/elsa-lai.jpg',
       role: 'Development Coach', cert: '', group: 'team',
       coaching: ['Exploration'], languages: ['English', 'Mandarin'],
       bio: [
@@ -200,7 +201,11 @@
      Copy is transcribed verbatim from the Google Doc
      "EB Website for Dom" -> tab "Write-ups for Development Pathways",
      including its capitalisation and paragraph breaks. Each stage is:
-        headline -> hook (optional) -> body -> closing
+        headline -> hook (optional) -> body
+     The doc's closing pointer line ("Recommended progression into
+     ESSENTIALS.", "Step into your full potential.", ...) was dropped at
+     the client's request (Aug 2026) — the arrows between the cards carry
+     the progression now.
      Age ranges, ability levels and grading checkpoints are still to be
      decided — they are deliberately not stated here rather than guessed.
      --------------------------------------------------------------- */
@@ -210,7 +215,6 @@
       headline: 'DISCOVER THE GAME. EXPERIENCE \u00c9LEVER.',
       hook: 'New to badminton? Start here.',
       body: 'EXPLORATION is our entry programme for new students. It introduces badminton in a safe, engaging, and structured environment, helping players build confidence while experiencing \u00c9lever Badminton\u2019s coaching approach.',
-      closing: 'Recommended progression into ESSENTIALS.',
       cta: { label: 'See our camps', href: 'camps.html' }
     },
     {
@@ -218,7 +222,6 @@
       headline: 'BUILD THE FOUNDATION. MASTER THE BASICS.',
       hook: 'Ready to take your game further?',
       body: 'ESSENTIALS is designed for players who have grasped the basics and are ready to strengthen their foundations. The programme focuses on solid footwork, proper grips, and reliable technique, helping players play with confidence and consistency.',
-      closing: 'Progression into EMERGENCE upon assessment.',
       cta: { label: 'Find an Essentials class', href: 'classes.html#locations' }
     },
     {
@@ -226,7 +229,6 @@
       headline: 'REFINE YOUR SKILLS. RAISE YOUR GAME.',
       hook: 'Take it to the next level.',
       body: 'EMERGENCE helps players move beyond the basics and explore the tactical side of the game. Through structured drills, guided match scenarios, and focused coaching, players develop greater consistency, strategic thinking, and adaptability on court.',
-      closing: 'Selection into ELITE based on readiness.',
       cta: { label: 'Find an Emergence class', href: 'classes.html#locations' }
     },
     {
@@ -234,7 +236,6 @@
       headline: 'PERFORM WITH PURPOSE. COMPETE WITH CONFIDENCE.',
       hook: '',
       body: 'For athletes aiming to reach their highest potential, ELITE focuses on advanced skills, tactical understanding, mental preparation, and competitive performance. Players experience high-intensity training, match simulations, and individualised guidance to maximise growth and readiness for tournaments.',
-      closing: 'Step into your full potential.',
       cta: { label: 'Enquire about Elite', href: 'contact.html' }
     }
   ];
@@ -259,7 +260,17 @@
      CAMPS — Exploration holiday camps
      Set  upcoming: []  when nothing is on sale; the page then shows
      the waitlist capture instead of a registration card.
+
+     `gallery.photos` are filenames only — CAMP_PHOTO_BASE (full size, used
+     in the lightbox) and CAMP_THUMB_BASE (grid thumbnails) supply the
+     directories, so both sets stay in sync. Regenerate both from the
+     originals in assets/img/Photos/Camps/ with:
+         bash tools/build-camp-photos.sh
+     then check the numbering here still matches.
      --------------------------------------------------------------- */
+  var CAMP_PHOTO_BASE = 'assets/img/camps/';
+  var CAMP_THUMB_BASE = 'assets/img/camps/thumb/';
+
   var CAMPS = {
     upcoming: [
       {
@@ -273,7 +284,28 @@
         ],
         signup: 'https://www.eleverbadminton.com/hec202609'
       }
-    ]
+    ],
+
+    /* One rolling gallery of past camps rather than one per occasion — the
+       camps run to the same shape every holiday, so they read as a single
+       set. `alt` is per photo because a gallery of children deserves real
+       alternative text, not "camp photo 3". */
+    gallery: {
+      title: 'Élever Exploration camps',
+      photos: [
+        'camp-1.jpg', 'camp-2.jpg', 'camp-3.jpg', 'camp-4.jpg',
+        'camp-5.jpg', 'camp-6.jpg', 'camp-7.jpg'
+      ],
+      alt: [
+        'Campers lined up along the net working through a rally drill with their coach',
+        'Campers sprinting through a warm-up across the court',
+        'A coach demonstrating a forehand to two campers',
+        'A camp group photographed on court with their coaches and rackets',
+        'A camper lunging low for a shot, laughing',
+        'A camp group standing arms-folded on court with their coach',
+        'A camper following through on a forehand as the shuttle leaves the racket'
+      ]
+    }
   };
 
   /* ---------------------------------------------------------------
@@ -645,6 +677,8 @@
     pathways: PATHWAYS,
     classes: CLASSES,
     camps: CAMPS,
+    campPhotoBase: CAMP_PHOTO_BASE,
+    campThumbBase: CAMP_THUMB_BASE,
     eventTypes: EVENT_TYPES,
     eventServices: EVENT_SERVICES,
     eventsUpcoming: EVENTS_UPCOMING,

@@ -36,6 +36,20 @@ After editing the coach list, regenerate their pages:
 node tools/build-coaches.js
 ```
 
+## Photos
+
+Originals live in `assets/img/Photos/` and are never modified. Three scripts export
+the web-ready sets from them — run the matching one after dropping new files in, then
+check the filenames listed in `data.js` still line up:
+
+| Source | Script | Output |
+|---|---|---|
+| `Photos/Coaches/Headshot - <Name>.<ext>` | `bash tools/build-coach-photos.sh` | `assets/img/coaches/<slug>.jpg` — 800×800, centre-cropped square |
+| `Photos/Camps/*` | `bash tools/build-camp-photos.sh` | `assets/img/camps/` (1600px) + `camps/thumb/` (640px) |
+| `Photos/Events/<occasion>/*` | `bash tools/build-event-photos.sh` | `assets/img/events/` (1600px) + `events/thumb/` (640px) |
+
+The scripts use macOS `sips`, so they run on a Mac as-is.
+
 ## Brand
 
 | | |
@@ -54,7 +68,6 @@ info@eleverbadminton.com · WhatsApp +65 8921 4221
 - Real class days, times, levels and venues (currently sample data in `CLASSES`)
 - Age ranges, ability levels and grading checkpoints for the four pathways (deliberately
   omitted rather than guessed)
-- Camp photos (`assets/img/camps/`) and event photos (`assets/img/events/`)
 - Partner logo files — drop them in `assets/img/partners/` and set `logo` in `PARTNERS`
 - Write-ups for the previous events listed on the Events page
 - Completion of the bracketed fields in `privacy.html` (DPO, retention period) and the
@@ -71,7 +84,7 @@ index.html  classes.html  camps.html  events.html  lab.html
 about.html  news.html     hub.html    contact.html privacy.html
 sitemap.xml robots.txt
 coaches/          generated — one page per coach
-tools/            build-coaches.js
+tools/            build-coaches.js, build-news.js, build-*-photos.sh
 assets/
   css/style.css   design system (white / black / #2151D1, Montserrat)
   css/pages.css   layout layer for the standalone pages
@@ -79,7 +92,11 @@ assets/
   js/site.js      shared nav + footer injection
   js/pages.js     renders the data-driven blocks on each page
   js/main.js      intro, hero canvas, nav, reveals, hub directory
-  img/            team photos, hero, player portraits
+  img/            hero and player portraits
+    Photos/       untouched originals — coaches, camps, events, logos
+    coaches/      square headshots      (build-coach-photos.sh)
+    camps/        camp gallery + thumbs (build-camp-photos.sh)
+    events/       event photos + thumbs (build-event-photos.sh)
 ```
 
 Scripts load in the order `data → site → pages → main`.

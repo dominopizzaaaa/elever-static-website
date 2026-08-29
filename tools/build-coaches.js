@@ -13,6 +13,8 @@ global.window = {};
 require(path.join(root, 'assets/js/data.js'));
 const COACHES = global.window.ELEVER_DATA.coaches;
 
+const V = '19'; // must match the ?v= cache-busting string used across the site
+
 const esc = s => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -65,8 +67,8 @@ function page(c) {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../assets/css/style.css?v=15" />
-  <link rel="stylesheet" href="../assets/css/pages.css?v=15" />
+  <link rel="stylesheet" href="../assets/css/style.css?v=${V}" />
+  <link rel="stylesheet" href="../assets/css/pages.css?v=${V}" />
   <script type="application/ld+json">${jsonld}</script>
 </head>
 <body data-page="about" data-nav="solid" data-base="../">
@@ -119,10 +121,10 @@ function page(c) {
 
   <footer id="siteFooter"></footer>
 
-  <script src="../assets/js/data.js?v=15"></script>
-  <script src="../assets/js/site.js?v=15"></script>
-  <script src="../assets/js/pages.js?v=15"></script>
-  <script src="../assets/js/main.js?v=15"></script>
+  <script src="../assets/js/data.js?v=${V}"></script>
+  <script src="../assets/js/site.js?v=${V}"></script>
+  <script src="../assets/js/pages.js?v=${V}"></script>
+  <script src="../assets/js/main.js?v=${V}"></script>
 </body>
 </html>
 `;

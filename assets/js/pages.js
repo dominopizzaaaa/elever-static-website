@@ -22,18 +22,37 @@
   function sampleTag(item) { return item && item.placeholder ? ' <span class="sample" title="Sample content — replace in assets/js/data.js">sample</span>' : ''; }
 
   /* Photo path helpers. data.js stores bare filenames; the base directories
-     live alongside so the full-size and thumbnail sets cannot drift apart. */
+     live alongside so the full-size and thumbnail sets cannot drift apart.
+     Events and camps keep separate directories, hence the pair of makers
+     rather than one pair of module-level functions. */
   var PHOTO_BASE = D.eventPhotoBase || 'assets/img/events/';
   var THUMB_BASE = D.eventThumbBase || 'assets/img/events/thumb/';
-  function fullSrc(file) { return (SITE.base || '') + PHOTO_BASE + file; }
-  function thumbSrc(file) { return (SITE.base || '') + THUMB_BASE + file; }
+  var CAMP_PHOTO_BASE = D.campPhotoBase || 'assets/img/camps/';
+  var CAMP_THUMB_BASE = D.campThumbBase || 'assets/img/camps/thumb/';
+  function srcMaker(dir) {
+    return function (file) { return (SITE.base || '') + dir + file; };
+  }
+  var fullSrc = srcMaker(PHOTO_BASE);
+  var thumbSrc = srcMaker(THUMB_BASE);
+  var campFullSrc = srcMaker(CAMP_PHOTO_BASE);
+  var campThumbSrc = srcMaker(CAMP_THUMB_BASE);
 
-  /* Full-screen gallery viewer for the event showcase.
-     Shows the full-size image, a thumbnail strip, a counter and keyboard,
-     swipe and button navigation. */
-  function initEventLightbox(scope) {
+  /* Full-screen gallery viewer, shared by the event showcase and the camp
+     gallery. Shows the full-size image, a thumbnail strip, a counter and
+     keyboard, swipe and button navigation.
+
+     `galleries` is a list of { title, photos: [filename] }; a click on any
+     [data-gallery]/[data-photo] element inside `scope` opens that photo.
+     `full` / `thumb` turn a bare filename into a URL, so each caller keeps
+     its own photo directory. */
+  function initLightbox(scope, opts) {
     if (!scope || scope.dataset.lightboxReady) return;
     scope.dataset.lightboxReady = '1';
+
+    var galleries = opts.galleries || [];
+    var full = opts.full || fullSrc;
+    var thumb = opts.thumb || thumbSrc;
+    var label = opts.label || 'Event photo viewer';
 
     var activeGallery = 0;
     var activePhoto = 0;
@@ -43,7 +62,7 @@
     modal.className = 'lightbox';
     modal.setAttribute('role', 'dialog');
     modal.setAttribute('aria-modal', 'true');
-    modal.setAttribute('aria-label', 'Event photo viewer');
+    modal.setAttribute('aria-label', label);
     modal.hidden = true;
     modal.innerHTML =
       '<div class="lightbox__bar">' +
@@ -64,7 +83,7 @@
     var stripEl = modal.querySelector('.lightbox__strip');
     var closeBtn = modal.querySelector('.lightbox__close');
 
-    function gallery() { return D.eventShowcase[activeGallery] || null; }
+    function gallery() { return galleries[activeGallery] || null; }
     function photos() { var g = gallery(); return (g && g.photos) || []; }
 
     /* Fetching the neighbours keeps stepping through a gallery instant. */
@@ -74,7 +93,7 @@
       [1, -1].forEach(function (d) {
         var i = (activePhoto + d + list.length) % list.length;
         var pre = new Image();
-        pre.src = fullSrc(list[i]);
+        pre.src = full(list[i]);
       });
     }
 
@@ -84,7 +103,7 @@
       stripEl.innerHTML = photos().map(function (file, i) {
         return '<button class="lightbox__stripitem" type="button" role="tab" data-idx="' + i + '"' +
           ' aria-label="' + esc('Photo ' + (i + 1) + ' of ' + photos().length) + '">' +
-          '<img src="' + esc(thumbSrc(file)) + '" alt="" loading="lazy" decoding="async"></button>';
+          '<img src="' + esc(thumb(file)) + '" alt="" loading="lazy" decoding="async"></button>';
       }).join('');
     }
 
@@ -93,7 +112,7 @@
       var list = photos();
       var file = list[activePhoto];
       if (!g || !file) return;
-      img.src = fullSrc(file);
+      img.src = full(file);
       img.alt = g.title + ' — photo ' + (activePhoto + 1) + ' of ' + list.length;
       titleEl.textContent = g.title;
       countEl.textContent = (activePhoto + 1) + ' / ' + list.length;
@@ -221,9 +240,13 @@
     var steps = D.pathways;
     var last = steps.length - 1;
 
+    /* The connector between two cards: a filled chevron chip, so the
+       progression reads as part of the design rather than as a stray
+       glyph dropped in the gap. .path__arrow rotates it on the narrow
+       layouts — the chip is drawn upright and CSS turns the whole span. */
     var ARROW = '<span class="path__arrow" aria-hidden="true">' +
-      '<svg viewBox="0 0 24 16" width="24" height="16" focusable="false">' +
-        '<path d="M1 8h20M15 2l6 6-6 6" fill="none" stroke="currentColor" ' +
+      '<svg viewBox="0 0 16 16" width="16" height="16" focusable="false">' +
+        '<path d="M5.5 3.2 10.3 8l-4.8 4.8" fill="none" stroke="currentColor" ' +
           'stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
       '</svg></span>';
 
@@ -234,28 +257,131 @@
           '<p class="path__headline">' + esc(p.headline) + '</p>' +
           (p.hook ? '<p class="path__hook">' + esc(p.hook) + '</p>' : '') +
           '<p class="path__body">' + esc(p.body) + '</p>' +
-          '<p class="path__closing">' + esc(p.closing) + '</p>' +
-          '<a class="path__cta" href="' + esc(p.cta.href) + '">' + esc(p.cta.label) + ' &rsaquo;</a>' +
+          /* nbsp keeps the chevron on the last word rather than orphaning it. */
+          '<a class="path__cta" href="' + esc(p.cta.href) + '">' + esc(p.cta.label) + '&nbsp;&rsaquo;</a>' +
         '</article>' + (i < last ? ARROW : '');
     }).join('');
   })();
 
   /* =================================================================
-     CLASSES — locations list.
+     CLASSES — locations. Map OR list, never both at once.
      ================================================================= */
   (function locations() {
     var listMount = el('schedList');
     if (!listMount) return;
 
+    var mapMount = el('schedMap');
     var countEl = el('schedCount');
     var filterWrap = el('schedFilters');
+    var toggleWrap = el('schedToggle');
+    var mapView = el('schedMapView');
+    var listView = el('schedListView');
 
     var level = 'all';
+    var mapDrawn = false;
 
     function gmapsSearchUrl(v) {
       var addr = (v.addr || '').replace(/,?\s*S\d{6}.*/, '');
       return 'https://www.google.com/maps/search/?api=1&query=' +
         encodeURIComponent((v.venue + ' ' + addr + ' Singapore').trim());
+    }
+
+    function venueLevel(v) {
+      var hasEmergence = v.sessions.some(function (s) { return s.level === 'Emergence'; });
+      var hasEssentials = v.sessions.some(function (s) { return s.level === 'Essentials'; });
+      if (hasEmergence && hasEssentials) return 'mixed';
+      return hasEmergence ? 'emergence' : 'essentials';
+    }
+
+    /* ---- Real map (Leaflet + OpenStreetMap tiles, no API key) ----
+       Pins are colour-coded by the level(s) taught at that venue:
+       Essentials = blue, Emergence = green, both = split marker. */
+    var LEVEL_COLOR = { essentials: '#2151d1', emergence: '#13a65b' };
+    var map = null;
+    var markerLayer = null;
+
+    function pinIcon(lvl) {
+      var a = LEVEL_COLOR.essentials, b = LEVEL_COLOR.emergence;
+      var fill = lvl === 'mixed'
+        ? '<path d="M14 0a14 14 0 0 0-14 14c0 9 14 26 14 26V0z" fill="' + a + '"/>' +
+          '<path d="M14 0a14 14 0 0 1 14 14c0 9-14 26-14 26V0z" fill="' + b + '"/>'
+        : '<path d="M14 0a14 14 0 0 0 0 28 14 14 0 0 0 0-28zM14 0a14 14 0 0 1 14 14c0 9-14 26-14 26S0 23 0 14A14 14 0 0 1 14 0z" fill="' +
+          (lvl === 'emergence' ? b : a) + '"/>';
+      var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="40" viewBox="0 0 28 40">' +
+        fill + '<circle cx="14" cy="14" r="5.2" fill="#fff"/></svg>';
+      return L.divIcon({
+        className: 'sched__leafpin',
+        html: svg,
+        iconSize: [28, 40],
+        iconAnchor: [14, 40],
+        popupAnchor: [0, -34]
+      });
+    }
+
+    function popupHtml(v) {
+      var rows = sessionsFor(v).map(function (s) {
+        return '<li><b>' + esc(s.day) + '</b> ' + esc(s.time) +
+          ' <span class="mpop__lvl mpop__lvl--' + esc(s.level.toLowerCase()) + '">' + esc(s.level) + '</span></li>';
+      }).join('');
+      return '<div class="mpop">' +
+        '<h4 class="mpop__name">' + esc(v.venue) + '</h4>' +
+        '<p class="mpop__addr"><a href="' + gmapsSearchUrl(v) + '" target="_blank" rel="noopener">' +
+          esc(v.addr) + '</a></p>' +
+        '<ul class="mpop__sessions">' + rows + '</ul>' +
+        '<div class="mpop__actions">' +
+          '<a href="' + esc(v.book || BOOK) + '" target="_blank" rel="noopener">Book this class &rsaquo;</a>' +
+        '</div>' +
+      '</div>';
+    }
+
+    /* Rendered only when the Map view is first opened, so the tile request
+       never runs for visitors who stay on the list. */
+    function drawMap() {
+      if (!mapMount) return;
+      var rows = visible();
+
+      // Leaflet blocked or offline: say so rather than showing an empty box.
+      if (typeof L === 'undefined') {
+        mapMount.innerHTML = '<p class="sched__mapfail">The map could not load. ' +
+          '<button type="button" class="sched__mapfail-btn" data-view="list">Use the list view</button> ' +
+          'for every venue, day and time.</p>';
+        mapDrawn = false;
+        return;
+      }
+
+      if (!map) {
+        map = L.map(mapMount, { scrollWheelZoom: false, attributionControl: true });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        // Wheel-zoom only after a deliberate click, so the page still scrolls.
+        map.on('click', function () { map.scrollWheelZoom.enable(); });
+        map.on('mouseout', function () { map.scrollWheelZoom.disable(); });
+        markerLayer = L.layerGroup().addTo(map);
+      }
+
+      markerLayer.clearLayers();
+      var pts = [];
+      rows.forEach(function (v) {
+        if (typeof v.lat !== 'number' || typeof v.lng !== 'number') return;
+        var m = L.marker([v.lat, v.lng], {
+          icon: pinIcon(venueLevel(v)),
+          title: v.venue,
+          alt: v.venue + ' — ' + sessionsFor(v).length + ' classes'
+        });
+        m.bindPopup(popupHtml(v), { maxWidth: 280 });
+        m.addTo(markerLayer);
+        pts.push([v.lat, v.lng]);
+      });
+
+      if (pts.length > 1) map.fitBounds(pts, { padding: [38, 38], maxZoom: 15 });
+      else if (pts.length === 1) map.setView(pts[0], 15);
+      else map.setView([1.3521, 103.8198], 11);   // whole island when nothing matches
+
+      // The container is sized by CSS after the tab switches; recalc once.
+      setTimeout(function () { map.invalidateSize(); }, 60);
+      mapDrawn = true;
     }
 
     /* Venues read alphabetically. localeCompare so the curly apostrophe in
@@ -281,6 +407,8 @@
         countEl.textContent = rows.length + (rows.length === 1 ? ' venue' : ' venues') +
           ' · ' + n + (n === 1 ? ' class' : ' classes');
       }
+      if (mapDrawn) drawMap();
+
       if (!rows.length) {
         listMount.innerHTML = '<p class="sched__empty">No classes match that level yet. Try “All levels”, or ' +
           '<a href="contact.html">ask us about a venue near you</a>.</p>';
@@ -317,6 +445,33 @@
           x.setAttribute('aria-pressed', String(on));
         });
         render();
+      });
+    }
+
+    function setView(view) {
+      if (!toggleWrap || !mapView || !listView) return;
+      toggleWrap.querySelectorAll('button').forEach(function (x) {
+        var on = x.getAttribute('data-view') === view;
+        x.classList.toggle('is-active', on);
+        x.setAttribute('aria-pressed', String(on));
+      });
+      listView.classList.toggle('is-active', view === 'list');
+      mapView.classList.toggle('is-active', view === 'map');
+      if (view === 'map') drawMap();
+    }
+
+    // The map's own failure message offers a way back to the list.
+    if (mapMount) {
+      mapMount.addEventListener('click', function (e) {
+        if (e.target.closest('.sched__mapfail-btn')) setView('list');
+      });
+    }
+
+    if (toggleWrap && mapView && listView) {
+      toggleWrap.addEventListener('click', function (e) {
+        var b = e.target.closest('button');
+        if (!b) return;
+        setView(b.getAttribute('data-view'));
       });
     }
 
@@ -370,6 +525,41 @@
       }).join('');
     }
 
+  })();
+
+  /* =================================================================
+     CAMPS — photo gallery
+     One rolling set of past-camp photos, opening in the shared lightbox.
+     ================================================================= */
+  (function campGallery() {
+    var mount = el('campGallery');
+    if (!mount) return;
+
+    var g = (D.camps && D.camps.gallery) || null;
+    var photos = (g && g.photos) || [];
+    var alts = (g && g.alt) || [];
+
+    // Nothing supplied yet: leave the section out rather than show empty boxes.
+    if (!photos.length) {
+      var section = mount.closest('section');
+      if (section) section.hidden = true;
+      return;
+    }
+
+    mount.innerHTML = photos.map(function (file, i) {
+      var alt = alts[i] || (g.title + ' — photo ' + (i + 1));
+      return '<button class="gallery__item" type="button" data-gallery="0" data-photo="' + i + '"' +
+        ' aria-label="' + esc('Open photo ' + (i + 1) + ' of ' + photos.length + ': ' + alt) + '">' +
+        '<img src="' + esc(campThumbSrc(file)) + '" alt="' + esc(alt) + '"' +
+          ' loading="lazy" decoding="async"></button>';
+    }).join('');
+
+    initLightbox(mount, {
+      galleries: [g],
+      full: campFullSrc,
+      thumb: campThumbSrc,
+      label: 'Camp photo viewer'
+    });
   })();
 
   /* =================================================================
@@ -455,7 +645,12 @@
           '</div>' +
         '</article>';
       }).join('');
-      initEventLightbox(showcase);
+      initLightbox(showcase, {
+        galleries: D.eventShowcase,
+        full: fullSrc,
+        thumb: thumbSrc,
+        label: 'Event photo viewer'
+      });
     }
 
     var pst = el('eventsPast');
@@ -514,6 +709,45 @@
 
     if (founders) founders.innerHTML = D.coaches.filter(function (c) { return c.group === 'founder'; }).map(card).join('');
     if (team) team.innerHTML = D.coaches.filter(function (c) { return c.group !== 'founder'; }).map(card).join('');
+
+    /* The team row scrolls sideways. Scrolling itself is CSS; this only adds
+       the two arrows a mouse user would otherwise not get, and only while
+       there is something off-screen to reach. */
+    var rail = el('coachTeamRail');
+    if (!rail || !team || !team.classList.contains('coachgrid--rail')) return;
+
+    function arrow(dir, label, d) {
+      return '<button class="rail__nav rail__nav--' + dir + '" type="button" aria-label="' + label + '">' +
+        '<svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" focusable="false">' +
+          '<path d="' + d + '" fill="none" stroke="currentColor" stroke-width="1.9" ' +
+            'stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+    }
+    rail.insertAdjacentHTML('beforeend',
+      arrow('prev', 'Scroll the team left', 'M10 3 5 8l5 5') +
+      arrow('next', 'Scroll the team right', 'M6 3l5 5-5 5'));
+
+    var prev = rail.querySelector('.rail__nav--prev');
+    var next = rail.querySelector('.rail__nav--next');
+
+    function sync() {
+      var max = team.scrollWidth - team.clientWidth;
+      // 2px of slack: fractional scroll positions never land exactly on the end.
+      prev.disabled = team.scrollLeft <= 2;
+      next.disabled = team.scrollLeft >= max - 2;
+    }
+    // One click moves two cards, so the gap has to come from the CSS.
+    function page(dir) {
+      var card = team.querySelector('.coach');
+      var gap = parseFloat(getComputedStyle(team).columnGap) || 0;
+      var step = card ? (card.offsetWidth + gap) * 2 : team.clientWidth * 0.8;
+      team.scrollBy({ left: dir * step, behavior: 'smooth' });
+    }
+
+    prev.addEventListener('click', function () { page(-1); });
+    next.addEventListener('click', function () { page(1); });
+    team.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
   })();
 
   /* =================================================================

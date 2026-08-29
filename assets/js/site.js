@@ -28,7 +28,7 @@
     {
       key: 'classes', href: 'classes.html', label: 'Classes',
       children: [
-        { key: 'classes', href: 'classes.html', label: 'Regular classes' },
+        { key: 'classes', href: 'classes.html', label: 'Regular Classes' },
         { key: 'camps', href: 'camps.html', label: 'Camps' }
       ]
     },
@@ -135,7 +135,7 @@
 
         '<div class="footer__col">' +
           '<h4>Train</h4>' +
-          '<a href="' + url('classes.html') + '">Regular classes</a>' +
+          '<a href="' + url('classes.html') + '">Regular Classes</a>' +
           '<a href="' + url('camps.html') + '">Camps</a>' +
           '<a href="' + BOOK_URL + '" target="_blank" rel="noopener">Book a class</a>' +
         '</div>' +
