@@ -73,6 +73,9 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .psec--alt{background:var(--bg-2);max-width:none;border-block:1px solid var(--line)}
 .psec--alt > .psec__inner{max-width:var(--maxw);margin:0 auto;padding:0}
 .psec--tight{padding-top:2.4rem;padding-bottom:2.4rem}
+/* First section on a page with no dark .phead band: clear the fixed nav. */
+.psec--top{padding-top:8rem}
+@media(max-width:900px){.psec--top{padding-top:7rem}}
 .psec__head{max-width:62ch;margin-bottom:2.2rem}
 .psec__head--spaced{margin-top:3.2rem}
 .psec__kicker{display:block;font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:.7rem}

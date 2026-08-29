@@ -39,61 +39,16 @@
   <header id="siteHeader"></header>
 
   <main id="main">
-    <section class="phead">
-      <div class="phead__inner">
-        <p class="phead__crumbs"><a href="index.html">Home</a> · Events</p>
-        <h1>We run badminton events <em>for you</em>.</h1>
-        <p class="phead__lead">Carnivals, clinics and competitions organised as a service for companies, schools, community clubs and organisations across Singapore. Bring us a date and a headcount — we bring everything else.</p>
-        <div class="phead__actions">
-          <a class="btn btn--primary" href="contact.html">Request a proposal</a>
-          <a class="btn btn--ghost" href="#work">See our work</a>
-        </div>
-      </div>
-    </section>
+    <!-- The page head band was removed at the client's request (Aug 2026).
+         The h1 is kept for the document outline and search results. -->
+    <h1 class="sr-only">Badminton events</h1>
 
     <!-- ===== THREE THINGS WE ORGANISE ===== -->
-    <section class="psec">
+    <section class="psec psec--top">
       <div class="psec__head">
         <span class="psec__kicker">What we organise</span>
-        <h2>Carnivals, clinics and competitions</h2>
       </div>
       <div class="etypes" id="eventTypes"></div>
-    </section>
-
-    <!-- ===== SERVICE PROVIDED ===== -->
-    <section class="psec psec--alt psec--tight">
-      <div class="psec__inner">
-        <div class="suitebar">
-          <div class="suitebar__head">
-            <span class="psec__kicker">Service provided</span>
-            <h2>Plan, run and wrap.</h2>
-            <p class="suitebar__sub">One team for format, courts, people, equipment and results.</p>
-          </div>
-          <a class="btn btn--primary suitebar__cta" href="contact.html">Request a proposal</a>
-        </div>
-        <div class="suite" id="eventServices"></div>
-      </div>
-    </section>
-
-    <!-- ===== OUR WORK ===== -->
-    <section class="psec" id="work">
-      <div class="psec__head">
-        <span class="psec__kicker">Our work</span>
-        <h2>Upcoming</h2>
-      </div>
-      <div class="ecards" id="eventsUpcoming" style="margin-bottom:3.5rem"></div>
-
-      <div class="psec__head">
-        <span class="psec__kicker">Event photos</span>
-        <h2>Highlights from recent events</h2>
-        <p class="psec__sub">A curated look at the carnivals, clinics and activations we have delivered for community partners, schools and brands.</p>
-      </div>
-      <div class="eshowcase" id="eventShowcase"></div>
-
-      <div class="psec__head psec__head--spaced">
-        <h2>Previously</h2>
-      </div>
-      <div class="elog" id="eventsPast"></div>
     </section>
 
     <!-- ===== TRUSTED BY ===== -->
@@ -104,6 +59,25 @@
         </div>
         <div class="partners" id="eventPartners"></div>
       </div>
+    </section>
+
+    <!-- The "Service provided / Plan, run and wrap." section was removed at the
+         client's request (Aug 2026). EVENT_SERVICES is still in data.js. -->
+
+    <!-- ===== OUR WORK ===== -->
+    <section class="psec" id="work">
+      <div class="psec__head">
+        <h2>Upcoming Events</h2>
+      </div>
+      <div class="ecards" id="eventsUpcoming" style="margin-bottom:3.5rem"></div>
+
+      <div class="psec__head">
+        <h2>Past Events</h2>
+      </div>
+      <div class="eshowcase" id="eventShowcase"></div>
+
+      <!-- The "Previously" log of past events was removed at the client's
+           request (Aug 2026). EVENTS_PAST is still in data.js. -->
     </section>
 
   </main>

@@ -298,7 +298,9 @@
     }
   ];
 
-  /* All-in-one suite of event management services. */
+  /* All-in-one suite of event management services.
+     Not rendered right now — the "Service provided" section was removed from
+     events.html in Aug 2026. Kept here so it is easy to bring back. */
   var EVENT_SERVICES = [
     { title: 'Plan', copy: 'Format, run sheet and court flow.' },
     { title: 'Run', copy: 'Coaches, marshals and hosting.' },
@@ -319,7 +321,9 @@
     }
   ];
 
-  /* Previous events, grouped by pillar. Write-ups and photos to follow. */
+  /* Previous events, grouped by pillar.
+     Not rendered right now — the "Previously" log was removed from
+     events.html in Aug 2026. Kept here so it is easy to bring back. */
   var EVENTS_PAST = {
     carnival: [
       { title: 'Joo Chiat Badminton Carnival 2026', when: '23 Jul 2026', where: 'St. Patrick’s School' },
@@ -432,7 +436,7 @@
     },
     {
       title: 'ÉB @ Northbrooks Secondary School',
-      type: 'School clinic',
+      type: 'Clinic',
       when: '23 Oct 2025',
       where: 'Northbrooks Secondary School',
       slug: 'northbrooks-school-2025',
@@ -450,7 +454,7 @@
     },
     {
       title: 'ÉB @ KFF Singapore Badminton Open 2025',
-      type: 'Festival activation',
+      type: 'Carnival',
       when: '30 May – 1 Jun 2025',
       where: 'OCBC Square',
       slug: 'kff-singapore-open-2025',
