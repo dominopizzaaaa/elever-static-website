@@ -553,6 +553,7 @@ body.has-lightbox{overflow:hidden}
 
 /* ---------- misc ---------- */
 .cols2{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}
+.cols2--single{grid-template-columns:1fr;max-width:38rem}
 @media(max-width:860px){.cols2{grid-template-columns:1fr;gap:1.6rem}}
 .prose p{color:var(--muted);margin-bottom:.9rem;max-width:62ch;font-size:.95rem;line-height:1.75}
 .prose p:last-child{margin-bottom:0}

@@ -471,6 +471,13 @@
     if (!up) return;
     var c = D.camps;
 
+    /* The waitlist form is only offered when there is nothing to register
+       for. With a camp on sale the card takes the full width instead. */
+    var waitlist = el('campWaitlist');
+    var layout = el('campLayout');
+    if (waitlist) waitlist.hidden = !!c.upcoming.length;
+    if (layout) layout.classList.toggle('cols2--single', !!c.upcoming.length);
+
     if (!c.upcoming.length) {
       up.innerHTML = '<article class="camp"><div class="camp__head"><h3>No camp on sale right now</h3>' +
         '<p class="camp__dates">Our next Exploration camp runs in the school holidays.</p></div>' +
@@ -497,7 +504,7 @@
             (m.bring && m.bring.length
               ? '<ul class="camp__bring">' + m.bring.map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') + '</ul>'
               : '') +
-            '<a class="btn btn--primary" href="' + esc(m.signup || BOOK) + '" target="_blank" rel="noopener">Register for this camp</a>' +
+            '<a class="btn btn--primary" href="' + esc(m.signup || BOOK) + '" target="_blank" rel="noopener">Register</a>' +
           '</div>' +
         '</article>';
       }).join('');

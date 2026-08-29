@@ -263,13 +263,13 @@
   var CAMPS = {
     upcoming: [
       {
-        title: 'Holiday Exploration Camp',
+        title: '2026 September Holidays Exploration Camp',
         dates: '7 – 11 September 2026',
         venues: ['Aljunied', 'Novena', 'Sengkang', 'Serangoon'],
         ratio: '6 students : 1 coach',
         pricing: [
-          { label: 'Standard pricing', note: 'until 31 Aug', price: 'S$228' },
-          { label: 'Closing pricing', note: 'until 6 Sep', price: 'S$248' }
+          { label: 'Standard Pricing', note: 'until 31 Aug', price: 'S$228' },
+          { label: 'Closing Pricing', note: 'until 6 Sep', price: 'S$248' }
         ],
         signup: 'https://www.eleverbadminton.com/hec202609'
       }
