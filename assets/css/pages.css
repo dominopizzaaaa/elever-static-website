@@ -301,7 +301,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .ecard__scope li::before{content:'·';position:absolute;left:.25rem;color:var(--accent);font-weight:800}
 
 /* event photo showcase */
-.eshowcase{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;margin-bottom:3rem}
+.eshowcase{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem}
 .eshow{overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
   transition:transform .25s var(--ease),box-shadow .25s,border-color .25s}
 .eshow:hover{transform:translateY(-3px);box-shadow:var(--shadow-sm);border-color:var(--line-2)}
