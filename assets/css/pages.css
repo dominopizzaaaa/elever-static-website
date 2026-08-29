@@ -660,6 +660,16 @@ body.is-dark .nav__link.is-current,body.is-dark .nav.scrolled .nav__link.is-curr
 body.is-dark .nav__burger span,body.is-dark .nav.scrolled .nav__burger span{background:#fff}
 body.is-dark .nav.open .nav__burger span{background:var(--ink)}
 body.is-dark .footer{border-top:1px solid rgba(255,255,255,.09)}
+/* Mobile: the burger panel is a solid white sheet, even here. Without these
+   the white `body.is-dark` link colours above carry into the open panel and
+   the menu reads as blank. `.nav.open` is deliberate on two counts: it is
+   exactly the state where the panel exists, and this page pins the nav to
+   `.scrolled`, whose is-dark rules would otherwise win on specificity. */
+@media(max-width:900px){
+  body.is-dark .nav.open .nav__links .nav__link{color:var(--ink)}
+  body.is-dark .nav.open .nav__links .nav__link:hover{color:var(--ink);background:transparent}
+  body.is-dark .nav.open .nav__links .nav__link.is-current{color:var(--accent)}
+}
 
 .lab{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
   padding:9rem clamp(1.25rem,5vw,3rem) 6rem;background:#000;color:#fff}
