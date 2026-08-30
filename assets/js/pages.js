@@ -250,8 +250,15 @@
           'stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
       '</svg></span>';
 
+    var base = SITE.base || '';
+
     mount.innerHTML = steps.map(function (p, i) {
       return '<article class="path" id="' + esc(p.key) + '">' +
+          (p.photo
+            ? '<div class="path__media"><img src="' + esc(base + p.photo) + '"' +
+                ' alt="' + esc(p.photoAlt || (p.name + ' players in training')) + '"' +
+                ' loading="lazy" decoding="async"></div>'
+            : '') +
           '<span class="path__num">' + esc(p.num) + '</span>' +
           '<h3>' + esc(p.name) + '</h3>' +
           '<p class="path__headline">' + esc(p.headline) + '</p>' +
@@ -548,7 +555,8 @@
 
     mount.innerHTML = photos.map(function (file, i) {
       var alt = alts[i] || (g.title + ' — photo ' + (i + 1));
-      return '<button class="gallery__item" type="button" data-gallery="0" data-photo="' + i + '"' +
+      return '<button class="gallery__item' + (i === 0 ? ' gallery__item--lead' : '') + '"' +
+        ' type="button" data-gallery="0" data-photo="' + i + '"' +
         ' aria-label="' + esc('Open photo ' + (i + 1) + ' of ' + photos.length + ': ' + alt) + '">' +
         '<img src="' + esc(campThumbSrc(file)) + '" alt="' + esc(alt) + '"' +
           ' loading="lazy" decoding="async"></button>';
@@ -670,9 +678,12 @@
 
     var partners = el('eventPartners');
     if (partners) {
+      var pbase = SITE.base || '';
       partners.innerHTML = D.partners.map(function (p) {
         return p.logo
-          ? '<span class="partners__chip"><img src="' + esc(p.logo) + '" alt="' + esc(p.name) + '" loading="lazy" decoding="async"></span>'
+          ? '<span class="partners__chip partners__chip--logo">' +
+              '<img src="' + esc(pbase + p.logo) + '" alt="' + esc(p.name) + '" loading="lazy" decoding="async">' +
+            '</span>'
           : '<span class="partners__chip">' + esc(p.name) + '</span>';
       }).join('');
     }

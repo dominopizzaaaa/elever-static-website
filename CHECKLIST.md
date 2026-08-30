@@ -523,3 +523,42 @@ Legend: `[x]` done · `[!]` assumption made — client to confirm
   and was not in the comments — say the word and it is a one-line fix.
 - `assets/img/team-*.jpg` still holds unreferenced older copies of the coach
   photos. Left alone; safe to delete whenever you want.
+
+---
+
+## R3 PHOTOS — CLASSES, PARTNERS, CAMP MOSAIC (30 Aug 2026)
+
+Élever supplied two more image sets (`assets/img/regular classes/` and
+`assets/img/partners/`) after the camp photos landed in R2. Originals moved to
+`assets/img/Photos/` with the rest; exports follow the existing one-script-per-set
+pattern.
+
+### Regular classes
+- [x] R3.1 `bash tools/build-class-photos.sh` — the four brand-tinted portraits
+      export to `assets/img/classes/<stage>.jpg` (900px, ~65 KB each)
+- [x] R3.2 Each pathway card on `classes.html` now opens with its stage photo,
+      full-bleed to the card edges, from `PATHWAYS[].photo` / `.photoAlt`
+- [x] R3.3 The image is 4/5 (the ratio supplied) and capped at 400px tall, so it
+      crops rather than towers on the 2×2 and single-column layouts
+- [x] R3.4 The clip lives on `.path__media`, **not** on `.path` — `overflow:hidden`
+      on the card itself zeroes the automatic minimum height and collapses every
+      card to a sliver in the single-column layout
+
+### Trusted by
+- [x] R3.5 `bash tools/build-partner-logos.sh` — six logos export to
+      `assets/img/partners/<slug>.png`, transparency kept
+- [x] R3.6 ASICS, People’s Association, Wabi Studios, Truly Nuts, Timber Actually
+      and JK Technology render as real marks; the seven partners we only have a
+      name for keep the dashed name chip and are listed after them
+- [x] R3.7 Chips grew to 84px so a near-square mark is not drawn half the size of
+      a wide one; the Truly Nuts logo is centre-cropped off its empty canvas first
+
+### Camp gallery
+- [x] R3.8 The seven camp photos are now a mosaic — first tile two columns and
+      two rows, tiles at 3/2 (the shape they were shot in) instead of a cropped
+      4/3 — so at full width the set fills a five-column grid exactly
+- [x] R3.9 `CAMPS.gallery.photos` re-ordered (`alt` re-ordered with it) so the
+      lead tile is the strongest action shot and the group photos close the set
+- [x] R3.10 Bump `?v=20` → `?v=21`, regenerate the coach and article pages
+- [x] R3.11 Verified headless at 1440 / 900 / 430: no 404s on any page, the
+      pathway cards, the camp mosaic and both lightboxes seen rendering

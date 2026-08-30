@@ -208,10 +208,15 @@
      the progression now.
      Age ranges, ability levels and grading checkpoints are still to be
      decided — they are deliberately not stated here rather than guessed.
+     `photo` is the brand-tinted portrait Élever supplied for each stage;
+     regenerate from "assets/img/Photos/Regular Classes/" with:
+         bash tools/build-class-photos.sh
      --------------------------------------------------------------- */
   var PATHWAYS = [
     {
       key: 'exploration', name: 'Exploration', num: '01',
+      photo: 'assets/img/classes/exploration.jpg',
+      photoAlt: 'A beginner holding her racket up at the start of an Exploration session',
       headline: 'DISCOVER THE GAME. EXPERIENCE \u00c9LEVER.',
       hook: 'New to badminton? Start here.',
       body: 'EXPLORATION is our entry programme for new students. It introduces badminton in a safe, engaging, and structured environment, helping players build confidence while experiencing \u00c9lever Badminton\u2019s coaching approach.',
@@ -219,6 +224,8 @@
     },
     {
       key: 'essentials', name: 'Essentials', num: '02',
+      photo: 'assets/img/classes/essentials.jpg',
+      photoAlt: 'A junior player watching the shuttle onto his racket face',
       headline: 'BUILD THE FOUNDATION. MASTER THE BASICS.',
       hook: 'Ready to take your game further?',
       body: 'ESSENTIALS is designed for players who have grasped the basics and are ready to strengthen their foundations. The programme focuses on solid footwork, proper grips, and reliable technique, helping players play with confidence and consistency.',
@@ -226,6 +233,8 @@
     },
     {
       key: 'emergence', name: 'Emergence', num: '03',
+      photo: 'assets/img/classes/emergence.jpg',
+      photoAlt: 'A player reaching full stretch for an overhead shot',
       headline: 'REFINE YOUR SKILLS. RAISE YOUR GAME.',
       hook: 'Take it to the next level.',
       body: 'EMERGENCE helps players move beyond the basics and explore the tactical side of the game. Through structured drills, guided match scenarios, and focused coaching, players develop greater consistency, strategic thinking, and adaptability on court.',
@@ -233,6 +242,8 @@
     },
     {
       key: 'elite', name: 'Elite', num: '04',
+      photo: 'assets/img/classes/elite.jpg',
+      photoAlt: 'An Élever player in a Singapore jersey mid-rally at a tournament',
       headline: 'PERFORM WITH PURPOSE. COMPETE WITH CONFIDENCE.',
       hook: '',
       body: 'For athletes aiming to reach their highest potential, ELITE focuses on advanced skills, tactical understanding, mental preparation, and competitive performance. Players experience high-intensity training, match simulations, and individualised guidance to maximise growth and readiness for tournaments.',
@@ -292,18 +303,21 @@
        alternative text, not "camp photo 3". */
     gallery: {
       title: 'Élever Exploration camps',
+      /* Order is deliberate, not the export order: the first photo leads the
+         mosaic at twice the size, so the action shots run ahead of the two
+         group photos. `alt` is index-matched to `photos`. */
       photos: [
-        'camp-1.jpg', 'camp-2.jpg', 'camp-3.jpg', 'camp-4.jpg',
-        'camp-5.jpg', 'camp-6.jpg', 'camp-7.jpg'
+        'camp-5.jpg', 'camp-7.jpg', 'camp-2.jpg', 'camp-3.jpg',
+        'camp-1.jpg', 'camp-6.jpg', 'camp-4.jpg'
       ],
       alt: [
-        'Campers lined up along the net working through a rally drill with their coach',
+        'A camper lunging low for a shot, laughing',
+        'A camper following through on a forehand as the shuttle leaves the racket',
         'Campers sprinting through a warm-up across the court',
         'A coach demonstrating a forehand to two campers',
-        'A camp group photographed on court with their coaches and rackets',
-        'A camper lunging low for a shot, laughing',
+        'Campers lined up along the net working through a rally drill with their coach',
         'A camp group standing arms-folded on court with their coach',
-        'A camper following through on a forehand as the shuttle leaves the racket'
+        'A camp group photographed on court with their coaches and rackets'
       ]
     }
   };
@@ -513,17 +527,24 @@
 
   var EVENT_GROUP_LABEL = { carnival: 'Carnivals', clinic: 'Clinics', competition: 'Competitions' };
 
-  /* Partner logos: drop files in assets/img/partners/ and set `logo`.
-     Entries with no logo render as a name chip rather than a fake mark. */
+  /* Partner logos: drop the supplied file in assets/img/Photos/Partners/,
+     run `bash tools/build-partner-logos.sh` and point `logo` at the export.
+     Entries with no logo render as a name chip rather than a fake mark, so
+     the ones we have a mark for are listed first. */
   var PARTNERS = [
+    { name: 'ASICS', logo: 'assets/img/partners/asics.png' },
+    { name: 'People\u2019s Association', logo: 'assets/img/partners/peoples-association.png' },
+    { name: 'Wabi Studios', logo: 'assets/img/partners/wabi-studios.png' },
+    { name: 'Truly Nuts', logo: 'assets/img/partners/truly-nuts.png' },
+    { name: 'Timber Actually', logo: 'assets/img/partners/timber-actually.png' },
+    { name: 'JK Technology', logo: 'assets/img/partners/jk-technology.png' },
     { name: 'SingHealth Community Hospitals', logo: '' },
-    { name: 'ASICS', logo: '' },
+    { name: 'Northbrooks Secondary School', logo: '' },
     { name: 'Joo Chiat CC', logo: '' },
     { name: 'Bukit Gombak CC', logo: '' },
     { name: 'Siglap South CC', logo: '' },
     { name: 'Paya Lebar Kovan CC', logo: '' },
-    { name: 'Kolam Ayer CC', logo: '' },
-    { name: 'Northbrooks Secondary School', logo: '' }
+    { name: 'Kolam Ayer CC', logo: '' }
   ];
 
   /* ---------------------------------------------------------------

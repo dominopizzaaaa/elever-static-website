@@ -38,8 +38,8 @@ node tools/build-coaches.js
 
 ## Photos
 
-Originals live in `assets/img/Photos/` and are never modified. Three scripts export
-the web-ready sets from them — run the matching one after dropping new files in, then
+Originals live in `assets/img/Photos/` and are never modified. One script per set
+exports the web-ready files — run the matching one after dropping new files in, then
 check the filenames listed in `data.js` still line up:
 
 | Source | Script | Output |
@@ -47,6 +47,8 @@ check the filenames listed in `data.js` still line up:
 | `Photos/Coaches/Headshot - <Name>.<ext>` | `bash tools/build-coach-photos.sh` | `assets/img/coaches/<slug>.jpg` — 800×800, centre-cropped square |
 | `Photos/Camps/*` | `bash tools/build-camp-photos.sh` | `assets/img/camps/` (1600px) + `camps/thumb/` (640px) |
 | `Photos/Events/<occasion>/*` | `bash tools/build-event-photos.sh` | `assets/img/events/` (1600px) + `events/thumb/` (640px) |
+| `Photos/Regular Classes/<Stage>.png` | `bash tools/build-class-photos.sh` | `assets/img/classes/<stage>.jpg` — 900px pathway card image |
+| `Photos/Partners/<Partner>.png` | `bash tools/build-partner-logos.sh` | `assets/img/partners/<slug>.png` — 480px, transparency kept |
 
 The scripts use macOS `sips`, so they run on a Mac as-is.
 
@@ -68,7 +70,8 @@ info@eleverbadminton.com · WhatsApp +65 8921 4221
 - Real class days, times, levels and venues (currently sample data in `CLASSES`)
 - Age ranges, ability levels and grading checkpoints for the four pathways (deliberately
   omitted rather than guessed)
-- Partner logo files — drop them in `assets/img/partners/` and set `logo` in `PARTNERS`
+- Logos for the partners still shown as name-only chips in `PARTNERS`
+  (SingHealth Community Hospitals, Northbrooks Secondary School, the five CCs)
 - Write-ups for the previous events listed on the Events page
 - Completion of the bracketed fields in `privacy.html` (DPO, retention period) and the
   Terms & Conditions page the footer links to
@@ -97,6 +100,8 @@ assets/
     coaches/      square headshots      (build-coach-photos.sh)
     camps/        camp gallery + thumbs (build-camp-photos.sh)
     events/       event photos + thumbs (build-event-photos.sh)
+    classes/      pathway card images   (build-class-photos.sh)
+    partners/     "Trusted by" logos    (build-partner-logos.sh)
 ```
 
 Scripts load in the order `data → site → pages → main`.

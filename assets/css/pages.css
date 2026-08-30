@@ -148,6 +148,19 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
   padding:1.25rem 1.2rem;transition:border-color .25s,box-shadow .25s,transform .25s}
 .path:hover{border-color:var(--accent);box-shadow:var(--shadow-sm);transform:translateY(-2px)}
+
+/* The stage photo runs to the card edges, so it cancels the card padding and
+   carries the card's own top corners — clipping on .path itself would zero
+   the automatic minimum height its cards rely on in the single-column layout.
+   4/5 is the ratio the images are supplied in; the cap stops the photo
+   towering on the two-column and single-column layouts, where the box crops
+   rather than grows. */
+.path__media{margin:-1.25rem -1.2rem 1.1rem;aspect-ratio:4/5;max-height:400px;
+  overflow:hidden;background:var(--panel-2);
+  border-radius:calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0}
+.path__media img{width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .5s var(--ease)}
+.path:hover .path__media img{transform:scale(1.03)}
 .path:target{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 
 /* The connector between two boxes — a small blue chip, so the progression
@@ -192,6 +205,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 
 @media(prefers-reduced-motion:reduce){
   .path:hover{transform:none}
+  .path:hover .path__media img{transform:none}
 }
 
 /* ---------- two-column write-up (group vs private) ---------- */
@@ -313,17 +327,26 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .timetable li{display:grid;grid-template-columns:6rem 1fr;gap:1rem;padding:.65rem 0;border-bottom:1px solid var(--line);font-size:.85rem}
 .timetable li:last-child{border-bottom:0}
 .timetable b{color:var(--accent);font-weight:700}
-.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.65rem}
+/* Photo mosaic: 3/2 tiles, the shape the camp photos are shot in, with the
+   opening tile two columns and two rows — at the section's full width that
+   is a five-column grid, so a seven-photo camp fills two rows exactly. */
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.65rem;grid-auto-flow:dense}
 .gallery__ph{aspect-ratio:4/3;background:var(--panel-2);border:1px dashed var(--line-2);border-radius:var(--r-md);
   display:flex;align-items:center;justify-content:center;text-align:center;padding:1rem;color:var(--faint);font-size:.8rem;line-height:1.5}
 /* A gallery thumbnail: a button, because it opens the lightbox. */
-.gallery__item{display:block;width:100%;aspect-ratio:4/3;padding:0;overflow:hidden;
+.gallery__item{display:block;width:100%;aspect-ratio:3/2;padding:0;overflow:hidden;
   border:1px solid var(--line);border-radius:var(--r-md);background:var(--panel-2);
   cursor:pointer;transition:border-color .25s,box-shadow .25s,transform .25s var(--ease)}
 .gallery__item img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
 .gallery__item:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm);transform:translateY(-2px)}
 .gallery__item:hover img{transform:scale(1.04)}
 .gallery__item:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.gallery__item--lead{grid-column:span 2;grid-row:span 2;aspect-ratio:auto}
+/* Two-up on a phone; the lead tile keeps its own shape across the row. */
+@media(max-width:640px){
+  .gallery{grid-template-columns:1fr 1fr}
+  .gallery__item--lead{grid-row:auto;aspect-ratio:3/2}
+}
 @media(prefers-reduced-motion:reduce){
   .gallery__item:hover{transform:none}
   .gallery__item:hover img{transform:none}
@@ -480,10 +503,15 @@ body.has-lightbox{overflow:hidden}
 }
 
 .partners{display:flex;flex-wrap:wrap;gap:.6rem}
-.partners__chip{display:grid;place-items:center;min-width:140px;height:68px;padding:0 1.1rem;background:var(--panel);
+.partners__chip{display:grid;place-items:center;min-width:150px;height:84px;padding:0 1.2rem;background:var(--panel);
   border:1px dashed var(--line-2);border-radius:var(--r-md);color:var(--faint);font-size:.78rem;font-weight:600;text-align:center}
-.partners img{max-height:40px;max-width:100%;width:auto;object-fit:contain;filter:grayscale(1);opacity:.7;transition:.25s}
-.partners a:hover img{filter:none;opacity:1}
+/* A real mark gets a solid tile; the dashed border stays for the partners we
+   only have a name for. Wide marks are limited by the chip width, so the
+   height allowance is set for the near-square ones. */
+.partners__chip--logo{border-style:solid;border-color:var(--line)}
+.partners__chip--logo:hover{border-color:var(--line-2)}
+.partners img{max-height:52px;max-width:100%;width:auto;object-fit:contain;filter:grayscale(1);opacity:.72;transition:filter .25s,opacity .25s}
+.partners__chip--logo:hover img,.partners a:hover img{filter:none;opacity:1}
 
 /* ---------- COACHES ---------- */
 .coachgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.8rem}
