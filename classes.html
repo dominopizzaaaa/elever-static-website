@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=21" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=21" />
+  <link rel="stylesheet" href="assets/css/style.css?v=22" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=22" />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -62,45 +62,89 @@
       <div class="paths" id="pathsGrid"></div>
     </section>
 
-    <!-- ===== GROUP VS PRIVATE ===== -->
-    <section class="psec psec--alt">
-      <div class="psec__inner">
-        <div class="psec__head psec__head--minor">
-          <h2>Class Type</h2>
-        </div>
-        <div class="duo">
-          <div class="duo__card">
-            <h3>Group Class</h3>
-            <p>Train in a small group, matched by level, with a maximum 1:6 coach-to-player ratio.</p>
-          </div>
-          <div class="duo__card">
-            <h3>Private Class</h3>
-            <p>Personalised 1-to-1 or 1-to-2 coaching for specific goals, technique fixes or faster progress.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
+    <!-- ===== CLASS TYPE SHOWCASE (ElevenLabs-style tabs) ===== -->
     <!-- Trial and placement section removed at the client's request (Aug 2026).
          Copy is preserved in the "EB Website for Dom" Google Doc if it returns. -->
-
-    <!-- ===== LOCATIONS ===== -->
-    <section class="psec" id="locations">
+    <section class="psec psec--alt" id="locations">
       <div class="psec__inner">
         <div class="psec__head">
-          <h2>Class Locations</h2>
+          <h2>Class Type</h2>
+          <p class="psec__sub">Two ways to train with Élever — pick a small group matched to your level, or go fully personalised. Explore what each format looks like and where classes run.</p>
         </div>
 
-        <div class="sched__controls">
-          <div id="schedFilters" role="group" aria-label="Filter classes by level">
-            <button class="sched__filter is-active" data-level="all" aria-pressed="true">All levels</button>
-            <button class="sched__filter" data-level="Essentials" aria-pressed="false">Essentials</button>
-            <button class="sched__filter" data-level="Emergence" aria-pressed="false">Emergence</button>
+        <div class="showcase" id="classShowcase">
+          <!-- Tab rail -->
+          <div class="showcase__tabs" role="tablist" aria-label="Choose a class type">
+            <button class="showcase__tab is-active" id="tab-group" role="tab" aria-selected="true" aria-controls="panel-group" data-tab="group">
+              <span class="showcase__tabdot showcase__tabdot--group"></span>
+              <span class="showcase__tablabel">Group Classes</span>
+            </button>
+            <button class="showcase__tab" id="tab-private" role="tab" aria-selected="false" aria-controls="panel-private" data-tab="private" tabindex="-1">
+              <span class="showcase__tabdot showcase__tabdot--private"></span>
+              <span class="showcase__tablabel">Private Classes</span>
+            </button>
+          </div>
+
+          <!-- ===== GROUP PANEL: intro + level filter + venue list ===== -->
+          <div class="showcase__panel is-active" id="panel-group" role="tabpanel" aria-labelledby="tab-group" tabindex="0">
+            <div class="showcase__intro">
+              <div class="showcase__lead">
+                <span class="showcase__eyebrow">Small-group coaching</span>
+                <h3>Train in a level-matched squad</h3>
+                <p>Group classes keep a maximum 1:6 coach-to-player ratio, so every session stays personal while you learn alongside players at your level. Choose a venue and time below.</p>
+              </div>
+              <ul class="showcase__facts">
+                <li><b>1:6</b><span>Max coach-to-player ratio</span></li>
+                <li><b>8</b><span>Venues across Singapore</span></li>
+                <li><b>2</b><span>Levels — Essentials &amp; Emergence</span></li>
+              </ul>
+            </div>
+
+            <div class="showcase__locations">
+              <div class="sched__controls">
+                <div id="schedFilters" role="group" aria-label="Filter classes by level">
+                  <button class="sched__filter is-active" data-level="all" aria-pressed="true">All levels</button>
+                  <button class="sched__filter" data-level="Essentials" aria-pressed="false">Essentials</button>
+                  <button class="sched__filter" data-level="Emergence" aria-pressed="false">Emergence</button>
+                </div>
+                <p class="hub__count" id="schedCount" aria-live="polite"></p>
+              </div>
+              <div class="sched__list" id="schedList"></div>
+            </div>
+          </div>
+
+          <!-- ===== PRIVATE PANEL: description content ===== -->
+          <div class="showcase__panel" id="panel-private" role="tabpanel" aria-labelledby="tab-private" tabindex="0" hidden>
+            <div class="showcase__intro">
+              <div class="showcase__lead">
+                <span class="showcase__eyebrow">1-to-1 &amp; 1-to-2 coaching</span>
+                <h3>Personalised coaching, built around you</h3>
+                <p>Private classes give you a coach&rsquo;s full attention — ideal for specific goals, technique fixes, or faster progress. Sessions are shaped around your schedule, level and the parts of your game you most want to sharpen.</p>
+              </div>
+              <ul class="showcase__facts">
+                <li><b>1:1</b><span>Or 1-to-2 with a partner</span></li>
+                <li><b>You</b><span>Flexible times &amp; focus</span></li>
+                <li><b>Fast</b><span>Targeted technique fixes</span></li>
+              </ul>
+            </div>
+
+            <div class="showcase__private">
+              <ul class="priv__list">
+                <li><b>Tailored plan</b><span>Every session is built around your goals, from first grip to competition prep.</span></li>
+                <li><b>Choose your pairing</b><span>Go solo for maximum focus, or train 1-to-2 with a friend or family member.</span></li>
+                <li><b>Flexible scheduling</b><span>We work around you to find times and venues that fit your week.</span></li>
+                <li><b>Technique-first</b><span>Fix footwork, grips and strokes fast with undivided coaching attention.</span></li>
+              </ul>
+              <div class="priv__cta">
+                <div>
+                  <b>Ready for private coaching?</b>
+                  <span>Tell us your goals and we&rsquo;ll match you with the right coach.</span>
+                </div>
+                <a class="btn btn--primary" href="contact.html">Enquire about private classes</a>
+              </div>
+            </div>
           </div>
         </div>
-        <p class="hub__count" id="schedCount" style="padding-left:0" aria-live="polite"></p>
-
-        <div class="sched__list" id="schedList"></div>
       </div>
     </section>
 
@@ -108,9 +152,9 @@
 
   <footer id="siteFooter"></footer>
 
-  <script src="assets/js/data.js?v=21"></script>
-  <script src="assets/js/site.js?v=21"></script>
-  <script src="assets/js/pages.js?v=21"></script>
-  <script src="assets/js/main.js?v=21"></script>
+  <script src="assets/js/data.js?v=22"></script>
+  <script src="assets/js/site.js?v=22"></script>
+  <script src="assets/js/pages.js?v=22"></script>
+  <script src="assets/js/main.js?v=22"></script>
 </body>
 </html>

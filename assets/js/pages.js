@@ -271,6 +271,52 @@
   })();
 
   /* =================================================================
+     CLASSES — class-type showcase (Group / Private tabs).
+     A small tab controller: swaps the active tab chip and shows the
+     matching panel. The venue list inside the Group panel is rendered
+     by locations() below, which is untouched by the switch.
+     ================================================================= */
+  (function classShowcase() {
+    var root = el('classShowcase');
+    if (!root) return;
+
+    var tabs = Array.prototype.slice.call(root.querySelectorAll('.showcase__tab'));
+    var panels = Array.prototype.slice.call(root.querySelectorAll('.showcase__panel'));
+    if (!tabs.length) return;
+
+    function activate(tab) {
+      var id = tab.getAttribute('aria-controls');
+      tabs.forEach(function (t) {
+        var on = t === tab;
+        t.classList.toggle('is-active', on);
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+      });
+      panels.forEach(function (p) {
+        var on = p.id === id;
+        p.classList.toggle('is-active', on);
+        p.hidden = !on;
+      });
+    }
+
+    root.querySelector('.showcase__tabs').addEventListener('click', function (e) {
+      var tab = e.target.closest('.showcase__tab');
+      if (tab) activate(tab);
+    });
+
+    /* Left/right arrows move between tabs, matching the tablist role. */
+    root.querySelector('.showcase__tabs').addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      var i = tabs.indexOf(document.activeElement);
+      if (i === -1) return;
+      var next = e.key === 'ArrowRight' ? (i + 1) % tabs.length : (i - 1 + tabs.length) % tabs.length;
+      tabs[next].focus();
+      activate(tabs[next]);
+      e.preventDefault();
+    });
+  })();
+
+  /* =================================================================
      CLASSES — locations list.
      ================================================================= */
   (function locations() {

@@ -208,21 +208,77 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   .path:hover .path__media img{transform:none}
 }
 
-/* ---------- two-column write-up (group vs private) ---------- */
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
-@media(max-width:820px){.duo{grid-template-columns:1fr}}
-.duo__card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:1.15rem 1.2rem;display:flex;flex-direction:column}
-/* Deliberately larger than the "Class Type" heading above it — the two
-   class formats are the thing being compared, the label is not. */
-.duo__card h3{font-size:1.35rem;font-weight:800;margin-bottom:.5rem;letter-spacing:-.025em}
-.duo__card p{color:var(--muted);font-size:.88rem;margin-bottom:.75rem;line-height:1.6}
-.duo__list{list-style:none;display:flex;flex-wrap:wrap;gap:.35rem .55rem;font-size:.78rem;color:var(--muted);margin-bottom:.9rem}
-.duo__list li{padding-left:1.15rem;position:relative;line-height:1.55}
-.duo__list li::before{content:'✓';position:absolute;left:0;color:var(--accent);font-weight:700}
-.duo__card .btn{margin-top:auto;align-self:flex-start}
+/* ---------- CLASS TYPE SHOWCASE (ElevenLabs-style tabbed panel) ----------
+   One rounded shell holds a pill tab-rail and a soft inner panel. The active
+   tab lifts out of the rail on a white chip; the panel below swaps content
+   with a gentle fade so it feels like a single interactive surface. */
+.showcase{background:var(--bg-2);border:1px solid var(--line);border-radius:calc(var(--r-lg) + 6px);
+  padding:.5rem;box-shadow:var(--shadow-sm)}
+.showcase__tabs{display:flex;gap:.3rem;padding:.35rem;background:transparent}
+.showcase__tab{flex:0 0 auto;display:inline-flex;align-items:center;gap:.55rem;font-family:inherit;
+  font-size:.92rem;font-weight:700;letter-spacing:-.01em;color:var(--muted);background:transparent;
+  border:1px solid transparent;border-radius:99px;padding:.65rem 1.15rem;cursor:pointer;
+  transition:color .2s,background .2s,box-shadow .2s,border-color .2s}
+.showcase__tab:hover{color:var(--ink)}
+.showcase__tab.is-active{color:var(--ink);background:var(--panel);border-color:var(--line);
+  box-shadow:0 6px 18px -12px rgba(0,0,0,.35)}
+.showcase__tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.showcase__tabdot{width:.85rem;height:.85rem;border-radius:50%;flex:none;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.55)}
+.showcase__tabdot--group{background:radial-gradient(circle at 32% 28%,#5b83f2,#2151d1 70%)}
+.showcase__tabdot--private{background:radial-gradient(circle at 32% 28%,#ff9a5a,#e5602a 72%)}
+
+/* Inner panel — the soft card the tabs feed into. */
+.showcase__panel{background:var(--panel);border:1px solid var(--line);
+  border-radius:calc(var(--r-lg) + 2px);padding:1.6rem;animation:showcaseFade .35s var(--ease)}
+.showcase__panel[hidden]{display:none}
+@keyframes showcaseFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.showcase__panel{animation:none}}
+
+/* Intro row: lead copy on the left, a mini stat rail on the right. */
+.showcase__intro{display:grid;grid-template-columns:1.4fr 1fr;gap:1.6rem;align-items:center;
+  padding-bottom:1.5rem;margin-bottom:1.5rem;border-bottom:1px solid var(--line)}
+.showcase__eyebrow{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:.7rem}
+.showcase__lead h3{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-bottom:.6rem}
+.showcase__lead p{color:var(--muted);font-size:.95rem;line-height:1.7;max-width:52ch}
+.showcase__facts{list-style:none;display:grid;gap:.55rem}
+.showcase__facts li{display:flex;align-items:baseline;gap:.7rem;background:var(--panel-2);
+  border:1px solid var(--line);border-radius:var(--r-md);padding:.65rem .85rem}
+.showcase__facts b{font-size:1.15rem;font-weight:800;letter-spacing:-.02em;color:var(--ink);
+  min-width:2.6rem;flex:none}
+.showcase__facts span{font-size:.8rem;color:var(--muted);line-height:1.4}
+
+/* Private panel content. */
+.showcase__private{display:grid;gap:1.4rem}
+.priv__list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.priv__list li{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--r-md);
+  padding:1rem 1.1rem;transition:border-color .2s,box-shadow .2s,transform .2s var(--ease)}
+.priv__list li:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm);transform:translateY(-2px)}
+.priv__list b{display:block;font-size:.95rem;font-weight:700;letter-spacing:-.01em;margin-bottom:.3rem}
+.priv__list span{display:block;font-size:.85rem;color:var(--muted);line-height:1.6}
+.priv__cta{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;
+  padding:1.2rem 1.4rem;border-radius:var(--r-lg);
+  background:linear-gradient(120deg,var(--accent-soft),#fff 70%);border:1px solid rgba(33,81,209,.18)}
+.priv__cta b{display:block;font-size:1rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.15rem}
+.priv__cta span{display:block;font-size:.85rem;color:var(--muted);line-height:1.55}
+.priv__cta .btn{flex:none}
+
+@media(max-width:820px){
+  .showcase__intro{grid-template-columns:1fr;gap:1.1rem}
+  .showcase__lead h3{font-size:1.35rem}
+  .priv__list{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .showcase{border-radius:var(--r-lg)}
+  .showcase__panel{padding:1.15rem}
+  .showcase__tab{flex:1;justify-content:center;font-size:.85rem;padding:.6rem .7rem}
+}
 
 /* ---------- CLASS LOCATIONS ---------- */
-.sched__controls{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;margin-bottom:1.2rem}
+.showcase__locations .sched__controls{margin-top:0}
+.sched__controls{display:flex;flex-wrap:wrap;gap:.45rem .8rem;align-items:center;margin-bottom:1.2rem}
+.hub__count{padding-left:0;margin-left:auto;font-size:.82rem;color:var(--faint);font-weight:600}
 .sched__filter{background:#fff;border:1px solid var(--line);color:var(--muted);font-family:inherit;
   font-size:.82rem;font-weight:600;padding:.5rem .9rem;min-height:40px;border-radius:99px;cursor:pointer;transition:.2s}
 .sched__filter:hover{border-color:var(--line-2);color:var(--ink)}
