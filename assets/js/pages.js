@@ -271,125 +271,16 @@
   })();
 
   /* =================================================================
-     CLASSES — locations. Map OR list, never both at once.
+     CLASSES — locations list.
      ================================================================= */
   (function locations() {
     var listMount = el('schedList');
     if (!listMount) return;
 
-    var mapMount = el('schedMap');
     var countEl = el('schedCount');
     var filterWrap = el('schedFilters');
-    var toggleWrap = el('schedToggle');
-    var mapView = el('schedMapView');
-    var listView = el('schedListView');
 
     var level = 'all';
-    var mapDrawn = false;
-
-    function gmapsSearchUrl(v) {
-      var addr = (v.addr || '').replace(/,?\s*S\d{6}.*/, '');
-      return 'https://www.google.com/maps/search/?api=1&query=' +
-        encodeURIComponent((v.venue + ' ' + addr + ' Singapore').trim());
-    }
-
-    function venueLevel(v) {
-      var hasEmergence = v.sessions.some(function (s) { return s.level === 'Emergence'; });
-      var hasEssentials = v.sessions.some(function (s) { return s.level === 'Essentials'; });
-      if (hasEmergence && hasEssentials) return 'mixed';
-      return hasEmergence ? 'emergence' : 'essentials';
-    }
-
-    /* ---- Real map (Leaflet + OpenStreetMap tiles, no API key) ----
-       Pins are colour-coded by the level(s) taught at that venue:
-       Essentials = blue, Emergence = green, both = split marker. */
-    var LEVEL_COLOR = { essentials: '#2151d1', emergence: '#13a65b' };
-    var map = null;
-    var markerLayer = null;
-
-    function pinIcon(lvl) {
-      var a = LEVEL_COLOR.essentials, b = LEVEL_COLOR.emergence;
-      var fill = lvl === 'mixed'
-        ? '<path d="M14 0a14 14 0 0 0-14 14c0 9 14 26 14 26V0z" fill="' + a + '"/>' +
-          '<path d="M14 0a14 14 0 0 1 14 14c0 9-14 26-14 26V0z" fill="' + b + '"/>'
-        : '<path d="M14 0a14 14 0 0 0 0 28 14 14 0 0 0 0-28zM14 0a14 14 0 0 1 14 14c0 9-14 26-14 26S0 23 0 14A14 14 0 0 1 14 0z" fill="' +
-          (lvl === 'emergence' ? b : a) + '"/>';
-      var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="40" viewBox="0 0 28 40">' +
-        fill + '<circle cx="14" cy="14" r="5.2" fill="#fff"/></svg>';
-      return L.divIcon({
-        className: 'sched__leafpin',
-        html: svg,
-        iconSize: [28, 40],
-        iconAnchor: [14, 40],
-        popupAnchor: [0, -34]
-      });
-    }
-
-    function popupHtml(v) {
-      var rows = sessionsFor(v).map(function (s) {
-        return '<li><b>' + esc(s.day) + '</b> ' + esc(s.time) +
-          ' <span class="mpop__lvl mpop__lvl--' + esc(s.level.toLowerCase()) + '">' + esc(s.level) + '</span></li>';
-      }).join('');
-      return '<div class="mpop">' +
-        '<h4 class="mpop__name">' + esc(v.venue) + '</h4>' +
-        '<p class="mpop__addr"><a href="' + gmapsSearchUrl(v) + '" target="_blank" rel="noopener">' +
-          esc(v.addr) + '</a></p>' +
-        '<ul class="mpop__sessions">' + rows + '</ul>' +
-        '<div class="mpop__actions">' +
-          '<a href="' + esc(v.book || BOOK) + '" target="_blank" rel="noopener">Book this class &rsaquo;</a>' +
-        '</div>' +
-      '</div>';
-    }
-
-    /* Rendered only when the Map view is first opened, so the tile request
-       never runs for visitors who stay on the list. */
-    function drawMap() {
-      if (!mapMount) return;
-      var rows = visible();
-
-      // Leaflet blocked or offline: say so rather than showing an empty box.
-      if (typeof L === 'undefined') {
-        mapMount.innerHTML = '<p class="sched__mapfail">The map could not load. ' +
-          '<button type="button" class="sched__mapfail-btn" data-view="list">Use the list view</button> ' +
-          'for every venue, day and time.</p>';
-        mapDrawn = false;
-        return;
-      }
-
-      if (!map) {
-        map = L.map(mapMount, { scrollWheelZoom: false, attributionControl: true });
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 18,
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-        // Wheel-zoom only after a deliberate click, so the page still scrolls.
-        map.on('click', function () { map.scrollWheelZoom.enable(); });
-        map.on('mouseout', function () { map.scrollWheelZoom.disable(); });
-        markerLayer = L.layerGroup().addTo(map);
-      }
-
-      markerLayer.clearLayers();
-      var pts = [];
-      rows.forEach(function (v) {
-        if (typeof v.lat !== 'number' || typeof v.lng !== 'number') return;
-        var m = L.marker([v.lat, v.lng], {
-          icon: pinIcon(venueLevel(v)),
-          title: v.venue,
-          alt: v.venue + ' — ' + sessionsFor(v).length + ' classes'
-        });
-        m.bindPopup(popupHtml(v), { maxWidth: 280 });
-        m.addTo(markerLayer);
-        pts.push([v.lat, v.lng]);
-      });
-
-      if (pts.length > 1) map.fitBounds(pts, { padding: [38, 38], maxZoom: 15 });
-      else if (pts.length === 1) map.setView(pts[0], 15);
-      else map.setView([1.3521, 103.8198], 11);   // whole island when nothing matches
-
-      // The container is sized by CSS after the tab switches; recalc once.
-      setTimeout(function () { map.invalidateSize(); }, 60);
-      mapDrawn = true;
-    }
 
     /* Venues read alphabetically. localeCompare so the curly apostrophe in
        "Singapore Chinese Girls' School" does not sort it out of place. */
@@ -414,7 +305,6 @@
         countEl.textContent = rows.length + (rows.length === 1 ? ' venue' : ' venues') +
           ' · ' + n + (n === 1 ? ' class' : ' classes');
       }
-      if (mapDrawn) drawMap();
 
       if (!rows.length) {
         listMount.innerHTML = '<p class="sched__empty">No classes match that level yet. Try “All levels”, or ' +
@@ -426,8 +316,7 @@
         return '<article class="vcard" id="venue-' + esc(v.venueId) + '">' +
           '<div class="vcard__top"><h3>' + esc(v.venue) + sampleTag(v) + '</h3>' +
             '<span class="vcard__region">' + esc(v.region) + '</span></div>' +
-          '<p class="vcard__addr"><a href="' + gmapsSearchUrl(v) + '" target="_blank" rel="noopener">' +
-            esc(v.addr) + '</a></p>' +
+          '<p class="vcard__addr">' + esc(v.addr) + '</p>' +
           '<ul class="vcard__sessions">' + sessionsFor(v).map(function (s) {
             return '<li><span class="vcard__day">' + esc(s.day) + '</span>' +
               '<span class="vcard__time">' + esc(s.time) + '</span>' +
@@ -452,33 +341,6 @@
           x.setAttribute('aria-pressed', String(on));
         });
         render();
-      });
-    }
-
-    function setView(view) {
-      if (!toggleWrap || !mapView || !listView) return;
-      toggleWrap.querySelectorAll('button').forEach(function (x) {
-        var on = x.getAttribute('data-view') === view;
-        x.classList.toggle('is-active', on);
-        x.setAttribute('aria-pressed', String(on));
-      });
-      listView.classList.toggle('is-active', view === 'list');
-      mapView.classList.toggle('is-active', view === 'map');
-      if (view === 'map') drawMap();
-    }
-
-    // The map's own failure message offers a way back to the list.
-    if (mapMount) {
-      mapMount.addEventListener('click', function (e) {
-        if (e.target.closest('.sched__mapfail-btn')) setView('list');
-      });
-    }
-
-    if (toggleWrap && mapView && listView) {
-      toggleWrap.addEventListener('click', function (e) {
-        var b = e.target.closest('button');
-        if (!b) return;
-        setView(b.getAttribute('data-view'));
       });
     }
 
