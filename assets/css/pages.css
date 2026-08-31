@@ -214,23 +214,23 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
    dots, swipe and arrow-keys all move focus; the detail block below the
    stage swaps to match whichever orb is centred. */
 .orbs{background:var(--bg-2);border:1px solid var(--line);border-radius:calc(var(--r-lg) + 8px);
-  padding:2.2rem 1rem 1.6rem;box-shadow:var(--shadow-sm);margin-bottom:1.4rem;overflow:hidden}
-.orbs__stage{position:relative;display:flex;align-items:center;justify-content:center;
-  max-width:760px;margin:0 auto;overflow:hidden}
+  padding:2.2rem 0 1.6rem;box-shadow:var(--shadow-sm);margin-bottom:1.4rem;overflow:hidden}
+.orbs__stage{position:relative;overflow:hidden}
 
-/* The track lays the orbs side by side and slides horizontally. A modest gap
-   keeps the neighbouring orb peeking in-frame beside the centred one. */
-.orbs__track{display:flex;align-items:flex-start;gap:clamp(1.5rem,4vw,3rem);
-  transition:transform .55s var(--ease);will-change:transform;padding:0 1rem}
+/* The track lays the orbs in a row and slides horizontally; JS translates it
+   so the active orb sits dead-centre. align-items:center keeps captions of
+   different heights vertically settled beside the centred one. */
+.orbs__track{display:flex;align-items:center;gap:clamp(1.5rem,4vw,3rem);width:max-content;
+  transition:transform .55s var(--ease);will-change:transform}
 
-/* Each orb: a big gradient ball + caption. Non-active orbs stay visible but
-   shrink and dim so the centred one clearly leads — the reference peek look.
-   They remain clickable to bring themselves to centre. */
+/* Each orb: a big ball + caption. Non-active orbs stay visible but shrink and
+   dim so the centred one clearly leads — the reference peek look. They remain
+   clickable to bring themselves to centre. */
 .orb{flex:0 0 clamp(200px,26vw,300px);margin:0;text-align:center;cursor:pointer;
   transform:scale(.72);opacity:.55;filter:saturate(.85);
   transition:transform .55s var(--ease),opacity .55s var(--ease),filter .55s var(--ease)}
 .orb.is-active{transform:scale(1);opacity:1;filter:none;cursor:default}
-.orb:not(.is-active):hover{opacity:.8;transform:scale(.76)}
+.orb:not(.is-active):hover{opacity:.85;transform:scale(.76)}
 .orb__ball{width:clamp(200px,26vw,300px);height:clamp(200px,26vw,300px);border-radius:50%;
   margin:0 auto;position:relative;background-position:center;background-size:cover;background-repeat:no-repeat;
   box-shadow:0 40px 80px -40px rgba(0,0,0,.5),inset 0 -30px 60px -30px rgba(0,0,0,.35)}
@@ -239,8 +239,9 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 /* A soft sheen so the balls read as 3-D like the reference. */
 .orb__ball::after{content:'';position:absolute;inset:0;border-radius:50%;
   background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.4),transparent 42%)}
-.orb__caption{margin-top:1.3rem;transition:opacity .4s var(--ease)}
-.orb:not(.is-active) .orb__caption{opacity:0}
+/* Captions are always visible — the inactive orb's name + copy stay readable,
+   just dimmed with the orb. */
+.orb__caption{margin-top:1.3rem}
 .orb__caption h3{font-size:1.35rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.5rem}
 .orb__caption p{color:var(--muted);font-size:.9rem;line-height:1.6;max-width:34ch;margin:0 auto}
 

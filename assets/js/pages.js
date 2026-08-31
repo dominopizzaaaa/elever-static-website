@@ -292,16 +292,29 @@
     var active = 0;
     var count = orbs.length;
 
-    /* Slide the track so the active orb is centred over the stage. We use the
-       orb's layout box (offsetLeft/offsetWidth), which ignores the CSS scale
-       transform on inactive orbs, so the centred one always lands dead centre
-       regardless of how much its neighbours are shrunk. */
+    /* Slide the track so the active orb is centred over the stage. We measure
+       the orb centre relative to the track's current position, back out the
+       transform already applied, then translate so that centre lands on the
+       stage's middle. getBoundingClientRect copes with the scale on inactive
+       orbs; the active orb (scale 1) gives its true centre. */
     function layout() {
       var stage = track.parentElement;
       var o = orbs[active];
-      var orbCentre = o.offsetLeft + o.offsetWidth / 2;
-      var x = stage.clientWidth / 2 - orbCentre;
+      var stageRect = stage.getBoundingClientRect();
+      var orbRect = o.getBoundingClientRect();
+      var current = getTranslateX();
+      var orbCentreInTrack = (orbRect.left + orbRect.width / 2) - stageRect.left - current;
+      var x = stageRect.width / 2 - orbCentreInTrack;
       track.style.transform = 'translateX(' + x + 'px)';
+    }
+    function getTranslateX() {
+      var t = getComputedStyle(track).transform;
+      if (!t || t === 'none') return 0;
+      var m = t.match(/matrix\(([^)]+)\)/);
+      if (m) return parseFloat(m[1].split(',')[4]) || 0;
+      var m3 = t.match(/matrix3d\(([^)]+)\)/);
+      if (m3) return parseFloat(m3[1].split(',')[12]) || 0;
+      return 0;
     }
 
     function go(i) {
