@@ -373,49 +373,69 @@
 
     var level = 'all';
 
-    /* Venues read alphabetically. localeCompare so the curly apostrophe in
-       "Singapore Chinese Girls' School" does not sort it out of place. */
-    function byVenueName(a, b) {
-      return String(a.venue).localeCompare(String(b.venue), 'en', { sensitivity: 'base' });
-    }
-    function visible() {
-      return D.classes.filter(function (v) {
-        if (level === 'all') return true;
-        return v.sessions.some(function (s) { return s.level === level; });
-      }).sort(byVenueName);
+    /* Areas read alphabetically. localeCompare keeps sort stable across
+       punctuation. */
+    function byAreaName(a, b) {
+      return String(a.area).localeCompare(String(b.area), 'en', { sensitivity: 'base' });
     }
     function sessionsFor(v) {
       return v.sessions.filter(function (s) { return level === 'all' || s.level === level; });
     }
+    /* Venues that still have at least one matching session for the level. */
+    function visibleVenues() {
+      return D.classes.filter(function (v) { return sessionsFor(v).length > 0; });
+    }
+    /* Group the visible venues by their area, preserving the source order of
+       venues within each area. Returns an array of { area, venues:[] }. */
+    function visibleAreas() {
+      var map = {};
+      var order = [];
+      visibleVenues().forEach(function (v) {
+        if (!map[v.area]) { map[v.area] = { area: v.area, venues: [] }; order.push(v.area); }
+        map[v.area].venues.push(v);
+      });
+      return order.map(function (a) { return map[a]; }).sort(byAreaName);
+    }
 
     function render() {
-      var rows = visible();
+      var areas = visibleAreas();
 
       if (countEl) {
-        var n = rows.reduce(function (a, v) { return a + sessionsFor(v).length; }, 0);
-        countEl.textContent = rows.length + (rows.length === 1 ? ' venue' : ' venues') +
+        var venueCount = areas.reduce(function (a, g) { return a + g.venues.length; }, 0);
+        var n = areas.reduce(function (a, g) {
+          return a + g.venues.reduce(function (b, v) { return b + sessionsFor(v).length; }, 0);
+        }, 0);
+        countEl.textContent = areas.length + (areas.length === 1 ? ' area' : ' areas') +
+          ' · ' + venueCount + (venueCount === 1 ? ' venue' : ' venues') +
           ' · ' + n + (n === 1 ? ' class' : ' classes');
       }
 
-      if (!rows.length) {
+      if (!areas.length) {
         listMount.innerHTML = '<p class="sched__empty">No classes match that level yet. Try “All levels”, or ' +
           '<a href="contact.html">ask us about a venue near you</a>.</p>';
         return;
       }
 
-      listMount.innerHTML = rows.map(function (v) {
-        return '<article class="vcard" id="venue-' + esc(v.venueId) + '">' +
-          '<div class="vcard__top"><h3>' + esc(v.venue) + sampleTag(v) + '</h3>' +
-            '<span class="vcard__region">' + esc(v.region) + '</span></div>' +
-          '<p class="vcard__addr">' + esc(v.addr) + '</p>' +
-          '<ul class="vcard__sessions">' + sessionsFor(v).map(function (s) {
-            return '<li><span class="vcard__day">' + esc(s.day) + '</span>' +
-              '<span class="vcard__time">' + esc(s.time) + '</span>' +
-              '<span class="vcard__lvl vcard__lvl--' + esc(s.level.toLowerCase()) + '">' + esc(s.level) + '</span>' +
-              '</li>';
-          }).join('') + '</ul>' +
+      listMount.innerHTML = areas.map(function (g) {
+        var region = g.venues[0].region;
+        var book = g.venues[0].book || BOOK;
+        return '<article class="vcard" id="area-' + esc(g.area.toLowerCase().replace(/[^a-z0-9]+/g, '-')) + '">' +
+          '<div class="vcard__top"><h3>' + esc(g.area) + '</h3>' +
+            '<span class="vcard__region">' + esc(region) + '</span></div>' +
+          g.venues.map(function (v) {
+            return '<div class="vcard__venue">' +
+              '<p class="vcard__venuename">' + esc(v.venue) + sampleTag(v) + '</p>' +
+              '<p class="vcard__addr">' + esc(v.addr) + '</p>' +
+              '<ul class="vcard__sessions">' + sessionsFor(v).map(function (s) {
+                return '<li><span class="vcard__day">' + esc(s.day) + '</span>' +
+                  '<span class="vcard__time">' + esc(s.time) + '</span>' +
+                  '<span class="vcard__lvl vcard__lvl--' + esc(s.level.toLowerCase()) + '">' + esc(s.level) + '</span>' +
+                  '</li>';
+              }).join('') + '</ul>' +
+            '</div>';
+          }).join('') +
           '<div class="vcard__actions">' +
-            '<a class="vcard__book" href="' + esc(v.book || BOOK) + '" target="_blank" rel="noopener">Book this class &rsaquo;</a>' +
+            '<a class="vcard__book" href="' + esc(book) + '" target="_blank" rel="noopener">Book a class &rsaquo;</a>' +
           '</div>' +
         '</article>';
       }).join('');
