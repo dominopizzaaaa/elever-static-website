@@ -293,9 +293,15 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   font-size:.82rem;font-weight:600;padding:.5rem .9rem;min-height:40px;border-radius:99px;cursor:pointer;transition:.2s}
 .sched__filter:hover{border-color:var(--line-2);color:var(--ink)}
 .sched__filter.is-active{background:var(--accent);border-color:var(--accent);color:#fff}
-.sched__list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:.7rem;align-items:start}
+/* Masonry-style packing via CSS columns. Venue cards vary a lot in height
+   (1 session vs 8), so a normal grid leaves big gaps under short cards. Column
+   flow lets each card take only the height it needs and packs the next card
+   directly beneath, filling the whitespace. */
+.sched__list{column-width:320px;column-gap:.9rem}
+.sched__list > *{break-inside:avoid;margin-bottom:.9rem}
 .vcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:1.1rem 1.2rem;
-  transition:border-color .25s,box-shadow .25s;display:flex;flex-direction:column}
+  transition:border-color .25s,box-shadow .25s;display:flex;flex-direction:column;
+  width:100%;-webkit-column-break-inside:avoid;break-inside:avoid}
 .vcard:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm)}
 .vcard__top{display:flex;justify-content:space-between;gap:.8rem;align-items:baseline;flex-wrap:wrap}
 .vcard h3{font-size:.96rem;font-weight:700;margin:0;letter-spacing:-.015em}
@@ -316,7 +322,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .vcard__actions{display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;margin-top:.9rem}
 .vcard__book{font-size:.78rem;font-weight:600;color:var(--accent)}
 .vcard__book:hover{text-decoration:underline}
-.sched__empty{grid-column:1/-1;padding:2rem;text-align:center;color:var(--faint);font-size:.88rem}
+.sched__empty{column-span:all;padding:2rem;text-align:center;color:var(--faint);font-size:.88rem}
 
 /* ---------- CAMPS ---------- */
 .camp{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden}
