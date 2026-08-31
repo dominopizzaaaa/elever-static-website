@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=22" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=22" />
+  <link rel="stylesheet" href="assets/css/style.css?v=23" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=23" />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -62,86 +62,82 @@
       <div class="paths" id="pathsGrid"></div>
     </section>
 
-    <!-- ===== CLASS TYPE SHOWCASE (ElevenLabs-style tabs) ===== -->
+    <!-- ===== CLASS TYPE CAROUSEL (ElevenLabs-style orbs) ===== -->
     <!-- Trial and placement section removed at the client's request (Aug 2026).
          Copy is preserved in the "EB Website for Dom" Google Doc if it returns. -->
     <section class="psec psec--alt" id="locations">
       <div class="psec__inner">
         <div class="psec__head">
           <h2>Class Type</h2>
-          <p class="psec__sub">Two ways to train with Élever — pick a small group matched to your level, or go fully personalised. Explore what each format looks like and where classes run.</p>
+          <p class="psec__sub">Swipe or use the arrows to explore how we train — a level-matched group, or fully personalised private coaching.</p>
         </div>
 
-        <div class="showcase" id="classShowcase">
-          <!-- Tab rail -->
-          <div class="showcase__tabs" role="tablist" aria-label="Choose a class type">
-            <button class="showcase__tab is-active" id="tab-group" role="tab" aria-selected="true" aria-controls="panel-group" data-tab="group">
-              <span class="showcase__tabdot showcase__tabdot--group"></span>
-              <span class="showcase__tablabel">Group Classes</span>
+        <div class="orbs" id="classCarousel" data-active="0">
+          <!-- Orb stage: the active orb sits centre, the other peeks at the side. -->
+          <div class="orbs__stage">
+            <button class="orbs__arrow orbs__arrow--prev" id="orbPrev" type="button" aria-label="Previous class type">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <button class="showcase__tab" id="tab-private" role="tab" aria-selected="false" aria-controls="panel-private" data-tab="private" tabindex="-1">
-              <span class="showcase__tabdot showcase__tabdot--private"></span>
-              <span class="showcase__tablabel">Private Classes</span>
+
+            <div class="orbs__track" id="orbTrack">
+              <figure class="orb is-active" data-index="0" data-type="group">
+                <div class="orb__ball orb__ball--group"></div>
+                <figcaption class="orb__caption">
+                  <h3>Group Classes</h3>
+                  <p>Level-matched squads, max 1:6 coach-to-player ratio, across 8 venues in Singapore.</p>
+                </figcaption>
+              </figure>
+
+              <figure class="orb" data-index="1" data-type="private">
+                <div class="orb__ball orb__ball--private"></div>
+                <figcaption class="orb__caption">
+                  <h3>Private Classes</h3>
+                  <p>Personalised 1-to-1 or 1-to-2 coaching, shaped around your goals and schedule.</p>
+                </figcaption>
+              </figure>
+            </div>
+
+            <button class="orbs__arrow orbs__arrow--next" id="orbNext" type="button" aria-label="Next class type">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
           </div>
 
-          <!-- ===== GROUP PANEL: intro + level filter + venue list ===== -->
-          <div class="showcase__panel is-active" id="panel-group" role="tabpanel" aria-labelledby="tab-group" tabindex="0">
-            <div class="showcase__intro">
-              <div class="showcase__lead">
-                <span class="showcase__eyebrow">Small-group coaching</span>
-                <h3>Train in a level-matched squad</h3>
-                <p>Group classes keep a maximum 1:6 coach-to-player ratio, so every session stays personal while you learn alongside players at your level. Choose a venue and time below.</p>
-              </div>
-              <ul class="showcase__facts">
-                <li><b>1:6</b><span>Max coach-to-player ratio</span></li>
-                <li><b>8</b><span>Venues across Singapore</span></li>
-                <li><b>2</b><span>Levels — Essentials &amp; Emergence</span></li>
-              </ul>
-            </div>
-
-            <div class="showcase__locations">
-              <div class="sched__controls">
-                <div id="schedFilters" role="group" aria-label="Filter classes by level">
-                  <button class="sched__filter is-active" data-level="all" aria-pressed="true">All levels</button>
-                  <button class="sched__filter" data-level="Essentials" aria-pressed="false">Essentials</button>
-                  <button class="sched__filter" data-level="Emergence" aria-pressed="false">Emergence</button>
-                </div>
-                <p class="hub__count" id="schedCount" aria-live="polite"></p>
-              </div>
-              <div class="sched__list" id="schedList"></div>
-            </div>
+          <!-- Dots -->
+          <div class="orbs__dots" role="tablist" aria-label="Choose a class type">
+            <button class="orbs__dot is-active" type="button" role="tab" aria-selected="true" data-goto="0" aria-label="Group Classes"></button>
+            <button class="orbs__dot" type="button" role="tab" aria-selected="false" data-goto="1" aria-label="Private Classes"></button>
           </div>
+        </div>
 
-          <!-- ===== PRIVATE PANEL: description content ===== -->
-          <div class="showcase__panel" id="panel-private" role="tabpanel" aria-labelledby="tab-private" tabindex="0" hidden>
-            <div class="showcase__intro">
-              <div class="showcase__lead">
-                <span class="showcase__eyebrow">1-to-1 &amp; 1-to-2 coaching</span>
-                <h3>Personalised coaching, built around you</h3>
-                <p>Private classes give you a coach&rsquo;s full attention — ideal for specific goals, technique fixes, or faster progress. Sessions are shaped around your schedule, level and the parts of your game you most want to sharpen.</p>
+        <!-- ===== DETAIL BELOW: swaps with the active orb ===== -->
+        <div class="orbdetail is-active" id="detail-group" data-panel="0">
+          <div class="showcase__locations">
+            <div class="sched__controls">
+              <div id="schedFilters" role="group" aria-label="Filter classes by level">
+                <button class="sched__filter is-active" data-level="all" aria-pressed="true">All levels</button>
+                <button class="sched__filter" data-level="Essentials" aria-pressed="false">Essentials</button>
+                <button class="sched__filter" data-level="Emergence" aria-pressed="false">Emergence</button>
               </div>
-              <ul class="showcase__facts">
-                <li><b>1:1</b><span>Or 1-to-2 with a partner</span></li>
-                <li><b>You</b><span>Flexible times &amp; focus</span></li>
-                <li><b>Fast</b><span>Targeted technique fixes</span></li>
-              </ul>
+              <p class="hub__count" id="schedCount" aria-live="polite"></p>
             </div>
+            <div class="sched__list" id="schedList"></div>
+          </div>
+        </div>
 
-            <div class="showcase__private">
-              <ul class="priv__list">
-                <li><b>Tailored plan</b><span>Every session is built around your goals, from first grip to competition prep.</span></li>
-                <li><b>Choose your pairing</b><span>Go solo for maximum focus, or train 1-to-2 with a friend or family member.</span></li>
-                <li><b>Flexible scheduling</b><span>We work around you to find times and venues that fit your week.</span></li>
-                <li><b>Technique-first</b><span>Fix footwork, grips and strokes fast with undivided coaching attention.</span></li>
-              </ul>
-              <div class="priv__cta">
-                <div>
-                  <b>Ready for private coaching?</b>
-                  <span>Tell us your goals and we&rsquo;ll match you with the right coach.</span>
-                </div>
-                <a class="btn btn--primary" href="contact.html">Enquire about private classes</a>
+        <div class="orbdetail" id="detail-private" data-panel="1" hidden>
+          <div class="showcase__private">
+            <ul class="priv__list">
+              <li><b>Tailored plan</b><span>Every session is built around your goals, from first grip to competition prep.</span></li>
+              <li><b>Choose your pairing</b><span>Go solo for maximum focus, or train 1-to-2 with a friend or family member.</span></li>
+              <li><b>Flexible scheduling</b><span>We work around you to find times and venues that fit your week.</span></li>
+              <li><b>Technique-first</b><span>Fix footwork, grips and strokes fast with undivided coaching attention.</span></li>
+            </ul>
+            <div class="priv__cta">
+              <div>
+                <b>Ready for private coaching?</b>
+                <span>Tell us your goals and we&rsquo;ll match you with the right coach.</span>
               </div>
+              <a class="btn btn--primary" href="contact.html">Enquire about private classes</a>
             </div>
           </div>
         </div>
@@ -152,9 +148,9 @@
 
   <footer id="siteFooter"></footer>
 
-  <script src="assets/js/data.js?v=22"></script>
-  <script src="assets/js/site.js?v=22"></script>
-  <script src="assets/js/pages.js?v=22"></script>
-  <script src="assets/js/main.js?v=22"></script>
+  <script src="assets/js/data.js?v=23"></script>
+  <script src="assets/js/site.js?v=23"></script>
+  <script src="assets/js/pages.js?v=23"></script>
+  <script src="assets/js/main.js?v=23"></script>
 </body>
 </html>

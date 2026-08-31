@@ -271,49 +271,94 @@
   })();
 
   /* =================================================================
-     CLASSES — class-type showcase (Group / Private tabs).
-     A small tab controller: swaps the active tab chip and shows the
-     matching panel. The venue list inside the Group panel is rendered
-     by locations() below, which is untouched by the switch.
+     CLASSES — class-type carousel (Group / Private orbs).
+     ElevenLabs-style: the active orb sits centred, the other peeks at the
+     side. Arrows, dots, swipe and arrow-keys move between them; the detail
+     block below (venue list for Group, copy for Private) swaps to match.
+     The Group venue list itself is rendered by locations() below.
      ================================================================= */
-  (function classShowcase() {
-    var root = el('classShowcase');
+  (function classCarousel() {
+    var root = el('classCarousel');
     if (!root) return;
 
-    var tabs = Array.prototype.slice.call(root.querySelectorAll('.showcase__tab'));
-    var panels = Array.prototype.slice.call(root.querySelectorAll('.showcase__panel'));
-    if (!tabs.length) return;
+    var track = el('orbTrack');
+    var orbs = Array.prototype.slice.call(root.querySelectorAll('.orb'));
+    var dots = Array.prototype.slice.call(root.querySelectorAll('.orbs__dot'));
+    var details = Array.prototype.slice.call(document.querySelectorAll('.orbdetail'));
+    var prevBtn = el('orbPrev');
+    var nextBtn = el('orbNext');
+    if (!track || orbs.length < 2) return;
 
-    function activate(tab) {
-      var id = tab.getAttribute('aria-controls');
-      tabs.forEach(function (t) {
-        var on = t === tab;
-        t.classList.toggle('is-active', on);
-        t.setAttribute('aria-selected', String(on));
-        t.tabIndex = on ? 0 : -1;
+    var active = 0;
+    var count = orbs.length;
+
+    /* Slide the track so the active orb is centred over the stage. Each orb
+       occupies an equal slot, so shifting by whole slots keeps it aligned. */
+    function layout() {
+      var stage = track.parentElement;
+      var first = orbs[0];
+      var slot = first.getBoundingClientRect().width;
+      var style = getComputedStyle(track);
+      var gap = parseFloat(style.columnGap || style.gap || '0') || 0;
+      var step = slot + gap;
+      var centreOffset = (stage.clientWidth - slot) / 2;
+      var x = centreOffset - active * step - parseFloat(style.paddingLeft || '0');
+      track.style.transform = 'translateX(' + x + 'px)';
+    }
+
+    function go(i) {
+      active = (i + count) % count;
+      orbs.forEach(function (o, k) { o.classList.toggle('is-active', k === active); });
+      dots.forEach(function (d, k) {
+        d.classList.toggle('is-active', k === active);
+        d.setAttribute('aria-selected', String(k === active));
       });
-      panels.forEach(function (p) {
-        var on = p.id === id;
+      details.forEach(function (p, k) {
+        var on = k === active;
         p.classList.toggle('is-active', on);
         p.hidden = !on;
       });
+      if (prevBtn) prevBtn.disabled = active === 0;
+      if (nextBtn) nextBtn.disabled = active === count - 1;
+      root.setAttribute('data-active', String(active));
+      layout();
     }
 
-    root.querySelector('.showcase__tabs').addEventListener('click', function (e) {
-      var tab = e.target.closest('.showcase__tab');
-      if (tab) activate(tab);
+    if (prevBtn) prevBtn.addEventListener('click', function () { go(active - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { go(active + 1); });
+    dots.forEach(function (d) {
+      d.addEventListener('click', function () { go(parseInt(d.getAttribute('data-goto'), 10) || 0); });
     });
 
-    /* Left/right arrows move between tabs, matching the tablist role. */
-    root.querySelector('.showcase__tabs').addEventListener('keydown', function (e) {
-      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-      var i = tabs.indexOf(document.activeElement);
-      if (i === -1) return;
-      var next = e.key === 'ArrowRight' ? (i + 1) % tabs.length : (i - 1 + tabs.length) % tabs.length;
-      tabs[next].focus();
-      activate(tabs[next]);
-      e.preventDefault();
+    /* Clicking a peeking orb brings it to centre. */
+    orbs.forEach(function (o, k) {
+      o.addEventListener('click', function () { if (k !== active) go(k); });
     });
+
+    /* Keyboard: left/right arrows when the carousel has focus. */
+    root.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { go(active + 1); e.preventDefault(); }
+      else if (e.key === 'ArrowLeft') { go(active - 1); e.preventDefault(); }
+    });
+
+    /* Touch + pointer swipe. */
+    var startX = 0, dragging = false;
+    function down(x) { startX = x; dragging = true; }
+    function up(x) {
+      if (!dragging) return;
+      dragging = false;
+      var dx = x - startX;
+      if (Math.abs(dx) > 40) go(active + (dx < 0 ? 1 : -1));
+    }
+    track.addEventListener('touchstart', function (e) { down(e.touches[0].clientX); }, { passive: true });
+    track.addEventListener('touchend', function (e) { up((e.changedTouches[0] || {}).clientX || startX); });
+    track.addEventListener('pointerdown', function (e) { if (e.pointerType === 'mouse') down(e.clientX); });
+    window.addEventListener('pointerup', function (e) { if (e.pointerType === 'mouse') up(e.clientX); });
+
+    window.addEventListener('resize', layout);
+    go(0);
+    /* Recalculate once fonts/layout settle so the first centre is exact. */
+    window.setTimeout(layout, 120);
   })();
 
   /* =================================================================
