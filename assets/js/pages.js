@@ -310,11 +310,22 @@
     }
 
     /* Match the viewport height to the active page so a short page (Private)
-       doesn't leave the tall page's whitespace beneath it. */
+       doesn't leave the tall page's whitespace beneath it. Because the
+       viewport clips overflow, an under-measured height would cut off the
+       bottom cards — so we re-measure whenever the active page's own size
+       changes (fonts loading, wrapping, filters) via a ResizeObserver. */
     var pages = Array.prototype.slice.call(track.querySelectorAll('.ctabs__page'));
     function sizeViewport() {
       if (!viewport || !pages[active]) return;
       viewport.style.height = pages[active].offsetHeight + 'px';
+    }
+    if (typeof ResizeObserver === 'function') {
+      var ro = new ResizeObserver(function () { sizeViewport(); });
+      pages.forEach(function (p) { ro.observe(p); });
+    }
+    /* Web fonts change text height after first paint; recalc once ready. */
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(sizeViewport);
     }
 
     tabs.forEach(function (t) {
