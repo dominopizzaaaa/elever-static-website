@@ -238,10 +238,14 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
    track slides horizontally (translateX) so the section reads as a real
    swiping page, in sync with the tabs above. */
 .ctabs__pages{display:flex;align-items:flex-start;gap:.5rem}
-.ctabs__viewport{flex:1 1 auto;overflow:hidden;transition:height .45s var(--ease)}
-.ctabs__track{display:flex;align-items:flex-start;width:200%;
+.ctabs__viewport{flex:1 1 auto;min-width:0;overflow:hidden;transition:height .45s var(--ease)}
+.ctabs__track{display:flex;align-items:flex-start;width:100%;
   transition:transform .45s var(--ease);will-change:transform}
-.ctabs__page{flex:0 0 50%;min-width:0;padding:.2rem .3rem}
+/* Each page is exactly one viewport wide. flex-basis in % is unreliable when
+   the track/viewport are themselves flex items, so pin the width to 100% of
+   the viewport instead — this guarantees content can never spill past the
+   clip edge and get cut off horizontally. */
+.ctabs__page{flex:0 0 100%;width:100%;min-width:0;box-sizing:border-box;padding:.2rem .3rem}
 
 /* Prev/next arrows. Disabled at the ends. */
 .ctabs__arrow{flex:0 0 auto;margin-top:.4rem;display:grid;place-items:center;

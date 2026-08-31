@@ -300,9 +300,10 @@
         t.setAttribute('aria-selected', String(on));
         t.tabIndex = on ? 0 : -1;
       });
-      /* Slide the track. The track is count*100% wide, so one page step is
-         (100/count)% of the track's own width. */
-      track.style.transform = 'translateX(-' + (active * (100 / count)) + '%)';
+      /* Slide the track. Each page is 100% of the viewport wide, and the
+         track's own width is one viewport (100%), so one page step is a full
+         100% of the track's width. */
+      track.style.transform = 'translateX(-' + (active * 100) + '%)';
       if (prevBtn) prevBtn.disabled = active === 0;
       if (nextBtn) nextBtn.disabled = active === count - 1;
       root.setAttribute('data-active', String(active));
