@@ -292,17 +292,15 @@
     var active = 0;
     var count = orbs.length;
 
-    /* Slide the track so the active orb is centred over the stage. Each orb
-       occupies an equal slot, so shifting by whole slots keeps it aligned. */
+    /* Slide the track so the active orb is centred over the stage. We use the
+       orb's layout box (offsetLeft/offsetWidth), which ignores the CSS scale
+       transform on inactive orbs, so the centred one always lands dead centre
+       regardless of how much its neighbours are shrunk. */
     function layout() {
       var stage = track.parentElement;
-      var first = orbs[0];
-      var slot = first.getBoundingClientRect().width;
-      var style = getComputedStyle(track);
-      var gap = parseFloat(style.columnGap || style.gap || '0') || 0;
-      var step = slot + gap;
-      var centreOffset = (stage.clientWidth - slot) / 2;
-      var x = centreOffset - active * step - parseFloat(style.paddingLeft || '0');
+      var o = orbs[active];
+      var orbCentre = o.offsetLeft + o.offsetWidth / 2;
+      var x = stage.clientWidth / 2 - orbCentre;
       track.style.transform = 'translateX(' + x + 'px)';
     }
 

@@ -228,15 +228,13 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   transition:transform .55s var(--ease),opacity .55s var(--ease),filter .55s var(--ease)}
 .orb.is-active{transform:scale(1);opacity:1;filter:none}
 .orb__ball{width:clamp(200px,26vw,300px);height:clamp(200px,26vw,300px);border-radius:50%;
-  margin:0 auto;position:relative;
+  margin:0 auto;position:relative;background-position:center;background-size:cover;background-repeat:no-repeat;
   box-shadow:0 40px 80px -40px rgba(0,0,0,.5),inset 0 -30px 60px -30px rgba(0,0,0,.35)}
-.orb__ball--group{background:
-  radial-gradient(circle at 30% 26%,#a8bffb 0%,#5b83f2 34%,#2151d1 68%,#16357f 100%)}
-.orb__ball--private{background:
-  radial-gradient(circle at 30% 26%,#ffd0a8 0%,#ff9a5a 32%,#e5602a 66%,#a83c14 100%)}
+.orb__ball--group{background-image:url('https://copilot-sg-og.byteintl.net/api/ide/v1/text_to_image?prompt=abstract%203D%20glossy%20sphere%2C%20smooth%20frosted%20glass%20orb%2C%20swirling%20cobalt%20blue%20and%20soft%20periwinkle%20gradient%2C%20gentle%20studio%20lighting%2C%20soft%20highlights%2C%20minimal%20clean%20background%2C%20high%20detail%2C%20render&image_size=square_hd')}
+.orb__ball--private{background-image:url('https://copilot-sg-og.byteintl.net/api/ide/v1/text_to_image?prompt=abstract%203D%20glossy%20sphere%2C%20smooth%20frosted%20glass%20orb%2C%20swirling%20warm%20orange%20and%20amber%20sunset%20gradient%2C%20gentle%20studio%20lighting%2C%20soft%20highlights%2C%20minimal%20clean%20background%2C%20high%20detail%2C%20render&image_size=square_hd')}
 /* A soft sheen so the balls read as 3-D like the reference. */
 .orb__ball::after{content:'';position:absolute;inset:0;border-radius:50%;
-  background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.55),transparent 42%)}
+  background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.4),transparent 42%)}
 .orb__caption{margin-top:1.3rem;transition:opacity .4s var(--ease)}
 .orb:not(.is-active) .orb__caption{opacity:0}
 .orb__caption h3{font-size:1.35rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.5rem}
