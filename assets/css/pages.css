@@ -234,8 +234,8 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .orb__ball{width:clamp(200px,26vw,300px);height:clamp(200px,26vw,300px);border-radius:50%;
   margin:0 auto;position:relative;background-position:center;background-size:cover;background-repeat:no-repeat;
   box-shadow:0 40px 80px -40px rgba(0,0,0,.5),inset 0 -30px 60px -30px rgba(0,0,0,.35)}
-.orb__ball--group{background-image:url('https://copilot-sg-og.byteintl.net/api/ide/v1/text_to_image?prompt=abstract%203D%20glossy%20sphere%2C%20smooth%20frosted%20glass%20orb%2C%20swirling%20cobalt%20blue%20and%20soft%20periwinkle%20gradient%2C%20gentle%20studio%20lighting%2C%20soft%20highlights%2C%20minimal%20clean%20background%2C%20high%20detail%2C%20render&image_size=square_hd')}
-.orb__ball--private{background-image:url('https://copilot-sg-og.byteintl.net/api/ide/v1/text_to_image?prompt=abstract%203D%20glossy%20sphere%2C%20smooth%20frosted%20glass%20orb%2C%20swirling%20warm%20orange%20and%20amber%20sunset%20gradient%2C%20gentle%20studio%20lighting%2C%20soft%20highlights%2C%20minimal%20clean%20background%2C%20high%20detail%2C%20render&image_size=square_hd')}
+.orb__ball--group{background-image:url('../img/classes/group-class-orb.png')}
+.orb__ball--private{background-image:url('../img/classes/private-class-orb.png')}
 /* A soft sheen so the balls read as 3-D like the reference. */
 .orb__ball::after{content:'';position:absolute;inset:0;border-radius:50%;
   background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.4),transparent 42%)}
