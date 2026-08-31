@@ -208,72 +208,62 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   .path:hover .path__media img{transform:none}
 }
 
-/* ---------- CLASS TYPE CAROUSEL (ElevenLabs-style orbs) ----------
-   A soft rounded stage holds a row of gradient orbs. The active orb sits
-   centre at full size; its neighbour peeks in, shrunk and faded. Arrows,
-   dots, swipe and arrow-keys all move focus; the detail block below the
-   stage swaps to match whichever orb is centred. */
-.orbs{background:var(--bg-2);border:1px solid var(--line);border-radius:calc(var(--r-lg) + 8px);
-  padding:2.2rem 0 1.6rem;box-shadow:var(--shadow-sm);margin-bottom:1.4rem;overflow:hidden}
-.orbs__stage{position:relative;overflow:hidden}
+/* ---------- CLASS TYPE TABS (ElevenLabs-style) ----------
+   A soft rounded rail holds two tabs (Group / Private), each with a coloured
+   status dot. The active tab lifts onto a white chip. The detail block below
+   swaps to match the active tab and is swipeable left/right. */
+.ctabs{background:var(--bg-2);border:1px solid var(--line);border-radius:calc(var(--r-lg) + 8px);
+  padding:.5rem;box-shadow:var(--shadow-sm);margin-bottom:1.4rem}
+.ctabs__rail{display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none}
+.ctabs__rail::-webkit-scrollbar{display:none}
+.ctabs__tab{flex:1 1 0;min-width:max-content;display:inline-flex;align-items:center;justify-content:center;
+  gap:.6rem;padding:.85rem 1.4rem;border:0;border-radius:calc(var(--r-lg) + 2px);cursor:pointer;
+  background:transparent;color:var(--muted);font:inherit;font-weight:700;font-size:1rem;letter-spacing:-.01em;
+  white-space:nowrap;transition:background .25s var(--ease),color .25s var(--ease),box-shadow .25s var(--ease)}
+.ctabs__tab:hover{color:var(--ink)}
+.ctabs__tab.is-active{background:var(--panel);color:var(--ink);box-shadow:var(--shadow-sm)}
+.ctabs__tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* Status dots — blue for group, orange for private, echoing the class colours. */
+.ctabs__dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+.ctabs__dot--group{background:radial-gradient(circle at 30% 25%,#7db4ff,#1e6bff 70%)}
+.ctabs__dot--private{background:radial-gradient(circle at 30% 25%,#ffc27d,#ff7a1e 70%)}
 
-/* The track lays the orbs in a row and slides horizontally; JS translates it
-   so the active orb sits dead-centre. align-items:center keeps captions of
-   different heights vertically settled beside the centred one. */
-.orbs__track{display:flex;align-items:center;gap:clamp(1.5rem,4vw,3rem);width:max-content;
-  transition:transform .55s var(--ease);will-change:transform}
+/* Intro row at the top of each detail panel. */
+.showcase__intro{margin-bottom:1.4rem}
+.showcase__intro h3{font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.4rem}
+.showcase__intro p{color:var(--muted);font-size:.95rem;line-height:1.6;max-width:60ch}
 
-/* Each orb: a big ball + caption. Non-active orbs stay visible but shrink and
-   dim so the centred one clearly leads — the reference peek look. They remain
-   clickable to bring themselves to centre. */
-.orb{flex:0 0 clamp(200px,26vw,300px);margin:0;text-align:center;cursor:pointer;
-  transform:scale(.72);opacity:.55;filter:saturate(.85);
-  transition:transform .55s var(--ease),opacity .55s var(--ease),filter .55s var(--ease)}
-.orb.is-active{transform:scale(1);opacity:1;filter:none;cursor:default}
-.orb:not(.is-active):hover{opacity:.85;transform:scale(.76)}
-.orb__ball{width:clamp(200px,26vw,300px);height:clamp(200px,26vw,300px);border-radius:50%;
-  margin:0 auto;position:relative;background-position:center;background-size:cover;background-repeat:no-repeat;
-  box-shadow:0 40px 80px -40px rgba(0,0,0,.5),inset 0 -30px 60px -30px rgba(0,0,0,.35)}
-.orb__ball--group{background-image:url('../img/classes/group-class-orb.png')}
-.orb__ball--private{background-image:url('../img/classes/private-class-orb.png')}
-/* A soft sheen so the balls read as 3-D like the reference. */
-.orb__ball::after{content:'';position:absolute;inset:0;border-radius:50%;
-  background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.4),transparent 42%)}
-/* Captions are always visible — the inactive orb's name + copy stay readable,
-   just dimmed with the orb. */
-.orb__caption{margin-top:1.3rem}
-.orb__caption h3{font-size:1.35rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.5rem}
-.orb__caption p{color:var(--muted);font-size:.9rem;line-height:1.6;max-width:34ch;margin:0 auto}
+/* Swipeable pages: arrows flank a viewport that clips a 2-page track. The
+   track slides horizontally (translateX) so the section reads as a real
+   swiping page, in sync with the tabs above. */
+.ctabs__pages{display:flex;align-items:flex-start;gap:.5rem}
+.ctabs__viewport{flex:1 1 auto;overflow:hidden;transition:height .45s var(--ease)}
+.ctabs__track{display:flex;align-items:flex-start;width:200%;
+  transition:transform .45s var(--ease);will-change:transform}
+.ctabs__page{flex:0 0 50%;min-width:0;padding:.2rem .3rem}
 
-/* Arrows float over the stage, vertically aligned with the captions. */
-.orbs__arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:2;
-  display:grid;place-items:center;width:44px;height:44px;border-radius:50%;
-  background:var(--panel);border:1px solid var(--line);color:var(--ink);cursor:pointer;
-  box-shadow:var(--shadow-sm);transition:transform .2s var(--ease),border-color .2s,color .2s}
-.orbs__arrow:hover{border-color:var(--line-2);transform:translateY(-50%) scale(1.08)}
-.orbs__arrow:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.orbs__arrow:disabled{opacity:.35;cursor:default;transform:translateY(-50%)}
-.orbs__arrow--prev{left:.4rem}
-.orbs__arrow--next{right:.4rem}
+/* Prev/next arrows. Disabled at the ends. */
+.ctabs__arrow{flex:0 0 auto;margin-top:.4rem;display:grid;place-items:center;
+  width:44px;height:44px;border-radius:50%;background:var(--panel);border:1px solid var(--line);
+  color:var(--ink);cursor:pointer;box-shadow:var(--shadow-sm);
+  transition:transform .2s var(--ease),border-color .2s,color .2s,opacity .2s}
+.ctabs__arrow:hover{border-color:var(--line-2);transform:scale(1.08)}
+.ctabs__arrow:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ctabs__arrow:disabled{opacity:.3;cursor:default;transform:none}
 
-/* Dots */
-.orbs__dots{display:flex;justify-content:center;gap:.5rem;margin-top:1.6rem}
-.orbs__dot{width:9px;height:9px;padding:0;border-radius:99px;border:0;cursor:pointer;
-  background:var(--line-2);transition:width .3s var(--ease),background .3s}
-.orbs__dot.is-active{width:26px;background:var(--accent)}
-.orbs__dot:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-
-/* Detail block that swaps with the active orb. */
+/* Detail block that swaps with the active tab. Both pages are always in the
+   DOM (side by side in the track); the viewport clips to show one. */
 .orbdetail{animation:showcaseFade .35s var(--ease)}
-.orbdetail[hidden]{display:none}
 @keyframes showcaseFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){
-  .orbs__track,.orb,.orbdetail{transition:none;animation:none}
+  .orbdetail,.ctabs__tab,.ctabs__track{transition:none;animation:none}
 }
 @media(max-width:560px){
-  .orbs{border-radius:var(--r-lg);padding:1.6rem .5rem 1.2rem}
-  .orbs__arrow{width:38px;height:38px}
-  .orb__caption h3{font-size:1.15rem}
+  .ctabs{border-radius:var(--r-lg)}
+  .ctabs__tab{padding:.75rem 1rem;font-size:.92rem}
+  .showcase__intro h3{font-size:1.2rem}
+  .ctabs__arrow{width:38px;height:38px}
 }
 
 /* Private detail content. */
