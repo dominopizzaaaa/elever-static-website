@@ -34,7 +34,13 @@
       burger.setAttribute('aria-expanded', isOpen);
     });
     navLinks.querySelectorAll('a').forEach(function (a) {
-      a.addEventListener('click', function () { 
+      a.addEventListener('click', function () {
+        // On mobile, tapping a parent item opens its submenu (handled in
+        // site.js) rather than navigating — don't close the whole panel.
+        if (a.classList.contains('nav__link--parent') &&
+            window.matchMedia('(max-width:900px)').matches) {
+          return;
+        }
         nav.classList.remove('open'); 
         burger.setAttribute('aria-expanded', 'false');
       });
