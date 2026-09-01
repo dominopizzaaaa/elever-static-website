@@ -274,11 +274,18 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   .ctabs__page{padding:.2rem 0}
 }
 
-/* Private detail content. */
-.showcase__private{display:grid;gap:1.4rem}
-.priv__list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+/* Private detail content.
+   Every grid track here is minmax(0,...) and every item gets min-width:0. A
+   grid item's default automatic minimum size is its min-content width, so a
+   single unbreakable child (a nowrap button, a long venue name) would push
+   the whole track wider than the carousel viewport — which clips — and slice
+   every card in the panel off at the same right edge. Pinning the minimums to
+   0 lets the tracks follow the viewport instead of the content. */
+.showcase__private{display:grid;grid-template-columns:minmax(0,1fr);gap:1.4rem;min-width:0}
+.showcase__private > *{min-width:0}
+.priv__list{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:.8rem;min-width:0}
 .priv__list li{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--r-md);
-  padding:1rem 1.1rem;transition:border-color .2s,box-shadow .2s,transform .2s var(--ease)}
+  min-width:0;padding:1rem 1.1rem;transition:border-color .2s,box-shadow .2s,transform .2s var(--ease)}
 .priv__list li:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm);transform:translateY(-2px)}
 .priv__list b{display:block;font-size:.95rem;font-weight:700;letter-spacing:-.01em;margin-bottom:.3rem}
 .priv__list span{display:block;font-size:.85rem;color:var(--muted);line-height:1.6}
@@ -290,13 +297,17 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .priv__cta .btn{flex:none}
 
 @media(max-width:820px){
-  .priv__list{grid-template-columns:1fr}
+  .priv__list{grid-template-columns:minmax(0,1fr)}
 }
 /* On phones the CTA row can't fit its text and button side by side inside the
    narrowed carousel viewport, so stack them and let the button span full width. */
 @media(max-width:560px){
   .priv__cta{flex-direction:column;align-items:stretch;padding:1.1rem 1.2rem;text-align:left}
-  .priv__cta .btn{width:100%;text-align:center}
+  /* Buttons are white-space:nowrap globally, and "Enquire about private
+     classes" is ~261px on one line — wider than the panel column once the
+     flanking arrows have taken their share of a phone screen. It is already
+     full-width and centred here, so let this label wrap onto two lines. */
+  .priv__cta .btn{width:100%;text-align:center;white-space:normal}
 }
 
 /* ---------- CLASS LOCATIONS ---------- */
