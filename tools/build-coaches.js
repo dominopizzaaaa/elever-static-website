@@ -13,7 +13,7 @@ global.window = {};
 require(path.join(root, 'assets/js/data.js'));
 const COACHES = global.window.ELEVER_DATA.coaches;
 
-const V = '21'; // must match the ?v= cache-busting string used across the site
+const V = '22'; // must match the ?v= cache-busting string used across the site
 
 const esc = s => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
