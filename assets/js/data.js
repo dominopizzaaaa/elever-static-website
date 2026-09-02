@@ -290,7 +290,7 @@
         venues: ['Aljunied', 'Novena', 'Sengkang', 'Serangoon'],
         ratio: '6 students : 1 coach',
         pricing: [
-          { label: 'Standard Pricing', note: 'until 31 Aug', price: 'S$228' },
+          { label: 'Standard Pricing', note: 'until 31 Aug', price: 'S$228', over: true },
           { label: 'Closing Pricing', note: 'until 6 Sep', price: 'S$248' }
         ],
         signup: 'https://www.eleverbadminton.com/hec202609'

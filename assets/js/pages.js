@@ -505,7 +505,7 @@
             '</div>' +
             (m.pricing && m.pricing.length
               ? '<div class="camp__price">' + m.pricing.map(function (p) {
-                  return '<div><span>' + esc(p.label) + ' <em style="color:var(--faint)">' + esc(p.note) + '</em></span><b>' + esc(p.price) + '</b></div>';
+                  return '<div' + (p.over ? ' style="text-decoration:line-through;color:var(--faint)"' : '') + '><span>' + esc(p.label) + ' <em style="color:var(--faint)">' + esc(p.note) + '</em></span><b>' + esc(p.price) + '</b></div>';
                 }).join('') + '</div>'
               : '') +
             (m.bring && m.bring.length
