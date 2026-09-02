@@ -537,14 +537,7 @@
     { name: 'Wabi Studios', logo: 'assets/img/partners/wabi-studios.png' },
     { name: 'Truly Nuts', logo: 'assets/img/partners/truly-nuts.png' },
     { name: 'Timber Actually', logo: 'assets/img/partners/timber-actually.png' },
-    { name: 'JK Technology', logo: 'assets/img/partners/jk-technology.png' },
-    { name: 'SingHealth Community Hospitals', logo: '' },
-    { name: 'Northbrooks Secondary School', logo: '' },
-    { name: 'Joo Chiat CC', logo: '' },
-    { name: 'Bukit Gombak CC', logo: '' },
-    { name: 'Siglap South CC', logo: '' },
-    { name: 'Paya Lebar Kovan CC', logo: '' },
-    { name: 'Kolam Ayer CC', logo: '' }
+    { name: 'JK Technology', logo: 'assets/img/partners/jk-technology.png' }
   ];
 
   /* ---------------------------------------------------------------
