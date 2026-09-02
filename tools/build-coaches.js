@@ -24,7 +24,7 @@ function page(c) {
   const bio = bioParagraphs.join(' ');
   const excerpt = bio.length > 130 ? bio.slice(0, 130).replace(/\s+\S*$/, '') + '...' : bio;
   const desc = `${c.name}, ${c.role} at Élever Badminton Singapore. ${excerpt}`;
-  const canonical = `https://www.eleverbadminton.com/coaches/${c.slug}.html`;
+  const canonical = `https://www.eleverbadminton.com/coaches/${c.slug}`;
   const image = `https://www.eleverbadminton.com/${c.photo}`;
   const sample = c.placeholder
     ? ' <span class="sample" title="Sample content — replace in assets/js/data.js">sample bio</span>' : '';

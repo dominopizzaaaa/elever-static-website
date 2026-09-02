@@ -58,7 +58,7 @@ function bodyHtml(blocks) {
 
 function page(a) {
   const title = `${a.title} — Élever Badminton`;
-  const canonical = `https://www.eleverbadminton.com/news/${a.slug}.html`;
+  const canonical = `https://www.eleverbadminton.com/news/${a.slug}`;
   const image = 'https://www.eleverbadminton.com/assets/img/hero-action.jpg';
 
   const jsonld = JSON.stringify({
