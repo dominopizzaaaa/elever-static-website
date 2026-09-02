@@ -922,9 +922,11 @@
 
   /* =================================================================
      LEAD FORMS
-     No backend is wired yet, so submitting opens a pre-filled email
-     rather than silently dropping the enquiry. Point `action` at a real
-     endpoint (Formspree, Netlify Forms, your CRM) to go live.
+     Submits the enquiry to the /api/contact serverless function, which
+     sends it to info@eleverbadminton.com via Resend. If that endpoint is
+     not available (e.g. the static GitHub Pages mirror, which has no
+     backend), it falls back to opening a pre-filled email so no enquiry
+     is silently dropped.
      ================================================================= */
   (function leadForms() {
     var forms = document.querySelectorAll('form[data-lead]');
@@ -976,18 +978,53 @@
         }
         var to = form.getAttribute('data-to') || EMAIL;
         var subject = form.getAttribute('data-subject') || 'Website enquiry';
+
+        var payload = { subject: subject };
         var lines = [];
         new FormData(form).forEach(function (v, k) {
           if (k === 'consent') return;
+          payload[k] = v;
           if (String(v).trim()) lines.push(k + ': ' + v);
         });
-        window.location.href = 'mailto:' + to +
-          '?subject=' + encodeURIComponent(subject) +
-          '&body=' + encodeURIComponent(lines.join('\n'));
-        if (status) {
-          status.textContent = 'Opening your email app — press send and we will reply within 1 working day.';
-          status.className = 'lead__status lead__status--ok';
+
+        function fallbackMailto(msg) {
+          window.location.href = 'mailto:' + to +
+            '?subject=' + encodeURIComponent(subject) +
+            '&body=' + encodeURIComponent(lines.join('\n'));
+          if (status) {
+            status.textContent = msg || 'Opening your email app — press send and we will reply within 1 working day.';
+            status.className = 'lead__status lead__status--ok';
+          }
         }
+
+        var submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) submitBtn.disabled = true;
+        if (status) {
+          status.textContent = 'Sending your message…';
+          status.className = 'lead__status';
+        }
+
+        fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).then(function (resp) {
+          if (resp.ok) {
+            form.reset();
+            if (status) {
+              status.textContent = 'Thanks — your message has been sent. We will reply within 1 working day.';
+              status.className = 'lead__status lead__status--ok';
+            }
+          } else {
+            // Endpoint reached but could not send (e.g. domain not verified yet).
+            fallbackMailto('We could not send it automatically — opening your email app so you can send it directly.');
+          }
+        }).catch(function () {
+          // No backend available (e.g. the static GitHub Pages mirror).
+          fallbackMailto();
+        }).then(function () {
+          if (submitBtn) submitBtn.disabled = false;
+        });
       });
     });
   })();
