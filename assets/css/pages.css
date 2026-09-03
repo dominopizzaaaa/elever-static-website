@@ -139,9 +139,9 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
    photo carries the brand blue tint the Development Pathway cards use; on
    hover (or keyboard focus) the colour comes back, the photo darkens so the
    white type stays readable, and the description fades in under the title. */
-.pillars{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:var(--dark)}
+.pillars{display:grid;grid-template-columns:repeat(5,1fr);gap:.65rem}
 .pillar{
-  position:relative;isolation:isolate;overflow:hidden;
+  position:relative;isolation:isolate;overflow:hidden;border-radius:var(--r-lg);
   aspect-ratio:3/4;display:grid;place-items:center;
   padding:1.4rem 1.1rem;text-align:center;background:var(--dark);color:#fff
 }
