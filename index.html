@@ -19,8 +19,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="assets/css/style.css?v=22" />
-    <link rel="stylesheet" href="assets/css/pages.css?v=22" />
+    <link rel="stylesheet" href="assets/css/style.css?v=35" />
+    <link rel="stylesheet" href="assets/css/pages.css?v=35" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -79,7 +79,23 @@
     <main id="main">
       <!-- ===== HERO ===== -->
       <section class="hero" id="top">
-        <div class="hero__bg" style="background-image: url(&quot;assets/img/hero-action.jpg&quot;)"></div>
+        <!-- Hero slideshow. Each slide crossfades and slowly zooms (the
+             "slow zoom" the client liked), pure CSS — no JS, no flash of an
+             empty hero. To change the photos, swap the four background-image
+             URLs below; add or remove a slide and update the nth-child delays
+             in .hero__slide (style.css) to match. The first photo is repeated
+             on the wrapper so the very first frame is never blank — keep the
+             two in step. Interim set is Élever's own photography until the
+             Google Drive shots arrive. -->
+        <div class="hero__slides" aria-hidden="true" style="background-image:url(&quot;assets/img/camps/camp-5.jpg&quot;)">
+          <div class="hero__slide" style="background-image:url(&quot;assets/img/camps/camp-5.jpg&quot;)"></div>
+          <div class="hero__slide" style="background-image:url(&quot;assets/img/events/joo-chiat-carnival-2026-12.jpg&quot;)"></div>
+          <div class="hero__slide" style="background-image:url(&quot;assets/img/events/asics-summit-2026-3.jpg&quot;)"></div>
+          <div class="hero__slide" style="background-image:url(&quot;assets/img/camps/camp-3.jpg&quot;)"></div>
+        </div>
+        <!-- Brand blue wash, in the spirit of the Development Pathway cards.
+             Delete this one line if the supplied photos arrive already tinted. -->
+        <div class="hero__tint" aria-hidden="true"></div>
         <div class="hero__overlay"></div>
         <div class="hero__inner">
           <div class="hero__content">
@@ -130,15 +146,13 @@
         </div>
       </section>
 
-      <!-- ===== THE FIVE PILLARS ===== -->
-      <section class="psec psec--alt">
-        <div class="psec__inner">
-          <div class="psec__head">
-            <span class="psec__kicker">What we do</span>
-            <h2>Five pillars</h2>
-          </div>
-          <div class="pillars" id="pillarsGrid"></div>
-        </div>
+      <!-- ===== WHAT WE DO — five photo tiles, full width =====
+           The "What we do" kicker and "Five pillars" heading were dropped at
+           the client's request (Sep 2026); the heading below is kept for
+           screen readers only so the section is still announced. -->
+      <section class="psec psec--bleed" aria-labelledby="whatwedo">
+        <h2 class="sr-only" id="whatwedo">What we do</h2>
+        <div class="pillars" id="pillarsGrid"></div>
       </section>
 
       <!-- ===== CTA ===== -->
@@ -156,9 +170,9 @@
 
     <footer id="siteFooter"></footer>
 
-    <script src="assets/js/data.js?v=22"></script>
-    <script src="assets/js/site.js?v=22"></script>
-    <script src="assets/js/pages.js?v=22"></script>
-    <script src="assets/js/main.js?v=22"></script>
+    <script src="assets/js/data.js?v=35"></script>
+    <script src="assets/js/site.js?v=35"></script>
+    <script src="assets/js/pages.js?v=35"></script>
+    <script src="assets/js/main.js?v=35"></script>
   </body>
 </html>

@@ -8,7 +8,7 @@ rather than one long scrolling page.
 
 | Page | File | What's on it |
 |---|---|---|
-| Home | `index.html` | Intro animation, hero, the Élever definition + tagline, the 5 pillars |
+| Home | `index.html` | Hero slideshow, the Élever definition + tagline, the What We Do tiles |
 | Classes | `classes.html` | Development pathways, group vs private, trial & placement, class locations (list **or** map) |
 | Camps | `camps.html` | What happens at an Exploration camp, a day's timetable, the next camp, waitlist |
 | Events | `events.html` | Carnivals / clinics / competitions offered as a service, the all-in-one suite, our work, Trusted by, proposal form |
@@ -37,6 +37,19 @@ node tools/build-coaches.js
 ```
 
 ## Photos
+
+**The Home hero** is a four-photo crossfading slideshow, written straight into
+`index.html` as four `.hero__slide` divs — swap the `background-image` URLs to change
+the photos. Add or remove a slide and the `nth-child` animation delays in
+`.hero__slide` (`assets/css/style.css`) have to match. The brand blue wash over
+them is `.hero__tint`; delete that one div if photos arrive already tinted.
+
+**The What We Do tiles** (Home + About) take their photo, crop focus and hover
+line from `PILLARS` in `assets/js/pages.js` — one line per pillar.
+
+**Press covers** in `assets/img/press/` are the publications' own article cover
+images, used on the About page's "Featured on" list. Confirm with the publication
+before adding more.
 
 Originals live in `assets/img/Photos/` and are never modified. One script per set
 exports the web-ready files — run the matching one after dropping new files in, then
@@ -67,6 +80,9 @@ info@eleverbadminton.com · WhatsApp +65 8921 4221
 
 ## Still needed from Élever
 
+- Home hero photos (the Google Drive set) — the current four are interim
+- The EPL logo as `assets/img/brand/epl-logo-white.png` — `lab.html` picks it up
+  automatically and falls back to the wordmark until it exists
 - Real class days, times, levels and venues (currently sample data in `CLASSES`)
 - Age ranges, ability levels and grading checkpoints for the four pathways (deliberately
   omitted rather than guessed)
@@ -95,13 +111,14 @@ assets/
   js/site.js      shared nav + footer injection
   js/pages.js     renders the data-driven blocks on each page
   js/main.js      intro, hero canvas, nav, reveals, hub directory
-  img/            hero and player portraits
+  img/            hero, tiles, press covers and player portraits
     Photos/       untouched originals — coaches, camps, events, logos
     coaches/      square headshots      (build-coach-photos.sh)
     camps/        camp gallery + thumbs (build-camp-photos.sh)
     events/       event photos + thumbs (build-event-photos.sh)
     classes/      pathway card images   (build-class-photos.sh)
     partners/     "Trusted by" logos    (build-partner-logos.sh)
+    press/        article covers for the About page "Featured on" list
 ```
 
 Scripts load in the order `data → site → pages → main`.

@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=22" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=22" />
+  <link rel="stylesheet" href="assets/css/style.css?v=35" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=35" />
 </head>
 <body data-page="about" data-nav="solid" data-base="">
 
@@ -30,7 +30,6 @@
   <main id="main">
     <section class="phead">
       <div class="phead__inner">
-        <p class="phead__crumbs"><a href="index.html">Home</a> · About</p>
         <h1>About <em>Élever</em>.</h1>
       </div>
     </section>
@@ -56,29 +55,41 @@
             <p>Founded in June 2023 by Loh Kean Hean and Eng Chin An, Élever Badminton aims to enhance the badminton experience for all. From players taking their first swings to seasoned elites looking to maximise their fullest potential, our team is committed to building strong foundations and guiding players through a structured pathway that supports their individual aspirations. Embark on this exciting journey of growth with us and elevate your game.</p>
           </div>
 
-          <!-- ===== FEATURED ON ===== -->
+          <!-- ===== FEATURED ON =====
+               Each item carries the publication's own cover photo (saved to
+               assets/img/press/) and the article's full published headline —
+               the Zaobao pieces are in Chinese, hence lang="zh-Hans". -->
           <div class="featured">
             <span class="featured__kicker">Featured on</span>
             <ul class="featured__list">
               <li>
                 <a class="press" href="https://www.zaobao.com.sg/news/sports/story20250602-6543840" target="_blank" rel="noopener">
-                  <span class="press__pub">Lianhe Zaobao</span>
-                  <span class="press__desc">Sharing the heart of the badminton community</span>
-                  <span class="press__meta">zaobao.com.sg · Jun 2025<span class="press__arrow" aria-hidden="true">&#8599;</span></span>
+                  <span class="press__cover"><img src="assets/img/press/zaobao-2025-06.jpg" alt="" loading="lazy" decoding="async" width="720" height="479"></span>
+                  <span class="press__text">
+                    <span class="press__pub">Lianhe Zaobao</span>
+                    <span class="press__desc" lang="zh-Hans">我国退役羽将骆建贤 另一种身份参与新加坡公开赛</span>
+                    <span class="press__meta">zaobao.com.sg · Jun 2025<span class="press__arrow" aria-hidden="true">&#8599;</span></span>
+                  </span>
                 </a>
               </li>
               <li>
                 <a class="press" href="https://sportplus.sg/blogs/news/sharing-the-heart-of-the-badminton-community-at-elever-badminton-loh-kean-hean-and-eng-chin-an" target="_blank" rel="noopener">
-                  <span class="press__pub">SportPlus</span>
-                  <span class="press__desc">Loh Kean Hean &amp; Eng Chin An on Élever Badminton</span>
-                  <span class="press__meta">sportplus.sg<span class="press__arrow" aria-hidden="true">&#8599;</span></span>
+                  <span class="press__cover"><img src="assets/img/press/sportplus-2025.jpg" alt="" loading="lazy" decoding="async" width="720" height="480"></span>
+                  <span class="press__text">
+                    <span class="press__pub">SportPlus</span>
+                    <span class="press__desc">Sharing the Heart of the Badminton Community at Élever Badminton: Loh Kean Hean and Eng Chin An</span>
+                    <span class="press__meta">sportplus.sg<span class="press__arrow" aria-hidden="true">&#8599;</span></span>
+                  </span>
                 </a>
               </li>
               <li>
                 <a class="press" href="https://www.zaobao.com.sg/news/sports/story20240408-3329453" target="_blank" rel="noopener">
-                  <span class="press__pub">Lianhe Zaobao</span>
-                  <span class="press__desc">Élever Badminton in the local sports scene</span>
-                  <span class="press__meta">zaobao.com.sg · Apr 2024<span class="press__arrow" aria-hidden="true">&#8599;</span></span>
+                  <span class="press__cover"><img src="assets/img/press/zaobao-2024-04.jpg" alt="" loading="lazy" decoding="async" width="720" height="479"></span>
+                  <span class="press__text">
+                    <span class="press__pub">Lianhe Zaobao</span>
+                    <span class="press__desc" lang="zh-Hans">羽总推广入门课培养学生兴趣 骆建贤教第一堂课盼栽培明日之星</span>
+                    <span class="press__meta">zaobao.com.sg · Apr 2024<span class="press__arrow" aria-hidden="true">&#8599;</span></span>
+                  </span>
                 </a>
               </li>
             </ul>
@@ -90,9 +101,11 @@
     <!-- ===== COACHING TEAM ===== -->
     <section class="psec psec--alt">
       <div class="psec__inner">
-        <h3 style="font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.9rem">Co-founders</h3>
-        <div class="coachgrid" id="coachFounders" style="margin-bottom:2.4rem"></div>
-        <h3 style="font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.9rem">Our team</h3>
+        <h3 class="teamlabel">Co-founders</h3>
+        <!-- Founders sit centred on the page rather than pinned left (client,
+             Sep 2026); .coachgrid--centred is a centred flex row. -->
+        <div class="coachgrid coachgrid--centred" id="coachFounders"></div>
+        <h3 class="teamlabel">Our team</h3>
         <!-- One row that scrolls sideways rather than wrapping into four.
              The arrows are added by pages.js only when the row overflows. -->
         <div class="rail" id="coachTeamRail">
@@ -101,11 +114,9 @@
       </div>
     </section>
 
-    <!-- ===== FIVE PILLARS ===== -->
-    <section class="psec">
-      <div class="psec__head">
-        <span class="psec__kicker">What we do</span>
-      </div>
+    <!-- ===== WHAT WE DO — same full-width photo tiles as the Home page ===== -->
+    <section class="psec psec--bleed" aria-labelledby="whatwedo">
+      <h2 class="sr-only" id="whatwedo">What we do</h2>
       <div class="pillars" id="pillarsGrid"></div>
     </section>
 
@@ -147,9 +158,9 @@
 
   <footer id="siteFooter"></footer>
 
-  <script src="assets/js/data.js?v=22"></script>
-  <script src="assets/js/site.js?v=22"></script>
-  <script src="assets/js/pages.js?v=22"></script>
-  <script src="assets/js/main.js?v=22"></script>
+  <script src="assets/js/data.js?v=35"></script>
+  <script src="assets/js/site.js?v=35"></script>
+  <script src="assets/js/pages.js?v=35"></script>
+  <script src="assets/js/main.js?v=35"></script>
 </body>
 </html>

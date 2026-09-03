@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=22" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=22" />
+  <link rel="stylesheet" href="assets/css/style.css?v=35" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=35" />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -44,7 +44,16 @@
 
   <main id="main">
     <section class="lab">
-      <p class="lab__mark">Élever Performance Lab</p>
+      <!-- EPL logo. Chin's mark drops in at assets/img/brand/epl-logo-white.png
+           and appears automatically; until that file exists the image fails to
+           load, onerror flips the block to its wordmark fallback and the page
+           reads exactly as it did before. No code change needed either way. -->
+      <p class="lab__mark">
+        <img class="lab__logo" src="assets/img/brand/epl-logo-white.png"
+             alt="Élever Performance Lab" width="420" height="120"
+             onerror="this.closest('.lab__mark').classList.add('lab__mark--fallback')">
+        <span class="lab__markword">Élever Performance Lab</span>
+      </p>
       <h1 class="lab__title">Opening<br />Soon</h1>
 
       <p class="lab__label">See you at</p>
@@ -69,9 +78,9 @@
 
   <footer id="siteFooter"></footer>
 
-  <script src="assets/js/data.js?v=22"></script>
-  <script src="assets/js/site.js?v=22"></script>
-  <script src="assets/js/pages.js?v=22"></script>
-  <script src="assets/js/main.js?v=22"></script>
+  <script src="assets/js/data.js?v=35"></script>
+  <script src="assets/js/site.js?v=35"></script>
+  <script src="assets/js/pages.js?v=35"></script>
+  <script src="assets/js/main.js?v=35"></script>
 </body>
 </html>

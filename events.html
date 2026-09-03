@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=22" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=22" />
+  <link rel="stylesheet" href="assets/css/style.css?v=35" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=35" />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -45,21 +45,33 @@
       </div>
     </section>
 
-    <!-- ===== THREE THINGS WE ORGANISE ===== -->
+    <!-- ===== OUR SERVICES =====
+         "Our Services" is a quiet label above the three cards; Carnivals,
+         Clinics and Competitions carry the weight (client, Sep 2026), and the
+         three repeated "Request a proposal" buttons are consolidated into the
+         single CTA below the row. -->
     <section class="psec">
-      <div class="psec__head">
-        <h2>What we organise</h2>
+      <div class="psec__head psec__head--minor">
+        <h2>Our Services</h2>
       </div>
       <div class="etypes" id="eventTypes"></div>
+      <div class="etypes__cta">
+        <a class="btn btn--primary" href="contact.html">Request a proposal</a>
+      </div>
     </section>
 
-    <!-- ===== TRUSTED BY ===== -->
-    <section class="psec psec--alt">
+    <!-- ===== TRUSTED BY =====
+         One row of logos that scrolls continuously, the same moving treatment
+         as the Home page marquee (client, Sep 2026). pages.js duplicates the
+         logo set so the loop has no visible seam. -->
+    <section class="psec psec--alt psec--tight">
       <div class="psec__inner">
         <div class="psec__head">
           <h2>Trusted by</h2>
         </div>
-        <div class="partners" id="eventPartners"></div>
+      </div>
+      <div class="logorail" aria-label="Organisations we have worked with">
+        <div class="logorail__track" id="eventPartners"></div>
       </div>
     </section>
 
@@ -86,9 +98,9 @@
 
   <footer id="siteFooter"></footer>
 
-  <script src="assets/js/data.js?v=22"></script>
-  <script src="assets/js/site.js?v=22"></script>
-  <script src="assets/js/pages.js?v=22"></script>
-  <script src="assets/js/main.js?v=22"></script>
+  <script src="assets/js/data.js?v=35"></script>
+  <script src="assets/js/site.js?v=35"></script>
+  <script src="assets/js/pages.js?v=35"></script>
+  <script src="assets/js/main.js?v=35"></script>
 </body>
 </html>

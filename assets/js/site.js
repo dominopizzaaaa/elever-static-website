@@ -18,7 +18,7 @@
      (ElevenLabs-style). `key` matches <body data-page> to mark current.
 
      NAV sits on the LEFT, immediately beside the logo. NAV_END sits on the
-     right, next to the "Book a class" button.
+     right, next to the "Book a class" button, and is empty by default.
 
      SG Hub is hidden for now — the page (hub.html) is untouched and still
      works if opened directly. To bring it back, restore this entry:
@@ -32,15 +32,30 @@
         { key: 'camps', href: 'camps.html', label: 'Camps' }
       ]
     },
+    /* The Lab sits directly beside Classes and goes by "Lab" (client, Sep
+       2026). The page <title> and the footer keep the full name. */
+    { key: 'lab', href: 'lab.html', label: 'Lab' },
     { key: 'events', href: 'events.html', label: 'Events' },
     { key: 'news', href: 'news.html', label: 'News' },
     { key: 'about', href: 'about.html', label: 'About' },
     { key: 'contact', href: 'contact.html', label: 'Contact' }
   ];
 
-  var NAV_END = [
-    { key: 'lab', href: 'lab.html', label: 'Élever Performance Lab' }
-  ];
+  /* Right-hand end of the bar. Only the booking CTA lives there now — add an
+     entry here to put a link back beside it. */
+  var NAV_END = [];
+
+  /* Socials render as marks rather than words (client, Sep 2026). Each icon is
+     drawn on a 24x24 grid so the row stays even; the platform name lives in
+     the link's aria-label so screen readers still hear it. */
+  var SOCIAL_ICONS = {
+    Instagram: '<rect x="2.6" y="2.6" width="18.8" height="18.8" rx="5.4" fill="none" stroke="currentColor" stroke-width="1.9"/>' +
+      '<circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.9"/>' +
+      '<circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/>',
+    Facebook: '<path d="M13.9 21v-7.6h2.55l.38-2.96H13.9V8.55c0-.86.24-1.44 1.47-1.44h1.57V4.46a21 21 0 0 0-2.29-.12c-2.26 0-3.81 1.38-3.81 3.92v2.18H8.28v2.96h2.56V21z" fill="currentColor"/>',
+    TikTok: '<path d="M14.9 3h-2.62v12.27a2.3 2.3 0 1 1-1.9-2.27v-2.7a4.98 4.98 0 1 0 4.52 4.97V9.6a6.2 6.2 0 0 0 3.6 1.15V8.09A3.63 3.63 0 0 1 14.9 4.6z" fill="currentColor"/>',
+    LinkedIn: '<path d="M6.94 8.72H4.16V21h2.78zM5.55 3.4a1.62 1.62 0 1 0 0 3.24 1.62 1.62 0 0 0 0-3.24zM19.84 13.9c0-3.02-1.62-4.43-3.77-4.43a3.25 3.25 0 0 0-2.95 1.62h-.04V8.72H10.4V21h2.78v-6.07c0-1.6.3-3.15 2.29-3.15 1.95 0 1.98 1.83 1.98 3.26V21h2.78z" fill="currentColor"/>'
+  };
 
   var SOCIALS = [
     { label: 'Instagram', href: 'https://www.instagram.com/eleverbadminton/' },
@@ -105,17 +120,22 @@
     header.className = 'nav';
     header.id = 'nav';
     header.innerHTML =
-      '<a href="' + url('index.html') + '" class="nav__logo" aria-label="Élever Badminton — home">' + brandLogo('nav__logo') + '</a>' +
-      /* One container for every link so the mobile burger panel stays a single
-         scrolling list; .nav__end is only pushed right on desktop. */
-      '<nav class="nav__links" id="navLinks" aria-label="Primary">' +
-        navLinks(NAV) +
-        '<div class="nav__end">' +
-          navLinks(NAV_END) +
-          '<a href="' + BOOK_URL + '" target="_blank" rel="noopener" class="nav__cta">Book a class</a>' +
-        '</div>' +
-      '</nav>' +
-      '<button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span></span></button>';
+      /* .nav__inner is the same capped, centred column the page content uses,
+         so the logo and the "Book a class" button line up with the copy in the
+         sections below rather than sitting out at the viewport edge. */
+      '<div class="nav__inner">' +
+        '<a href="' + url('index.html') + '" class="nav__logo" aria-label="Élever Badminton — home">' + brandLogo('nav__logo') + '</a>' +
+        /* One container for every link so the mobile burger panel stays a single
+           scrolling list; .nav__end is only pushed right on desktop. */
+        '<nav class="nav__links" id="navLinks" aria-label="Primary">' +
+          navLinks(NAV) +
+          '<div class="nav__end">' +
+            navLinks(NAV_END) +
+            '<a href="' + BOOK_URL + '" target="_blank" rel="noopener" class="nav__cta">Book a class</a>' +
+          '</div>' +
+        '</nav>' +
+        '<button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span></span></button>' +
+      '</div>';
   }
 
   var footer = document.getElementById('siteFooter');
@@ -128,7 +148,10 @@
           '<p class="footer__tag">Enhance your skills.<br>Enjoy the process.<br>Elevate your experience.</p>' +
           '<div class="footer__socials">' +
             SOCIALS.map(function (s) {
-              return '<a href="' + s.href + '" target="_blank" rel="noopener">' + s.label + '</a>';
+              return '<a href="' + s.href + '" target="_blank" rel="noopener"' +
+                ' aria-label="Élever Badminton on ' + s.label + '" title="' + s.label + '">' +
+                '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' + (SOCIAL_ICONS[s.label] || '') + '</svg>' +
+              '</a>';
             }).join('') +
           '</div>' +
         '</div>' +

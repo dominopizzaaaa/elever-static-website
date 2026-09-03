@@ -67,7 +67,13 @@
     modal.innerHTML =
       '<div class="lightbox__bar">' +
         '<div class="lightbox__meta"><b class="lightbox__title"></b><span class="lightbox__count"></span></div>' +
-        '<button class="lightbox__close" type="button" aria-label="Close gallery">Close &times;</button>' +
+        /* A circled × rather than the words "Close ×" (client, Sep 2026). */
+        '<button class="lightbox__close" type="button" aria-label="Close gallery" title="Close">' +
+          '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">' +
+            '<path d="M6.4 6.4 17.6 17.6M17.6 6.4 6.4 17.6" fill="none" stroke="currentColor" ' +
+              'stroke-width="2.1" stroke-linecap="round"/>' +
+          '</svg>' +
+        '</button>' +
       '</div>' +
       '<div class="lightbox__stage">' +
         '<button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="Previous photo">&lsaquo;</button>' +
@@ -207,24 +213,46 @@
   /* =================================================================
      THE FIVE PILLARS — Home + About
      ================================================================= */
+  /* Five photo tiles, full width, title centred on the photo (client brief,
+     Sep 2026). `photo` is Élever's own photography — swap any line here when
+     the client picks a different shot for a pillar; `focus` is the CSS
+     object-position for the crop, `who` is the line revealed on hover. */
   var PILLARS = [
-    { num: '01', name: 'Classes', href: 'classes.html', who: 'Weekly coaching along a structured pathway.' },
-    { num: '02', name: 'Camps', href: 'camps.html', who: 'Holiday Exploration camps for new players.' },
-    { num: '03', name: 'Carnivals', href: 'events.html#carnival', who: 'Mass-participation event days.' },
-    { num: '04', name: 'Clinics', href: 'events.html#clinic', who: 'Short, focused coaching workshops.' },
-    { num: '05', name: 'Competitions', href: 'events.html#competition', who: 'Tournaments run end to end.' }
+    { name: 'Classes', href: 'classes.html', who: 'Weekly coaching along a structured pathway.',
+      photo: 'assets/img/camps/camp-7.jpg', focus: '50% 38%',
+      alt: 'A junior player in an Élever shirt playing a forehand in a class' },
+    { name: 'Camps', href: 'camps.html', who: 'Holiday Exploration camps for new players.',
+      photo: 'assets/img/camps/camp-4.jpg', focus: 'center 32%',
+      alt: 'A holiday camp group on court with their coaches' },
+    { name: 'Carnivals', href: 'events.html#carnival', who: 'Mass-participation event days.',
+      photo: 'assets/img/events/joo-chiat-carnival-2026-4.jpg', focus: 'center 62%',
+      alt: 'A full hall of players at an Élever badminton carnival' },
+    { name: 'Clinics', href: 'events.html#clinic', who: 'Short, focused coaching workshops.',
+      photo: 'assets/img/events/bukit-gombak-clinic-2026-9.jpg', focus: 'center 40%',
+      alt: 'A coach demonstrating a shot to two children at a community clinic' },
+    { name: 'Competitions', href: 'events.html#competition', who: 'Tournaments run end to end.',
+      photo: 'assets/img/events/joo-chiat-carnival-2026-18.jpg', focus: '58% 45%',
+      alt: 'Medals being presented at the end of a competition' }
   ];
 
   (function pillars() {
     var mount = el('pillarsGrid');
     if (!mount) return;
     var base = SITE.base || '';
-    mount.innerHTML = PILLARS.map(function (p, i) {
+    mount.innerHTML = PILLARS.map(function (p) {
+      /* div/h3/p rather than nested spans: <a> is transparent content, so the
+         heading is valid here and the tile keeps a real heading in the
+         outline. */
       return '<a class="pillar" href="' + base + p.href + '">' +
-        '<span class="pillar__num">' + p.num + '</span>' +
-        '<h3>' + esc(p.name) + '</h3>' +
-        '<p class="pillar__who">' + esc(p.who) + '</p>' +
-        '<span class="pillar__go">Explore &rsaquo;</span>' +
+        '<div class="pillar__media">' +
+          '<img src="' + esc(base + p.photo) + '" alt="' + esc(p.alt || '') + '"' +
+            (p.focus ? ' style="object-position:' + esc(p.focus) + '"' : '') +
+            ' loading="lazy" decoding="async">' +
+        '</div>' +
+        '<div class="pillar__inner">' +
+          '<h3>' + esc(p.name) + '</h3>' +
+          '<p class="pillar__who">' + esc(p.who) + '</p>' +
+        '</div>' +
       '</a>';
     }).join('');
   })();
@@ -380,10 +408,17 @@
     var listMount = el('schedList');
     if (!listMount) return;
 
-    var countEl = el('schedCount');
     var filterWrap = el('schedFilters');
 
     var level = 'all';
+
+    /* A Google Maps search for the venue. Coordinates would pin more exactly,
+       but a name + address search survives a venue moving, and every entry in
+       CLASSES has both. */
+    function mapsUrl(v) {
+      return 'https://www.google.com/maps/search/?api=1&query=' +
+        encodeURIComponent(v.venue + ', ' + v.addr);
+    }
 
     /* Areas read alphabetically. localeCompare keeps sort stable across
        punctuation. */
@@ -412,16 +447,6 @@
     function render() {
       var areas = visibleAreas();
 
-      if (countEl) {
-        var venueCount = areas.reduce(function (a, g) { return a + g.venues.length; }, 0);
-        var n = areas.reduce(function (a, g) {
-          return a + g.venues.reduce(function (b, v) { return b + sessionsFor(v).length; }, 0);
-        }, 0);
-        countEl.textContent = areas.length + (areas.length === 1 ? ' area' : ' areas') +
-          ' · ' + venueCount + (venueCount === 1 ? ' venue' : ' venues') +
-          ' · ' + n + (n === 1 ? ' class' : ' classes');
-      }
-
       if (!areas.length) {
         listMount.innerHTML = '<p class="sched__empty">No classes match that level yet. Try “All levels”, or ' +
           '<a href="contact.html">ask us about a venue near you</a>.</p>';
@@ -436,8 +461,14 @@
             '<span class="vcard__region">' + esc(region) + '</span></div>' +
           g.venues.map(function (v) {
             return '<div class="vcard__venue">' +
-              '<p class="vcard__venuename">' + esc(v.venue) + sampleTag(v) + '</p>' +
-              '<p class="vcard__addr">' + esc(v.addr) + '</p>' +
+              /* Name left, address right, on one line — the address opens the
+                 venue on Google Maps (client, Sep 2026). */
+              '<p class="vcard__venuename">' + esc(v.venue) + sampleTag(v) +
+                '<a class="vcard__addr" href="' + esc(mapsUrl(v)) + '" target="_blank" rel="noopener"' +
+                  ' aria-label="' + esc(v.venue + ', ' + v.addr + ' — open in Google Maps') + '">' +
+                  '<span class="vcard__pin" aria-hidden="true">\u25CE</span>' + esc(v.addr) +
+                '</a>' +
+              '</p>' +
               '<ul class="vcard__sessions">' + sessionsFor(v).map(function (s) {
                 return '<li><span class="vcard__day">' + esc(s.day) + '</span>' +
                   '<span class="vcard__time">' + esc(s.time) + '</span>' +
@@ -567,7 +598,6 @@
           '<h3>' + esc(t.name) + '</h3>' +
           '<p class="etype__what">' + esc(t.what) + '</p>' +
           '<ul class="etype__prov">' + t.provides.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ul>' +
-          '<a class="btn btn--ghost" href="contact.html">Request a proposal</a>' +
         '</article>';
       }).join('');
     }
@@ -661,16 +691,23 @@
       }).join('');
     }
 
+    /* Trusted by — one row that scrolls continuously, like the Home page
+       marquee (client, Sep 2026). The set is rendered TWICE: the CSS animation
+       translates the track by exactly -50%, so the second copy is in the first
+       copy's place when the loop restarts and the motion has no seam. The
+       duplicate is aria-hidden so the names are announced only once. */
     var partners = el('eventPartners');
     if (partners) {
       var pbase = SITE.base || '';
-      partners.innerHTML = D.partners.map(function (p) {
+      var logos = D.partners.map(function (p) {
         return p.logo
-          ? '<span class="partners__chip partners__chip--logo">' +
+          ? '<span class="logorail__item">' +
               '<img src="' + esc(pbase + p.logo) + '" alt="' + esc(p.name) + '" loading="lazy" decoding="async">' +
             '</span>'
-          : '<span class="partners__chip">' + esc(p.name) + '</span>';
+          : '<span class="logorail__item logorail__item--name">' + esc(p.name) + '</span>';
       }).join('');
+      partners.innerHTML = '<span class="logorail__set">' + logos + '</span>' +
+        '<span class="logorail__set" aria-hidden="true">' + logos + '</span>';
     }
   })();
 

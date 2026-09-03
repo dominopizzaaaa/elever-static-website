@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=34" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=34" />
+  <link rel="stylesheet" href="assets/css/style.css?v=35" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=35" />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -67,23 +67,20 @@
          Copy is preserved in the "EB Website for Dom" Google Doc if it returns. -->
     <section class="psec psec--alt" id="locations">
       <div class="psec__inner">
-        <div class="psec__head">
+        <!-- "Class Type" is a quiet label: the tab titles below it carry the
+             weight (client, Sep 2026), hence .psec__head--minor. -->
+        <div class="psec__head psec__head--minor">
           <h2>Class Type</h2>
-          <p class="psec__sub">Switch tabs, swipe, or use the arrows to explore how we train — a level-matched group, or fully personalised private coaching.</p>
         </div>
 
-        <!-- ElevenLabs-style tab shell: a soft rounded card with a tab rail up
-             top, then a swipeable panel area below. -->
+        <!-- Tab shell: a soft rounded card with a tab rail up top, then a
+             swipeable panel area below. The active tab is solid brand blue. -->
         <div class="ctabs" id="classCarousel" data-active="0">
           <div class="ctabs__rail" role="tablist" aria-label="Choose a class type">
             <button class="ctabs__tab is-active" type="button" role="tab" id="ctab-group"
-              aria-selected="true" aria-controls="detail-group" data-goto="0">
-              <span class="ctabs__dot ctabs__dot--group" aria-hidden="true"></span>Group Classes
-            </button>
+              aria-selected="true" aria-controls="detail-group" data-goto="0">Group Classes</button>
             <button class="ctabs__tab" type="button" role="tab" id="ctab-private"
-              aria-selected="false" aria-controls="detail-private" data-goto="1" tabindex="-1">
-              <span class="ctabs__dot ctabs__dot--private" aria-hidden="true"></span>Private Classes
-            </button>
+              aria-selected="false" aria-controls="detail-private" data-goto="1" tabindex="-1">Private Classes</button>
           </div>
         </div>
 
@@ -97,8 +94,9 @@
             <div class="ctabs__track" id="ctabTrack">
               <div class="ctabs__page">
                 <div class="orbdetail is-active" id="detail-group" role="tabpanel" aria-labelledby="ctab-group" data-panel="0">
+                  <!-- The tab above already says "Group Classes", so the panel
+                       leads straight into the description (client, Sep 2026). -->
                   <div class="showcase__intro">
-                    <h3>Group Classes</h3>
                     <p>Level-matched squads, max 1:6 coach-to-player ratio, across 8 venues in Singapore.</p>
                   </div>
                   <div class="showcase__locations">
@@ -108,7 +106,6 @@
                         <button class="sched__filter" data-level="Essentials" aria-pressed="false">Essentials</button>
                         <button class="sched__filter" data-level="Emergence" aria-pressed="false">Emergence</button>
                       </div>
-                      <p class="hub__count" id="schedCount" aria-live="polite"></p>
                     </div>
                     <div class="sched__list" id="schedList"></div>
                   </div>
@@ -118,7 +115,6 @@
               <div class="ctabs__page">
                 <div class="orbdetail" id="detail-private" role="tabpanel" aria-labelledby="ctab-private" data-panel="1">
                   <div class="showcase__intro">
-                    <h3>Private Classes</h3>
                     <p>Personalised 1-to-1 or 1-to-2 coaching, shaped around your goals and schedule.</p>
                   </div>
                   <div class="showcase__private">
@@ -152,9 +148,9 @@
 
   <footer id="siteFooter"></footer>
 
-  <script src="assets/js/data.js?v=34"></script>
-  <script src="assets/js/site.js?v=34"></script>
-  <script src="assets/js/pages.js?v=34"></script>
-  <script src="assets/js/main.js?v=34"></script>
+  <script src="assets/js/data.js?v=35"></script>
+  <script src="assets/js/site.js?v=35"></script>
+  <script src="assets/js/pages.js?v=35"></script>
+  <script src="assets/js/main.js?v=35"></script>
 </body>
 </html>
