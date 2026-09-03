@@ -79,56 +79,24 @@
     <main id="main">
       <!-- ===== HERO ===== -->
       <section class="hero" id="top">
-        <!-- Hero slideshow. Each slide crossfades and slowly zooms (the
-             "slow zoom" the client liked), pure CSS — no JS, no flash of an
-             empty hero. To change the photos, swap the four background-image
-             URLs below; add or remove a slide and update the nth-child delays
-             in .hero__slide (style.css) to match. The first photo is repeated
-             on the wrapper so the very first frame is never blank — keep the
-             two in step. Interim set is Élever's own photography until the
-             Google Drive shots arrive. -->
-        <div class="hero__slides" aria-hidden="true" style="background-image:url(&quot;assets/img/camps/camp-5.jpg&quot;)">
-          <div class="hero__slide" style="background-image:url(&quot;assets/img/camps/camp-5.jpg&quot;)"></div>
-          <div class="hero__slide" style="background-image:url(&quot;assets/img/events/joo-chiat-carnival-2026-12.jpg&quot;)"></div>
-          <div class="hero__slide" style="background-image:url(&quot;assets/img/events/asics-summit-2026-3.jpg&quot;)"></div>
-          <div class="hero__slide" style="background-image:url(&quot;assets/img/camps/camp-3.jpg&quot;)"></div>
-        </div>
-        <!-- Brand blue wash, in the spirit of the Development Pathway cards.
-             Delete this one line if the supplied photos arrive already tinted. -->
-        <div class="hero__tint" aria-hidden="true"></div>
-        <div class="hero__overlay"></div>
         <div class="hero__inner">
           <div class="hero__content">
             <h1 class="hero__title">
               <img class="hero__logo reveal" src="assets/img/brand/eb-logo-white.png" alt="Élever Badminton" />
             </h1>
-            <p class="hero__sub reveal" data-delay="240">Enhance Your Skills. Enjoy The Process. Elevate Your Experience.</p>
+            <p class="hero__sub reveal" data-delay="240">Enhance Your Skills, Enjoy The Process, Elevate Your Experience.</p>
             <div class="hero__actions reveal" data-delay="320">
-              <a href="about.html" class="btn btn--primary">About us</a>
+              <a href="about.html" class="btn btn--primary">ABOUT US</a>
             </div>
           </div>
-          <!-- WHAT WE DO — five photo tiles, inside the hero image.
+          <!-- WHAT WE DO — five photo tiles, inside the hero.
                The screen-reader heading keeps the group announced; the tiles
                themselves are injected into #pillarsGrid by pages.js. -->
           <h2 class="sr-only" id="whatwedo">What we do</h2>
           <div class="pillars" id="pillarsGrid"></div>
         </div>
       </section>
-
-      <!-- ===== CTA ===== -->
-      <section class="cta" id="contact">
-        <div class="cta__inner">
-          <h2 class="reveal">Ready to <em>elevate</em>?</h2>
-          <p class="reveal" data-delay="120">Whether it's your first swing or your next title, there's a place for you at Élever Badminton.</p>
-          <div class="cta__actions reveal" data-delay="200">
-            <a href="https://app.eleverbadminton.com/" target="_blank" rel="noopener" class="btn btn--primary">Book a class</a>
-            <a href="contact.html" class="btn btn--ghost">Talk to us</a>
-          </div>
-        </div>
-      </section>
     </main>
-
-    <footer id="siteFooter"></footer>
 
     <script src="assets/js/data.js?v=35"></script>
     <script src="assets/js/site.js?v=35"></script>

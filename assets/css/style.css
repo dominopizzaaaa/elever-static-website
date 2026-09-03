@@ -128,11 +128,11 @@ em{font-style:normal;color:var(--accent)}
 .nav.open .nav__burger span:nth-child(3){transform:translateY(-6.8px) rotate(-45deg)}
 
 /* ===================== HERO (dark) ===================== */
-/* Full-viewport hero: the photo fills the whole screen the moment the visitor
-   lands. Content (logo, taglines, About button) is centred, with the five
-   What We Do tiles sitting inside the same image near the foot. */
+/* Full-viewport hero on a solid black background (slideshow removed at the
+   client's request). Content (logo, tagline, About button) is centred, with
+   the five What We Do tiles sitting below near the foot. */
 .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
-  padding:6rem var(--gutter) 2.5rem;overflow:hidden}
+  padding:6rem var(--gutter) 2.5rem;overflow:hidden;background:#000}
 /* ---- hero slideshow ----
    Four photos crossfade on a 34s loop, each with the slow Ken Burns zoom the
    client asked to keep. Each slide owns a quarter of the loop, so slide n
