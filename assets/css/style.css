@@ -188,7 +188,7 @@ em{font-style:normal;color:var(--accent)}
    screen on entry. */
 .hero .pillars{position:relative;z-index:2;width:100%}
 .hero .pillar{aspect-ratio:auto;min-height:clamp(150px,22vh,220px);padding:1.1rem .9rem;background:rgba(10,20,45,.35)}
-.hero .btn--ghost{border-color:rgba(255,255,255,.34);color:#fff;background:transparent}
+.hero .btn--ghost{border-color:#fff;color:#fff;background:transparent}
 .hero .btn--ghost:hover{border-color:#fff;background:rgba(255,255,255,.1)}
 .hero__scroll{position:absolute;bottom:1.8rem;left:var(--gutter);color:#8d94a8;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;display:flex;align-items:center;gap:.7rem;z-index:2}
 .hero__scroll span{width:1px;height:32px;background:linear-gradient(var(--accent-light),transparent);animation:scrollLine 1.8s ease-in-out infinite}
