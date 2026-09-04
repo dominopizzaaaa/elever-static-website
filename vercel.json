@@ -1,5 +1,17 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/shpc26badmintonprospectus",
+      "destination": "https://docs.google.com/document/d/1dGYKSrpPPSBj7nxp3qd4VhH8-ub1xC9lXx7Xa0wj_b4/edit?usp=share_link",
+      "permanent": false
+    },
+    {
+      "source": "/shpc26pickleballprospectus",
+      "destination": "https://docs.google.com/document/d/1kjM8TElVF5-ogQ1g91Eh0zozHVCHKmxvkFhiwlYKZmg/edit?usp=sharing",
+      "permanent": false
+    }
+  ]
 }
