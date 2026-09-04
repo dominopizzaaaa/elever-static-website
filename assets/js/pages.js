@@ -10,7 +10,7 @@
   var D = window.ELEVER_DATA;
   if (!D) return;
   var SITE = window.ELEVER_SITE || {};
-  var BOOK = SITE.bookUrl || 'https://app.eleverbadminton.com/';
+  var BOOK = SITE.bookUrl || 'https://wa.me/6589214221';
   var EMAIL = SITE.email || 'info@eleverbadminton.com';
 
   function esc(s) {

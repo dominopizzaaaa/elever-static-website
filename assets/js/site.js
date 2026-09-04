@@ -8,7 +8,7 @@
 (function () {
   'use strict';
 
-  var BOOK_URL = 'https://app.eleverbadminton.com/';
+  var BOOK_URL = 'https://wa.me/6589214221';
   var WHATSAPP = 'https://wa.me/6589214221';
   var EMAIL = 'info@eleverbadminton.com';
   var LOGO_BLACK = 'assets/img/brand/eb-logo-black.png';
