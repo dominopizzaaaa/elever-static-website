@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=36" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=36" />
+  <link rel="stylesheet" href="assets/css/style.css?v=37" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=37" />
 </head>
 <body data-page="about" data-nav="solid" data-base="">
 
@@ -116,24 +116,16 @@
       </div>
     </section>
 
-    <!-- ===== OUR SERVICES =====
-         Added above the five pillars (client, Sep 2026). Same component as the
-         Events page — pages.js fills #eventTypes wherever it finds it, and each
-         card links through to its own filter in Past Events. Below three-across
-         the row scrolls sideways rather than stacking. -->
-    <section class="psec">
-      <div class="psec__head psec__head--minor">
-        <h2>Our Services</h2>
+    <!-- ===== OUR SERVICES — the five photo tiles from the Home page =====
+         "Our Services" is the label above the five boxes and nothing more
+         (client, Sep 2026): the three Carnivals / Clinics / Competitions cards
+         that briefly sat here are gone, and the tiles themselves already link
+         through to their own filter in Past Events. The heading needs the page
+         gutter that .psec--bleed takes off the section, hence --inset. -->
+    <section class="psec psec--bleed" aria-labelledby="ourservices">
+      <div class="psec__head psec__head--minor psec__head--inset">
+        <h2 id="ourservices">Our Services</h2>
       </div>
-      <div class="etypes" id="eventTypes"></div>
-      <div class="etypes__cta">
-        <a class="btn btn--primary" href="contact.html">Request a proposal</a>
-      </div>
-    </section>
-
-    <!-- ===== WHAT WE DO — same full-width photo tiles as the Home page ===== -->
-    <section class="psec psec--bleed" aria-labelledby="whatwedo">
-      <h2 class="sr-only" id="whatwedo">What we do</h2>
       <div class="pillars" id="pillarsGrid"></div>
     </section>
 
@@ -146,9 +138,9 @@
 
   <footer id="siteFooter"></footer>
 
-  <script src="assets/js/data.js?v=36"></script>
-  <script src="assets/js/site.js?v=36"></script>
-  <script src="assets/js/pages.js?v=36"></script>
-  <script src="assets/js/main.js?v=36"></script>
+  <script src="assets/js/data.js?v=37"></script>
+  <script src="assets/js/site.js?v=37"></script>
+  <script src="assets/js/pages.js?v=37"></script>
+  <script src="assets/js/main.js?v=37"></script>
 </body>
 </html>

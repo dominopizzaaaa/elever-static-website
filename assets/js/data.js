@@ -356,11 +356,15 @@
 
   /* `when` / `time` / `where` render as the card's detail lines. `map` is
      optional — supply it and the venue name becomes a Google Maps link.
-     The "Client:" line was dropped at the client's request (Sep 2026). */
+     The "Client:" line was dropped at the client's request (Sep 2026).
+
+     `type` takes either one name or a list. A list renders as one chip per
+     type and, once the event moves down to EVENT_SHOWCASE, files it under
+     every one of those filters in Past Events (client, Sep 2026). */
   var EVENTS_UPCOMING = [
     {
       title: 'SingHealth Presidents’ Challenge Sports Day 2026',
-      type: 'Competition & Clinic',
+      type: ['Competition', 'Clinic'],
       when: '5 Sep 2026',
       time: '08:30 – 14:00',
       where: 'Our Tampines Hub',
@@ -397,7 +401,8 @@
     competition: []
   };
 
-  /* EVENT_SHOWCASE photos are filenames only. `eventPhotoBase` (full size,
+  /* EVENT_SHOWCASE photos are filenames only. `type` takes one name or a list —
+     a list files the event under each of those Past Events filters. `eventPhotoBase` (full size,
      used in the lightbox) and `eventThumbBase` (grid thumbnails) supply the
      directories, so both sets stay in sync. Regenerate both from the
      originals in assets/img/Photos/Events/ with:

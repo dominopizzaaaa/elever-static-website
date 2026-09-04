@@ -99,6 +99,9 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
    (Class Type over Group Class / Private Class) — the h2 drops to a quiet
    label so the cards carry the weight. */
 .psec__head--minor{margin-bottom:1rem}
+/* A heading inside a .psec--bleed section: the section drops its side padding
+   so the tiles can run edge to edge, so the heading puts it back. */
+.psec__head--inset{padding-left:var(--gutter);padding-right:var(--gutter)}
 .psec__head--minor h2{font-size:.86rem;font-weight:700;letter-spacing:.01em;color:var(--muted)}
 
 /* ---------- ElevenLabs-style two-column split ---------- */
@@ -189,11 +192,20 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
      two across is taller than it needs to be. */
   .pillar{aspect-ratio:4/5}
 }
+/* Phones: one sideways-scrolling row rather than tiles stacked two-by-two down
+   the page (client, Sep 2026) — the same treatment as the Our team rail. The
+   next tile is deliberately part-visible at the edge, which is the cue that
+   the row keeps going. In a .psec--bleed section the row carries the page
+   gutter itself so the first tile still lines up with the copy above it. */
 @media(max-width:640px){
-  .pillars{grid-template-columns:repeat(2,1fr)}
-  /* Five tiles over two columns would leave the last row half empty, so the
-     final tile takes the full width and a wider crop. */
-  .pillar:last-child{grid-column:1/-1;aspect-ratio:16/10}
+  .pillars{display:flex;grid-template-columns:none;flex-wrap:nowrap;
+    overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;
+    gap:.5rem;padding-bottom:.5rem;
+    scrollbar-width:none;-ms-overflow-style:none}
+  .pillars::-webkit-scrollbar{display:none}
+  .pillar{flex:0 0 62%;aspect-ratio:4/5;scroll-snap-align:start}
+  .psec--bleed .pillars{padding-left:var(--gutter);padding-right:var(--gutter);
+    scroll-padding-left:var(--gutter)}
 }
 /* Touch devices have no hover, so the description is always shown there. */
 @media(hover:none){
@@ -222,17 +234,15 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
    4/5 is the ratio the images are supplied in; the cap stops the photo
    towering on the two-column and single-column layouts, where the box crops
    rather than grows. */
-/* The stage photos are supplied already framed 4:5 (see
-   tools/build-class-photos.sh — it resizes, it never crops), so the box takes
-   that same ratio and the whole photo lands in it: nothing is trimmed at any
-   width, and the ratio reserves the space before the image loads. `contain`
-   rather than `cover` is the guarantee — swap in a photo of another shape and
-   it letterboxes onto the panel colour instead of losing its edges. No
-   max-height: a cap is a crop by another name (client, Sep 2026). */
+/* The box takes a 4:5 ratio and the photo fills it edge to edge with `cover`,
+   so the image spans the full width of the card on every device — no
+   panel-coloured side bands where a narrower photo would otherwise letterbox
+   (client, Sep 2026). `overflow:hidden` keeps the minimal crop inside the
+   rounded top corners; the ratio also reserves the space before load. */
 .path__media{flex:none;margin:-1.25rem -1.2rem 1.1rem;aspect-ratio:4/5;
   overflow:hidden;background:var(--panel-2);
   border-radius:calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0}
-.path__media img{width:100%;height:100%;object-fit:contain;display:block;
+.path__media img{width:100%;height:100%;object-fit:cover;display:block;
   transition:transform .5s var(--ease)}
 .path:hover .path__media img{transform:scale(1.03)}
 .path:target{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
@@ -580,8 +590,10 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   transition:border-color .25s,box-shadow .25s}
 .ecard:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm)}
 .ecard--feature{border-color:rgba(33,81,209,.35);background:linear-gradient(180deg,var(--accent-soft),#fff 55%)}
+/* An event can be more than one type — one chip each, on one wrapping row. */
+.ecard__types{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.7rem}
 .ecard__type{font-size:.6rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:#fff;
-  background:var(--accent);padding:.2rem .5rem;border-radius:4px;display:inline-block;margin-bottom:.7rem}
+  background:var(--accent);padding:.2rem .5rem;border-radius:4px;display:inline-block}
 .ecard h3{font-size:1rem;font-weight:700;margin-bottom:.5rem;line-height:1.35;letter-spacing:-.015em}
 /* Date / Time / Location. The label column is fixed so the values line up. */
 .ecard__meta{list-style:none;display:flex;flex-direction:column;gap:.3rem;font-size:.84rem;color:var(--ink);margin-bottom:.7rem}
@@ -604,7 +616,8 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .eshow__photo{display:block;width:100%;border:0;background:transparent;padding:0}
 .eshow__cover{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--panel-2);display:block}
 .eshow__body{padding:1rem 1.05rem 1.1rem}
-.eshow__type{display:inline-block;margin-bottom:.55rem;font-size:.6rem;font-weight:800;letter-spacing:.11em;
+.eshow__types{display:flex;flex-wrap:wrap;gap:.28rem;margin-bottom:.55rem}
+.eshow__type{display:inline-block;font-size:.6rem;font-weight:800;letter-spacing:.11em;
   text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.18rem .48rem;border-radius:4px}
 .eshow h3{font-size:1rem;font-weight:800;letter-spacing:-.02em;line-height:1.35;margin-bottom:.35rem}
 .eshow p{font-size:.8rem;color:var(--muted);line-height:1.5;margin-bottom:.85rem}
@@ -817,7 +830,23 @@ body.has-lightbox{overflow:hidden}
 .rail__nav--next{right:-.75rem}
 .rail__nav[disabled]{opacity:0;pointer-events:none}
 /* Touch devices scroll the rail directly — the buttons would only cover cards. */
-@media(hover:none),(max-width:700px){.rail__nav{display:none}}
+@media(hover:none),(max-width:700px){
+  .rail__nav{display:none}
+  /* In their place, a quiet cue that the row keeps going (client, Sep 2026):
+     the last card softens off the right edge and a small chevron sits over it.
+     A mask rather than a gradient overlay, so it works on whatever colour the
+     section happens to be. Both fade out once the rail reaches the end —
+     pages.js puts .rail--end on for that, and also when the row is short
+     enough not to scroll at all. */
+  .coachgrid--rail{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 2.6rem),transparent);
+    mask-image:linear-gradient(90deg,#000 calc(100% - 2.6rem),transparent);
+    transition:-webkit-mask-image .25s var(--ease),mask-image .25s var(--ease)}
+  .rail--end .coachgrid--rail{-webkit-mask-image:none;mask-image:none}
+  .rail::after{content:'\203A';position:absolute;right:.3rem;top:22%;
+    font-size:1.45rem;line-height:1;font-weight:700;color:var(--ink);opacity:.4;
+    pointer-events:none;transition:opacity .25s var(--ease)}
+  .rail--end::after{opacity:0}
+}
 @media(prefers-reduced-motion:reduce){.coachgrid--rail{scroll-behavior:auto}}
 .coach{display:block;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;
   transition:transform .25s var(--ease),box-shadow .25s,border-color .25s}

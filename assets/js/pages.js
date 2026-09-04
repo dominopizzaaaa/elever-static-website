@@ -651,7 +651,9 @@
                 : esc(e.where)) + '</li>');
             }
             return '<article class="ecard' + (e.feature ? ' ecard--feature' : '') + '">' +
-              '<span class="ecard__type">' + esc(e.type) + '</span>' +
+              '<span class="ecard__types">' + typeList(e.type).map(function (t) {
+                return '<span class="ecard__type">' + esc(t) + '</span>';
+              }).join('') + '</span>' +
               '<h3>' + esc(e.title) + sampleTag(e) + '</h3>' +
               (meta.length ? '<ul class="ecard__meta">' + meta.join('') + '</ul>' : '') +
               (e.scope && e.scope.length
@@ -672,7 +674,7 @@
         var strip = photos.slice(1, 4);
         var hidden = total - 1 - strip.length;
 
-        return '<article class="eshow" data-type="' + esc(typeKey(e.type)) + '">' +
+        return '<article class="eshow" data-type="' + esc(typeKeys(e.type).join(' ')) + '">' +
           (cover
             ? '<button class="eshow__photo" type="button" data-gallery="' + eIndex + '" data-photo="0"' +
                 ' aria-label="' + esc('View all ' + total + ' photos from ' + e.title) + '">' +
@@ -682,7 +684,9 @@
               '</button>'
             : '') +
           '<div class="eshow__body">' +
-            '<span class="eshow__type">' + esc(e.type) + '</span>' +
+            '<span class="eshow__types">' + typeList(e.type).map(function (t) {
+              return '<span class="eshow__type">' + esc(t) + '</span>';
+            }).join('') + '</span>' +
             '<h3>' + esc(e.title) + '</h3>' +
             '<p>' + esc(e.when) + ' \u00b7 ' + esc(e.where) + '</p>' +
             '<div class="eshow__thumbs">' + strip.map(function (file, idx) {
@@ -744,10 +748,19 @@
     }
   })();
 
-  /* 'Clinic' -> 'clinic', 'Carnival' -> 'carnival': the showcase entries carry
-     a display type, the EVENT_TYPES keys are lowercase singular. */
+  /* 'Clinic' -> 'clinic', 'Carnival' -> 'carnival': the entries carry a display
+     type, the EVENT_TYPES keys are lowercase singular. */
   function typeKey(t) {
     return String(t || '').toLowerCase().trim().replace(/s$/, '');
+  }
+  /* An event can be more than one thing — the SingHealth day is a competition
+     AND a clinic (client, Sep 2026). `type` therefore takes a single name or a
+     list; these two normalise either shape. */
+  function typeList(t) {
+    return (Array.isArray(t) ? t : [t]).filter(Boolean);
+  }
+  function typeKeys(t) {
+    return typeList(t).map(typeKey);
   }
 
   /* Past Events filter. The Our Services cards link in with #past-clinics and
@@ -780,7 +793,8 @@
     function apply(key, focus) {
       var shown = 0;
       cards.forEach(function (c) {
-        var on = key === 'all' || c.getAttribute('data-type') === key;
+        var keys = (c.getAttribute('data-type') || '').split(' ');
+        var on = key === 'all' || keys.indexOf(key) > -1;
         c.hidden = !on;
         if (on) shown++;
       });
@@ -932,6 +946,11 @@
       // 2px of slack: fractional scroll positions never land exactly on the end.
       prev.disabled = team.scrollLeft <= 2;
       next.disabled = team.scrollLeft >= max - 2;
+      /* Phones don't get the arrows (they would only cover cards), so the same
+         two states drive the quiet edge cue instead — see .rail--end in the
+         stylesheet. `max < 3` also covers a row short enough not to scroll,
+         where there is nothing to hint at. */
+      rail.classList.toggle('rail--end', max < 3 || next.disabled);
     }
     // One click moves two cards, so the gap has to come from the CSS.
     function page(dir) {

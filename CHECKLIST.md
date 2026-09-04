@@ -94,6 +94,40 @@ Earlier rounds' outstanding items are in the previous checklist below.
 
 ---
 
+## Follow-up, 4 Sep 2026 (phone view)
+
+### Events
+
+- [x] **The SingHealth day is a Competition *and* a Clinic — two chips, not one label.**
+  `type` in `data.js` now takes either a single name or a list. A list renders one chip per type
+  and, once the event moves down into `EVENT_SHOWCASE`, files it under *every* one of those
+  filters in Past Events. Verified end to end: a two-type entry gets
+  `data-type="clinic competition"` and shows up under Clinics *and* Competitions, while
+  single-type entries are untouched.
+
+### About
+
+- [x] **Our team shows that it scrolls, quietly.** On phone the last card softens off the right
+  edge and a small chevron sits over it; both fade out once you reach the end, and neither appears
+  if the row is short enough not to scroll. It is a mask rather than an overlay, so it works on
+  whatever colour the section is. Desktop keeps the arrow buttons and gets neither.
+- [x] **"Our Services" is now just the words above the five boxes** — the three Carnivals /
+  Clinics / Competitions cards I had added there are gone. The tiles themselves already link
+  through to their own filter in Past Events, so nothing was lost.
+- [x] **The five boxes scroll sideways on phone** instead of stacking two-by-two down the page,
+  the same as Our team. The next tile is deliberately part-visible at the edge, which is the cue
+  that the row continues.
+
+### Contact
+
+- [x] **"Talk to us." → "Get in touch."**
+
+**Note on scope:** the five tiles are one shared component, so the sideways row applies on the
+Home hero too at phone width. It suits that page — the hero now fits one screen instead of running
+three rows deep — but say the word if you want Home left as the two-column grid.
+
+---
+
 <details>
 <summary>Previous round — desktop review, 3 Sep 2026</summary>
 
