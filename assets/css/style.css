@@ -101,7 +101,8 @@ em{font-style:normal;color:var(--accent)}
 .nav__link.is-current{color:#fff}
 .nav.scrolled .nav__link.is-current{color:var(--accent)}
 .nav__cta{background:var(--accent);color:#fff!important;padding:.55rem 1.05rem;border-radius:100px;
-  font-weight:600;font-size:.875rem;margin-left:.6rem;min-height:38px;display:inline-flex;align-items:center;transition:background .2s}
+  font-weight:600;font-size:.875rem;margin-left:.6rem;min-height:38px;display:inline-flex;align-items:center;
+  flex:none;white-space:nowrap;transition:background .2s}
 .nav__cta:hover{background:var(--accent-press)}
 
 /* ---- ElevenLabs-style dropdown ---- */
@@ -397,12 +398,24 @@ button{cursor:pointer;background:none;border:0;color:inherit}
   .nav__group.is-open .nav__chev{transform:rotate(180deg)}
   .nav__menu-item{padding:.6rem .9rem}
   .nav__end{flex-direction:column;align-items:stretch;margin-left:0;padding-left:0;gap:0}
-  .nav__links .nav__cta{justify-content:center;margin:1.2rem 0 0;padding:.85rem 1.3rem;font-size:.95rem}
-  .nav__burger{display:flex;margin-left:auto}
+  /* "Book a class" is in the bar, not in the burger panel (client, Sep 2026).
+     .nav__links is position:fixed here, so the CTA and the burger are the only
+     things left in the flow row — margin-left:auto pins them to the right.
+     z-index 901 matches the burger so the button stays tappable while the
+     panel is open. */
+  .nav__inner{gap:.6rem}
+  .nav__cta{margin-left:auto;padding:.55rem .95rem;font-size:.82rem;position:relative;z-index:901}
+  .nav__burger{display:flex;margin-left:0}
   .nav__logo__mark{height:34px}
+}
+@media(max-width:700px){
+  /* The tagline is deliberately one line on desktop (client, Sep 2026), but at
+     phone widths that single line runs off the screen — let it wrap here. */
+  .hero__sub{white-space:normal;letter-spacing:.02em;margin:1.1rem auto 1.7rem}
 }
 @media(max-width:600px){
   .nav__logo__mark{height:30px}
+  .nav__cta{padding:.5rem .8rem;font-size:.78rem}
   .footer__brand__mark{height:36px}
   .hub__grid,.hub__book,.hub__groups{grid-template-columns:1fr}
   .hub__controls{flex-direction:column;align-items:stretch}
@@ -410,6 +423,11 @@ button{cursor:pointer;background:none;border:0;color:inherit}
   .footer__base{flex-direction:column;gap:.4rem}
   .cta__actions .btn,.hero__actions .btn{width:100%}
   .news__filters button{flex:1 1 130px}
+}
+@media(max-width:360px){
+  .nav__inner{gap:.4rem}
+  .nav__cta{padding:.45rem .7rem;font-size:.74rem}
+  .nav__burger{min-width:38px}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;

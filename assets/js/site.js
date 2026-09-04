@@ -131,9 +131,14 @@
           navLinks(NAV) +
           '<div class="nav__end">' +
             navLinks(NAV_END) +
-            '<a href="' + BOOK_URL + '" target="_blank" rel="noopener" class="nav__cta">Book a class</a>' +
           '</div>' +
         '</nav>' +
+        /* The booking CTA sits in the bar itself, NOT inside .nav__links —
+           on phones that keeps it on screen beside the burger instead of
+           hiding it inside the menu (client, Sep 2026). On desktop
+           .nav__links takes the free space, so the button still lands at the
+           right-hand end of the row exactly as before. */
+        '<a href="' + BOOK_URL + '" target="_blank" rel="noopener" class="nav__cta">Book a class</a>' +
         '<button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span></span></button>' +
       '</div>';
   }
@@ -169,6 +174,9 @@
           '<a href="' + url('lab.html') + '">Performance Lab</a>' +
           '<a href="' + url('about.html') + '">About</a>' +
           '<a href="' + url('news.html') + '">News</a>' +
+          /* About no longer carries its own contact block (client, Sep 2026),
+             so the footer names the Contact page explicitly. */
+          '<a href="' + url('contact.html') + '">Contact</a>' +
           /* SG Badminton Hub hidden for now — restore this line to bring it back:
              '<a href="' + url('hub.html') + '">SG Badminton Hub</a>' */
         '</div>' +

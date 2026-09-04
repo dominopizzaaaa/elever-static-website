@@ -1,3 +1,98 @@
+# Élever Badminton — phone review, 4 Sep 2026
+
+Source: owner's review notes, **all comments are for the phone view**. Every change below was
+checked at 390px and re-checked on tablet and desktop so nothing regressed.
+
+Legend: `[x]` done · `[ ]` deliberately not done (waiting on the client, see note).
+
+---
+
+## 1. General
+
+- [x] **"Book a class" moved out of the burger menu.** It now lives in the header bar itself,
+  beside the 3-line button, on every page — one button, not two: the same element still lands at
+  the right-hand end of the desktop row, so nothing changed there.
+- [x] *Not on the list, but found while checking:* the Home hero tagline
+  (*Enhance your skills, Enjoy the process…*) is deliberately kept to one line on desktop, and
+  that line ran off the side of a phone. It now wraps below 700px.
+
+## 2. Classes
+
+- [x] **The photo fills the development-pathway boxes.** On phone the photo band now has a
+  definite height instead of an aspect ratio (a card in a column has no height of its own for the
+  ratio to work against), so it always fills the box edge to edge.
+- [x] **Locations are drop-downs** — Aljunied ▾ · Cantonment ▾ · Expo ▾ … Tapping an area opens
+  its venues, addresses, days, times and the Book link. Built on native `<details>`, so it works
+  with or without JavaScript. Collapsed on phones and tablets, open on desktop where there is room.
+- [x] **Level filter removed** (All levels / Essentials / Emergence).
+- [x] **Level chip restyled** — blue border, white fill, blue text, not bold — identical for every
+  level. Emergence used to be a green chip; it now matches Essentials.
+- [x] *Also on the class panel:* the two carousel arrows cost about a quarter of a phone's width
+  and were squeezing the venue list. They are hidden on phones — the Group / Private tabs and a
+  left-right swipe already move between the pages — so the list gets the full width.
+
+## 3. Events
+
+- [x] **"Trusted by" is faster and can be scrolled by hand.** The row is now a real scroller that
+  JavaScript nudges along (roughly twice the old pace); a swipe, trackpad or wheel takes it over
+  instantly and it resumes about two seconds after you stop.
+- [x] **SingHealth: "Carnival" → "Competition & Clinic".**
+- [x] **"Client:" line removed.**
+- [x] **Date, time and location added** — 5 Sep 2026 · 08:30 – 14:00 · Our Tampines Hub, the venue
+  opening in Google Maps.
+
+## 4. News
+
+- [ ] *"News should be part of the badminton hub in the future"* — noted, no change made. The hub
+  page (`hub.html`) still exists and is hidden from the nav; folding News into it changes the
+  site's structure and the URLs, so it wants planning rather than a quick edit.
+
+## 5. About
+
+- [x] **"About Élever" → "About Us".**
+- [x] **The three statements are bold and black** — the third line used to be brand blue.
+- [x] **SportPlus article now reads "sportplus.sg · Jun 2025"** (taken from the article's byline).
+- [x] **Co-founders sit side by side on phone**, on a narrower card.
+- [x] **Our team cards match that size**, so two are in view at a time just like the founders.
+- [x] **"Our Services" added above the five Cs.** It is the same component as the Events page, so
+  the copy has one home in `data.js`.
+- [x] **Carnivals / Clinics / Competitions link to their own filter in Past Events.** Both the
+  five-C tiles and the new Our Services cards point at `events.html#past-carnivals` (and clinics /
+  competitions). Past Events gained the matching filter chips; a type with nothing in it yet —
+  Competitions today — lands on its own filter and says so rather than quietly showing everything.
+- [x] **Our Services scrolls sideways** below the three-across layout, the same as Our team,
+  instead of three tall boxes down the page.
+- [x] **Contact: one home, not two.** See the recommendation below.
+
+---
+
+## The one recommendation you asked for
+
+**Keep the Contact page and drop the contact block from About.** The Contact page carries the
+enquiry form as well as WhatsApp, email, the events route and the booking link; About was
+repeating three of those with no form, so a reader met the same choices twice and the weaker copy
+first. About now ends on the five Cs, and Contact is reachable from the nav, from the footer's
+Élever column (added in this round) and from the Request a proposal button.
+
+That also settles the two items above it on your list — *"Change talk to us to just Get in touch"*
+and *"Remove 'One inbox for…'"* — since the block they referred to is gone. If you would rather
+keep it on About after all, say so: the markup is one `git revert` away and those two edits take
+a minute.
+
+## Still with the client
+
+| # | Item | Needed |
+|---|---|---|
+| 1 | News inside the SG Badminton Hub | A decision on the hub's structure before News moves into it |
+| 2 | Past Competitions | Nothing has run yet — the filter is live and empty, and fills in from `EVENTS_PAST` / `EVENT_SHOWCASE` in `data.js` |
+
+Earlier rounds' outstanding items are in the previous checklist below.
+
+---
+
+<details>
+<summary>Previous round — desktop review, 3 Sep 2026</summary>
+
 # Élever Badminton — client review, 3 Sep 2026
 
 Source: owner's review notes (`1.png`, `2.png`). **All comments are for desktop view**, but every
@@ -132,3 +227,5 @@ Legend: `[x]` done · `[~]` done as far as the supplied assets allow · `[ ]` de
 | 6 | EPL logo | `epl-logo-white.png` (Chin) |
 | 7 | Press cover photos | Confirm we may use the publications' images |
 | 8 | New Home page style | Client's direction |
+
+</details>

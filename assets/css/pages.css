@@ -122,8 +122,11 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .def__gloss{display:block;color:var(--muted);font-size:.88rem;font-weight:500;letter-spacing:0;margin-top:.3rem}
 .def__gloss em{color:var(--accent);font-weight:600}
 .def__mean{margin-top:.9rem;font-size:1.05rem;line-height:1.6;font-weight:500;max-width:34ch}
-.tagline{margin-top:1.8rem;font-size:clamp(1.05rem,2vw,1.4rem);font-weight:600;letter-spacing:-.02em;line-height:1.7;max-width:24ch}
-.tagline em{color:var(--accent)}
+/* All three statements bold and black (client, Sep 2026) — the third line used
+   to be brand blue. */
+.tagline{margin-top:1.8rem;font-size:clamp(1.05rem,2vw,1.4rem);font-weight:800;color:var(--ink);
+  letter-spacing:-.02em;line-height:1.7;max-width:24ch}
+.tagline em{color:inherit;font-style:normal;font-weight:inherit}
 .tagline--cards{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;max-width:none;font-size:.9rem;line-height:1.45}
 .tagline--cards span{background:var(--ink);color:#fff;border-radius:var(--r-md);padding:1rem 1.05rem}
 .tagline--cards span:last-child{background:var(--accent)}
@@ -219,7 +222,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
    4/5 is the ratio the images are supplied in; the cap stops the photo
    towering on the two-column and single-column layouts, where the box crops
    rather than grows. */
-.path__media{margin:-1.25rem -1.2rem 1.1rem;aspect-ratio:4/5;max-height:400px;
+.path__media{flex:none;margin:-1.25rem -1.2rem 1.1rem;aspect-ratio:4/5;max-height:400px;
   overflow:hidden;background:var(--panel-2);
   border-radius:calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0}
 .path__media img{width:100%;height:100%;object-fit:cover;display:block;
@@ -261,10 +264,16 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   .path__arrow:nth-of-type(2){grid-area:2/1/3/4;justify-self:center;rotate:90deg}
 }
 
-/* Mobile: a single column, every arrow pointing down. */
+/* Mobile: a single column, every arrow pointing down.
+   The photo band gets a definite height rather than an aspect ratio here: a
+   card in a column flex container has no definite height of its own, and
+   `aspect-ratio` + `max-height` left the photo short of the box on some
+   phones (client, Sep 2026). A fixed band always fills, edge to edge. */
 @media(max-width:700px){
   .paths{display:flex;flex-direction:column;flex-wrap:nowrap;gap:.65rem}
   .path__arrow{rotate:90deg;margin:.15rem 0}
+  .path__media{aspect-ratio:auto;height:clamp(200px,58vw,280px);max-height:none}
+  .path__media img{width:100%;height:100%;min-height:100%;object-fit:cover;object-position:center 32%}
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -328,10 +337,12 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 @media(max-width:560px){
   .ctabs{border-radius:var(--r-lg)}
   .ctabs__tab{padding:.75rem 1rem;font-size:.92rem}
-  .ctabs__arrow{width:38px;height:38px}
-  /* Tighten the page gutters so the panel (and its cards) never runs wider
-     than the viewport once the flanking arrows take their share of the row. */
-  .ctabs__pages{gap:.35rem}
+  /* The two arrows cost ~90px of a 350px-wide phone — a quarter of the panel,
+     and the squeeze showed up in the venue list. The tabs above and a
+     left/right swipe already move between the pages on touch, so the arrows
+     go and the panel gets the full width back (client, Sep 2026). */
+  .ctabs__arrow{display:none}
+  .ctabs__pages{gap:0}
   .ctabs__page{padding:.2rem 0}
 }
 
@@ -392,13 +403,30 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   transition:border-color .25s,box-shadow .25s;display:flex;flex-direction:column;
   width:100%;-webkit-column-break-inside:avoid;break-inside:avoid}
 .vcard:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm)}
-.vcard__top{display:flex;justify-content:space-between;gap:.8rem;align-items:baseline;flex-wrap:wrap}
+/* Each area is a <details> drop-down (client, Sep 2026). The summary is the
+   whole tap target: area name, region chip, class count and a chevron that
+   turns when it opens. list-style:none + ::-webkit-details-marker kills the
+   browser's own triangle in every engine. */
+.vcard{padding:0}
+/* Two columns: everything that can wrap on the left, the chevron pinned to
+   the right so it never drops onto a second line. */
+.vcard__top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.8rem;align-items:center;
+  padding:1.05rem 1.2rem;cursor:pointer;list-style:none;min-height:44px}
+.vcard__heading{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .6rem;min-width:0}
+.vcard__top::-webkit-details-marker{display:none}
+.vcard__top:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:var(--r-lg)}
+.vcard__count{font-size:.76rem;color:var(--faint);font-weight:500}
+.vcard__chev{flex:none;color:var(--faint);transition:transform .22s var(--ease)}
+.vcard[open] > .vcard__top .vcard__chev{transform:rotate(180deg)}
+.vcard[open] > .vcard__top{border-bottom:1px solid var(--line)}
+.vcard__body{padding:0 1.2rem 1.1rem}
 .vcard h3{font-size:1.15rem;font-weight:800;margin:0;letter-spacing:-.02em}
 .vcard__region{font-size:.62rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);
   background:var(--accent-soft);padding:.18rem .45rem;border-radius:4px}
 /* A single area can hold more than one venue (e.g. Aljunied = SBH + SBS).
    Each venue block sits under the area header, separated by a hairline. */
 .vcard__venue{margin-top:.9rem}
+.vcard__body > .vcard__venue:first-child{margin-top:1rem}
 .vcard__venue + .vcard__venue{border-top:1px solid var(--line);padding-top:.9rem}
 /* Venue name and address share one line, the address pushed right and
    linking out to Google Maps (client, Sep 2026). It only drops to a second
@@ -410,16 +438,28 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   text-decoration-color:var(--line);transition:color .2s,text-decoration-color .2s}
 .vcard__addr:hover,.vcard__addr:focus-visible{color:var(--accent);text-decoration-color:currentColor}
 .vcard__addr .vcard__pin{margin-right:.25rem;font-size:.72rem;opacity:.75}
-@media(max-width:560px){.vcard__addr{text-align:left;flex-basis:100%}}
+@media(max-width:560px){
+  .vcard__addr{text-align:left;flex-basis:100%}
+  /* Keep the area name, its region and the class count on one line so every
+     drop-down is the same height down the list. */
+  .vcard__top{padding:.95rem 1rem;gap:.5rem}
+  .vcard__heading{gap:.35rem .45rem}
+  .vcard h3{font-size:1rem}
+  .vcard__region{font-size:.58rem;padding:.16rem .4rem}
+  .vcard__count{font-size:.74rem}
+  .vcard__body{padding:0 1rem 1rem}
+}
 .vcard__sessions{list-style:none;display:flex;flex-direction:column;gap:.3rem}
 .vcard__sessions li{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;font-size:.84rem;
   border-top:1px solid var(--line);padding-top:.4rem}
 .vcard__sessions li:first-child{border-top:0;padding-top:0}
 .vcard__day{font-weight:700;min-width:5.2rem}
 .vcard__time{color:var(--muted)}
-.vcard__lvl{margin-left:auto;font-size:.62rem;font-weight:700;padding:.16rem .45rem;border-radius:4px;letter-spacing:.04em}
-.vcard__lvl--essentials{background:#e8eefc;color:#17369b}
-.vcard__lvl--emergence{background:#e7f5ec;color:#1a6b3c}
+/* One chip treatment for every level — blue outline, white fill, blue text,
+   not bold (client, Sep 2026). Emergence used to be green; it now matches. */
+.vcard__lvl{margin-left:auto;font-size:.66rem;font-weight:500;padding:.16rem .5rem;
+  border-radius:99px;letter-spacing:.04em;
+  background:#fff;color:var(--accent);border:1px solid var(--accent)}
 .vcard__actions{display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;margin-top:.9rem}
 .vcard__book{font-size:.78rem;font-weight:600;color:var(--accent)}
 .vcard__book:hover{text-decoration:underline}
@@ -475,7 +515,19 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 
 /* ---------- EVENTS ---------- */
 .etypes{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem}
-@media(max-width:940px){.etypes{grid-template-columns:1fr}}
+/* Below three-across the cards become one sideways-scrolling row rather than
+   three tall boxes stacked down the page (client, Sep 2026) — the same
+   treatment as the Our team rail on About. */
+@media(max-width:940px){
+  .etypes{display:flex;grid-template-columns:none;flex-wrap:nowrap;
+    overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;
+    gap:.7rem;padding:4px 0 .9rem;margin-top:-4px;
+    scrollbar-width:thin;scrollbar-color:var(--line-2) transparent}
+  .etypes::-webkit-scrollbar{height:8px}
+  .etypes::-webkit-scrollbar-track{background:transparent}
+  .etypes::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:99px}
+  .etype{flex:0 0 min(80%,320px);scroll-snap-align:start}
+}
 .etype{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:1.5rem 1.4rem;display:flex;flex-direction:column;transition:border-color .25s,box-shadow .25s}
 .etype:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm)}
 .etype__num{font-size:.66rem;font-weight:700;letter-spacing:.14em;color:var(--accent)}
@@ -487,6 +539,11 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .etype__prov li{padding-left:1.1rem;position:relative;line-height:1.5}
 .etype__prov li::before{content:'✓';position:absolute;left:0;color:var(--accent);font-weight:700}
 .etype__prov:last-child{margin-bottom:0}
+/* Each card links to its own slice of Past Events (client, Sep 2026). */
+.etype__link{margin-top:auto;padding-top:.4rem;font-size:.84rem;font-weight:600;color:var(--accent);
+  display:inline-flex;align-items:center;align-self:flex-start}
+.etype__link:hover{text-decoration:underline}
+
 /* One proposal CTA under all three boxes rather than one per box. */
 .etypes__cta{display:flex;justify-content:center;margin-top:1.4rem}
 @media(max-width:520px){.etypes__cta .btn{width:100%}}
@@ -523,8 +580,13 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .ecard__type{font-size:.6rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:#fff;
   background:var(--accent);padding:.2rem .5rem;border-radius:4px;display:inline-block;margin-bottom:.7rem}
 .ecard h3{font-size:1rem;font-weight:700;margin-bottom:.5rem;line-height:1.35;letter-spacing:-.015em}
-.ecard__meta{list-style:none;display:flex;flex-direction:column;gap:.25rem;font-size:.8rem;color:var(--muted);margin-bottom:.7rem}
-.ecard__meta b{color:var(--ink);font-weight:600}
+/* Date / Time / Location. The label column is fixed so the values line up. */
+.ecard__meta{list-style:none;display:flex;flex-direction:column;gap:.3rem;font-size:.84rem;color:var(--ink);margin-bottom:.7rem}
+.ecard__meta li{display:grid;grid-template-columns:4.6rem minmax(0,1fr);gap:.5rem;align-items:baseline}
+.ecard__meta b{color:var(--faint);font-weight:700;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase}
+.ecard__meta a{color:var(--accent);font-weight:600;text-decoration:underline;
+  text-underline-offset:2px;text-decoration-color:rgba(33,81,209,.35)}
+.ecard__meta a:hover{text-decoration-color:currentColor}
 .ecard p{font-size:.84rem;color:var(--muted);line-height:1.6}
 .ecard__scope{list-style:none;display:flex;flex-direction:column;gap:.25rem;font-size:.82rem;color:var(--muted);margin-top:.7rem}
 .ecard__scope li{padding-left:1rem;position:relative;line-height:1.5}
@@ -648,9 +710,17 @@ body.has-lightbox{overflow:hidden}
    moving scroll like the one on the home page". The track holds the logo set
    twice and slides by exactly -50%, so the loop is seamless. Logos stay in
    full colour. Hovering pauses it, so a reader can stop on a mark. */
-.logorail{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+/* The row is a real scroller so a finger can drag it (client, Sep 2026);
+   pages.js drives the auto-advance by moving scrollLeft and pauses while the
+   reader is moving it. The keyframe animation below is the no-JS fallback —
+   .logorail--js (added by pages.js) turns it off so the two never fight. */
+.logorail{overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
   mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
-.logorail__track{display:flex;width:max-content;animation:logorail 38s linear infinite}
+.logorail::-webkit-scrollbar{display:none}
+.logorail__track{display:flex;width:max-content;animation:logorail 20s linear infinite}
+.logorail--js .logorail__track{animation:none}
 .logorail:hover .logorail__track,.logorail:focus-within .logorail__track{animation-play-state:paused}
 .logorail__set{display:flex;align-items:center;gap:clamp(1.6rem,4vw,3.4rem);padding-right:clamp(1.6rem,4vw,3.4rem)}
 .logorail__item{flex:none;display:grid;place-items:center;height:72px}
@@ -718,6 +788,21 @@ body.has-lightbox{overflow:hidden}
 .coachgrid--rail::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:99px}
 .coachgrid--rail > .coach{flex:0 0 200px;scroll-snap-align:start}
 .coachgrid--rail:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:var(--r-md)}
+
+/* Phones: the two co-founders sit side by side rather than stacking, which
+   means a narrower card — and the Our team rail matches it exactly so the two
+   rows read as one set (client, Sep 2026). 50% of the rail's own width also
+   means two team cards are in view at a time, like the founders. */
+@media(max-width:620px){
+  .coachgrid--centred{gap:.55rem;margin-bottom:2rem}
+  .coachgrid--centred > .coach,
+  .coachgrid--rail > .coach{flex:0 0 calc(50% - .28rem);max-width:calc(50% - .28rem)}
+  .coach__body{padding:.7rem .75rem .85rem}
+  .coach__body h3{font-size:.84rem}
+  .coach__role{font-size:.7rem}
+  .coach__cert{font-size:.55rem}
+  .coach__more{font-size:.68rem}
+}
 
 /* 100px = half a card's square photo, so the arrows sit level with the faces. */
 .rail__nav{position:absolute;top:100px;transform:translateY(-50%);z-index:2;

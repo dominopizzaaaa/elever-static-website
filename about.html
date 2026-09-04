@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=35" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=35" />
+  <link rel="stylesheet" href="assets/css/style.css?v=36" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=36" />
 </head>
 <body data-page="about" data-nav="solid" data-base="">
 
@@ -30,7 +30,7 @@
   <main id="main">
     <section class="phead">
       <div class="phead__inner">
-        <h1>About <em>Élever</em>.</h1>
+        <h1>About <em>Us</em>.</h1>
       </div>
     </section>
 
@@ -45,7 +45,9 @@
             </p>
             <p class="def__mean">to build or raise; bring something to a higher position</p>
           </div>
-          <p class="tagline">Enhance your skills.<br />Enjoy the process.<br /><em>Elevate your experience.</em></p>
+          <!-- All three statements bold and black (client, Sep 2026) — the third
+               used to be blue. -->
+          <p class="tagline">Enhance your skills.<br />Enjoy the process.<br />Elevate your experience.</p>
         </div>
         <div>
           <div class="psec__head">
@@ -78,7 +80,7 @@
                   <span class="press__text">
                     <span class="press__pub">SportPlus</span>
                     <span class="press__desc">Sharing the Heart of the Badminton Community at Élever Badminton: Loh Kean Hean and Eng Chin An</span>
-                    <span class="press__meta">sportplus.sg<span class="press__arrow" aria-hidden="true">&#8599;</span></span>
+                    <span class="press__meta">sportplus.sg · Jun 2025<span class="press__arrow" aria-hidden="true">&#8599;</span></span>
                   </span>
                 </a>
               </li>
@@ -114,53 +116,39 @@
       </div>
     </section>
 
+    <!-- ===== OUR SERVICES =====
+         Added above the five pillars (client, Sep 2026). Same component as the
+         Events page — pages.js fills #eventTypes wherever it finds it, and each
+         card links through to its own filter in Past Events. Below three-across
+         the row scrolls sideways rather than stacking. -->
+    <section class="psec">
+      <div class="psec__head psec__head--minor">
+        <h2>Our Services</h2>
+      </div>
+      <div class="etypes" id="eventTypes"></div>
+      <div class="etypes__cta">
+        <a class="btn btn--primary" href="contact.html">Request a proposal</a>
+      </div>
+    </section>
+
     <!-- ===== WHAT WE DO — same full-width photo tiles as the Home page ===== -->
     <section class="psec psec--bleed" aria-labelledby="whatwedo">
       <h2 class="sr-only" id="whatwedo">What we do</h2>
       <div class="pillars" id="pillarsGrid"></div>
     </section>
 
-    <!-- ===== CONTACT ===== -->
-    <section class="psec psec--alt">
-      <div class="psec__inner">
-        <div class="split">
-          <div class="split__aside">
-            <div class="psec__head">
-              <span class="psec__kicker">Get in touch</span>
-              <h2>Talk to us.</h2>
-              <p class="psec__sub">One inbox for every enquiry — classes, camps, private coaching or an event.</p>
-            </div>
-          </div>
-          <div class="contact-actions">
-            <div class="ccard ccard--hero">
-              <span class="ccard__label">Email</span>
-              <h3>info@eleverbadminton.com</h3>
-              <p>Best for classes, camps, private coaching and event proposals.</p>
-              <a class="btn btn--ghost" href="mailto:info@eleverbadminton.com">Send an email</a>
-            </div>
-            <div class="ccard">
-              <span class="ccard__label">WhatsApp</span>
-              <h3>+65 8921 4221</h3>
-              <p>Fastest for short questions and schedule checks.</p>
-              <a class="btn btn--primary" href="https://wa.me/6589214221" target="_blank" rel="noopener">Chat on WhatsApp</a>
-            </div>
-            <div class="ccard">
-              <span class="ccard__label">Booking</span>
-              <h3>Book a class</h3>
-              <p>Already know what you want? Book directly.</p>
-              <a class="btn btn--ghost" href="https://app.eleverbadminton.com/" target="_blank" rel="noopener">Open the booking app</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- The "Get in touch / Talk to us" block was removed here (client,
+         Sep 2026): it repeated the Contact page, which keeps the enquiry form
+         and every channel. The nav and the footer both link to it. Recover the
+         markup from git history if it is ever wanted back. -->
+
   </main>
 
   <footer id="siteFooter"></footer>
 
-  <script src="assets/js/data.js?v=35"></script>
-  <script src="assets/js/site.js?v=35"></script>
-  <script src="assets/js/pages.js?v=35"></script>
-  <script src="assets/js/main.js?v=35"></script>
+  <script src="assets/js/data.js?v=36"></script>
+  <script src="assets/js/site.js?v=36"></script>
+  <script src="assets/js/pages.js?v=36"></script>
+  <script src="assets/js/main.js?v=36"></script>
 </body>
 </html>

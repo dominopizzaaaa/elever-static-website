@@ -354,11 +354,18 @@
     { title: 'Score', copy: 'Draws, fixtures, leaderboards and results.' }
   ];
 
+  /* `when` / `time` / `where` render as the card's detail lines. `map` is
+     optional — supply it and the venue name becomes a Google Maps link.
+     The "Client:" line was dropped at the client's request (Sep 2026). */
   var EVENTS_UPCOMING = [
     {
       title: 'SingHealth Presidents’ Challenge Sports Day 2026',
-      type: 'carnival',
-      client: 'SingHealth Community Hospitals',
+      type: 'Competition & Clinic',
+      when: '5 Sep 2026',
+      time: '08:30 – 14:00',
+      where: 'Our Tampines Hub',
+      map: 'https://www.google.com/maps/search/?api=1&query=' +
+        encodeURIComponent('Our Tampines Hub, 1 Tampines Walk, Singapore 528523'),
       scope: [
         'Badminton and Pickleball Tournament',
         'Badminton and Pickleball Clinics'

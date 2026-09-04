@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=35" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=35" />
+  <link rel="stylesheet" href="assets/css/style.css?v=36" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=36" />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -85,9 +85,14 @@
       </div>
       <div class="ecards" id="eventsUpcoming"></div>
 
-      <div class="psec__head psec__head--spaced">
+      <div class="psec__head psec__head--spaced" id="past">
         <h2>Past Events</h2>
       </div>
+      <!-- Filter chips are rendered by pages.js from the types actually
+           present. The Our Services cards link here with #past-carnivals /
+           #past-clinics / #past-competitions, which preselects a chip
+           (client, Sep 2026). -->
+      <div class="sched__controls" id="showcaseFilters" role="group" aria-label="Filter past events by type"></div>
       <div class="eshowcase" id="eventShowcase"></div>
 
       <!-- The "Previously" log of past events was removed at the client's
@@ -98,9 +103,9 @@
 
   <footer id="siteFooter"></footer>
 
-  <script src="assets/js/data.js?v=35"></script>
-  <script src="assets/js/site.js?v=35"></script>
-  <script src="assets/js/pages.js?v=35"></script>
-  <script src="assets/js/main.js?v=35"></script>
+  <script src="assets/js/data.js?v=36"></script>
+  <script src="assets/js/site.js?v=36"></script>
+  <script src="assets/js/pages.js?v=36"></script>
+  <script src="assets/js/main.js?v=36"></script>
 </body>
 </html>

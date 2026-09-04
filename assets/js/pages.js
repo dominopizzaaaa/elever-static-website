@@ -224,13 +224,15 @@
     { name: 'Camps', href: 'camps.html', who: 'Holiday Exploration camps for new players.',
       photo: 'assets/img/camps/camp-4.jpg', focus: 'center 32%',
       alt: 'A holiday camp group on court with their coaches' },
-    { name: 'Carnivals', href: 'events.html#carnival', who: 'Mass-participation event days.',
+    /* The three event pillars land on their own slice of Past Events rather
+       than on the service card (client, Sep 2026). */
+    { name: 'Carnivals', href: 'events.html#past-carnivals', who: 'Mass-participation event days.',
       photo: 'assets/img/events/joo-chiat-carnival-2026-4.jpg', focus: 'center 62%',
       alt: 'A full hall of players at an Élever badminton carnival' },
-    { name: 'Clinics', href: 'events.html#clinic', who: 'Short, focused coaching workshops.',
+    { name: 'Clinics', href: 'events.html#past-clinics', who: 'Short, focused coaching workshops.',
       photo: 'assets/img/events/bukit-gombak-clinic-2026-9.jpg', focus: 'center 40%',
       alt: 'A coach demonstrating a shot to two children at a community clinic' },
-    { name: 'Competitions', href: 'events.html#competition', who: 'Tournaments run end to end.',
+    { name: 'Competitions', href: 'events.html#past-competitions', who: 'Tournaments run end to end.',
       photo: 'assets/img/events/joo-chiat-carnival-2026-18.jpg', focus: '58% 45%',
       alt: 'Medals being presented at the end of a competition' }
   ];
@@ -403,14 +405,16 @@
 
   /* =================================================================
      CLASSES — locations list.
+     One <details> per area (Aljunied, Cantonment, Expo …) so the list reads
+     as a short set of drop-downs on a phone rather than one very long page
+     (client, Sep 2026). Native <details> keeps it working without JS and
+     gives the disclosure semantics for free. Desktop has the room, so the
+     areas start open there and collapsed on narrow screens.
+     The level filter was removed in the same round.
      ================================================================= */
   (function locations() {
     var listMount = el('schedList');
     if (!listMount) return;
-
-    var filterWrap = el('schedFilters');
-
-    var level = 'all';
 
     /* A Google Maps search for the venue. Coordinates would pin more exactly,
        but a name + address search survives a venue moving, and every entry in
@@ -425,80 +429,83 @@
     function byAreaName(a, b) {
       return String(a.area).localeCompare(String(b.area), 'en', { sensitivity: 'base' });
     }
-    function sessionsFor(v) {
-      return v.sessions.filter(function (s) { return level === 'all' || s.level === level; });
-    }
-    /* Venues that still have at least one matching session for the level. */
-    function visibleVenues() {
-      return D.classes.filter(function (v) { return sessionsFor(v).length > 0; });
-    }
-    /* Group the visible venues by their area, preserving the source order of
-       venues within each area. Returns an array of { area, venues:[] }. */
-    function visibleAreas() {
+    /* Group the venues by their area, preserving the source order of venues
+       within each area. Returns an array of { area, venues:[] }. */
+    function areasOf(list) {
       var map = {};
       var order = [];
-      visibleVenues().forEach(function (v) {
+      list.forEach(function (v) {
         if (!map[v.area]) { map[v.area] = { area: v.area, venues: [] }; order.push(v.area); }
         map[v.area].venues.push(v);
       });
       return order.map(function (a) { return map[a]; }).sort(byAreaName);
     }
 
+    var CHEV = '<svg class="vcard__chev" viewBox="0 0 12 8" width="12" height="8" aria-hidden="true">' +
+      '<path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor" stroke-width="1.8" ' +
+      'stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
     function render() {
-      var areas = visibleAreas();
+      var areas = areasOf(D.classes);
 
       if (!areas.length) {
-        listMount.innerHTML = '<p class="sched__empty">No classes match that level yet. Try “All levels”, or ' +
+        listMount.innerHTML = '<p class="sched__empty">No classes on the schedule right now — ' +
           '<a href="contact.html">ask us about a venue near you</a>.</p>';
         return;
       }
 
+      /* Phones open one area at a time; from tablet up there is room to show
+         them all, so they start expanded. */
+      var openByDefault = !window.matchMedia('(max-width:900px)').matches;
+
       listMount.innerHTML = areas.map(function (g) {
         var region = g.venues[0].region;
         var book = g.venues[0].book || BOOK;
-        return '<article class="vcard" id="area-' + esc(g.area.toLowerCase().replace(/[^a-z0-9]+/g, '-')) + '">' +
-          '<div class="vcard__top"><h3>' + esc(g.area) + '</h3>' +
-            '<span class="vcard__region">' + esc(region) + '</span></div>' +
-          g.venues.map(function (v) {
-            return '<div class="vcard__venue">' +
-              /* Name left, address right, on one line — the address opens the
-                 venue on Google Maps (client, Sep 2026). */
-              '<p class="vcard__venuename">' + esc(v.venue) + sampleTag(v) +
-                '<a class="vcard__addr" href="' + esc(mapsUrl(v)) + '" target="_blank" rel="noopener"' +
-                  ' aria-label="' + esc(v.venue + ', ' + v.addr + ' — open in Google Maps') + '">' +
-                  '<span class="vcard__pin" aria-hidden="true">\u25CE</span>' + esc(v.addr) +
-                '</a>' +
-              '</p>' +
-              '<ul class="vcard__sessions">' + sessionsFor(v).map(function (s) {
-                return '<li><span class="vcard__day">' + esc(s.day) + '</span>' +
-                  '<span class="vcard__time">' + esc(s.time) + '</span>' +
-                  '<span class="vcard__lvl vcard__lvl--' + esc(s.level.toLowerCase()) + '">' + esc(s.level) + '</span>' +
-                  '</li>';
-              }).join('') + '</ul>' +
-            '</div>';
-          }).join('') +
-          '<div class="vcard__actions">' +
-            '<a class="vcard__book" href="' + esc(book) + '" target="_blank" rel="noopener">Book a class &rsaquo;</a>' +
+        var count = g.venues.reduce(function (n, v) { return n + v.sessions.length; }, 0);
+        return '<details class="vcard" id="area-' + esc(g.area.toLowerCase().replace(/[^a-z0-9]+/g, '-')) + '"' +
+            (openByDefault ? ' open' : '') + '>' +
+          '<summary class="vcard__top">' +
+            '<span class="vcard__heading">' +
+              '<h3>' + esc(g.area) + '</h3>' +
+              '<span class="vcard__region">' + esc(region) + '</span>' +
+              '<span class="vcard__count">' + count + (count === 1 ? ' class' : ' classes') + '</span>' +
+            '</span>' +
+            CHEV +
+          '</summary>' +
+          '<div class="vcard__body">' +
+            g.venues.map(function (v) {
+              return '<div class="vcard__venue">' +
+                /* Name left, address right, on one line — the address opens the
+                   venue on Google Maps (client, Sep 2026). */
+                '<p class="vcard__venuename">' + esc(v.venue) + sampleTag(v) +
+                  '<a class="vcard__addr" href="' + esc(mapsUrl(v)) + '" target="_blank" rel="noopener"' +
+                    ' aria-label="' + esc(v.venue + ', ' + v.addr + ' — open in Google Maps') + '">' +
+                    '<span class="vcard__pin" aria-hidden="true">\u25CE</span>' + esc(v.addr) +
+                  '</a>' +
+                '</p>' +
+                '<ul class="vcard__sessions">' + v.sessions.map(function (s) {
+                  return '<li><span class="vcard__day">' + esc(s.day) + '</span>' +
+                    '<span class="vcard__time">' + esc(s.time) + '</span>' +
+                    '<span class="vcard__lvl">' + esc(s.level) + '</span>' +
+                    '</li>';
+                }).join('') + '</ul>' +
+              '</div>';
+            }).join('') +
+            '<div class="vcard__actions">' +
+              '<a class="vcard__book" href="' + esc(book) + '" target="_blank" rel="noopener">Book a class &rsaquo;</a>' +
+            '</div>' +
           '</div>' +
-        '</article>';
+        '</details>';
       }).join('');
     }
 
-    if (filterWrap) {
-      filterWrap.addEventListener('click', function (e) {
-        var b = e.target.closest('.sched__filter');
-        if (!b) return;
-        level = b.getAttribute('data-level');
-        filterWrap.querySelectorAll('.sched__filter').forEach(function (x) {
-          var on = x === b;
-          x.classList.toggle('is-active', on);
-          x.setAttribute('aria-pressed', String(on));
-        });
-        render();
-      });
-    }
-
     render();
+
+    /* Opening or closing an area changes the panel height, and the class-type
+       carousel sizes its viewport to the active page — nudge it to re-measure. */
+    listMount.addEventListener('toggle', function () {
+      window.dispatchEvent(new Event('resize'));
+    }, true);
   })();
 
   /* =================================================================
@@ -590,6 +597,16 @@
      EVENTS
      ================================================================= */
   (function events() {
+    /* Each service card links through to that filter in Past Events (client,
+       Sep 2026). On the Events page itself that is a same-page hash — the
+       filter listens for hashchange — and from About it is the full URL. */
+    var onEvents = document.body.getAttribute('data-page') === 'events';
+    function pastHash(t) { return '#past-' + t.key + 's'; }
+    function pastHref(t) {
+      var evt = SITE.url ? SITE.url('events.html') : 'events.html';
+      return (onEvents ? '' : evt) + pastHash(t);
+    }
+
     var types = el('eventTypes');
     if (types) {
       types.innerHTML = D.eventTypes.map(function (t) {
@@ -598,6 +615,7 @@
           '<h3>' + esc(t.name) + '</h3>' +
           '<p class="etype__what">' + esc(t.what) + '</p>' +
           '<ul class="etype__prov">' + t.provides.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ul>' +
+          '<a class="etype__link" href="' + esc(pastHref(t)) + '">See past ' + esc(t.name) + '&nbsp;&rsaquo;</a>' +
         '</article>';
       }).join('');
     }
@@ -619,10 +637,23 @@
     if (upc) {
       upc.innerHTML = D.eventsUpcoming.length
         ? D.eventsUpcoming.map(function (e) {
+            /* Date, time and venue (client, Sep 2026). The venue links out to
+               Google Maps when the entry carries a `map` URL. The old
+               "Client:" line was dropped in the same round. */
+            var meta = [];
+            if (e.when) meta.push('<li><b>Date</b> ' + esc(e.when) + '</li>');
+            if (e.time) meta.push('<li><b>Time</b> ' + esc(e.time) + '</li>');
+            if (e.where) {
+              meta.push('<li><b>Location</b> ' + (e.map
+                ? '<a href="' + esc(e.map) + '" target="_blank" rel="noopener"' +
+                    ' aria-label="' + esc(e.where + ' — open in Google Maps') + '">' +
+                    esc(e.where) + '</a>'
+                : esc(e.where)) + '</li>');
+            }
             return '<article class="ecard' + (e.feature ? ' ecard--feature' : '') + '">' +
               '<span class="ecard__type">' + esc(e.type) + '</span>' +
               '<h3>' + esc(e.title) + sampleTag(e) + '</h3>' +
-              (e.client ? '<ul class="ecard__meta"><li><b>Client:</b> ' + esc(e.client) + '</li></ul>' : '') +
+              (meta.length ? '<ul class="ecard__meta">' + meta.join('') + '</ul>' : '') +
               (e.scope && e.scope.length
                 ? '<ul class="ecard__scope">' + e.scope.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>'
                 : '') +
@@ -641,7 +672,7 @@
         var strip = photos.slice(1, 4);
         var hidden = total - 1 - strip.length;
 
-        return '<article class="eshow">' +
+        return '<article class="eshow" data-type="' + esc(typeKey(e.type)) + '">' +
           (cover
             ? '<button class="eshow__photo" type="button" data-gallery="' + eIndex + '" data-photo="0"' +
                 ' aria-label="' + esc('View all ' + total + ' photos from ' + e.title) + '">' +
@@ -674,6 +705,7 @@
         thumb: thumbSrc,
         label: 'Event photo viewer'
       });
+      initShowcaseFilter(showcase);
     }
 
     var pst = el('eventsPast');
@@ -708,8 +740,141 @@
       }).join('');
       partners.innerHTML = '<span class="logorail__set">' + logos + '</span>' +
         '<span class="logorail__set" aria-hidden="true">' + logos + '</span>';
+      initLogoRail(partners.parentElement);
     }
   })();
+
+  /* 'Clinic' -> 'clinic', 'Carnival' -> 'carnival': the showcase entries carry
+     a display type, the EVENT_TYPES keys are lowercase singular. */
+  function typeKey(t) {
+    return String(t || '').toLowerCase().trim().replace(/s$/, '');
+  }
+
+  /* Past Events filter. The Our Services cards link in with #past-clinics and
+     friends (client, Sep 2026), so the hash selects a chip; the chips let the
+     reader change it from there. Cards are hidden rather than re-rendered so
+     the photo viewer's indices stay valid. */
+  function initShowcaseFilter(showcase) {
+    var chips = el('showcaseFilters');
+    var cards = Array.prototype.slice.call(showcase.querySelectorAll('.eshow'));
+    if (!chips || !cards.length) return;
+
+    /* Every service gets a chip, in the order EVENT_TYPES lists them, even
+       when nothing has run yet — the Our Services cards link straight to
+       #past-competitions and the reader should land on that filter and be told
+       it is empty rather than silently see everything. */
+    var types = D.eventTypes || [];
+    if (!types.length) return;
+
+    var options = [{ key: 'all', name: 'All' }].concat(types);
+    chips.innerHTML = options.map(function (o, i) {
+      return '<button class="sched__filter' + (i === 0 ? ' is-active' : '') + '" type="button"' +
+        ' data-type="' + esc(o.key) + '" aria-pressed="' + (i === 0) + '">' + esc(o.name) + '</button>';
+    }).join('');
+
+    var empty = document.createElement('p');
+    empty.className = 'sched__empty';
+    empty.hidden = true;
+    showcase.parentNode.insertBefore(empty, showcase.nextSibling);
+
+    function apply(key, focus) {
+      var shown = 0;
+      cards.forEach(function (c) {
+        var on = key === 'all' || c.getAttribute('data-type') === key;
+        c.hidden = !on;
+        if (on) shown++;
+      });
+      var label = (options.filter(function (o) { return o.key === key; })[0] || {}).name || key;
+      empty.hidden = shown > 0;
+      empty.textContent = 'No past ' + label.toLowerCase() + ' to show yet — ' +
+        'ask us about running one.';
+      chips.querySelectorAll('.sched__filter').forEach(function (b) {
+        var on = b.getAttribute('data-type') === key;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-pressed', String(on));
+      });
+      if (focus) {
+        var head = document.getElementById('past');
+        if (head && head.scrollIntoView) head.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    chips.addEventListener('click', function (e) {
+      var b = e.target.closest('.sched__filter');
+      if (!b) return;
+      apply(b.getAttribute('data-type'), false);
+    });
+
+    /* #past-clinics -> 'clinic'. An unknown hash falls through to 'all'. */
+    function fromHash(focus) {
+      var m = /^#past-(.+)$/.exec(window.location.hash || '');
+      if (!m) return;
+      var key = typeKey(m[1]);
+      var known = options.some(function (o) { return o.key === key; });
+      apply(known ? key : 'all', focus);
+    }
+    window.addEventListener('hashchange', function () { fromHash(true); });
+    fromHash(true);
+  }
+
+  /* Drive the "Trusted by" row by scrolling the container rather than
+     animating the track (client, Sep 2026: "scrolls too slowly and cannot
+     scroll manually"). Because the motion IS the scroll position, a finger
+     swipe, a trackpad or the arrow keys move it like any other scroller; the
+     auto-advance simply pauses while the reader is driving and picks up again
+     once they stop. The CSS keyframe animation stays as the no-JS fallback and
+     is switched off by the .logorail--js class. */
+  function initLogoRail(rail) {
+    if (!rail || !rail.classList.contains('logorail')) return;
+    var track = rail.querySelector('.logorail__track');
+    if (!track) return;
+    rail.classList.add('logorail--js');
+
+    var SPEED = 58;            // px per second — roughly double the old pace
+    var RESUME_AFTER = 1800;   // ms of stillness before it starts again
+    var pos = 0, last = 0, paused = false, resumeTimer = 0;
+
+    /* The set is rendered twice, so half the track is one full pass: jumping
+       back by that much is invisible. */
+    function half() { return track.scrollWidth / 2; }
+    function scrollable() { return rail.scrollWidth - rail.clientWidth > 4; }
+
+    function pause() {
+      paused = true;
+      window.clearTimeout(resumeTimer);
+      resumeTimer = window.setTimeout(function () {
+        pos = rail.scrollLeft;
+        paused = false;
+      }, RESUME_AFTER);
+    }
+
+    ['pointerdown', 'touchstart', 'wheel', 'keydown'].forEach(function (evt) {
+      rail.addEventListener(evt, pause, { passive: true });
+    });
+    rail.addEventListener('mouseenter', function () { paused = true; });
+    rail.addEventListener('mouseleave', function () { pos = rail.scrollLeft; paused = false; });
+    /* A scroll we did not cause means the reader is dragging it. Scroll events
+       are dispatched after our own write has returned, so a flag set around the
+       assignment would always be back to false by the time this runs — compare
+       against the position we asked for instead. */
+    rail.addEventListener('scroll', function () {
+      if (Math.abs(rail.scrollLeft - pos) > 2) pause();
+    }, { passive: true });
+
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    window.requestAnimationFrame(function step(now) {
+      window.requestAnimationFrame(step);
+      if (!last) { last = now; return; }
+      var dt = Math.min(64, now - last);
+      last = now;
+      if (paused || document.hidden || !scrollable()) { pos = rail.scrollLeft; return; }
+      var h = half();
+      pos += SPEED * dt / 1000;
+      if (h > 0 && pos >= h) pos -= h;
+      rail.scrollLeft = pos;
+    });
+  }
 
   /* =================================================================
      COACHES — About page grid
