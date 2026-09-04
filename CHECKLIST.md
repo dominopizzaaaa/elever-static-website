@@ -18,9 +18,13 @@ Legend: `[x]` done · `[ ]` deliberately not done (waiting on the client, see no
 
 ## 2. Classes
 
-- [x] **The photo fills the development-pathway boxes.** On phone the photo band now has a
-  definite height instead of an aspect ratio (a card in a column has no height of its own for the
-  ratio to work against), so it always fills the box edge to edge.
+- [x] **The photo fills the development-pathway boxes, uncropped.** The box takes the photos' own
+  4:5 shape at every width, so the whole picture lands in it and fills it exactly — no trimmed
+  edges, no letterbox bars, and the ratio reserves the space before the image loads. The first
+  attempt at this gave the box a fixed height and cropped the top and bottom off the photo; that
+  cap is gone, and `object-fit` is `contain` so a future photo of another shape letterboxes
+  rather than losing its edges. Élever supplies these already framed 4:5 and
+  `tools/build-class-photos.sh` only resizes, so nothing crops anywhere in the chain.
 - [x] **Locations are drop-downs** — Aljunied ▾ · Cantonment ▾ · Expo ▾ … Tapping an area opens
   its venues, addresses, days, times and the Book link. Built on native `<details>`, so it works
   with or without JavaScript. Collapsed on phones and tablets, open on desktop where there is room.

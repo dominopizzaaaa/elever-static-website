@@ -222,10 +222,17 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
    4/5 is the ratio the images are supplied in; the cap stops the photo
    towering on the two-column and single-column layouts, where the box crops
    rather than grows. */
-.path__media{flex:none;margin:-1.25rem -1.2rem 1.1rem;aspect-ratio:4/5;max-height:400px;
+/* The stage photos are supplied already framed 4:5 (see
+   tools/build-class-photos.sh — it resizes, it never crops), so the box takes
+   that same ratio and the whole photo lands in it: nothing is trimmed at any
+   width, and the ratio reserves the space before the image loads. `contain`
+   rather than `cover` is the guarantee — swap in a photo of another shape and
+   it letterboxes onto the panel colour instead of losing its edges. No
+   max-height: a cap is a crop by another name (client, Sep 2026). */
+.path__media{flex:none;margin:-1.25rem -1.2rem 1.1rem;aspect-ratio:4/5;
   overflow:hidden;background:var(--panel-2);
   border-radius:calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0}
-.path__media img{width:100%;height:100%;object-fit:cover;display:block;
+.path__media img{width:100%;height:100%;object-fit:contain;display:block;
   transition:transform .5s var(--ease)}
 .path:hover .path__media img{transform:scale(1.03)}
 .path:target{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
@@ -264,16 +271,12 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   .path__arrow:nth-of-type(2){grid-area:2/1/3/4;justify-self:center;rotate:90deg}
 }
 
-/* Mobile: a single column, every arrow pointing down.
-   The photo band gets a definite height rather than an aspect ratio here: a
-   card in a column flex container has no definite height of its own, and
-   `aspect-ratio` + `max-height` left the photo short of the box on some
-   phones (client, Sep 2026). A fixed band always fills, edge to edge. */
+/* Mobile: a single column, every arrow pointing down. The photo keeps its own
+   4:5 shape here as everywhere else — a fixed band height cropped the top and
+   bottom off it (client, Sep 2026). */
 @media(max-width:700px){
   .paths{display:flex;flex-direction:column;flex-wrap:nowrap;gap:.65rem}
   .path__arrow{rotate:90deg;margin:.15rem 0}
-  .path__media{aspect-ratio:auto;height:clamp(200px,58vw,280px);max-height:none}
-  .path__media img{width:100%;height:100%;min-height:100%;object-fit:cover;object-position:center 32%}
 }
 
 @media(prefers-reduced-motion:reduce){
