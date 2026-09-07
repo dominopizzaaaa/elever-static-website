@@ -182,11 +182,13 @@ Legend: `[x]` done · `[~]` done as far as the supplied assets allow · `[ ]` de
   (opens in a new tab). The venue list went from three columns to two so the name and the address
   genuinely fit on one line at desktop width — three columns forced the address onto its own row.
 - [ ] *Edit the Group / Private descriptions* — waiting on Chin's copy.
-- [x] **Area / Location / Day / Time cards redesigned.** The schedule now has a
-  clear information hierarchy: a blue-tinted glass Area header, an inset
-  Location panel with its map-linked address, and individually labelled Day /
-  Time rows. Information stays visually quiet while booking remains the only
-  action treatment.
+- [x] **Locations are back to their earlier, plainer cards.** The blue-tinted
+  glass headers, inset Location panels and labelled Day / Time rows were tried
+  and taken back out — the client kept the new tab treatment but asked for the
+  locations as they were ("the locations previously is ok la").
+- [x] **Region chips (`East`, `Central`, …) removed** from the area drop-downs.
+- [x] **Class count removed** from the area drop-downs.
+- [x] **The 'Area' label removed** — the area name stands on its own.
 
 ## 4. Camps
 
@@ -206,6 +208,8 @@ Legend: `[x]` done · `[~]` done as far as the supplied assets allow · `[ ]` de
 - [x] **Event-type chips use title case** (`Competition`, `Clinic`) rather than all caps.
 - [x] **Specific-event details can show a Partner after Services provided.** SingHealth uses the
   supplied SingHealth Community Hospitals logo. The visible photo count beside Highlights is gone.
+- [x] **The partner logo is no longer boxed** — it sits on the page with no card, border or shadow
+  around it ("the logo can don't box?").
 
 ## 6. About
 
@@ -267,10 +271,9 @@ Legend: `[x]` done · `[~]` done as far as the supplied assets allow · `[ ]` de
 | 1 | Home hero photos | The Google Drive set (Chin) — ideally 4–6 landscape shots |
 | 2 | What We Do tile photos | Optional: a chosen shot per pillar |
 | 3 | Group / Private class descriptions | Copy (Chin) |
-| 4 | Area / Location / Day / Time card UI | Client's direction |
-| 5 | Contact box UI | Client's direction |
-| 6 | EPL logo | `epl-logo-white.png` (Chin) |
-| 7 | Press cover photos | Confirm we may use the publications' images |
-| 8 | New Home page style | Client's direction |
+| 4 | Contact box UI | Client's direction |
+| 5 | EPL logo | `epl-logo-white.png` (Chin) |
+| 6 | Press cover photos | Confirm we may use the publications' images |
+| 7 | New Home page style | Client's direction |
 
 </details>

@@ -623,42 +623,32 @@
       var openByDefault = !window.matchMedia('(max-width:900px)').matches;
 
       listMount.innerHTML = areas.map(function (g) {
-        var region = g.venues[0].region;
         var book = g.venues[0].book || BOOK;
-        var count = g.venues.reduce(function (n, v) { return n + v.sessions.length; }, 0);
         return '<details class="vcard" id="area-' + esc(g.area.toLowerCase().replace(/[^a-z0-9]+/g, '-')) + '"' +
             (openByDefault ? ' open' : '') + '>' +
           '<summary class="vcard__top">' +
-            '<span class="vcard__identity">' +
-              '<span class="vcard__eyebrow">Area</span>' +
-              '<span class="vcard__heading">' +
-                '<span class="vcard__area" role="heading" aria-level="3">' + esc(g.area) + '</span>' +
-                '<span class="vcard__region">' + esc(region) + '</span>' +
-                '<span class="vcard__count">' + count + (count === 1 ? ' class' : ' classes') + '</span>' +
-              '</span>' +
+            /* Just the area name. The "Area" label, the region chip ("East",
+               "Central", ...) and the class count were all dropped
+               (client, Sep 2026) — the drop-down reads cleaner without them. */
+            '<span class="vcard__heading">' +
+              '<h3>' + esc(g.area) + '</h3>' +
             '</span>' +
             CHEV +
           '</summary>' +
           '<div class="vcard__body">' +
             g.venues.map(function (v) {
               return '<div class="vcard__venue">' +
-                '<div class="vcard__venuehead">' +
-                  '<span class="vcard__location">' +
-                    '<span class="vcard__eyebrow">Location</span>' +
-                    '<strong class="vcard__venuename">' + esc(v.venue) + sampleTag(v) + '</strong>' +
-                  '</span>' +
-                  /* Address remains to the right and opens Google Maps. */
+                /* Name left, address right, on one line — the address opens the
+                   venue on Google Maps (client, Sep 2026). */
+                '<p class="vcard__venuename">' + esc(v.venue) + sampleTag(v) +
                   '<a class="vcard__addr" href="' + esc(mapsUrl(v)) + '" target="_blank" rel="noopener"' +
                     ' aria-label="' + esc(v.venue + ', ' + v.addr + ' — open in Google Maps') + '">' +
                     '<span class="vcard__pin" aria-hidden="true">\u25CE</span>' + esc(v.addr) +
                   '</a>' +
-                '</div>' +
+                '</p>' +
                 '<ul class="vcard__sessions">' + v.sessions.map(function (s) {
-                  return '<li>' +
-                    '<span class="vcard__slot"><span class="vcard__slotlabel">Day</span>' +
-                      '<strong class="vcard__day">' + esc(s.day) + '</strong></span>' +
-                    '<span class="vcard__slot"><span class="vcard__slotlabel">Time</span>' +
-                      '<span class="vcard__time">' + esc(s.time) + '</span></span>' +
+                  return '<li><span class="vcard__day">' + esc(s.day) + '</span>' +
+                    '<span class="vcard__time">' + esc(s.time) + '</span>' +
                     '<span class="vcard__lvl">' + esc(s.level) + '</span>' +
                     '</li>';
                 }).join('') + '</ul>' +
