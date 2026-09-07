@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
-# Exports each partner logo for the "Trusted by" row on the Events page:
+# Exports supplied partner artwork for the Events page:
 #   assets/img/partners/<slug>.png   max 480px on the long edge
+#   SingHealth Community Hospitals  max 960px for the event detail
 #
 # PNG rather than JPEG because every mark is drawn on transparency and sits on
-# a white chip. 480px is comfortably past the ~52px they are drawn at, retina
-# included.
+# a white chip. 480px is comfortably past the ~52px used in the logo rail,
+# retina included; the event-detail mark gets the roomier exception above.
 #
 # Sources live in assets/img/Photos/Partners/ as "<Partner Name>.png" and are
 # never modified; <slug> is that name lowercased and hyphenated, and must match
 # the `logo` path in PARTNERS in assets/js/data.js.
 #
 # Run after adding a logo:   bash tools/build-partner-logos.sh
-# The event-detail-only SingHealth Community Hospitals asset is supplied
-# directly in assets/img/partners and is intentionally outside this batch.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -29,6 +28,15 @@ crop_for() {
   esac
 }
 
+# SingHealth appears in the roomier event-detail Partner section, so retain a
+# 960px export. Logos in the compact scrolling rail remain capped at 480px.
+max_edge_for() {
+  case "$1" in
+    singhealth-community-hospitals) echo "960" ;;
+    *)                              echo "480" ;;
+  esac
+}
+
 n=0
 for f in "$SRC"/*.png; do
   [ -e "$f" ] || continue
@@ -36,11 +44,12 @@ for f in "$SRC"/*.png; do
   slug="$(basename "${f%.*}" | tr '[:upper:]' '[:lower:]' | tr -d "_'" | tr ' ' '-')"
   out="$OUT/$slug.png"
   crop="$(crop_for "$slug")"
+  max_edge="$(max_edge_for "$slug")"
   if [ -n "$crop" ]; then
     sips -c $crop "$f" --out "$out" >/dev/null
-    sips -Z 480 -s format png "$out" --out "$out" >/dev/null
+    sips -Z "$max_edge" -s format png "$out" --out "$out" >/dev/null
   else
-    sips -Z 480 -s format png "$f" --out "$out" >/dev/null
+    sips -Z "$max_edge" -s format png "$f" --out "$out" >/dev/null
   fi
   n=$((n+1))
   echo "partners/$slug.png"
