@@ -842,7 +842,10 @@
                 : '') +
             '</article>';
           }).join('')
-        : '<p class="sched__empty">No public events on the calendar right now — <a href="contact.html">talk to us about running one</a>.</p>';
+        : '<div class="ecard__empty">' +
+            '<p>No public events are scheduled at this time. If you are looking to partner with us, or want to inquire about hosting a private event at our venue, please get in touch with our team for availability and services.</p>' +
+            '<a class="btn btn--primary" href="contact.html">Request a proposal</a>' +
+          '</div>';
     }
 
     var showcase = el('eventShowcase');

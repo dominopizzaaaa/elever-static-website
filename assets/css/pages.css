@@ -586,6 +586,12 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   .suite__item{padding:.75rem .7rem}.suite__item p{font-size:.72rem}}
 
 .ecards{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:.8rem}
+/* Empty state — no public events on the calendar. Spans the whole grid and
+   centres the invitation to enquire, with the proposal CTA beneath. */
+.ecard__empty{grid-column:1 / -1;display:flex;flex-direction:column;align-items:center;text-align:center;
+  gap:1.25rem;background:linear-gradient(180deg,var(--accent-soft),#fff 60%);border:1px solid var(--line);
+  border-radius:var(--r-lg);padding:clamp(1.8rem,4vw,2.8rem) clamp(1.3rem,4vw,2.2rem)}
+.ecard__empty p{max-width:62ch;font-size:.98rem;line-height:1.7;color:var(--muted);margin:0}
 .ecard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:1.25rem 1.3rem;
   transition:border-color .25s,box-shadow .25s}
 .ecard:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm)}
