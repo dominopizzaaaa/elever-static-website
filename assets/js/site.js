@@ -32,10 +32,10 @@
         { key: 'camps', href: 'camps.html', label: 'Camps' }
       ]
     },
-    /* The Lab sits directly beside Classes and goes by "Lab" (client, Sep
+    { key: 'events', href: 'events.html', label: 'Events' },
+    /* Keep the short "Lab" label, immediately after Events (client, Sep
        2026). The page <title> and the footer keep the full name. */
     { key: 'lab', href: 'lab.html', label: 'Lab' },
-    { key: 'events', href: 'events.html', label: 'Events' },
     { key: 'news', href: 'news.html', label: 'News' },
     { key: 'about', href: 'about.html', label: 'About' },
     { key: 'contact', href: 'contact.html', label: 'Contact' }

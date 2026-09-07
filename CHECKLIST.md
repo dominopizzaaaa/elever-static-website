@@ -182,8 +182,11 @@ Legend: `[x]` done · `[~]` done as far as the supplied assets allow · `[ ]` de
   (opens in a new tab). The venue list went from three columns to two so the name and the address
   genuinely fit on one line at desktop width — three columns forced the address onto its own row.
 - [ ] *Edit the Group / Private descriptions* — waiting on Chin's copy.
-- [ ] *"Something not quite right with the UI of each Area / Location / Day / Time box"* — waiting
-  on the client's decision.
+- [x] **Area / Location / Day / Time cards redesigned.** The schedule now has a
+  clear information hierarchy: a blue-tinted glass Area header, an inset
+  Location panel with its map-linked address, and individually labelled Day /
+  Time rows. Information stays visually quiet while booking remains the only
+  action treatment.
 
 ## 4. Camps
 
@@ -199,6 +202,10 @@ Legend: `[x]` done · `[~]` done as far as the supplied assets allow · `[ ]` de
 - [x] **One *Request a proposal* button below all three boxes** instead of one per box.
 - [x] **'Trusted by' is a single scrolling row** with the logos close together, using the same
   moving-marquee treatment as the Home page.
+- [x] **Past-event covers now use their native 3:2 photo ratio**, shortening the cards.
+- [x] **Event-type chips use title case** (`Competition`, `Clinic`) rather than all caps.
+- [x] **Specific-event details can show a Partner after Services provided.** SingHealth uses the
+  supplied SingHealth Community Hospitals logo. The visible photo count beside Highlights is gone.
 
 ## 6. About
 

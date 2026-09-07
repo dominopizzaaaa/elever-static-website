@@ -11,6 +11,8 @@
 # the `logo` path in PARTNERS in assets/js/data.js.
 #
 # Run after adding a logo:   bash tools/build-partner-logos.sh
+# The event-detail-only SingHealth Community Hospitals asset is supplied
+# directly in assets/img/partners and is intentionally outside this batch.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 

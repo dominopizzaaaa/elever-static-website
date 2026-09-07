@@ -87,7 +87,8 @@ info@eleverbadminton.com · WhatsApp +65 8921 4221
 - Age ranges, ability levels and grading checkpoints for the four pathways (deliberately
   omitted rather than guessed)
 - Logos for the partners still shown as name-only chips in `PARTNERS`
-  (SingHealth Community Hospitals, Northbrooks Secondary School, the five CCs)
+  (Northbrooks Secondary School and the five CCs). The supplied SingHealth
+  Community Hospitals mark is used in its event detail.
 - Write-ups for the previous events listed on the Events page
 - Completion of the bracketed fields in `privacy.html` (DPO, retention period) and the
   Terms & Conditions page the footer links to

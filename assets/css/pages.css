@@ -294,23 +294,30 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   .path:hover .path__media img{transform:none}
 }
 
-/* ---------- CLASS TYPE TABS (ElevenLabs-style) ----------
-   A soft rounded rail holds two tabs (Group / Private), each with a coloured
-   status dot. The active tab lifts onto a white chip. The detail block below
-   swaps to match the active tab and is swipeable left/right. */
-.ctabs{background:var(--bg-2);border:1px solid var(--line);border-radius:calc(var(--r-lg) + 8px);
-  padding:.5rem;box-shadow:var(--shadow-sm);margin-bottom:1.4rem}
-.ctabs__rail{display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none}
+/* ---------- CLASS TYPE TABS ----------
+   A cool glass selector keeps navigation visually distinct from the solid
+   blue enquiry and booking buttons. */
+.ctabs{position:relative;isolation:isolate;overflow:hidden;
+  background:linear-gradient(135deg,rgba(255,255,255,.96),rgba(225,235,255,.8));
+  border:1px solid rgba(33,81,209,.17);border-radius:calc(var(--r-lg) + 8px);
+  padding:.5rem;box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 20px 48px -34px rgba(33,81,209,.7);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);margin-bottom:1.4rem}
+.ctabs::before{content:'';position:absolute;z-index:-1;pointer-events:none;width:18rem;height:18rem;
+  top:-14rem;left:8%;border-radius:50%;background:rgba(107,145,244,.26);filter:blur(24px)}
+.ctabs__rail{position:relative;display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none}
 .ctabs__rail::-webkit-scrollbar{display:none}
 .ctabs__tab{flex:1 1 0;min-width:max-content;display:inline-flex;align-items:center;justify-content:center;
-  gap:.6rem;padding:.85rem 1.4rem;border:0;border-radius:calc(var(--r-lg) + 2px);cursor:pointer;
-  background:transparent;color:var(--muted);font:inherit;font-weight:700;font-size:1rem;letter-spacing:-.01em;
-  white-space:nowrap;transition:background .25s var(--ease),color .25s var(--ease),box-shadow .25s var(--ease)}
-.ctabs__tab:hover{color:var(--ink)}
-/* The tab you are on is solid brand blue with white type (client, Sep 2026) —
-   it used to lift onto a white chip, which read as the inactive state. */
-.ctabs__tab.is-active{background:var(--accent);color:#fff;box-shadow:var(--shadow-sm)}
-.ctabs__tab.is-active:hover{color:#fff}
+  position:relative;gap:.6rem;padding:.9rem 1.4rem 1rem;border:1px solid transparent;
+  border-radius:calc(var(--r-lg) + 2px);cursor:pointer;background:transparent;color:#59637c;
+  font:inherit;font-weight:700;font-size:1rem;letter-spacing:-.01em;white-space:nowrap;
+  transition:background .25s var(--ease),color .25s var(--ease),box-shadow .25s var(--ease),border-color .25s}
+.ctabs__tab:hover{color:var(--accent-2);background:rgba(255,255,255,.44)}
+.ctabs__tab.is-active{color:var(--accent-2);border-color:rgba(33,81,209,.16);
+  background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(239,244,255,.94));
+  box-shadow:inset 0 1px 0 #fff,0 12px 30px -22px rgba(18,54,155,.75)}
+.ctabs__tab.is-active::after{content:'';position:absolute;left:50%;bottom:.38rem;width:1.55rem;height:2px;
+  border-radius:99px;background:var(--accent);transform:translateX(-50%)}
+.ctabs__tab.is-active:hover{color:var(--accent-2)}
 .ctabs__tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 /* Intro row at the top of each detail panel. The panel headings were removed
@@ -322,7 +329,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
    track slides horizontally (translateX) so the section reads as a real
    swiping page, in sync with the tabs above. */
 .ctabs__pages{display:flex;align-items:flex-start;gap:.5rem}
-.ctabs__viewport{flex:1 1 auto;min-width:0;overflow:hidden;transition:height .45s var(--ease)}
+.ctabs__viewport{flex:1 1 auto;min-width:0;overflow:hidden;touch-action:pan-y;transition:height .45s var(--ease)}
 .ctabs__track{display:flex;align-items:flex-start;width:100%;
   transition:transform .45s var(--ease);will-change:transform}
 /* Each page is exactly one viewport wide. flex-basis in % is unreliable when
@@ -410,12 +417,18 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 /* Two columns on desktop: the venue name and its address share one line
    (client, Sep 2026) and need the room. Masonry packing via CSS columns keeps
    a one-session card from leaving a hole under an eight-session card. */
-.sched__list{column-width:470px;column-gap:.9rem}
-.sched__list > *{break-inside:avoid;margin-bottom:.9rem}
-.vcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:1.1rem 1.2rem;
-  transition:border-color .25s,box-shadow .25s;display:flex;flex-direction:column;
-  width:100%;-webkit-column-break-inside:avoid;break-inside:avoid}
-.vcard:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm)}
+.sched__list{column-width:500px;column-gap:1rem}
+.sched__list > *{break-inside:avoid;margin-bottom:1rem}
+.vcard{position:relative;overflow:hidden;background:rgba(255,255,255,.86);
+  border:1px solid rgba(33,81,209,.14);border-radius:calc(var(--r-lg) + 2px);
+  transition:border-color .25s,box-shadow .25s,transform .25s var(--ease);display:flex;flex-direction:column;
+  width:100%;-webkit-column-break-inside:avoid;break-inside:avoid;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 18px 42px -34px rgba(25,53,124,.65);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.vcard::before{content:'';position:absolute;inset:0 auto 0 0;width:3px;pointer-events:none;
+  background:linear-gradient(180deg,var(--accent),rgba(111,147,244,.28))}
+.vcard:hover{border-color:rgba(33,81,209,.28);
+  box-shadow:inset 0 1px 0 #fff,0 24px 54px -36px rgba(33,81,209,.8);transform:translateY(-2px)}
 /* Each area is a <details> drop-down (client, Sep 2026). The summary is the
    whole tap target: area name, region chip, class count and a chevron that
    turns when it opens. list-style:none + ::-webkit-details-marker kills the
@@ -424,50 +437,58 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 /* Two columns: everything that can wrap on the left, the chevron pinned to
    the right so it never drops onto a second line. */
 .vcard__top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.8rem;align-items:center;
-  padding:1.05rem 1.2rem;cursor:pointer;list-style:none;min-height:44px}
-.vcard__heading{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .6rem;min-width:0}
+  padding:1.05rem 1.2rem 1rem 1.35rem;cursor:pointer;list-style:none;min-height:44px;
+  background:linear-gradient(120deg,rgba(231,239,255,.78),rgba(255,255,255,.62))}
+.vcard__identity{display:flex;flex-direction:column;gap:.22rem;min-width:0}
+.vcard__eyebrow,.vcard__slotlabel{display:block;font-size:.57rem;font-weight:800;line-height:1.2;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.vcard__heading{display:flex;flex-wrap:wrap;align-items:baseline;gap:.35rem .65rem;min-width:0}
 .vcard__top::-webkit-details-marker{display:none}
 .vcard__top:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:var(--r-lg)}
 .vcard__count{font-size:.76rem;color:var(--faint);font-weight:500}
-.vcard__chev{flex:none;color:var(--faint);transition:transform .22s var(--ease)}
+.vcard__chev{flex:none;color:var(--accent);transition:transform .22s var(--ease)}
 .vcard[open] > .vcard__top .vcard__chev{transform:rotate(180deg)}
-.vcard[open] > .vcard__top{border-bottom:1px solid var(--line)}
-.vcard__body{padding:0 1.2rem 1.1rem}
-.vcard h3{font-size:1.15rem;font-weight:800;margin:0;letter-spacing:-.02em}
-.vcard__region{font-size:.62rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);
-  background:var(--accent-soft);padding:.18rem .45rem;border-radius:4px}
+.vcard[open] > .vcard__top{border-bottom:1px solid rgba(33,81,209,.1)}
+.vcard__body{padding:.95rem 1.05rem 1.05rem 1.2rem;background:rgba(255,255,255,.64)}
+.vcard__area{font-size:1.2rem;font-weight:800;line-height:1.15;letter-spacing:-.025em}
+.vcard__region{font-size:.63rem;font-weight:750;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-2)}
 /* A single area can hold more than one venue (e.g. Aljunied = SBH + SBS).
    Each venue block sits under the area header, separated by a hairline. */
-.vcard__venue{margin-top:.9rem}
-.vcard__body > .vcard__venue:first-child{margin-top:1rem}
-.vcard__venue + .vcard__venue{border-top:1px solid var(--line);padding-top:.9rem}
+.vcard__venue{padding:.9rem;background:rgba(255,255,255,.84);border:1px solid rgba(33,81,209,.1);
+  border-radius:var(--r-md);box-shadow:inset 0 1px 0 #fff}
+.vcard__venue + .vcard__venue{margin-top:.7rem}
 /* Venue name and address share one line, the address pushed right and
    linking out to Google Maps (client, Sep 2026). It only drops to a second
    line when the two genuinely cannot fit. */
-.vcard__venuename{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;
-  gap:.15rem .9rem;font-size:.9rem;font-weight:700;letter-spacing:-.01em;margin:0 0 .7rem}
-.vcard__addr{flex:1 1 auto;min-width:0;text-align:right;font-size:.76rem;font-weight:500;
+.vcard__venuehead{display:grid;grid-template-columns:minmax(0,1fr) minmax(11rem,.85fr);gap:.7rem 1rem;
+  align-items:end;margin-bottom:.75rem}
+.vcard__location{display:flex;flex-direction:column;gap:.22rem;min-width:0}
+.vcard__venuename{font-size:.91rem;font-weight:750;line-height:1.35;letter-spacing:-.012em;overflow-wrap:anywhere}
+.vcard__addr{min-width:0;text-align:right;font-size:.73rem;font-weight:500;
   color:var(--muted);line-height:1.5;text-decoration:underline;text-underline-offset:2px;
   text-decoration-color:var(--line);transition:color .2s,text-decoration-color .2s}
 .vcard__addr:hover,.vcard__addr:focus-visible{color:var(--accent);text-decoration-color:currentColor}
 .vcard__addr .vcard__pin{margin-right:.25rem;font-size:.72rem;opacity:.75}
 @media(max-width:560px){
-  .vcard__addr{text-align:left;flex-basis:100%}
+  .vcard__venuehead{grid-template-columns:1fr;gap:.45rem}
+  .vcard__addr{text-align:left}
   /* Keep the area name, its region and the class count on one line so every
      drop-down is the same height down the list. */
   .vcard__top{padding:.95rem 1rem;gap:.5rem}
   .vcard__heading{gap:.35rem .45rem}
-  .vcard h3{font-size:1rem}
-  .vcard__region{font-size:.58rem;padding:.16rem .4rem}
+  .vcard__area{font-size:1.05rem}
+  .vcard__region{font-size:.58rem}
   .vcard__count{font-size:.74rem}
-  .vcard__body{padding:0 1rem 1rem}
+  .vcard__body{padding:.8rem .8rem .9rem .95rem}
 }
-.vcard__sessions{list-style:none;display:flex;flex-direction:column;gap:.3rem}
-.vcard__sessions li{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;font-size:.84rem;
-  border-top:1px solid var(--line);padding-top:.4rem}
-.vcard__sessions li:first-child{border-top:0;padding-top:0}
-.vcard__day{font-weight:700;min-width:5.2rem}
-.vcard__time{color:var(--muted)}
+.vcard__sessions{list-style:none;display:flex;flex-direction:column;gap:.42rem}
+.vcard__sessions li{display:grid;grid-template-columns:minmax(4.6rem,.7fr) minmax(7.5rem,1fr) auto;
+  gap:.6rem;align-items:center;font-size:.82rem;padding:.58rem .65rem;border:1px solid rgba(33,81,209,.08);
+  border-radius:10px;background:linear-gradient(110deg,rgba(239,244,255,.82),rgba(255,255,255,.9))}
+.vcard__slot{display:flex;flex-direction:column;gap:.08rem;min-width:0}
+.vcard__slotlabel{font-size:.52rem;color:var(--faint)}
+.vcard__day{font-weight:750}
+.vcard__time{color:var(--ink);font-variant-numeric:tabular-nums}
 /* One chip treatment for every level — blue outline, white fill, blue text,
    not bold (client, Sep 2026). Emergence used to be green; it now matches. */
 .vcard__lvl{margin-left:auto;font-size:.66rem;font-weight:500;padding:.16rem .5rem;
@@ -477,6 +498,10 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .vcard__book{font-size:.78rem;font-weight:600;color:var(--accent)}
 .vcard__book:hover{text-decoration:underline}
 .sched__empty{column-span:all;padding:2rem;text-align:center;color:var(--faint);font-size:.88rem}
+@media(max-width:420px){
+  .vcard__sessions li{grid-template-columns:1fr 1fr}
+  .vcard__lvl{grid-column:1/-1;justify-self:start;margin-left:0}
+}
 
 /* ---------- CAMPS ---------- */
 .camp{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden}
@@ -598,7 +623,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .ecard--feature{border-color:rgba(33,81,209,.35);background:linear-gradient(180deg,var(--accent-soft),#fff 55%)}
 /* An event can be more than one type — one chip each, on one wrapping row. */
 .ecard__types{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.7rem}
-.ecard__type{font-size:.6rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:#fff;
+.ecard__type{font-size:.66rem;font-weight:700;letter-spacing:.01em;color:#fff;
   background:var(--accent);padding:.2rem .5rem;border-radius:4px;display:inline-block}
 .ecard h3{font-size:1rem;font-weight:700;margin-bottom:.5rem;line-height:1.35;letter-spacing:-.015em}
 /* Date / Time / Location. The label column is fixed so the values line up. */
@@ -625,14 +650,14 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .ecov__open:hover{transform:translateY(-4px);box-shadow:var(--shadow-md,0 18px 44px -20px rgba(8,10,16,.4));border-color:var(--line-2)}
 .ecov__open:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .ecov__media{position:relative;display:block;overflow:hidden;background:var(--panel-2)}
-.ecov__media img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;transition:transform .55s var(--ease)}
+.ecov__media img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block;transition:transform .55s var(--ease)}
 .ecov__open:hover .ecov__media img{transform:scale(1.06)}
 .ecov__scrim{position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(180deg,rgba(8,10,16,.05) 0%,rgba(8,10,16,0) 45%)}
 .ecov__body{display:block;padding:.9rem 1.05rem 1.05rem}
 /* Type sits on top of the title (client, Sep 2026). */
 .ecov__types{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.5rem}
-.ecov__type{font-size:.58rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);
+.ecov__type{font-size:.64rem;font-weight:750;letter-spacing:.01em;color:var(--accent);
   background:var(--accent-soft);padding:.2rem .5rem;border-radius:4px}
 .ecov__title{display:block;font-size:1.02rem;font-weight:800;letter-spacing:-.02em;line-height:1.35;color:var(--ink)}
 .ecov__meta{display:block;margin-top:.3rem;font-size:.8rem;color:var(--muted);line-height:1.5}
@@ -664,7 +689,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 
 .edetail__head{padding:1.9rem clamp(1.3rem,3.4vw,2.4rem) 1.4rem;border-bottom:1px solid var(--line)}
 .edetail__types{display:flex;flex-wrap:wrap;gap:.34rem;margin-bottom:.75rem}
-.edetail__type{font-size:.6rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);
+.edetail__type{font-size:.66rem;font-weight:750;letter-spacing:.01em;color:var(--accent);
   background:var(--accent-soft);padding:.22rem .55rem;border-radius:4px}
 .edetail__title{font-size:clamp(1.5rem,3.2vw,2.15rem);font-weight:900;letter-spacing:-.03em;line-height:1.15}
 .edetail__meta{margin-top:.5rem;font-size:.9rem;color:var(--muted)}
@@ -677,13 +702,17 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 /* Section headings the client asked to keep in plain black, not upper-case
    accent (Services provided / Highlights). */
 .edetail__subhead--plain{text-transform:none;letter-spacing:-.01em;color:var(--ink);font-size:1.05rem;font-weight:800}
-.edetail__num{font-size:.72rem;font-weight:700;letter-spacing:.02em;text-transform:none;color:var(--faint)}
 /* Point form (client, Sep 2026: "use point form instead of tick"). */
 .edetail__servicelist{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem 1.4rem;
   font-size:.9rem;color:var(--ink)}
 .edetail__servicelist li{padding-left:1.1rem;position:relative;line-height:1.5}
 .edetail__servicelist li::before{content:'';position:absolute;left:.1rem;top:.62em;width:.32rem;height:.32rem;
   border-radius:99px;background:var(--ink)}
+.edetail__partnerlist{display:flex;flex-wrap:wrap;gap:.75rem}
+.edetail__partner{display:flex;align-items:center;min-height:5.6rem;padding:.9rem 1.1rem;
+  border:1px solid var(--line);border-radius:var(--r-md);background:#fff;box-shadow:var(--shadow-sm)}
+.edetail__partner img{width:min(100%,320px);max-height:5rem;object-fit:contain;object-position:left center}
+.edetail__partner span{font-size:.92rem;font-weight:700}
 
 .edetail__gallery{padding:1.6rem clamp(1.3rem,3.4vw,2.4rem) 2rem}
 .edetail__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}

@@ -393,11 +393,12 @@
      originals in assets/img/Photos/Events/ with:
          bash tools/build-event-photos.sh
 
-     Two optional fields flesh out an entry when the story is worth telling
-     (client, Sep 2026). Either can be omitted and the detail overlay simply
+     Optional fields flesh out an entry when the story is worth telling
+     (client, Sep 2026). Any can be omitted and the detail overlay simply
      drops it:
        description — one short paragraph on what the day was.
        services    — a list of what Élever provided end to end.
+       partners    — partner names with an optional supplied logo.
      (An earlier `insta` embed was dropped in Sep 2026 — the reel took up too
      much room next to the photo gallery. The field is left on the SingHealth
      entry for reference but is no longer rendered.) */
@@ -419,6 +420,9 @@
         'Certified coaches',
         'Emcee',
         'Backdrop'
+      ],
+      partners: [
+        { name: 'SingHealth Community Hospitals', logo: 'assets/img/partners/singhealth-community-hospitals.png' }
       ],
       insta: 'https://www.instagram.com/p/Dc8cjOngS1X/?stkn=ZHVob3B3dW5kMWkw',
       /* Photo 26 leads as the cover (client, Sep 2026); the rest follow in

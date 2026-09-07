@@ -253,6 +253,7 @@
     function render(e, idx) {
       var photos = e.photos || [];
       var total = photos.length;
+      var partners = e.partners || [];
       var chips = typeList(e.type).map(function (t) {
         return '<span class="edetail__type">' + esc(t) + '</span>';
       }).join('');
@@ -274,7 +275,7 @@
             '<span>' + esc(e.where) + '</span>' +
           '</p>' +
         '</header>' +
-        (e.description || (e.services && e.services.length)
+        (e.description || (e.services && e.services.length) || partners.length
           ? '<div class="edetail__story">' +
               (e.description ? '<p class="edetail__desc">' + esc(e.description) + '</p>' : '') +
               (e.services && e.services.length
@@ -285,10 +286,24 @@
                     }).join('') + '</ul>' +
                   '</div>'
                 : '') +
+              (partners.length
+                ? '<div class="edetail__partners">' +
+                    '<h3 class="edetail__subhead edetail__subhead--plain">Partner</h3>' +
+                    '<div class="edetail__partnerlist">' + partners.map(function (p) {
+                      var partner = typeof p === 'string' ? { name: p } : p;
+                      return '<div class="edetail__partner">' +
+                        (partner.logo
+                          ? '<img src="' + esc((SITE.base || '') + partner.logo) + '" alt="' +
+                              esc(partner.name || 'Event partner') + '" loading="lazy" decoding="async">'
+                          : '<span>' + esc(partner.name) + '</span>') +
+                      '</div>';
+                    }).join('') + '</div>' +
+                  '</div>'
+                : '') +
             '</div>'
           : '') +
         '<div class="edetail__gallery">' +
-          '<h3 class="edetail__subhead edetail__subhead--plain">Highlights <span class="edetail__num">' + total + ' photos</span></h3>' +
+          '<h3 class="edetail__subhead edetail__subhead--plain">Highlights</h3>' +
           '<div class="edetail__grid" data-detail-idx="' + idx + '">' + grid + '</div>' +
         '</div>';
 
@@ -458,6 +473,7 @@
 
     var active = 0;
     var count = tabs.length;
+    var pages = Array.prototype.slice.call(track.querySelectorAll('.ctabs__page'));
 
     function go(i) {
       active = Math.max(0, Math.min(count - 1, i));
@@ -466,6 +482,16 @@
         t.classList.toggle('is-active', on);
         t.setAttribute('aria-selected', String(on));
         t.tabIndex = on ? 0 : -1;
+      });
+      /* A translated panel is still available to assistive technology and
+         keyboard focus. Mark the off-screen page inert as well as moving it. */
+      pages.forEach(function (p, k) {
+        var on = k === active;
+        p.setAttribute('aria-hidden', String(!on));
+        if (on) p.removeAttribute('inert');
+        else p.setAttribute('inert', '');
+        var panel = p.querySelector('[role="tabpanel"]');
+        if (panel) panel.classList.toggle('is-active', on);
       });
       /* Slide the track. Each page is 100% of the viewport wide, and the
          track's own width is one viewport (100%), so one page step is a full
@@ -482,7 +508,6 @@
        viewport clips overflow, an under-measured height would cut off the
        bottom cards — so we re-measure whenever the active page's own size
        changes (fonts loading, wrapping, filters) via a ResizeObserver. */
-    var pages = Array.prototype.slice.call(track.querySelectorAll('.ctabs__page'));
     function sizeViewport() {
       if (!viewport || !pages[active]) return;
       viewport.style.height = pages[active].offsetHeight + 'px';
@@ -502,10 +527,12 @@
     if (prevBtn) prevBtn.addEventListener('click', function () { go(active - 1); });
     if (nextBtn) nextBtn.addEventListener('click', function () { go(active + 1); });
 
-    /* Keyboard: left/right arrows move between pages and focus the new tab. */
+    /* Keyboard: the standard tablist keys move and focus the selected tab. */
     root.addEventListener('keydown', function (e) {
       if (e.key === 'ArrowRight') { go(active + 1); tabs[active].focus(); e.preventDefault(); }
       else if (e.key === 'ArrowLeft') { go(active - 1); tabs[active].focus(); e.preventDefault(); }
+      else if (e.key === 'Home') { go(0); tabs[active].focus(); e.preventDefault(); }
+      else if (e.key === 'End') { go(count - 1); tabs[active].focus(); e.preventDefault(); }
     });
 
     /* Touch + mouse swipe on the viewport switches pages. Mostly-vertical
@@ -602,27 +629,36 @@
         return '<details class="vcard" id="area-' + esc(g.area.toLowerCase().replace(/[^a-z0-9]+/g, '-')) + '"' +
             (openByDefault ? ' open' : '') + '>' +
           '<summary class="vcard__top">' +
-            '<span class="vcard__heading">' +
-              '<h3>' + esc(g.area) + '</h3>' +
-              '<span class="vcard__region">' + esc(region) + '</span>' +
-              '<span class="vcard__count">' + count + (count === 1 ? ' class' : ' classes') + '</span>' +
+            '<span class="vcard__identity">' +
+              '<span class="vcard__eyebrow">Area</span>' +
+              '<span class="vcard__heading">' +
+                '<span class="vcard__area" role="heading" aria-level="3">' + esc(g.area) + '</span>' +
+                '<span class="vcard__region">' + esc(region) + '</span>' +
+                '<span class="vcard__count">' + count + (count === 1 ? ' class' : ' classes') + '</span>' +
+              '</span>' +
             '</span>' +
             CHEV +
           '</summary>' +
           '<div class="vcard__body">' +
             g.venues.map(function (v) {
               return '<div class="vcard__venue">' +
-                /* Name left, address right, on one line — the address opens the
-                   venue on Google Maps (client, Sep 2026). */
-                '<p class="vcard__venuename">' + esc(v.venue) + sampleTag(v) +
+                '<div class="vcard__venuehead">' +
+                  '<span class="vcard__location">' +
+                    '<span class="vcard__eyebrow">Location</span>' +
+                    '<strong class="vcard__venuename">' + esc(v.venue) + sampleTag(v) + '</strong>' +
+                  '</span>' +
+                  /* Address remains to the right and opens Google Maps. */
                   '<a class="vcard__addr" href="' + esc(mapsUrl(v)) + '" target="_blank" rel="noopener"' +
                     ' aria-label="' + esc(v.venue + ', ' + v.addr + ' — open in Google Maps') + '">' +
                     '<span class="vcard__pin" aria-hidden="true">\u25CE</span>' + esc(v.addr) +
                   '</a>' +
-                '</p>' +
+                '</div>' +
                 '<ul class="vcard__sessions">' + v.sessions.map(function (s) {
-                  return '<li><span class="vcard__day">' + esc(s.day) + '</span>' +
-                    '<span class="vcard__time">' + esc(s.time) + '</span>' +
+                  return '<li>' +
+                    '<span class="vcard__slot"><span class="vcard__slotlabel">Day</span>' +
+                      '<strong class="vcard__day">' + esc(s.day) + '</strong></span>' +
+                    '<span class="vcard__slot"><span class="vcard__slotlabel">Time</span>' +
+                      '<span class="vcard__time">' + esc(s.time) + '</span></span>' +
                     '<span class="vcard__lvl">' + esc(s.level) + '</span>' +
                     '</li>';
                 }).join('') + '</ul>' +
