@@ -149,7 +149,10 @@
 
     function close() {
       modal.hidden = true;
-      document.body.classList.remove('has-lightbox');
+      // The event detail overlay can be open beneath the lightbox; keep the
+      // scroll lock while it is still showing.
+      var det = document.querySelector('.edetail');
+      if (!det || det.hidden) document.body.classList.remove('has-lightbox');
       // Send focus back where it came from so the keyboard user is not lost.
       if (lastTrigger && lastTrigger.focus) lastTrigger.focus();
       lastTrigger = null;
@@ -208,6 +211,151 @@
       // Ignore mostly-vertical drags so scrolling the strip still works.
       if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) step(dx < 0 ? 1 : -1);
     }, { passive: true });
+
+    /* Hand the opener back so other UI (the event detail overlay) can jump
+       straight into a photo without a synthetic click. */
+    return { open: open };
+  }
+
+  /* =================================================================
+     EVENT DETAIL OVERLAY
+     -----------------------------------------------------------------
+     The Past Events cards stay uncluttered — one photo, the title and a
+     date/venue line. Everything else (the write-up, the "What we provided"
+     list, the Instagram link and the full photo set) opens here, on tap
+     (client, Sep 2026). A tile in the grid opens the shared lightbox at
+     full size via `openPhoto`, so the two viewers stay in step.
+     ================================================================= */
+  function initEventDetail(scope, events, openPhoto) {
+    if (!scope || scope.dataset.detailReady) return;
+    scope.dataset.detailReady = '1';
+
+    var lastTrigger = null;
+
+    var modal = document.createElement('div');
+    modal.className = 'edetail';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Event details');
+    modal.hidden = true;
+    modal.innerHTML =
+      '<button class="edetail__close" type="button" aria-label="Close" title="Close">' +
+        '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">' +
+          '<path d="M6.4 6.4 17.6 17.6M17.6 6.4 6.4 17.6" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>' +
+        '</svg>' +
+      '</button>' +
+      '<div class="edetail__panel" role="document"></div>';
+    document.body.appendChild(modal);
+
+    var panel = modal.querySelector('.edetail__panel');
+    var closeBtn = modal.querySelector('.edetail__close');
+
+    function render(e, idx) {
+      var photos = e.photos || [];
+      var total = photos.length;
+      var chips = typeList(e.type).map(function (t) {
+        return '<span class="edetail__type">' + esc(t) + '</span>';
+      }).join('');
+
+      var insta = e.insta
+        ? '<a class="edetail__insta" href="' + esc(e.insta) + '" target="_blank" rel="noopener">' +
+            '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">' +
+              '<rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/>' +
+              '<circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/>' +
+              '<circle cx="17.2" cy="6.8" r="1.3" fill="currentColor"/>' +
+            '</svg><span>View on Instagram</span>' +
+          '</a>'
+        : '';
+
+      var grid = photos.map(function (file, i) {
+        return '<button class="edetail__tile" type="button" data-photo="' + i + '"' +
+          ' aria-label="' + esc('View photo ' + (i + 1) + ' of ' + total) + '">' +
+          '<img src="' + esc(thumbSrc(file)) + '" alt="' + (i === 0 ? esc(e.title) : '') + '"' +
+            ' loading="lazy" decoding="async"></button>';
+      }).join('');
+
+      panel.innerHTML =
+        '<header class="edetail__head">' +
+          (chips ? '<div class="edetail__types">' + chips + '</div>' : '') +
+          '<h2 class="edetail__title">' + esc(e.title) + '</h2>' +
+          '<p class="edetail__meta">' +
+            '<span>' + esc(e.when) + '</span>' +
+            '<span class="edetail__dot" aria-hidden="true">\u00b7</span>' +
+            '<span>' + esc(e.where) + '</span>' +
+          '</p>' +
+        '</header>' +
+        (e.description || (e.services && e.services.length) || insta
+          ? '<div class="edetail__story">' +
+              (e.description ? '<p class="edetail__desc">' + esc(e.description) + '</p>' : '') +
+              (e.services && e.services.length
+                ? '<div class="edetail__services">' +
+                    '<h3 class="edetail__subhead">What we provided</h3>' +
+                    '<ul class="edetail__servicelist">' + e.services.map(function (s) {
+                      return '<li>' + esc(s) + '</li>';
+                    }).join('') + '</ul>' +
+                  '</div>'
+                : '') +
+              (insta ? '<div class="edetail__links">' + insta + '</div>' : '') +
+            '</div>'
+          : '') +
+        '<div class="edetail__gallery">' +
+          '<h3 class="edetail__subhead">Gallery <span class="edetail__num">' + total + ' photos</span></h3>' +
+          '<div class="edetail__grid" data-detail-idx="' + idx + '">' + grid + '</div>' +
+        '</div>';
+
+      // Jump into the shared lightbox from any tile.
+      var gridEl = panel.querySelector('.edetail__grid');
+      gridEl.addEventListener('click', function (ev) {
+        var t = ev.target.closest('.edetail__tile');
+        if (!t || !openPhoto) return;
+        openPhoto(idx, Number(t.dataset.photo || 0), t);
+      });
+    }
+
+    function open(idx, trigger) {
+      var e = events[idx];
+      if (!e) return;
+      lastTrigger = trigger || null;
+      render(e, idx);
+      modal.hidden = false;
+      document.body.classList.add('has-lightbox');
+      panel.scrollTop = 0;
+      closeBtn.focus();
+    }
+
+    function close() {
+      modal.hidden = true;
+      // Only release the scroll lock if the lightbox has not taken over.
+      var lb = document.querySelector('.lightbox');
+      if (!lb || lb.hidden) document.body.classList.remove('has-lightbox');
+      if (lastTrigger && lastTrigger.focus) lastTrigger.focus();
+      lastTrigger = null;
+    }
+
+    scope.addEventListener('click', function (ev) {
+      var trigger = ev.target.closest('[data-detail]');
+      if (!trigger) return;
+      open(Number(trigger.dataset.detail), trigger);
+    });
+
+    modal.addEventListener('click', function (ev) {
+      if (ev.target.closest('.edetail__close') || ev.target === modal) close();
+    });
+
+    document.addEventListener('keydown', function (ev) {
+      if (modal.hidden) return;
+      // If the lightbox is open on top, let it own the keyboard.
+      var lb = document.querySelector('.lightbox');
+      if (lb && !lb.hidden) return;
+      if (ev.key === 'Escape') { close(); return; }
+      if (ev.key === 'Tab') {
+        var f = modal.querySelectorAll('button, a[href]');
+        if (!f.length) return;
+        var first = f[0], last = f[f.length - 1];
+        if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last.focus(); }
+        else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first.focus(); }
+      }
+    });
   }
 
   /* =================================================================
@@ -666,115 +814,56 @@
 
     var showcase = el('eventShowcase');
     if (showcase && D.eventShowcase) {
+      /* Uniform, uncluttered cover cards (client, Sep 2026: "not too much
+         words and photos on the cover — show everything when pressed in").
+         The whole card is one button; the write-up, services, Instagram link
+         and the full photo set live in the detail overlay that opens on tap.
+         initEventDetail (below) reuses the lightbox for full-size viewing. */
       showcase.innerHTML = D.eventShowcase.map(function (e, eIndex) {
         var photos = e.photos || [];
         var cover = photos[0] || '';
         var total = photos.length;
-
-        /* A "rich" entry carries a write-up, a services list or an Instagram
-           link (client, Sep 2026). Those read as a case study — a wide,
-           two-column card with the story beside a larger gallery. A plain
-           entry keeps the compact archive tile. */
         var hasStory = !!(e.description || (e.services && e.services.length) || e.insta);
 
-        var types = '<span class="eshow__types">' + typeList(e.type).map(function (t) {
-          return '<span class="eshow__type">' + esc(t) + '</span>';
-        }).join('') + '</span>';
+        var chips = typeList(e.type).map(function (t) {
+          return '<span class="ecov__type">' + esc(t) + '</span>';
+        }).join('');
 
-        var meta = '<p class="eshow__meta">' +
-          '<span class="eshow__metaitem">' + esc(e.when) + '</span>' +
-          '<span class="eshow__dot" aria-hidden="true">\u00b7</span>' +
-          '<span class="eshow__metaitem">' + esc(e.where) + '</span>' +
-        '</p>';
-
-        var moreBtn = '<button class="eshow__more" type="button" data-gallery="' + eIndex + '" data-photo="0">' +
-          'View all ' + total + ' photos &rsaquo;</button>';
-
-        var instaLink = e.insta
-          ? '<a class="eshow__insta" href="' + esc(e.insta) + '" target="_blank" rel="noopener"' +
-              ' aria-label="' + esc('View the ' + e.title + ' post on Instagram') + '">' +
-              '<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false">' +
-                '<rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/>' +
-                '<circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/>' +
-                '<circle cx="17.2" cy="6.8" r="1.3" fill="currentColor"/>' +
-              '</svg>' +
-              '<span>View on Instagram</span>' +
-            '</a>'
-          : '';
-
-        if (hasStory) {
-          // Wide case-study card: a mosaic of up to five photos beside the story.
-          var mosaic = photos.slice(0, 5);
-          var extra = total - mosaic.length;
-          var media = '<div class="eshow__media" role="group" aria-label="' +
-            esc(e.title + ' photos') + '">' +
-            mosaic.map(function (file, idx) {
-              var isLast = extra > 0 && idx === mosaic.length - 1;
-              return '<button class="eshow__tile' + (isLast ? ' eshow__tile--more' : '') + '" type="button"' +
-                ' data-gallery="' + eIndex + '" data-photo="' + idx + '"' +
-                ' aria-label="' + esc('View ' + e.title + ' photo ' + (idx + 1) + ' of ' + total) + '">' +
-                '<img src="' + esc(thumbSrc(file)) + '" alt="' + (idx === 0 ? esc(e.title) : '') + '"' +
-                  ' loading="lazy" decoding="async">' +
-                (idx === 0 ? '<span class="eshow__badge">' + total + ' photos</span>' : '') +
-                (isLast ? '<span class="eshow__tilemore">+' + extra + '</span>' : '') +
-              '</button>';
-            }).join('') +
-          '</div>';
-
-          return '<article class="eshow eshow--feature" data-type="' + esc(typeKeys(e.type).join(' ')) + '">' +
-            media +
-            '<div class="eshow__body">' +
-              types +
-              '<h3>' + esc(e.title) + '</h3>' +
-              meta +
-              (e.description ? '<p class="eshow__desc">' + esc(e.description) + '</p>' : '') +
-              (e.services && e.services.length
-                ? '<div class="eshow__services">' +
-                    '<h4 class="eshow__subhead">What we provided</h4>' +
-                    '<ul class="eshow__servicelist">' + e.services.map(function (s) {
-                      return '<li>' + esc(s) + '</li>';
-                    }).join('') + '</ul>' +
-                  '</div>'
+        return '<article class="ecov" data-type="' + esc(typeKeys(e.type).join(' ')) + '">' +
+          '<button class="ecov__open" type="button" data-detail="' + eIndex + '"' +
+            ' aria-label="' + esc('Open ' + e.title + ' — ' + total + ' photos' +
+              (hasStory ? ' and details' : '')) + '">' +
+            '<span class="ecov__media">' +
+              (cover
+                ? '<img src="' + esc(thumbSrc(cover)) + '" alt="' + esc(e.title) + '"' +
+                    ' loading="lazy" decoding="async">'
                 : '') +
-              '<div class="eshow__actions">' + moreBtn + instaLink + '</div>' +
-            '</div>' +
-          '</article>';
-        }
-
-        // Compact archive tile — a full-bleed cover the reader taps to open
-        // the gallery, with the type and photo count laid over the image and a
-        // tidy caption below (client, Sep 2026).
-        return '<article class="eshow" data-type="' + esc(typeKeys(e.type).join(' ')) + '">' +
-          (cover
-            ? '<button class="eshow__photo" type="button" data-gallery="' + eIndex + '" data-photo="0"' +
-                ' aria-label="' + esc('View all ' + total + ' photos from ' + e.title) + '">' +
-                '<img class="eshow__cover" src="' + esc(thumbSrc(cover)) + '" alt="' + esc(e.title) + '"' +
-                  ' loading="lazy" decoding="async">' +
-                '<span class="eshow__scrim" aria-hidden="true"></span>' +
-                (types ? '<span class="eshow__overtypes">' + typeList(e.type).map(function (t) {
-                  return '<span class="eshow__type">' + esc(t) + '</span>';
-                }).join('') + '</span>' : '') +
-                '<span class="eshow__badge">' +
-                  '<svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" focusable="false">' +
-                    '<rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>' +
-                    '<path d="M3 16l5-4 4 3 4-5 5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
-                  '</svg>' +
-                  total + ' photos</span>' +
-                '<span class="eshow__view" aria-hidden="true">View gallery &rsaquo;</span>' +
-              '</button>'
-            : '') +
-          '<div class="eshow__body">' +
-            '<h3>' + esc(e.title) + '</h3>' +
-            meta +
-          '</div>' +
+              '<span class="ecov__scrim" aria-hidden="true"></span>' +
+              (chips ? '<span class="ecov__types">' + chips + '</span>' : '') +
+              '<span class="ecov__count">' +
+                '<svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" focusable="false">' +
+                  '<rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>' +
+                  '<path d="M3 16l5-4 4 3 4-5 5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+                '</svg>' + total + '</span>' +
+              '<span class="ecov__cta" aria-hidden="true">' +
+                (hasStory ? 'View event' : 'View gallery') +
+                ' <svg viewBox="0 0 16 16" width="14" height="14" focusable="false"><path d="M5.5 3.2 10.3 8l-4.8 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+              '</span>' +
+            '</span>' +
+            '<span class="ecov__body">' +
+              '<span class="ecov__title">' + esc(e.title) + '</span>' +
+              '<span class="ecov__meta">' + esc(e.when) + '<span class="ecov__dot" aria-hidden="true">\u00b7</span>' + esc(e.where) + '</span>' +
+            '</span>' +
+          '</button>' +
         '</article>';
       }).join('');
-      initLightbox(showcase, {
+      var lb = initLightbox(showcase, {
         galleries: D.eventShowcase,
         full: fullSrc,
         thumb: thumbSrc,
         label: 'Event photo viewer'
       });
+      initEventDetail(showcase, D.eventShowcase, lb && lb.open);
       initShowcaseFilter(showcase);
     }
 
@@ -835,7 +924,7 @@
      the photo viewer's indices stay valid. */
   function initShowcaseFilter(showcase) {
     var chips = el('showcaseFilters');
-    var cards = Array.prototype.slice.call(showcase.querySelectorAll('.eshow'));
+    var cards = Array.prototype.slice.call(showcase.querySelectorAll('.ecov'));
     if (!chips || !cards.length) return;
 
     /* Every service gets a chip, in the order EVENT_TYPES lists them, even
