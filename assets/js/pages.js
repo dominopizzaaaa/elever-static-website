@@ -875,15 +875,15 @@
                     ' loading="lazy" decoding="async">'
                 : '') +
               '<span class="ecov__scrim" aria-hidden="true"></span>' +
-              '<span class="ecov__cta" aria-hidden="true">' +
-                (hasStory ? 'View event' : 'View gallery') +
-                ' <svg viewBox="0 0 16 16" width="14" height="14" focusable="false"><path d="M5.5 3.2 10.3 8l-4.8 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-              '</span>' +
             '</span>' +
             '<span class="ecov__body">' +
               (chips ? '<span class="ecov__types">' + chips + '</span>' : '') +
               '<span class="ecov__title">' + esc(e.title) + '</span>' +
               '<span class="ecov__meta">' + esc(e.when) + '<span class="ecov__sep" aria-hidden="true">|</span>' + esc(e.where) + '</span>' +
+              '<span class="ecov__cta" aria-hidden="true">' +
+                (hasStory ? 'View event' : 'View gallery') +
+                ' <svg viewBox="0 0 16 16" width="14" height="14" focusable="false"><path d="M5.5 3.2 10.3 8l-4.8 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+              '</span>' +
             '</span>' +
           '</button>' +
         '</article>';

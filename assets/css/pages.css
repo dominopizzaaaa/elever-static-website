@@ -628,14 +628,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .ecov__media img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;transition:transform .55s var(--ease)}
 .ecov__open:hover .ecov__media img{transform:scale(1.06)}
 .ecov__scrim{position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(180deg,rgba(8,10,16,.06) 0%,rgba(8,10,16,0) 40%,rgba(8,10,16,0) 55%,rgba(8,10,16,.45) 100%)}
-/* "View event / View gallery" cue slides up on hover; always shown on touch. */
-.ecov__cta{position:absolute;left:.7rem;bottom:.7rem;display:inline-flex;align-items:center;gap:.3rem;
-  padding:.34rem .72rem;border-radius:99px;background:var(--accent);color:#fff;font-size:.7rem;font-weight:800;
-  letter-spacing:.01em;pointer-events:none;opacity:0;transform:translateY(8px);
-  transition:opacity .28s,transform .28s var(--ease)}
-.ecov__cta svg{flex:none}
-.ecov__open:hover .ecov__cta,.ecov__open:focus-visible .ecov__cta{opacity:1;transform:translateY(0)}
+  background:linear-gradient(180deg,rgba(8,10,16,.05) 0%,rgba(8,10,16,0) 45%)}
 .ecov__body{display:block;padding:.9rem 1.05rem 1.05rem}
 /* Type sits on top of the title (client, Sep 2026). */
 .ecov__types{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.5rem}
@@ -643,7 +636,16 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   background:var(--accent-soft);padding:.2rem .5rem;border-radius:4px}
 .ecov__title{display:block;font-size:1.02rem;font-weight:800;letter-spacing:-.02em;line-height:1.35;color:var(--ink)}
 .ecov__meta{display:block;margin-top:.3rem;font-size:.8rem;color:var(--muted);line-height:1.5}
-.ecov__sep{margin:0 .5rem;color:var(--muted);font-weight:600}
+.ecov__sep{margin:0 .5rem}
+/* "View event / View gallery" cue appears below the date on hover (client,
+   Sep 2026); always shown on touch. It grows into place so the resting card
+   stays clean. */
+.ecov__cta{display:inline-flex;align-items:center;gap:.3rem;margin-top:0;color:var(--accent);
+  font-size:.78rem;font-weight:800;letter-spacing:.01em;
+  max-height:0;opacity:0;overflow:hidden;transform:translateY(-4px);
+  transition:max-height .28s var(--ease),opacity .28s,transform .28s var(--ease),margin-top .28s var(--ease)}
+.ecov__cta svg{flex:none}
+.ecov__open:hover .ecov__cta,.ecov__open:focus-visible .ecov__cta{max-height:1.6rem;opacity:1;transform:translateY(0);margin-top:.55rem}
 
 /* ---------- PAST EVENTS: detail overlay ---------- */
 .edetail{position:fixed;inset:0;z-index:1100;display:flex;justify-content:center;align-items:flex-start;
@@ -666,7 +668,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   background:var(--accent-soft);padding:.22rem .55rem;border-radius:4px}
 .edetail__title{font-size:clamp(1.5rem,3.2vw,2.15rem);font-weight:900;letter-spacing:-.03em;line-height:1.15}
 .edetail__meta{margin-top:.5rem;font-size:.9rem;color:var(--muted)}
-.edetail__sep{margin:0 .55rem;color:var(--muted);font-weight:600}
+.edetail__sep{margin:0 .55rem}
 
 .edetail__story{padding:1.6rem clamp(1.3rem,3.4vw,2.4rem);display:grid;gap:1.8rem;border-bottom:1px solid var(--line)}
 .edetail__desc{font-size:.98rem;color:var(--ink);line-height:1.75;max-width:66ch;margin:0}
@@ -681,7 +683,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   font-size:.9rem;color:var(--ink)}
 .edetail__servicelist li{padding-left:1.1rem;position:relative;line-height:1.5}
 .edetail__servicelist li::before{content:'';position:absolute;left:.1rem;top:.62em;width:.32rem;height:.32rem;
-  border-radius:99px;background:var(--accent)}
+  border-radius:99px;background:var(--ink)}
 /* Embedded Instagram reel — Instagram's script sets the width, so cap and
    centre it and give it a soft frame while it loads. */
 .edetail__reel{max-width:400px}
@@ -697,7 +699,6 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 
 @media(max-width:1000px){.eshowcase{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:820px){
-  .ecov__cta{opacity:1;transform:none}
   .edetail__grid{grid-template-columns:repeat(3,1fr)}
 }
 @media(max-width:620px){
@@ -706,7 +707,8 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   .edetail__grid{grid-template-columns:repeat(2,1fr)}
   .edetail__reel{max-width:none}
 }
-@media(hover:none){.ecov__cta{opacity:1;transform:none}}
+/* Touch devices have no hover, so keep the cue visible below the date. */
+@media(hover:none){.ecov__cta{max-height:1.6rem;opacity:1;transform:none;margin-top:.55rem}}
 @media(prefers-reduced-motion:reduce){
   .ecov__media img,.ecov__cta,.edetail__tile img{transition:none}
   .ecov__open:hover .ecov__media img,.edetail__tile:hover img{transform:none}
