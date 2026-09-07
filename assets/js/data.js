@@ -393,12 +393,14 @@
      originals in assets/img/Photos/Events/ with:
          bash tools/build-event-photos.sh
 
-     Three optional fields flesh out an entry when the story is worth telling
-     (client, Sep 2026). Any one can be omitted and the card simply drops it:
+     Two optional fields flesh out an entry when the story is worth telling
+     (client, Sep 2026). Either can be omitted and the detail overlay simply
+     drops it:
        description — one short paragraph on what the day was.
        services    — a list of what Élever provided end to end.
-       insta       — a public Instagram post URL; renders as a "View on
-                     Instagram" link on the card.                            */
+     (An earlier `insta` embed was dropped in Sep 2026 — the reel took up too
+     much room next to the photo gallery. The field is left on the SingHealth
+     entry for reference but is no longer rendered.) */
   var EVENT_PHOTO_BASE = 'assets/img/events/';
   var EVENT_THUMB_BASE = 'assets/img/events/thumb/';
 

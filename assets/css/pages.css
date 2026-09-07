@@ -684,10 +684,6 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .edetail__servicelist li{padding-left:1.1rem;position:relative;line-height:1.5}
 .edetail__servicelist li::before{content:'';position:absolute;left:.1rem;top:.62em;width:.32rem;height:.32rem;
   border-radius:99px;background:var(--ink)}
-/* Embedded Instagram reel — Instagram's script sets the width, so cap and
-   centre it and give it a soft frame while it loads. */
-.edetail__reel{max-width:400px}
-.edetail__reel .instagram-media{margin:0 auto !important;min-width:0 !important}
 
 .edetail__gallery{padding:1.6rem clamp(1.3rem,3.4vw,2.4rem) 2rem}
 .edetail__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}
@@ -705,7 +701,6 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   .eshowcase{grid-template-columns:1fr}
   .edetail__servicelist{grid-template-columns:1fr}
   .edetail__grid{grid-template-columns:repeat(2,1fr)}
-  .edetail__reel{max-width:none}
 }
 /* Touch devices have no hover, so keep the cue visible below the date. */
 @media(hover:none){.ecov__cta{max-height:1.6rem;opacity:1;transform:none;margin-top:.55rem}}

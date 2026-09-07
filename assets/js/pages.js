@@ -21,32 +21,6 @@
   function el(id) { return document.getElementById(id); }
   function sampleTag(item) { return item && item.placeholder ? ' <span class="sample" title="Sample content — replace in assets/js/data.js">sample</span>' : ''; }
 
-  /* Instagram embed helpers. A shared post URL carries tracking params
-     (?stkn=…, ?img_index=…) that break the oEmbed lookup, so the embed uses a
-     clean /p/<id>/ or /reel/<id>/ permalink. embed.js is loaded once, lazily —
-     only when an embed is actually placed on the page — then asked to render
-     each time a new blockquote appears. */
-  function instaPermalink(url) {
-    var m = /instagram\.com\/(p|reel|tv)\/([^/?#]+)/i.exec(String(url || ''));
-    return m ? 'https://www.instagram.com/' + m[1] + '/' + m[2] + '/' : url;
-  }
-  var instaScriptState = 0; // 0 = not requested, 1 = loading, 2 = ready
-  function processInstagram() {
-    if (window.instgrm && window.instgrm.Embeds && window.instgrm.Embeds.process) {
-      window.instgrm.Embeds.process();
-    }
-  }
-  function loadInstagramEmbeds() {
-    if (instaScriptState === 2) { processInstagram(); return; }
-    if (instaScriptState === 1) return; // onload will process
-    instaScriptState = 1;
-    var s = document.createElement('script');
-    s.async = true;
-    s.src = 'https://www.instagram.com/embed.js';
-    s.onload = function () { instaScriptState = 2; processInstagram(); };
-    document.body.appendChild(s);
-  }
-
   /* Photo path helpers. data.js stores bare filenames; the base directories
      live alongside so the full-size and thumbnail sets cannot drift apart.
      Events and camps keep separate directories, hence the pair of makers
@@ -283,20 +257,6 @@
         return '<span class="edetail__type">' + esc(t) + '</span>';
       }).join('');
 
-      /* Embed the Instagram post itself so the reel shows and plays inline,
-         rather than a button that leaves the site (client, Sep 2026). The
-         clean permalink (tracking params stripped) is what embed.js needs. */
-      var instaEmbed = e.insta
-        ? '<div class="edetail__reel">' +
-            '<h3 class="edetail__subhead">Highlight reel</h3>' +
-            '<blockquote class="instagram-media" data-instgrm-captioned' +
-              ' data-instgrm-permalink="' + esc(instaPermalink(e.insta)) + '"' +
-              ' data-instgrm-version="14">' +
-              '<a href="' + esc(instaPermalink(e.insta)) + '" target="_blank" rel="noopener">View this post on Instagram</a>' +
-            '</blockquote>' +
-          '</div>'
-        : '';
-
       var grid = photos.map(function (file, i) {
         return '<button class="edetail__tile" type="button" data-photo="' + i + '"' +
           ' aria-label="' + esc('View photo ' + (i + 1) + ' of ' + total) + '">' +
@@ -314,7 +274,7 @@
             '<span>' + esc(e.where) + '</span>' +
           '</p>' +
         '</header>' +
-        (e.description || (e.services && e.services.length) || instaEmbed
+        (e.description || (e.services && e.services.length)
           ? '<div class="edetail__story">' +
               (e.description ? '<p class="edetail__desc">' + esc(e.description) + '</p>' : '') +
               (e.services && e.services.length
@@ -325,7 +285,6 @@
                     }).join('') + '</ul>' +
                   '</div>'
                 : '') +
-              instaEmbed +
             '</div>'
           : '') +
         '<div class="edetail__gallery">' +
@@ -340,9 +299,6 @@
         if (!t || !openPhoto) return;
         openPhoto(idx, Number(t.dataset.photo || 0), t);
       });
-
-      // Ask Instagram's script to render (and re-render) any embed we added.
-      if (instaEmbed) loadInstagramEmbeds();
     }
 
     function open(idx, trigger) {
