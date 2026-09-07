@@ -608,9 +608,9 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .ecard__scope li::before{content:'·';position:absolute;left:.25rem;color:var(--accent);font-weight:800}
 
 /* ---------- PAST EVENTS: cover cards ----------
-   Deliberately minimal — one photo, the title and a date/venue line. The
-   write-up, services, Instagram link and full photo set are behind a tap,
-   in the .edetail overlay (client, Sep 2026). */
+   Deliberately minimal — one photo, the type on top of the title and a
+   date/venue line. The write-up, services, embedded reel and full photo set
+   are behind a tap, in the .edetail overlay (client, Sep 2026). */
 .eshowcase{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;align-items:start}
 .ecov{border-radius:var(--r-lg)}
 .ecov__open{display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;
@@ -622,15 +622,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .ecov__media img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;transition:transform .55s var(--ease)}
 .ecov__open:hover .ecov__media img{transform:scale(1.06)}
 .ecov__scrim{position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(180deg,rgba(8,10,16,.30) 0%,rgba(8,10,16,0) 30%,rgba(8,10,16,0) 55%,rgba(8,10,16,.55) 100%)}
-.ecov__types{position:absolute;top:.7rem;left:.7rem;display:flex;flex-wrap:wrap;gap:.3rem;pointer-events:none}
-.ecov__type{font-size:.58rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:#fff;
-  background:rgba(8,10,16,.5);padding:.2rem .5rem;border-radius:4px;
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-.ecov__count{position:absolute;top:.7rem;right:.7rem;display:inline-flex;align-items:center;gap:.28rem;
-  padding:.24rem .5rem;border-radius:99px;background:rgba(8,10,16,.55);color:#fff;font-size:.66rem;font-weight:800;
-  letter-spacing:.02em;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);pointer-events:none}
-.ecov__count svg{flex:none;opacity:.9}
+  background:linear-gradient(180deg,rgba(8,10,16,.06) 0%,rgba(8,10,16,0) 40%,rgba(8,10,16,0) 55%,rgba(8,10,16,.45) 100%)}
 /* "View event / View gallery" cue slides up on hover; always shown on touch. */
 .ecov__cta{position:absolute;left:.7rem;bottom:.7rem;display:inline-flex;align-items:center;gap:.3rem;
   padding:.34rem .72rem;border-radius:99px;background:var(--accent);color:#fff;font-size:.7rem;font-weight:800;
@@ -639,9 +631,13 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .ecov__cta svg{flex:none}
 .ecov__open:hover .ecov__cta,.ecov__open:focus-visible .ecov__cta{opacity:1;transform:translateY(0)}
 .ecov__body{display:block;padding:.9rem 1.05rem 1.05rem}
+/* Type sits on top of the title (client, Sep 2026). */
+.ecov__types{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.5rem}
+.ecov__type{font-size:.58rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);
+  background:var(--accent-soft);padding:.2rem .5rem;border-radius:4px}
 .ecov__title{display:block;font-size:1.02rem;font-weight:800;letter-spacing:-.02em;line-height:1.35;color:var(--ink)}
 .ecov__meta{display:block;margin-top:.3rem;font-size:.8rem;color:var(--muted);line-height:1.5}
-.ecov__dot{margin:0 .4rem;color:var(--line-2)}
+.ecov__sep{margin:0 .5rem;color:var(--muted);font-weight:600}
 
 /* ---------- PAST EVENTS: detail overlay ---------- */
 .edetail{position:fixed;inset:0;z-index:1100;display:flex;justify-content:center;align-items:flex-start;
@@ -664,26 +660,26 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   background:var(--accent-soft);padding:.22rem .55rem;border-radius:4px}
 .edetail__title{font-size:clamp(1.5rem,3.2vw,2.15rem);font-weight:900;letter-spacing:-.03em;line-height:1.15}
 .edetail__meta{margin-top:.5rem;font-size:.9rem;color:var(--muted)}
-.edetail__dot{margin:0 .5rem;color:var(--line-2)}
+.edetail__sep{margin:0 .55rem;color:var(--muted);font-weight:600}
 
-.edetail__story{padding:1.6rem clamp(1.3rem,3.4vw,2.4rem);display:grid;gap:1.5rem;border-bottom:1px solid var(--line)}
+.edetail__story{padding:1.6rem clamp(1.3rem,3.4vw,2.4rem);display:grid;gap:1.8rem;border-bottom:1px solid var(--line)}
 .edetail__desc{font-size:.98rem;color:var(--ink);line-height:1.75;max-width:66ch;margin:0}
 .edetail__subhead{font-size:.7rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
   margin-bottom:.85rem;display:flex;align-items:baseline;gap:.6rem}
+/* Section headings the client asked to keep in plain black, not upper-case
+   accent (Services provided / Highlights). */
+.edetail__subhead--plain{text-transform:none;letter-spacing:-.01em;color:var(--ink);font-size:1.05rem;font-weight:800}
 .edetail__num{font-size:.72rem;font-weight:700;letter-spacing:.02em;text-transform:none;color:var(--faint)}
+/* Point form (client, Sep 2026: "use point form instead of tick"). */
 .edetail__servicelist{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem 1.4rem;
   font-size:.9rem;color:var(--ink)}
-.edetail__servicelist li{padding-left:1.5rem;position:relative;line-height:1.5}
-.edetail__servicelist li::before{content:'';position:absolute;left:0;top:.5em;width:.85rem;height:.85rem;
-  border-radius:99px;background:var(--accent-soft)}
-.edetail__servicelist li::after{content:'';position:absolute;left:.28rem;top:.62em;width:.32rem;height:.16rem;
-  border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg)}
-.edetail__links{display:flex;flex-wrap:wrap;gap:.6rem}
-.edetail__insta{display:inline-flex;align-items:center;gap:.45rem;font-size:.86rem;font-weight:700;color:#fff;
-  text-decoration:none;padding:.55rem 1.05rem;border-radius:99px;
-  background:linear-gradient(120deg,#f9ce34,#ee2a7b 46%,#6228d7);transition:opacity .2s,transform .2s var(--ease)}
-.edetail__insta:hover{opacity:.92;transform:translateY(-1px)}
-.edetail__insta svg{flex:none}
+.edetail__servicelist li{padding-left:1.1rem;position:relative;line-height:1.5}
+.edetail__servicelist li::before{content:'';position:absolute;left:.1rem;top:.62em;width:.32rem;height:.32rem;
+  border-radius:99px;background:var(--accent)}
+/* Embedded Instagram reel — Instagram's script sets the width, so cap and
+   centre it and give it a soft frame while it loads. */
+.edetail__reel{max-width:400px}
+.edetail__reel .instagram-media{margin:0 auto !important;min-width:0 !important}
 
 .edetail__gallery{padding:1.6rem clamp(1.3rem,3.4vw,2.4rem) 2rem}
 .edetail__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}
@@ -702,6 +698,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   .eshowcase{grid-template-columns:1fr}
   .edetail__servicelist{grid-template-columns:1fr}
   .edetail__grid{grid-template-columns:repeat(2,1fr)}
+  .edetail__reel{max-width:none}
 }
 @media(hover:none){.ecov__cta{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){

@@ -404,7 +404,7 @@
 
   var EVENT_SHOWCASE = [
     {
-      title: 'SingHealth Presidents’ Challenge Sports Day 2026',
+      title: 'SingHealth President’s Challenge Sports Day 2026',
       type: ['Competition', 'Clinic'],
       when: '5 Sep 2026',
       where: 'Our Tampines Hub',
@@ -419,7 +419,10 @@
         'Backdrop'
       ],
       insta: 'https://www.instagram.com/p/Dc8cjOngS1X/?stkn=ZHVob3B3dW5kMWkw',
+      /* Photo 26 leads as the cover (client, Sep 2026); the rest follow in
+         their original order. */
       photos: [
+        'singhealth-sports-day-2026-26.jpg',
         'singhealth-sports-day-2026-1.jpg',
         'singhealth-sports-day-2026-2.jpg',
         'singhealth-sports-day-2026-3.jpg',
@@ -445,7 +448,6 @@
         'singhealth-sports-day-2026-23.jpg',
         'singhealth-sports-day-2026-24.jpg',
         'singhealth-sports-day-2026-25.jpg',
-        'singhealth-sports-day-2026-26.jpg',
         'singhealth-sports-day-2026-27.jpg',
         'singhealth-sports-day-2026-28.jpg',
         'singhealth-sports-day-2026-29.jpg'

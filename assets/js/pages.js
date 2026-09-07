@@ -21,6 +21,32 @@
   function el(id) { return document.getElementById(id); }
   function sampleTag(item) { return item && item.placeholder ? ' <span class="sample" title="Sample content — replace in assets/js/data.js">sample</span>' : ''; }
 
+  /* Instagram embed helpers. A shared post URL carries tracking params
+     (?stkn=…, ?img_index=…) that break the oEmbed lookup, so the embed uses a
+     clean /p/<id>/ or /reel/<id>/ permalink. embed.js is loaded once, lazily —
+     only when an embed is actually placed on the page — then asked to render
+     each time a new blockquote appears. */
+  function instaPermalink(url) {
+    var m = /instagram\.com\/(p|reel|tv)\/([^/?#]+)/i.exec(String(url || ''));
+    return m ? 'https://www.instagram.com/' + m[1] + '/' + m[2] + '/' : url;
+  }
+  var instaScriptState = 0; // 0 = not requested, 1 = loading, 2 = ready
+  function processInstagram() {
+    if (window.instgrm && window.instgrm.Embeds && window.instgrm.Embeds.process) {
+      window.instgrm.Embeds.process();
+    }
+  }
+  function loadInstagramEmbeds() {
+    if (instaScriptState === 2) { processInstagram(); return; }
+    if (instaScriptState === 1) return; // onload will process
+    instaScriptState = 1;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.instagram.com/embed.js';
+    s.onload = function () { instaScriptState = 2; processInstagram(); };
+    document.body.appendChild(s);
+  }
+
   /* Photo path helpers. data.js stores bare filenames; the base directories
      live alongside so the full-size and thumbnail sets cannot drift apart.
      Events and camps keep separate directories, hence the pair of makers
@@ -257,14 +283,18 @@
         return '<span class="edetail__type">' + esc(t) + '</span>';
       }).join('');
 
-      var insta = e.insta
-        ? '<a class="edetail__insta" href="' + esc(e.insta) + '" target="_blank" rel="noopener">' +
-            '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">' +
-              '<rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/>' +
-              '<circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/>' +
-              '<circle cx="17.2" cy="6.8" r="1.3" fill="currentColor"/>' +
-            '</svg><span>View on Instagram</span>' +
-          '</a>'
+      /* Embed the Instagram post itself so the reel shows and plays inline,
+         rather than a button that leaves the site (client, Sep 2026). The
+         clean permalink (tracking params stripped) is what embed.js needs. */
+      var instaEmbed = e.insta
+        ? '<div class="edetail__reel">' +
+            '<h3 class="edetail__subhead">Highlight reel</h3>' +
+            '<blockquote class="instagram-media" data-instgrm-captioned' +
+              ' data-instgrm-permalink="' + esc(instaPermalink(e.insta)) + '"' +
+              ' data-instgrm-version="14">' +
+              '<a href="' + esc(instaPermalink(e.insta)) + '" target="_blank" rel="noopener">View this post on Instagram</a>' +
+            '</blockquote>' +
+          '</div>'
         : '';
 
       var grid = photos.map(function (file, i) {
@@ -280,26 +310,26 @@
           '<h2 class="edetail__title">' + esc(e.title) + '</h2>' +
           '<p class="edetail__meta">' +
             '<span>' + esc(e.when) + '</span>' +
-            '<span class="edetail__dot" aria-hidden="true">\u00b7</span>' +
+            '<span class="edetail__sep" aria-hidden="true">|</span>' +
             '<span>' + esc(e.where) + '</span>' +
           '</p>' +
         '</header>' +
-        (e.description || (e.services && e.services.length) || insta
+        (e.description || (e.services && e.services.length) || instaEmbed
           ? '<div class="edetail__story">' +
               (e.description ? '<p class="edetail__desc">' + esc(e.description) + '</p>' : '') +
               (e.services && e.services.length
                 ? '<div class="edetail__services">' +
-                    '<h3 class="edetail__subhead">What we provided</h3>' +
+                    '<h3 class="edetail__subhead edetail__subhead--plain">Services provided</h3>' +
                     '<ul class="edetail__servicelist">' + e.services.map(function (s) {
                       return '<li>' + esc(s) + '</li>';
                     }).join('') + '</ul>' +
                   '</div>'
                 : '') +
-              (insta ? '<div class="edetail__links">' + insta + '</div>' : '') +
+              instaEmbed +
             '</div>'
           : '') +
         '<div class="edetail__gallery">' +
-          '<h3 class="edetail__subhead">Gallery <span class="edetail__num">' + total + ' photos</span></h3>' +
+          '<h3 class="edetail__subhead edetail__subhead--plain">Highlights <span class="edetail__num">' + total + ' photos</span></h3>' +
           '<div class="edetail__grid" data-detail-idx="' + idx + '">' + grid + '</div>' +
         '</div>';
 
@@ -310,6 +340,9 @@
         if (!t || !openPhoto) return;
         openPhoto(idx, Number(t.dataset.photo || 0), t);
       });
+
+      // Ask Instagram's script to render (and re-render) any embed we added.
+      if (instaEmbed) loadInstagramEmbeds();
     }
 
     function open(idx, trigger) {
@@ -839,20 +872,15 @@
                     ' loading="lazy" decoding="async">'
                 : '') +
               '<span class="ecov__scrim" aria-hidden="true"></span>' +
-              (chips ? '<span class="ecov__types">' + chips + '</span>' : '') +
-              '<span class="ecov__count">' +
-                '<svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" focusable="false">' +
-                  '<rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>' +
-                  '<path d="M3 16l5-4 4 3 4-5 5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
-                '</svg>' + total + '</span>' +
               '<span class="ecov__cta" aria-hidden="true">' +
                 (hasStory ? 'View event' : 'View gallery') +
                 ' <svg viewBox="0 0 16 16" width="14" height="14" focusable="false"><path d="M5.5 3.2 10.3 8l-4.8 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
               '</span>' +
             '</span>' +
             '<span class="ecov__body">' +
+              (chips ? '<span class="ecov__types">' + chips + '</span>' : '') +
               '<span class="ecov__title">' + esc(e.title) + '</span>' +
-              '<span class="ecov__meta">' + esc(e.when) + '<span class="ecov__dot" aria-hidden="true">\u00b7</span>' + esc(e.where) + '</span>' +
+              '<span class="ecov__meta">' + esc(e.when) + '<span class="ecov__sep" aria-hidden="true">|</span>' + esc(e.where) + '</span>' +
             '</span>' +
           '</button>' +
         '</article>';
