@@ -741,33 +741,31 @@
           '</article>';
         }
 
-        // Compact archive tile — cover, three thumbs, view-all.
-        var strip = photos.slice(1, 4);
-        var hidden = total - 1 - strip.length;
-
+        // Compact archive tile — a full-bleed cover the reader taps to open
+        // the gallery, with the type and photo count laid over the image and a
+        // tidy caption below (client, Sep 2026).
         return '<article class="eshow" data-type="' + esc(typeKeys(e.type).join(' ')) + '">' +
           (cover
             ? '<button class="eshow__photo" type="button" data-gallery="' + eIndex + '" data-photo="0"' +
                 ' aria-label="' + esc('View all ' + total + ' photos from ' + e.title) + '">' +
                 '<img class="eshow__cover" src="' + esc(thumbSrc(cover)) + '" alt="' + esc(e.title) + '"' +
                   ' loading="lazy" decoding="async">' +
-                '<span class="eshow__badge">' + total + ' photos</span>' +
+                '<span class="eshow__scrim" aria-hidden="true"></span>' +
+                (types ? '<span class="eshow__overtypes">' + typeList(e.type).map(function (t) {
+                  return '<span class="eshow__type">' + esc(t) + '</span>';
+                }).join('') + '</span>' : '') +
+                '<span class="eshow__badge">' +
+                  '<svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" focusable="false">' +
+                    '<rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>' +
+                    '<path d="M3 16l5-4 4 3 4-5 5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+                  '</svg>' +
+                  total + ' photos</span>' +
+                '<span class="eshow__view" aria-hidden="true">View gallery &rsaquo;</span>' +
               '</button>'
             : '') +
           '<div class="eshow__body">' +
-            types +
             '<h3>' + esc(e.title) + '</h3>' +
             meta +
-            '<div class="eshow__thumbs">' + strip.map(function (file, idx) {
-              var isLast = hidden > 0 && idx === strip.length - 1;
-              return '<button class="eshow__thumb' + (isLast ? ' eshow__thumb--more' : '') + '" type="button"' +
-                ' data-gallery="' + eIndex + '" data-photo="' + (idx + 1) + '"' +
-                ' aria-label="' + esc('View ' + e.title + ' photo ' + (idx + 2) + ' of ' + total) + '">' +
-                '<img src="' + esc(thumbSrc(file)) + '" alt="" loading="lazy" decoding="async">' +
-                (isLast ? '<span class="eshow__thumbmore">+' + hidden + '</span>' : '') +
-              '</button>';
-            }).join('') + '</div>' +
-            moreBtn +
           '</div>' +
         '</article>';
       }).join('');

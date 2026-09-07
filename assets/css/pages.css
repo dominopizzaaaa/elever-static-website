@@ -608,31 +608,40 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .ecard__scope li::before{content:'·';position:absolute;left:.25rem;color:var(--accent);font-weight:800}
 
 /* event photo showcase */
-.eshowcase{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;align-items:start}
+.eshowcase{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;align-items:start}
 .eshow{overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
-  transition:transform .25s var(--ease),box-shadow .25s,border-color .25s}
-.eshow:hover{transform:translateY(-3px);box-shadow:var(--shadow-sm);border-color:var(--line-2)}
-.eshow__photo,.eshow__thumb,.eshow__more,.eshow__tile{font:inherit;cursor:pointer}
-.eshow__photo{display:block;width:100%;border:0;background:transparent;padding:0}
-.eshow__cover{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--panel-2);display:block}
-.eshow__body{padding:1rem 1.05rem 1.1rem}
+  transition:transform .28s var(--ease),box-shadow .28s,border-color .28s}
+.eshow:hover{transform:translateY(-4px);box-shadow:var(--shadow-md,0 14px 40px rgba(8,10,16,.12));border-color:var(--line-2)}
+.eshow__photo,.eshow__more,.eshow__tile{font:inherit;cursor:pointer}
+.eshow__photo{display:block;width:100%;border:0;background:var(--panel-2);padding:0;position:relative}
+.eshow__cover{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--panel-2);display:block;
+  transition:transform .5s var(--ease)}
+.eshow:hover .eshow__cover{transform:scale(1.05)}
+/* Bottom-up scrim so the overlaid count and hover cue stay legible on any photo. */
+.eshow__scrim{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(8,10,16,.28) 0%,rgba(8,10,16,0) 26%,rgba(8,10,16,0) 52%,rgba(8,10,16,.62) 100%)}
+.eshow__body{padding:.95rem 1.05rem 1.1rem}
 .eshow__types{display:flex;flex-wrap:wrap;gap:.28rem;margin-bottom:.55rem}
 .eshow__type{display:inline-block;font-size:.6rem;font-weight:800;letter-spacing:.11em;
   text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.18rem .48rem;border-radius:4px}
-.eshow h3{font-size:1rem;font-weight:800;letter-spacing:-.02em;line-height:1.35;margin-bottom:.35rem}
-.eshow__meta{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem;font-size:.8rem;color:var(--muted);line-height:1.5;margin-bottom:.85rem}
+/* Type chips laid over the top-left of the cover — frosted so they read on photos. */
+.eshow__overtypes{position:absolute;top:.7rem;left:.7rem;display:flex;flex-wrap:wrap;gap:.3rem;pointer-events:none}
+.eshow__overtypes .eshow__type{color:#fff;background:rgba(8,10,16,.5);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.eshow h3{font-size:1.02rem;font-weight:800;letter-spacing:-.02em;line-height:1.35;margin-bottom:.35rem}
+.eshow__meta{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem;font-size:.8rem;color:var(--muted);line-height:1.5}
 .eshow__dot{color:var(--line-2)}
-.eshow__thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:.38rem}
-.eshow__thumb{border:0;background:transparent;padding:0;border-radius:8px;overflow:hidden;position:relative}
-.eshow__thumb img{width:100%;aspect-ratio:1/1;object-fit:cover;background:var(--panel-2);display:block;transition:transform .25s var(--ease)}
-.eshow__thumb:hover img,.eshow__photo:hover img,.eshow__tile:hover img{transform:scale(1.03)}
-.eshow__photo{position:relative}
-.eshow__badge{position:absolute;right:.6rem;bottom:.6rem;padding:.28rem .55rem;border-radius:99px;
-  background:rgba(8,10,16,.72);color:#fff;font-size:.66rem;font-weight:800;letter-spacing:.02em;
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);pointer-events:none}
-.eshow__thumb--more img{filter:brightness(.5)}
-.eshow__thumbmore{position:absolute;inset:0;display:grid;place-items:center;color:#fff;
-  font-size:.82rem;font-weight:800;letter-spacing:-.01em;pointer-events:none}
+/* Photo count, bottom-left over the cover. */
+.eshow__badge{position:absolute;left:.7rem;bottom:.7rem;display:inline-flex;align-items:center;gap:.32rem;
+  padding:.3rem .6rem;border-radius:99px;background:rgba(8,10,16,.62);color:#fff;font-size:.68rem;font-weight:800;
+  letter-spacing:.02em;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);pointer-events:none}
+.eshow__badge svg{flex:none;opacity:.9}
+/* Hover cue, bottom-right — slides in on hover, always present for keyboard focus. */
+.eshow__view{position:absolute;right:.7rem;bottom:.7rem;padding:.34rem .7rem;border-radius:99px;
+  background:var(--accent);color:#fff;font-size:.7rem;font-weight:800;letter-spacing:.01em;pointer-events:none;
+  opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s var(--ease)}
+.eshow:hover .eshow__view,.eshow__photo:focus-visible .eshow__view{opacity:1;transform:translateY(0)}
+.eshow__photo:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .eshow__more{margin-top:0;border:0;background:transparent;color:var(--accent);font-size:.78rem;font-weight:700;padding:0}
 .eshow__more:hover{text-decoration:underline}
 
@@ -661,7 +670,8 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .eshow--feature .eshow__media{display:grid;grid-template-columns:1.4fr 1fr;grid-template-rows:1fr 1fr;
   gap:.3rem;min-height:100%}
 .eshow__tile{border:0;background:var(--panel-2);padding:0;overflow:hidden;position:relative;display:block}
-.eshow__tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s var(--ease)}
+.eshow__tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s var(--ease)}
+.eshow__tile:hover img{transform:scale(1.05)}
 .eshow__tile:first-child{grid-row:1 / span 2}
 .eshow__tile--more img{filter:brightness(.45)}
 .eshow__tilemore{position:absolute;inset:0;display:grid;place-items:center;color:#fff;
@@ -673,11 +683,18 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   .eshow--feature .eshow__media{grid-template-columns:1fr 1fr;grid-template-rows:auto;aspect-ratio:16/9}
   .eshow__tile:first-child{grid-row:1 / span 2}
   .eshow--feature .eshow__body{padding:1.3rem 1.3rem 1.4rem}
+  /* Touch: no hover, so the "View gallery" cue is always shown. */
+  .eshow__view{opacity:1;transform:none}
 }
 @media(max-width:620px){
   .eshowcase{grid-template-columns:1fr}
   .eshow__servicelist{grid-template-columns:1fr}
   .eshow--feature .eshow__media{aspect-ratio:4/3}
+}
+@media(hover:none){.eshow__view{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .eshow__cover,.eshow__tile img,.eshow__view{transition:none}
+  .eshow:hover .eshow__cover,.eshow__tile:hover img{transform:none}
 }
 /* ---------- FULL-SCREEN GALLERY VIEWER ---------- */
 .lightbox{position:fixed;inset:0;z-index:1000;background:rgba(8,10,16,.985);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
