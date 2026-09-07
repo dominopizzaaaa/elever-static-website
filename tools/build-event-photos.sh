@@ -22,6 +22,7 @@ slug_for() {
     *"Serangoon-Paya Lebar Badminton Clinic 2026"*) echo "serangoon-paya-lebar-clinic-2026" ;;
     *"Joo Chiat Badminton Carnival 2026"*)          echo "joo-chiat-carnival-2026" ;;
     *"ASICS Badminton Summit 2026"*)                echo "asics-summit-2026" ;;
+    *"SingHealth President"*"Sports Day 2026"*)     echo "singhealth-sports-day-2026" ;;
     *) echo "" ;;
   esac
 }

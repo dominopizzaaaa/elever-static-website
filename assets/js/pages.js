@@ -670,7 +670,78 @@
         var photos = e.photos || [];
         var cover = photos[0] || '';
         var total = photos.length;
-        // Three thumbs under the cover; the rest are reachable in the viewer.
+
+        /* A "rich" entry carries a write-up, a services list or an Instagram
+           link (client, Sep 2026). Those read as a case study — a wide,
+           two-column card with the story beside a larger gallery. A plain
+           entry keeps the compact archive tile. */
+        var hasStory = !!(e.description || (e.services && e.services.length) || e.insta);
+
+        var types = '<span class="eshow__types">' + typeList(e.type).map(function (t) {
+          return '<span class="eshow__type">' + esc(t) + '</span>';
+        }).join('') + '</span>';
+
+        var meta = '<p class="eshow__meta">' +
+          '<span class="eshow__metaitem">' + esc(e.when) + '</span>' +
+          '<span class="eshow__dot" aria-hidden="true">\u00b7</span>' +
+          '<span class="eshow__metaitem">' + esc(e.where) + '</span>' +
+        '</p>';
+
+        var moreBtn = '<button class="eshow__more" type="button" data-gallery="' + eIndex + '" data-photo="0">' +
+          'View all ' + total + ' photos &rsaquo;</button>';
+
+        var instaLink = e.insta
+          ? '<a class="eshow__insta" href="' + esc(e.insta) + '" target="_blank" rel="noopener"' +
+              ' aria-label="' + esc('View the ' + e.title + ' post on Instagram') + '">' +
+              '<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false">' +
+                '<rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/>' +
+                '<circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/>' +
+                '<circle cx="17.2" cy="6.8" r="1.3" fill="currentColor"/>' +
+              '</svg>' +
+              '<span>View on Instagram</span>' +
+            '</a>'
+          : '';
+
+        if (hasStory) {
+          // Wide case-study card: a mosaic of up to five photos beside the story.
+          var mosaic = photos.slice(0, 5);
+          var extra = total - mosaic.length;
+          var media = '<div class="eshow__media" role="group" aria-label="' +
+            esc(e.title + ' photos') + '">' +
+            mosaic.map(function (file, idx) {
+              var isLast = extra > 0 && idx === mosaic.length - 1;
+              return '<button class="eshow__tile' + (isLast ? ' eshow__tile--more' : '') + '" type="button"' +
+                ' data-gallery="' + eIndex + '" data-photo="' + idx + '"' +
+                ' aria-label="' + esc('View ' + e.title + ' photo ' + (idx + 1) + ' of ' + total) + '">' +
+                '<img src="' + esc(thumbSrc(file)) + '" alt="' + (idx === 0 ? esc(e.title) : '') + '"' +
+                  ' loading="lazy" decoding="async">' +
+                (idx === 0 ? '<span class="eshow__badge">' + total + ' photos</span>' : '') +
+                (isLast ? '<span class="eshow__tilemore">+' + extra + '</span>' : '') +
+              '</button>';
+            }).join('') +
+          '</div>';
+
+          return '<article class="eshow eshow--feature" data-type="' + esc(typeKeys(e.type).join(' ')) + '">' +
+            media +
+            '<div class="eshow__body">' +
+              types +
+              '<h3>' + esc(e.title) + '</h3>' +
+              meta +
+              (e.description ? '<p class="eshow__desc">' + esc(e.description) + '</p>' : '') +
+              (e.services && e.services.length
+                ? '<div class="eshow__services">' +
+                    '<h4 class="eshow__subhead">What we provided</h4>' +
+                    '<ul class="eshow__servicelist">' + e.services.map(function (s) {
+                      return '<li>' + esc(s) + '</li>';
+                    }).join('') + '</ul>' +
+                  '</div>'
+                : '') +
+              '<div class="eshow__actions">' + moreBtn + instaLink + '</div>' +
+            '</div>' +
+          '</article>';
+        }
+
+        // Compact archive tile — cover, three thumbs, view-all.
         var strip = photos.slice(1, 4);
         var hidden = total - 1 - strip.length;
 
@@ -684,11 +755,9 @@
               '</button>'
             : '') +
           '<div class="eshow__body">' +
-            '<span class="eshow__types">' + typeList(e.type).map(function (t) {
-              return '<span class="eshow__type">' + esc(t) + '</span>';
-            }).join('') + '</span>' +
+            types +
             '<h3>' + esc(e.title) + '</h3>' +
-            '<p>' + esc(e.when) + ' \u00b7 ' + esc(e.where) + '</p>' +
+            meta +
             '<div class="eshow__thumbs">' + strip.map(function (file, idx) {
               var isLast = hidden > 0 && idx === strip.length - 1;
               return '<button class="eshow__thumb' + (isLast ? ' eshow__thumb--more' : '') + '" type="button"' +
@@ -698,8 +767,7 @@
                 (isLast ? '<span class="eshow__thumbmore">+' + hidden + '</span>' : '') +
               '</button>';
             }).join('') + '</div>' +
-            '<button class="eshow__more" type="button" data-gallery="' + eIndex + '" data-photo="0">' +
-              'View all ' + total + ' photos &rsaquo;</button>' +
+            moreBtn +
           '</div>' +
         '</article>';
       }).join('');

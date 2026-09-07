@@ -361,22 +361,7 @@
      `type` takes either one name or a list. A list renders as one chip per
      type and, once the event moves down to EVENT_SHOWCASE, files it under
      every one of those filters in Past Events (client, Sep 2026). */
-  var EVENTS_UPCOMING = [
-    {
-      title: 'SingHealth Presidents’ Challenge Sports Day 2026',
-      type: ['Competition', 'Clinic'],
-      when: '5 Sep 2026',
-      time: '08:30 – 14:00',
-      where: 'Our Tampines Hub',
-      map: 'https://www.google.com/maps/search/?api=1&query=' +
-        encodeURIComponent('Our Tampines Hub, 1 Tampines Walk, Singapore 528523'),
-      scope: [
-        'Badminton and Pickleball Tournament',
-        'Badminton and Pickleball Clinics'
-      ],
-      feature: true
-    }
-  ];
+  var EVENTS_UPCOMING = [];
 
   /* Previous events, grouped by pillar.
      Not rendered right now — the "Previously" log was removed from
@@ -406,11 +391,66 @@
      used in the lightbox) and `eventThumbBase` (grid thumbnails) supply the
      directories, so both sets stay in sync. Regenerate both from the
      originals in assets/img/Photos/Events/ with:
-         bash tools/build-event-photos.sh                              */
+         bash tools/build-event-photos.sh
+
+     Three optional fields flesh out an entry when the story is worth telling
+     (client, Sep 2026). Any one can be omitted and the card simply drops it:
+       description — one short paragraph on what the day was.
+       services    — a list of what Élever provided end to end.
+       insta       — a public Instagram post URL; renders as a "View on
+                     Instagram" link on the card.                            */
   var EVENT_PHOTO_BASE = 'assets/img/events/';
   var EVENT_THUMB_BASE = 'assets/img/events/thumb/';
 
   var EVENT_SHOWCASE = [
+    {
+      title: 'SingHealth Presidents’ Challenge Sports Day 2026',
+      type: ['Competition', 'Clinic'],
+      when: '5 Sep 2026',
+      where: 'Our Tampines Hub',
+      slug: 'singhealth-sports-day-2026',
+      description: 'An internal corporate sports day for around 200 staff — a badminton and pickleball tournament paired with coaching clinics for both sports, led by top players and former Singapore national team players. On the tournament side we provided an end-to-end service, from RnR to pre-planning like court layout and flow, scheduling, on-site registration and admin such as score reporting, certified umpires for both sports, and emcee and backdrop printing.',
+      services: [
+        'Tournament management — set-up, scheduling, rules & regulations, on-site registration and admin',
+        'Certified umpires',
+        'Coaching clinic programme and execution',
+        'Certified coaches',
+        'Emcee',
+        'Backdrop'
+      ],
+      insta: 'https://www.instagram.com/p/Dc8cjOngS1X/?stkn=ZHVob3B3dW5kMWkw',
+      photos: [
+        'singhealth-sports-day-2026-1.jpg',
+        'singhealth-sports-day-2026-2.jpg',
+        'singhealth-sports-day-2026-3.jpg',
+        'singhealth-sports-day-2026-4.jpg',
+        'singhealth-sports-day-2026-5.jpg',
+        'singhealth-sports-day-2026-6.jpg',
+        'singhealth-sports-day-2026-7.jpg',
+        'singhealth-sports-day-2026-8.jpg',
+        'singhealth-sports-day-2026-9.jpg',
+        'singhealth-sports-day-2026-10.jpg',
+        'singhealth-sports-day-2026-11.jpg',
+        'singhealth-sports-day-2026-12.jpg',
+        'singhealth-sports-day-2026-13.jpg',
+        'singhealth-sports-day-2026-14.jpg',
+        'singhealth-sports-day-2026-15.jpg',
+        'singhealth-sports-day-2026-16.jpg',
+        'singhealth-sports-day-2026-17.jpg',
+        'singhealth-sports-day-2026-18.jpg',
+        'singhealth-sports-day-2026-19.jpg',
+        'singhealth-sports-day-2026-20.jpg',
+        'singhealth-sports-day-2026-21.jpg',
+        'singhealth-sports-day-2026-22.jpg',
+        'singhealth-sports-day-2026-23.jpg',
+        'singhealth-sports-day-2026-24.jpg',
+        'singhealth-sports-day-2026-25.jpg',
+        'singhealth-sports-day-2026-26.jpg',
+        'singhealth-sports-day-2026-27.jpg',
+        'singhealth-sports-day-2026-28.jpg',
+        'singhealth-sports-day-2026-29.jpg'
+      ]
+    },
     {
       title: 'ASICS Badminton Summit 2026',
       type: 'Clinic',
