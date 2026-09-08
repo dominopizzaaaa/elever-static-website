@@ -493,9 +493,10 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .vcard__sessions li + li::before{content:"";position:absolute;top:0;left:.15rem;right:.15rem;
   border-top:1px solid var(--line)}
 /* Same-day rows: shorten the divider so it runs from the time column to the
-   end, leaving the day column clear. A row carrying vcard__day--repeat shares
-   its day with the row above, so the boundary at its top is a within-day one. */
-.vcard__sessions li + li.vcard__day--repeat::before{left:calc(.15rem + var(--day-col) + .6rem)}
+   end, leaving the day column clear. The li carries vcard__row--sameday when
+   it shares its day with the row above, so the boundary at its top is a
+   within-day one. */
+.vcard__sessions li.vcard__row--sameday::before{left:calc(.15rem + var(--day-col) + .6rem)}
 .vcard__sessions li:first-child{padding-top:.3rem}
 .vcard__sessions li:last-child{padding-bottom:.15rem}
 .vcard__day{font-weight:750;color:var(--navy);white-space:nowrap}
@@ -517,7 +518,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   .vcard__sessions li{grid-template-columns:1fr auto}
   .vcard__day--repeat{display:none}
   /* The day column is hidden on phones, so every divider spans the full row. */
-  .vcard__sessions li + li.vcard__day--repeat::before{left:.15rem}
+  .vcard__sessions li.vcard__row--sameday::before{left:.15rem}
   .vcard__time{grid-column:1}
   .vcard__lvl{grid-column:2;grid-row:1/3}
 }

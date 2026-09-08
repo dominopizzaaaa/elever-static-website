@@ -656,7 +656,7 @@
                   var dayCell = sameAsPrev
                     ? '<span class="vcard__day vcard__day--repeat" aria-label="' + esc(s.day) + '"></span>'
                     : '<span class="vcard__day">' + esc(s.day) + '</span>';
-                  return '<li>' + dayCell +
+                  return '<li' + (sameAsPrev ? ' class="vcard__row--sameday"' : '') + '>' + dayCell +
                     '<span class="vcard__time">' + esc(s.time) + '</span>' +
                     '<span class="vcard__lvl">' + esc(s.level) + '</span>' +
                     '</li>';
