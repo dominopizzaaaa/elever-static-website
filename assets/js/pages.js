@@ -529,6 +529,7 @@
 
     /* Keyboard: the standard tablist keys move and focus the selected tab. */
     root.addEventListener('keydown', function (e) {
+      if (!e.target.closest('.ctabs__tab')) return;
       if (e.key === 'ArrowRight') { go(active + 1); tabs[active].focus(); e.preventDefault(); }
       else if (e.key === 'ArrowLeft') { go(active - 1); tabs[active].focus(); e.preventDefault(); }
       else if (e.key === 'Home') { go(0); tabs[active].focus(); e.preventDefault(); }
@@ -1321,6 +1322,25 @@
     var forms = document.querySelectorAll('form[data-lead]');
     if (!forms.length) return;
 
+    /* Contextual Contact links preselect the relevant enquiry type while the
+       hash still reaches the form when JavaScript is unavailable. */
+    var contactForm = el('contact-form');
+    if (contactForm) {
+      var contactTopic = contactForm.querySelector('[name="Topic"]');
+      var contactName = contactForm.querySelector('[name="Name"]');
+      document.querySelectorAll('[data-contact-topic]').forEach(function (link) {
+        link.addEventListener('click', function () {
+          if (contactTopic) {
+            contactTopic.value = link.getAttribute('data-contact-topic') || '';
+            contactTopic.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+          window.setTimeout(function () {
+            if (contactName) contactName.focus({ preventScroll: true });
+          }, 350);
+        });
+      });
+    }
+
     forms.forEach(function (form) {
       var status = form.querySelector('.lead__status');
       function clearErrors() {
@@ -1388,6 +1408,7 @@
 
         var submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) submitBtn.disabled = true;
+        form.setAttribute('aria-busy', 'true');
         if (status) {
           status.textContent = 'Sending your message…';
           status.className = 'lead__status';
@@ -1413,6 +1434,7 @@
           fallbackMailto();
         }).then(function () {
           if (submitBtn) submitBtn.disabled = false;
+          form.removeAttribute('aria-busy');
         });
       });
     });

@@ -35,7 +35,13 @@ for dir in "$SRC"/*/; do
     continue
   fi
 
-  # Deterministic order so numbering is stable across runs.
+  # Clear only this event's generated files. This matters when a curated set
+  # becomes shorter: stale numbered photos must not survive in either output.
+  find "$OUT" -maxdepth 1 -type f -name "$slug-*.jpg" -delete
+  find "$THUMB" -maxdepth 1 -type f -name "$slug-*.jpg" -delete
+
+  # Deterministic lexical order; curated source names are zero-padded so their
+  # order is explicit and stable across platforms.
   n=0
   while IFS= read -r f; do
     n=$((n+1))

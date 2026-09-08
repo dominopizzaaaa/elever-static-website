@@ -62,7 +62,7 @@
       <div class="paths" id="pathsGrid"></div>
     </section>
 
-    <!-- ===== CLASS TYPE TABS (ElevenLabs-style) ===== -->
+    <!-- ===== CLASS TYPE SELECTOR ===== -->
     <!-- Trial and placement section removed at the client's request (Aug 2026).
          Copy is preserved in the "EB Website for Dom" Google Doc if it returns. -->
     <section class="psec psec--alt" id="locations">
@@ -73,14 +73,20 @@
           <h2>Class Type</h2>
         </div>
 
-        <!-- Tab shell: a pale blue glass rail, visually distinct from the
-             solid enquiry buttons, above a swipeable panel area. -->
+        <!-- Flat editorial navigation, deliberately distinct from the rounded
+             blue booking and enquiry actions used elsewhere. -->
         <div class="ctabs" id="classCarousel" data-active="0">
           <div class="ctabs__rail" role="tablist" aria-label="Choose a class type">
             <button class="ctabs__tab is-active" type="button" role="tab" id="ctab-group"
-              aria-selected="true" aria-controls="detail-group" data-goto="0">Group Classes</button>
+              aria-selected="true" aria-controls="detail-group" data-goto="0">
+              <span class="ctabs__index" aria-hidden="true">01 / Group</span>
+              <span class="ctabs__label">Group Classes</span>
+            </button>
             <button class="ctabs__tab" type="button" role="tab" id="ctab-private"
-              aria-selected="false" aria-controls="detail-private" data-goto="1" tabindex="-1">Private Classes</button>
+              aria-selected="false" aria-controls="detail-private" data-goto="1" tabindex="-1">
+              <span class="ctabs__index" aria-hidden="true">02 / Private</span>
+              <span class="ctabs__label">Private Classes</span>
+            </button>
           </div>
         </div>
 

@@ -368,7 +368,7 @@
      events.html in Aug 2026. Kept here so it is easy to bring back. */
   var EVENTS_PAST = {
     carnival: [
-      { title: 'Joo Chiat Badminton Carnival 2026', when: '23 Jul 2026', where: 'St. Patrick’s School' },
+      { title: 'Joo Chiat Badminton Carnival 2026', when: '23 May 2026', where: 'St. Patrick’s School' },
       { title: 'ÉB @ KFF Singapore Badminton Open 2025', when: '30 May – 1 Jun 2025', where: 'OCBC Square' }
     ],
     clinic: [
@@ -399,9 +399,8 @@
        description — one short paragraph on what the day was.
        services    — a list of what Élever provided end to end.
        partners    — partner names with an optional supplied logo.
-     (An earlier `insta` embed was dropped in Sep 2026 — the reel took up too
-     much room next to the photo gallery. The field is left on the SingHealth
-     entry for reference but is no longer rendered.) */
+     An earlier `insta` embed was dropped in Sep 2026 — the reel took up too
+     much room next to the photo gallery. */
   var EVENT_PHOTO_BASE = 'assets/img/events/';
   var EVENT_THUMB_BASE = 'assets/img/events/thumb/';
 
@@ -412,23 +411,23 @@
       when: '5 Sep 2026',
       where: 'Our Tampines Hub',
       slug: 'singhealth-sports-day-2026',
-      description: 'An internal corporate sports day for around 200 staff — a badminton and pickleball tournament paired with coaching clinics for both sports, led by top players and former Singapore national team players. On the tournament side we provided an end-to-end service, from RnR to pre-planning like court layout and flow, scheduling, on-site registration and admin such as score reporting, certified umpires for both sports, and emcee and backdrop printing.',
+      description: 'We partnered with SingHealth Community Hospitals to plan and deliver their Badminton & Pickleball corporate competition from concept to event-day execution. From tournament management and certified officials to coaching clinics, our team managed every aspect of the event to create a complete corporate racket sports experience that brought together competitive play, skills development and meaningful team bonding.',
       services: [
-        'Tournament management — set-up, scheduling, rules & regulations, on-site registration and admin',
-        'Certified umpires',
-        'Coaching clinic programme and execution',
-        'Certified coaches',
-        'Emcee',
-        'Backdrop'
+        'Tournament Format & Scheduling',
+        'Venue & Court Setup',
+        'Match Operations & Results Management',
+        'Certified Badminton & Pickleball Umpires',
+        'Professional Badminton and Pickleball Coaches',
+        'Clinics Programme Planning and Execution',
+        'Event Emcee',
+        'Backdrop Production & Setup'
       ],
       partners: [
         { name: 'SingHealth Community Hospitals', logo: 'assets/img/partners/singhealth-community-hospitals.png' }
       ],
-      insta: 'https://www.instagram.com/p/Dc8cjOngS1X/?stkn=ZHVob3B3dW5kMWkw',
-      /* Photo 26 leads as the cover (client, Sep 2026); the rest follow in
-         their original order. */
+      /* The client-curated source set is numbered in display order; photo 1
+         is the selected cover. */
       photos: [
-        'singhealth-sports-day-2026-26.jpg',
         'singhealth-sports-day-2026-1.jpg',
         'singhealth-sports-day-2026-2.jpg',
         'singhealth-sports-day-2026-3.jpg',
@@ -445,18 +444,7 @@
         'singhealth-sports-day-2026-14.jpg',
         'singhealth-sports-day-2026-15.jpg',
         'singhealth-sports-day-2026-16.jpg',
-        'singhealth-sports-day-2026-17.jpg',
-        'singhealth-sports-day-2026-18.jpg',
-        'singhealth-sports-day-2026-19.jpg',
-        'singhealth-sports-day-2026-20.jpg',
-        'singhealth-sports-day-2026-21.jpg',
-        'singhealth-sports-day-2026-22.jpg',
-        'singhealth-sports-day-2026-23.jpg',
-        'singhealth-sports-day-2026-24.jpg',
-        'singhealth-sports-day-2026-25.jpg',
-        'singhealth-sports-day-2026-27.jpg',
-        'singhealth-sports-day-2026-28.jpg',
-        'singhealth-sports-day-2026-29.jpg'
+        'singhealth-sports-day-2026-17.jpg'
       ]
     },
     {
@@ -465,6 +453,18 @@
       when: '5 Jul 2026',
       where: 'The Sports Arina @ Jalan Kayu',
       slug: 'asics-summit-2026',
+      description: 'In celebration of World Badminton Day, we partnered with ASICS to create a one-of-a-kind Badminton Summit, bringing their Speed and Control shoes to life on court. From curating participants to designing targeted badminton drills for each style of play, followed by a yoga session inspired by ASICS’ “Sound Mind, Sound Body” philosophy, we delivered an immersive experience connecting product, performance, community and brand.',
+      services: [
+        'Event Concept & Experience Design',
+        'Product-Focused Drill Design',
+        'Professional Badminton Coaches & On-Court Facilitation',
+        'Participant Curation & Management',
+        'Brand & Product Integration',
+        'Yoga Programme Coordination'
+      ],
+      partners: [
+        { name: 'ASICS', logo: 'assets/img/partners/asics.png' }
+      ],
       photos: [
         'asics-summit-2026-1.jpg',
         'asics-summit-2026-2.jpg',
@@ -480,7 +480,7 @@
     {
       title: 'Joo Chiat Badminton Carnival 2026',
       type: 'Carnival',
-      when: '23 Jul 2026',
+      when: '23 May 2026',
       where: 'St. Patrick’s School',
       slug: 'joo-chiat-carnival-2026',
       photos: [
