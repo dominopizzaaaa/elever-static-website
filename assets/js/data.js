@@ -609,8 +609,9 @@
     {
       slug: 'bronze-builds-belief-for-para-badminton-athlete-lim',
       title: 'Bronze Builds Belief for Para Badminton Athlete Lim',
-      category: 'SG badminton scene', date: '2026-01-30', read: '3 min',
-      author: 'Jeremiah Ong',
+      category: 'Features', date: '2026-01-30',
+      tags: ['Features'],
+      author: { name: 'Jeremiah Ong', image: 'assets/img/authors/jeremiah-ong.jpg', href: '#author-jeremiah-ong' },
       excerpt: 'National para badminton player Xavier Lim left the 2025 ASEAN Para Games in Nakhon Ratchasima with an abundant haul – a joint bronze in the men’s singles SH6 – and, more…',
       body: [
         { type: 'p', text: 'National para badminton player Xavier Lim left the 2025 ASEAN Para Games in Nakhon Ratchasima with an abundant haul – a joint bronze in the men’s singles SH6 – and, more importantly, sharper footwork, greater mental strength and belief as he looks to kickstart his season.' },
@@ -638,8 +639,9 @@
     {
       slug: 'an-completes-malaysia-open-three-peat',
       title: 'An completes Malaysia Open three-peat as Kunlavut claims maiden Super 1000 title',
-      category: 'World tour', date: '2026-01-13', read: '4 min',
-      author: 'Jeremiah Ong',
+      category: 'BWF World Tour', date: '2026-01-13',
+      tags: ['BWF World Tour'],
+      author: { name: 'Jeremiah Ong', image: 'assets/img/authors/jeremiah-ong.jpg', href: '#author-jeremiah-ong' },
       excerpt: 'It was the same old story in the women’s singles at the season-opening Malaysia Open, as world no. 1 An completed a three-peat after dispatching China’s Wang Zhiyi 21-15,…',
       body: [
         { type: 'h2', text: 'An-touchable' },

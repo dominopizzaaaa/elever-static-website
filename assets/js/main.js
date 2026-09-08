@@ -1,7 +1,7 @@
 /* =====================================================================
    ÉLEVER BADMINTON — Interactive layer
    - Nav behaviour, magnetic buttons, 3D tilt, scroll reveals
-   - SG Badminton Hub venue directory + world-tour calendar
+   - Singapore Shuttle Hub venue directory + world-tour calendar
    ===================================================================== */
 (function () {
   'use strict';
@@ -150,18 +150,10 @@
   /* =====================================================================
      8. THE 2026 SEASON — every stop on the world tour
      ---------------------------------------------------------------------
-     Two layers, so the section is never wrong and never blank:
-
-     1. A baked-in calendar with real, sourced champions for every event
-        that has finished. This renders instantly and is what shows if the
-        device is offline.
-     2. A self-updating layer that refreshes results from Wikipedia's
-        2026 BWF World Tour winners table on load, caches them in
-        localStorage for a day, and merges anything newer over layer 1.
-        If that fetch fails for any reason, layer 1 simply stands.
-
-     Status (done / live / upcoming) is always computed from the real clock
-     against each event's own dates — nothing about it is hardcoded.
+     A static editorial calendar retained as a browsing aid. Status is
+     inferred from the listed dates, while every visible route points to BWF
+     for current schedules, draws and results. The former Wikipedia refresh
+     code remains below for history but is deliberately never invoked.
      ===================================================================== */
   (function seasonNews() {
     var mount = document.getElementById('newsTimeline');
@@ -204,7 +196,9 @@
       { date: '9–13 December', start: '2026-12-09', end: '2026-12-13', name: 'BWF World Tour Finals', grade: 'Season finale', host: 'Hangzhou, China', note: 'The top eight in each discipline close the season.' }
     ];
 
-    /* ---------- self-updating results ---------- */
+    /* ---------- legacy refresh helpers ----------
+       Kept inert for now so the parsing code can be re-enabled if a
+       trustworthy official feed replaces the former Wikipedia source. */
     var CACHE_KEY = 'eleverBwf2026Results';
     var CACHE_TTL = 24 * 60 * 60 * 1000;          // re-check at most once a day
     var WIKI_API = 'https://en.wikipedia.org/w/api.php?action=parse' +
@@ -440,8 +434,8 @@
           '<h4 class="ncard__name">' + esc(ev.name) + '</h4>' +
           (ev.host ? '<p class="ncard__host">' + esc(ev.host) + '</p>' : '') +
           body +
-          '<a class="ncard__link" href="' + esc(ev.href || BWF_CAL) + '" target="_blank" rel="noopener">' +
-            (ev.status === 'done' ? 'Full draw and scores' : 'Tournament details') + ' ↗</a>' +
+          '<a class="ncard__link" href="' + BWF_CAL + '" target="_blank" rel="noopener">' +
+            (ev.status === 'done' ? 'Verify results on BWF' : 'Check details on BWF') + ' ↗</a>' +
         '</article>';
       }).join('');
 
@@ -460,11 +454,8 @@
       var stampEl = document.getElementById('newsStamp');
       if (stampEl) {
         var n = normalised.filter(function (e) { return e.status === 'done'; }).length;
-        var src = liveStamp
-          ? 'Results last refreshed ' + new Date(liveStamp).toLocaleDateString('en-GB',
-              { day: 'numeric', month: 'short', year: 'numeric' }) + '.'
-          : 'Showing our verified results for the season so far.';
-        stampEl.textContent = n + ' of ' + EVENTS.length + ' events completed. ' + src;
+        stampEl.textContent = n + ' of ' + EVENTS.length +
+          ' listed events have passed by date. Static editorial reference — verify on BWF.';
       }
     }
 
@@ -493,7 +484,9 @@
     window.ELEVER_SEASON = EVENTS;
 
     render();
-    refreshResults();
+    // Keep this calendar as an explicitly static editorial reference. The old
+    // Wikipedia refresh is intentionally disabled: BWF remains the source of
+    // truth for current schedules, draws and results.
   })();
 
 
@@ -635,7 +628,6 @@
       grid.innerHTML = list.map(function (v) {
         var l = loc(v);
         var book = v.book || (v.type === 'activesg' ? ACTIVESG_BOOK : '');
-        var bookLabel = v.bookLabel || (v.type === 'activesg' ? 'Book on ActiveSG' : 'Book');
         var note = v.bookNote || (v.type === 'activesg'
           ? 'Peak slots are balloted about 14 days ahead; off-peak is first-come.'
           : '');
@@ -646,16 +638,19 @@
         if (v.bookable === false) {
           // No working public booking page — say so instead of linking nowhere.
           if (v.phone) {
-            actions += '<a class="hcard__link hcard__link--call" href="tel:' + attr(v.phone) + '" aria-label="' +
-              attr('Call ' + l.name) + '">Call to book</a>';
+            actions += '<a class="hcard__link hcard__link--book" href="tel:' + attr(v.phone) + '" aria-label="' +
+              attr('Call ' + l.name + ' to check availability') + '">Check Availability</a>';
           }
         } else if (book) {
           actions += '<a class="hcard__link hcard__link--book" href="' + attr(book) + '" target="_blank" rel="noopener" aria-label="' +
-            attr('Book a court at ' + l.name) + '">' + esc(bookLabel) + ' \u2197</a>';
+            attr('Check availability at ' + l.name) + '">Check Availability</a>';
           if (v.altBook) {
             actions += '<a class="hcard__link" href="' + attr(v.altBook) + '" target="_blank" rel="noopener">' +
               esc(v.altBookLabel || 'Other booking') + ' \u2197</a>';
           }
+        }
+        if (v.elever) {
+          actions += '<a class="hcard__link hcard__class-link" href="classes.html">Élever classes</a>';
         }
 
         return '<article class="hcard">' +
@@ -723,23 +718,23 @@
         else if (e.key === 'End') next = order.length - 1;
         e.preventDefault();
         activateTab(order[next], true);
+        if (history.replaceState) history.replaceState(null, '', '#' + order[next]);
       });
     }
-    // inline "go to Where to play" links inside the How-to-book panel
-    hub.addEventListener('click', function (e) {
-      var link = e.target.closest('.hub__inline-link');
-      if (link && link.dataset.goto) {
-        activateTab(link.dataset.goto);
-        if (history.replaceState) history.replaceState(null, '', '#' + link.dataset.goto);
-      }
-    });
-
-    /* Deep-link the tabs (#book, #groups) so a panel can be shared,
-       bookmarked and linked to from elsewhere on the site. */
+    /* Deep-link both main tabs and the preserved section aliases so older
+       #book / #groups / #halls / #team links continue to land correctly. */
     var TAB_NAMES = Array.prototype.map.call(tabs, function (b) { return b.dataset.tab; });
+    var TAB_ALIASES = { halls: 'local', book: 'local', groups: 'local', team: 'international' };
     function tabFromHash() {
       var name = (location.hash || '').replace('#', '');
+      if (TAB_ALIASES[name]) return TAB_ALIASES[name];
       return TAB_NAMES.indexOf(name) > -1 ? name : '';
+    }
+    function scrollToHashTarget() {
+      var name = (location.hash || '').replace('#', '');
+      if (!TAB_ALIASES[name]) return;
+      var target = document.getElementById(name);
+      if (target) target.scrollIntoView({ block: 'start' });
     }
     if (tabsEl) {
       tabsEl.addEventListener('click', function (e) {
@@ -750,11 +745,17 @@
       });
       window.addEventListener('hashchange', function () {
         var name = tabFromHash();
-        if (name) activateTab(name);
+        if (name) {
+          activateTab(name);
+          window.requestAnimationFrame(scrollToHashTarget);
+        }
       });
     }
     var initial = tabFromHash();
-    if (initial) activateTab(initial);
+    if (initial) {
+      activateTab(initial);
+      window.requestAnimationFrame(scrollToHashTarget);
+    }
 
     render();
     // Re-render the venue list when the language changes (static text in the

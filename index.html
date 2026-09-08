@@ -19,8 +19,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="assets/css/style.css?v=48" />
-    <link rel="stylesheet" href="assets/css/pages.css?v=48" />
+    <link rel="stylesheet" href="assets/css/style.css?v=49" />
+    <link rel="stylesheet" href="assets/css/pages.css?v=49" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -73,34 +73,24 @@
     </script>
   </head>
   <body data-page="home" data-base="">
-    <a href="#top" class="skip-link">Skip to main content</a>
-    <header id="siteHeader"></header>
+    <a href="#main" class="skip-link">Skip to main content</a>
 
     <main id="main">
-      <!-- ===== HERO ===== -->
-      <section class="hero" id="top">
+      <section class="hero" id="top" aria-labelledby="homeTitle">
+        <div class="hero__glow hero__glow--one" aria-hidden="true"></div>
+        <div class="hero__glow hero__glow--two" aria-hidden="true"></div>
         <div class="hero__inner">
           <div class="hero__content">
-            <h1 class="hero__title">
-              <img class="hero__logo reveal" src="assets/img/brand/eb-logo-white.png" alt="Élever Badminton" />
+            <h1 class="hero__title" id="homeTitle">
+              <img class="hero__logo" src="assets/img/brand/eb-logo-white.png" alt="Élever Badminton" />
             </h1>
-            <p class="hero__sub reveal" data-delay="240">Enhance Your Skills, Enjoy The Process, Elevate Your Experience.</p>
-            <div class="hero__actions reveal" data-delay="320">
-              <a href="about.html" class="btn btn--ghost">ABOUT US</a>
+            <div class="hero__actions" aria-label="Explore Élever Badminton">
+              <a href="classes.html" class="hero__link hero__link--primary">Classes <span aria-hidden="true">&rsaquo;</span></a>
+              <a href="events.html" class="hero__link">Events <span aria-hidden="true">&rsaquo;</span></a>
             </div>
           </div>
-          <!-- WHAT WE DO — five photo tiles, inside the hero.
-               The screen-reader heading keeps the group announced; the tiles
-               themselves are injected into #pillarsGrid by pages.js. -->
-          <h2 class="sr-only" id="whatwedo">What we do</h2>
-          <div class="pillars" id="pillarsGrid"></div>
         </div>
       </section>
     </main>
-
-    <script src="assets/js/data.js?v=46"></script>
-    <script src="assets/js/site.js?v=46"></script>
-    <script src="assets/js/pages.js?v=46"></script>
-    <script src="assets/js/main.js?v=46"></script>
   </body>
 </html>

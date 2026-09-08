@@ -3,27 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Hidden from the site for now: not linked from the nav, footer or sitemap.
-       The page still works if opened directly. Remove the robots tag to relaunch. -->
-  <meta name="robots" content="noindex,nofollow" />
-  <title>SG Badminton Hub — Courts, Booking Guide & Groups | Élever</title>
-  <meta name="description" content="Every place to play badminton in Singapore: private halls, ActiveSG and CC courts, how to book each one, recreational groups, ratings and the world tour calendar." />
-  <meta property="og:title" content="SG Badminton Hub — Courts, Booking Guide & Groups | Élever" />
-  <meta property="og:description" content="Every place to play badminton in Singapore: private halls, ActiveSG and CC courts, how to book each one, recreational groups, ratings and the world tour calendar." />
+  <title>Singapore Shuttle Hub — Badminton News, Courts &amp; Community | Élever</title>
+  <meta name="description" content="Follow Singapore badminton on the world stage, find courts and local tournaments, join social groups, and learn how to book a game." />
+  <meta property="og:title" content="Singapore Shuttle Hub | Élever Badminton" />
+  <meta property="og:description" content="International badminton and the local Singapore game, together in one practical community hub." />
   <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://www.eleverbadminton.com/assets/img/hero-action.jpg" />
-  <meta name="twitter:description" content="Every place to play badminton in Singapore: private halls, ActiveSG and CC courts, how to book each one, recreational groups, ratings and the world tour calendar." />
-  <meta name="twitter:title" content="SG Badminton Hub — Courts, Booking Guide & Groups | Élever" />
   <meta property="og:image" content="https://www.eleverbadminton.com/assets/img/hero-action.jpg" />
   <meta property="og:url" content="https://www.eleverbadminton.com/hub" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Singapore Shuttle Hub | Élever Badminton" />
+  <meta name="twitter:description" content="International badminton and the local Singapore game, together in one practical community hub." />
+  <meta name="twitter:image" content="https://www.eleverbadminton.com/assets/img/hero-action.jpg" />
   <link rel="canonical" href="https://www.eleverbadminton.com/hub" />
   <link rel="icon" type="image/png" href="assets/img/brand/eb-icon-black.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=48" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=48" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css?v=49" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=49" />
+  <link rel="stylesheet" href="assets/css/hub.css?v=49" />
 </head>
 <body data-page="hub" data-nav="solid" data-base="">
 
@@ -31,198 +29,178 @@
   <header id="siteHeader"></header>
 
   <main id="main">
-    <section class="phead phead--hub">
+    <section class="phead phead--hub" aria-labelledby="hub-page-title">
       <div class="phead__inner">
-        <p class="phead__crumbs"><a href="index.html">Home</a> · SG Badminton Hub</p>
-        <h1>The home of <em>badminton</em> in Singapore.</h1>
-        <p class="phead__lead">Nowhere in Singapore lists every place to play, how to book it, and who to play with — so we built it. Compare private halls, ActiveSG and community club courts island-wide, then find a group at your level. <strong>Free, for everyone, whether or not you ever train with us.</strong></p>
-        <dl class="phead__stats">
-          <div><dt>Venues listed</dt><dd id="statVenues">43</dd></div>
-          <div><dt>Cost to use</dt><dd>Free</dd></div>
-        </dl>
+        <p class="hub-hero__eyebrow">Singapore Shuttle Hub</p>
+        <h1 id="hub-page-title">The Home of Singapore Badminton</h1>
+        <p class="phead__lead">From national team triumphs to securing your next weekend court booking, Singapore Shuttle Hub brings the entire local badminton community under one roof. Powered by Élever Badminton.</p>
+        <div class="hub-hero__proof" aria-label="Hub highlights">
+          <span><b id="statVenues">43</b> venues</span>
+          <span><b>2</b> ways in</span>
+          <span><b>Free</b> community guide</span>
+        </div>
       </div>
     </section>
 
-  <section class="hub" id="hub" aria-labelledby="hubTitle">
-    <h2 class="sr-only" id="hubTitle">Singapore Badminton Hub</h2>
+    <section class="hub" id="hub" aria-labelledby="hubTitle">
+      <h2 class="sr-only" id="hubTitle">Singapore Shuttle Hub</h2>
 
-    <!-- HUB TABS -->
-    <div class="hub__tabs" id="hubTabs">
-      <div class="hub__tabs-inner" role="tablist" aria-label="Singapore Badminton Hub sections">
-        <button class="hub__tab is-active" data-tab="halls" role="tab" id="tab-halls" aria-selected="true" aria-controls="panel-halls">Where to play</button>
-        <button class="hub__tab" data-tab="book" role="tab" id="tab-book" aria-selected="false" aria-controls="panel-book" tabindex="-1">How to book</button>
-        <button class="hub__tab" data-tab="groups" role="tab" id="tab-groups" aria-selected="false" aria-controls="panel-groups" tabindex="-1">Groups &amp; ratings</button>
-        <button class="hub__tab" data-tab="team" role="tab" id="tab-team" aria-selected="false" aria-controls="panel-team" tabindex="-1">Team Singapore</button>
-      </div>
-    </div>
-
-    <!-- ===== PANEL: HALLS ===== -->
-    <div class="hub__panel is-active" data-panel="halls" id="panel-halls" role="tabpanel" aria-labelledby="tab-halls" tabindex="0">
-      <div class="hub__toolbar">
-      <div class="hub__controls reveal">
-        <div class="hub__search">
-          <label class="hub__search-label" for="hallSearch">Find a venue</label>
-          <input type="search" id="hallSearch" placeholder="Search by name or area, e.g. Tampines" aria-describedby="hallCount" />
-        </div>
-        <div class="hub__filters" id="hallFilters" role="group" aria-label="Filter venues by type">
-          <button class="hub__filter is-active" data-type="all" aria-pressed="true">All venues</button>
-          <button class="hub__filter hub__filter--elever" data-type="elever" aria-pressed="false">Élever classes</button>
-          <button class="hub__filter" data-type="private" aria-pressed="false">Private halls</button>
-          <button class="hub__filter" data-type="activesg" aria-pressed="false">ActiveSG (public)</button>
-          <button class="hub__filter" data-type="club" aria-pressed="false">Country clubs</button>
+      <div class="hub__tabs" id="hubTabs">
+        <div class="hub__tabs-inner" role="tablist" aria-label="Choose international or local badminton">
+          <button class="hub__tab is-active" data-tab="international" role="tab" id="tab-international" aria-selected="true" aria-controls="panel-international">International</button>
+          <button class="hub__tab" data-tab="local" role="tab" id="tab-local" aria-selected="false" aria-controls="panel-local" tabindex="-1">Local</button>
         </div>
       </div>
-      </div>
-      <p class="hub__count" id="hallCount" aria-live="polite"></p>
-      <div class="hub__grid" id="hallGrid"></div>
-      <p class="hub__note reveal"><strong>Singapore badminton court guide:</strong> Use this hub to compare badminton courts for rent in Singapore, including public ActiveSG halls, private badminton halls, community club courts and family-friendly places to play in Central, North, North-East, East and West Singapore.</p>
-      <p class="hub__note reveal">Addresses are compiled from Google Maps and the official SportSG facilities dataset. ActiveSG public halls can also be booked in the MyActiveSG app. Community Club (CC) courts are booked on <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a>. Spotted a mistake or a missing hall? <a href="mailto:info@eleverbadminton.com?subject=SG%20Badminton%20Hub%20—%20hall%20update">Tell us</a>.</p>
-    </div>
 
-    <!-- ===== PANEL: HOW TO BOOK ===== -->
-    <div class="hub__panel" data-panel="book" id="panel-book" role="tabpanel" aria-labelledby="tab-book" tabindex="0" hidden>
-      <div class="hub__book">
-        <article class="bcard reveal">
-          <span class="bcard__num" aria-hidden="true">01</span>
-          <h3>Private halls</h3>
-          <p>Air-conditioned courts you rent by the hour, usually through each hall's own website or app. Best for a guaranteed slot with no balloting. Prices vary — roughly <strong>S$20–40 per hour</strong> per court.</p>
-          <ul class="bcard__list">
-            <li>Pick a hall on the <button class="hub__inline-link" data-goto="halls" type="button">Where to play</button> tab.</li>
-            <li>Open its booking link and choose a date and time.</li>
-            <li>Pay online to confirm — you're set.</li>
-          </ul>
-        </article>
-        <article class="bcard reveal" data-delay="100">
-          <span class="bcard__num" aria-hidden="true">02</span>
-          <h3>ActiveSG public halls</h3>
-          <p>The most affordable way to play — from about <strong>S$3.50–7.40 per hour</strong>. Book at <a href="https://activesg.gov.sg/facility-bookings/activities/YLONatwvqJfikKOmB5N9U/venues" target="_blank" rel="noopener">activesg.gov.sg</a> or in the MyActiveSG app.</p>
-          <ul class="bcard__list">
-            <li>Log in with <strong>Singpass</strong>, then choose Book a Facility → Badminton.</li>
-            <li>Search by postal code or venue. Each slot is 1 hour (up to 2 per day).</li>
-            <li><strong>Peak</strong> hours (weekdays after 6pm, weekends and public holidays) use a <strong>ballot</strong> that opens about 14 days ahead. <strong>Off-peak</strong> is first-come, released about 13 days ahead at 12pm.</li>
-          </ul>
-        </article>
-        <article class="bcard reveal" data-delay="200">
-          <span class="bcard__num" aria-hidden="true">03</span>
-          <h3>Community Club (CC) courts</h3>
-          <p>Run by the People's Association across the island. Prices vary by CC, roughly <strong>S$5–7 per hour</strong>. Book on <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a>.</p>
-          <ul class="bcard__list">
-            <li>Log in with <strong>Singpass</strong>, then choose Facilities → Book a Facility.</li>
-            <li>Select Badminton Court, then your region, date and time.</li>
-            <li>New slots open <strong>daily at 10pm</strong>, up to <strong>15 days</strong> ahead.</li>
-          </ul>
-        </article>
-      </div>
-    </div>
-
-    <!-- ===== PANEL: GROUPS & RATINGS ===== -->
-    <div class="hub__panel" data-panel="groups" id="panel-groups" role="tabpanel" aria-labelledby="tab-groups" tabindex="0" hidden>
-
-      <!-- ===== RACKET RATINGS ===== -->
-      <section class="rr">
-        <div class="rr__head">
-          <span class="rr__eyebrow">Our top pick · Know your level</span>
-          <h3>Racket Ratings</h3>
-          <p class="rr__lead">A free platform that gives every badminton player in Singapore a real, comparable skill level — then uses it to match you with clubs, ladders and tournaments at your standard. If you want to find people to play with, this is the single most useful thing on this page.</p>
-          <div class="rr__metrics">
-            <div class="rr__metric"><b>⚡ Rating</b><span>How strong you are</span></div>
-            <div class="rr__metric"><b>🏅 Ranking</b><span>What you have won</span></div>
-            <div class="rr__metric"><b>Formats</b><span>Singles · Doubles · 3v3</span></div>
-          </div>
-        </div>
-        <div class="rr__grid" id="rrFeatures"></div>
-        <div class="rr__foot">
-          <a href="https://www.racketratings.net/badminton" target="_blank" rel="noopener" class="btn btn--primary">Get your free rating →</a>
-          <p class="rr__note">Free to use, available in English and Chinese, and it covers table tennis, tennis, pickleball and squash too. Élever is not affiliated with Racket Ratings — we point players there because it is the most useful tool in the local scene.</p>
-        </div>
-      </section>
-
-      <!-- ===== OTHER ROUTES ===== -->
-      <div class="hub__groups">
-        <article class="gcard reveal">
-          <h3>Casual &amp; social play</h3>
-          <p>Most social games form up on community platforms. Try these to find a session near you and at your level:</p>
-          <ul class="gcard__list">
-            <li><a href="https://www.racketratings.net/badminton/clubs" target="_blank" rel="noopener">Racket Ratings Clubs</a> — rated players and ladders</li>
-            <li><a href="https://www.meetup.com/find/?keywords=badminton&location=sg--Singapore" target="_blank" rel="noopener">Meetup — Singapore badminton</a></li>
-            <li>Facebook and Telegram “kaki” groups (search “badminton Singapore”)</li>
-            <li>Your neighbourhood CC — many run drop-in social sessions</li>
-          </ul>
-        </article>
-        <article class="gcard reveal" data-delay="100">
-          <h3>Ready to compete?</h3>
-          <p>Once you have a rating, Racket Ratings lists open tournaments you can enter — and lets your own group create one. A low-pressure way into competitive play.</p>
-          <a href="https://www.racketratings.net/badminton/tournaments" target="_blank" rel="noopener" class="btn btn--ghost">Browse tournaments</a>
-        </article>
-        <article class="gcard reveal" data-delay="200">
-          <h3>Prefer structured coaching?</h3>
-          <p>If you'd rather improve with a coach, that's exactly what we do. From your first swing to competition, Élever's camps, classes and clinics have a place for you.</p>
-          <a href="classes.html" class="btn btn--ghost">See our classes</a>
-        </article>
-      </div>
-    </div>
-    <!-- ===== PANEL: TEAM SINGAPORE ===== -->
-    <div class="hub__panel" data-panel="team" id="panel-team" role="tabpanel" aria-labelledby="tab-team" tabindex="0" hidden>
-      <section class="teamhub">
-        <div class="teamhub__head">
-          <span class="rr__eyebrow">Know the national team</span>
-          <h3>Team Singapore</h3>
-          <p class="rr__lead">Who represents Singapore on the world tour, where they stand in the world rankings, what they are playing next, and where to read the latest on them.</p>
-        </div>
-
-        <div class="teamhub__grid" id="teamGrid"></div>
-
-        <div class="teamhub__cols">
-          <section class="tpanel">
-            <h4 class="tpanel__title">Next on the calendar</h4>
-            <p class="tpanel__lead">The next stops on the 2026 world tour, taken from the season tracker further down this page.</p>
-            <ul class="tnext" id="teamNext"></ul>
-            <a class="tpanel__more" href="https://corporate.bwfbadminton.com/events/calendar/2026/all/0/-1" target="_blank" rel="noopener">Full BWF calendar &#8599;</a>
-          </section>
-
-          <section class="tpanel">
-            <h4 class="tpanel__title">Latest news</h4>
-            <p class="tpanel__lead">Current stories on Singapore's players and the national squad. Each opens a live news search, so it is never out of date.</p>
-            <div class="tnews" id="teamNews"></div>
-          </section>
-        </div>
-
-        <div class="teamhub__live">
+      <div class="hub__panel is-active" data-panel="international" id="panel-international" role="tabpanel" aria-labelledby="tab-international" tabindex="0">
+        <div class="hub-panel-intro">
           <div>
-            <h4>Rankings move every week</h4>
-            <p>The numbers on the cards are the last figures we verified, with the month they were true. For today's position, open the official BWF world rankings — they are republished every Tuesday.</p>
+            <span class="hub-kicker">Beyond our shores</span>
+            <h2>Follow the world game</h2>
           </div>
-          <div class="teamhub__links">
-            <a class="btn btn--primary" href="https://bwf.tournamentsoftware.com/ranking/ranking.aspx?rid=70" target="_blank" rel="noopener">Open BWF rankings</a>
-            <a class="btn btn--ghost" href="https://singaporebadminton.org.sg/" target="_blank" rel="noopener">Singapore Badminton Association</a>
-          </div>
+          <p>Track Singapore’s leading players, move from headlines to official rankings, and find the tournament pages that carry current draws, schedules and results.</p>
         </div>
-      </section>
-    </div>
-  </section>
-  <section class="news" id="news" aria-labelledby="newsTitle">
-    <div class="section-head">
-      <span class="kicker reveal">The 2026 Season</span>
-      <h2 class="section-title reveal" id="newsTitle">Every stop on the <em>world tour</em>.</h2>
-      <p class="news__hint reveal" data-delay="120">Every stop on the 2026 HSBC BWF World Tour, with the champions in all five disciplines for each completed event. Results refresh themselves — the page checks for newly published winners each day.</p>
-      <p class="news__stamp reveal" data-delay="140" id="newsStamp" aria-live="polite"></p>
-      <div class="news__filters reveal" data-delay="160" id="newsFilters" role="group" aria-label="Filter tournaments">
-        <button class="news__filter is-active" data-filter="all" aria-pressed="true">All</button>
-        <button class="news__filter" data-filter="done" aria-pressed="false">Completed</button>
-        <button class="news__filter" data-filter="upcoming" aria-pressed="false">Upcoming</button>
+
+        <nav class="hub-route-grid" aria-label="Official international badminton resources">
+          <a class="hub-route hub-route--feature" href="https://bwfbadminton.com/news/" target="_blank" rel="noopener">
+            <span class="hub-route__index">01</span><span><b>BWF News</b><small>Reporting and player stories from the federation</small></span><span aria-hidden="true">↗</span>
+          </a>
+          <a class="hub-route" href="https://bwfbadminton.com/rankings/" target="_blank" rel="noopener">
+            <span class="hub-route__index">02</span><span><b>World Rankings</b><small>Check the latest official tables</small></span><span aria-hidden="true">↗</span>
+          </a>
+          <a class="hub-route" href="https://corporate.bwfbadminton.com/events/calendar/" target="_blank" rel="noopener">
+            <span class="hub-route__index">03</span><span><b>BWF Calendar</b><small>Upcoming international competitions</small></span><span aria-hidden="true">↗</span>
+          </a>
+          <a class="hub-route" href="https://bwfbadminton.com/results/" target="_blank" rel="noopener">
+            <span class="hub-route__index">04</span><span><b>Results &amp; Last Matches</b><small>Official draws, scores and completed matches</small></span><span aria-hidden="true">↗</span>
+          </a>
+          <a class="hub-route" href="news.html?category=BWF%20World%20Tour">
+            <span class="hub-route__index">05</span><span><b>Our World Tour News</b><small>Élever’s BWF World Tour coverage</small></span><span aria-hidden="true">→</span>
+          </a>
+        </nav>
+
+        <section class="hub-block teamhub" id="team" aria-labelledby="team-title">
+          <div class="hub-section-head">
+            <div><span class="hub-kicker">Team Singapore</span><h2 id="team-title">Players to follow</h2></div>
+            <p>Meet Singapore names competing internationally. Rankings change often, so we do not pin a number to any player here—use the official BWF route for the current position.</p>
+          </div>
+          <div class="hub-player-grid">
+            <article class="hub-player"><span>MS</span><h3>Loh Kean Yew</h3><p>Singapore’s first BWF world champion and a two-time Olympian.</p><a href="https://bwfbadminton.com/player/76115/loh-kean-yew" target="_blank" rel="noopener">BWF player profile ↗</a></article>
+            <article class="hub-player"><span>WS</span><h3>Yeo Jia Min</h3><p>Former world junior No. 1 and an established women’s singles Olympian.</p><a href="https://bwfbadminton.com/?s=Yeo+Jia+Min" target="_blank" rel="noopener">BWF coverage ↗</a></article>
+            <article class="hub-player"><span>MS</span><h3>Jason Teh</h3><p>A Singapore men’s singles representative on the international circuit.</p><a href="https://bwfbadminton.com/?s=Jason+Teh" target="_blank" rel="noopener">BWF coverage ↗</a></article>
+            <article class="hub-player"><span>MD</span><h3>Terry Hee</h3><p>Commonwealth Games mixed doubles champion competing across doubles events.</p><a href="https://bwfbadminton.com/?s=Terry+Hee" target="_blank" rel="noopener">BWF coverage ↗</a></article>
+            <article class="hub-player"><span>MD</span><h3>Andy Kwek</h3><p>A men’s doubles competitor in tour events and Singapore team ties.</p><a href="https://bwfbadminton.com/?s=Andy+Kwek" target="_blank" rel="noopener">BWF coverage ↗</a></article>
+          </div>
+          <div class="hub-callout">
+            <div><strong>Want the current ranking?</strong><p>BWF’s official pages are the source of truth for positions, entries, draws and match results.</p></div>
+            <div class="hub-callout__actions"><a class="btn btn--primary" href="https://bwfbadminton.com/rankings/" target="_blank" rel="noopener">Open official rankings</a><a class="btn btn--ghost" href="https://singaporebadminton.org.sg/" target="_blank" rel="noopener">Singapore Badminton Association</a></div>
+          </div>
+        </section>
+
+        <section class="hub-block news" id="news" aria-labelledby="newsTitle">
+          <div class="hub-section-head">
+            <div><span class="hub-kicker">2026 reference</span><h2 id="newsTitle">World Tour calendar</h2></div>
+            <p>This is Élever’s static season reference, not a live or official feed. Event status is inferred from listed dates. Always verify schedules, draws and results on BWF before making plans.</p>
+          </div>
+          <p class="news__stamp" id="newsStamp" aria-live="polite"></p>
+          <div class="news__filters" id="newsFilters" role="group" aria-label="Filter calendar events">
+            <button class="news__filter is-active" data-filter="all" aria-pressed="true">All</button>
+            <button class="news__filter" data-filter="done" aria-pressed="false">Past by date</button>
+            <button class="news__filter" data-filter="upcoming" aria-pressed="false">Current &amp; upcoming</button>
+          </div>
+          <div class="news__timeline" id="newsTimeline" aria-live="polite"></div>
+          <div class="news__more"><button class="btn btn--ghost" id="newsToggle" aria-expanded="false">Show all tournaments</button></div>
+          <p class="hub-source-note"><strong>Source note:</strong> this editorial snapshot is retained as a browsing aid. It does not refresh from Wikipedia and should not be treated as official or live. Use the <a href="https://corporate.bwfbadminton.com/events/calendar/" target="_blank" rel="noopener">BWF calendar</a> for current information.</p>
+        </section>
+
+        <section class="hub-updates" aria-labelledby="international-updates-title">
+          <div><span class="hub-kicker">Stay updated</span><h2 id="international-updates-title">Keep the rally going</h2><p>Join Singapore Shuttle Hub on Telegram, or follow Élever for coaching, events and community updates.</p></div>
+          <div class="hub-updates__links"><a class="btn btn--primary" href="https://t.me/sgshuttlehub" target="_blank" rel="noopener">Join Telegram</a><a href="https://www.instagram.com/eleverbadminton/" target="_blank" rel="noopener">Instagram ↗</a><a href="https://www.facebook.com/eleverbadminton/" target="_blank" rel="noopener">Facebook ↗</a><a href="https://www.tiktok.com/@eleverbadminton" target="_blank" rel="noopener">TikTok ↗</a></div>
+        </section>
       </div>
-    </div>
-    <div class="news__timeline" id="newsTimeline" aria-live="polite"></div>
-    <div class="news__more"><button class="btn btn--ghost" id="newsToggle" aria-expanded="false">Show all tournaments</button></div>
-    <p class="news__source reveal">Calendar and champions are compiled from the Badminton World Federation calendar and the 2026 BWF World Tour record, and refresh automatically as new results are published. Completed / upcoming status is worked out from each event's own dates. For live draws and match-by-match scores, open the official BWF link on any card.</p>
-  </section>
+
+      <div class="hub__panel" data-panel="local" id="panel-local" role="tabpanel" aria-labelledby="tab-local" tabindex="0" hidden>
+        <div class="hub-panel-intro">
+          <div><span class="hub-kicker">Your next game</span><h2>Play badminton in Singapore</h2></div>
+          <p>Discover competitions, search 43 venues, understand each booking route, find a social group and shop for the right gear.</p>
+        </div>
+
+        <section class="hub-block" id="tournaments" aria-labelledby="tournament-title">
+          <div class="hub-section-head">
+            <div><span class="hub-kicker">Compete locally</span><h2 id="tournament-title">Find a tournament</h2></div>
+            <p>Open events change throughout the year. These links are discovery routes, not claims that registration is currently open. Check all four details before entering.</p>
+          </div>
+          <div class="hub-checklist" aria-label="Tournament entry checklist"><span><b>01</b> Dates</span><span><b>02</b> Location</span><span><b>03</b> Age &amp; level</span><span><b>04</b> Registration</span></div>
+          <div class="hub-discovery-grid">
+            <article class="hub-discovery hub-discovery--dated"><span class="hub-discovery__tag">Upcoming · Tier 2</span><h3>KSA Challenge 2026</h3><dl class="hub-event-facts"><div><dt>Date</dt><dd>28 Nov–4 Dec 2026</dd></div><div><dt>Location</dt><dd>Fernvale Village</dd></div><div><dt>Eligibility</dt><dd>See organiser notice</dd></div></dl><a href="https://singaporebadminton.org.sg/events/" target="_blank" rel="noopener">Check event details ↗</a></article>
+            <article class="hub-discovery hub-discovery--dated"><span class="hub-discovery__tag">Upcoming · Junior</span><h3>Singapore Junior International Series 2026</h3><dl class="hub-event-facts"><div><dt>Date</dt><dd>7–13 Dec 2026</dd></div><div><dt>Location</dt><dd>Wyse Active Hub</dd></div><div><dt>Age groups</dt><dd>U13 · U15 · U17 · U19</dd></div></dl><a href="https://badmintonasia.org/calendar/singapore-junior-international-series-2026/" target="_blank" rel="noopener">View official listing ↗</a></article>
+            <article class="hub-discovery hub-discovery--dated"><span class="hub-discovery__tag">Upcoming · Tier 2</span><h3>Papago Badminton Carnival</h3><dl class="hub-event-facts"><div><dt>Date</dt><dd>14–24 Dec 2026</dd></div><div><dt>Location</dt><dd>KFF Badminton Arena</dd></div><div><dt>Eligibility</dt><dd>See organiser notice</dd></div></dl><a href="https://singaporebadminton.org.sg/events/" target="_blank" rel="noopener">Check event details ↗</a></article>
+          </div>
+          <p class="hub-source-note"><strong>Schedule checked 8 September 2026:</strong> dates and venues above are from the Singapore Badminton Association’s sanctioned-tournament calendar; junior age groups are also listed by Badminton Asia. Registration details can change, so use the linked organiser page before entering.</p>
+        </section>
+
+        <section class="hub-block hub-venues" id="halls" aria-labelledby="venue-title">
+          <div class="hub-section-head">
+            <div><span class="hub-kicker">Island-wide directory</span><h2 id="venue-title">Find a court near you</h2></div>
+            <p>Search private halls, ActiveSG facilities, clubs and Élever class venues. Availability and booking rules remain with each venue.</p>
+          </div>
+          <div class="hub__toolbar">
+            <div class="hub__controls">
+              <div class="hub__search"><label class="hub__search-label" for="hallSearch">Search all 43 venues</label><input type="search" id="hallSearch" placeholder="Try Tampines, Jurong or a venue name" aria-describedby="hallCount" /></div>
+              <div class="hub__filters" id="hallFilters" role="group" aria-label="Filter venues by type">
+                <button class="hub__filter is-active" data-type="all" aria-pressed="true">All venues</button>
+                <button class="hub__filter hub__filter--elever" data-type="elever" aria-pressed="false">Élever classes</button>
+                <button class="hub__filter" data-type="private" aria-pressed="false">Private halls</button>
+                <button class="hub__filter" data-type="activesg" aria-pressed="false">ActiveSG</button>
+                <button class="hub__filter" data-type="club" aria-pressed="false">Clubs</button>
+              </div>
+            </div>
+          </div>
+          <div class="hub-venue-resultbar"><p class="hub__count" id="hallCount" aria-live="polite"></p><p>Élever-tagged venues also link to our <a href="classes.html">class schedule</a>.</p></div>
+          <div class="hub__grid" id="hallGrid"></div>
+          <p class="hub-source-note">Addresses are compiled from Google Maps and the SportSG facilities directory. ActiveSG public halls use the ActiveSG booking service; community club courts use <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a>. Spotted an error? <a href="mailto:info@eleverbadminton.com?subject=Singapore%20Shuttle%20Hub%20venue%20update">Tell us</a>.</p>
+        </section>
+
+        <section class="hub-block" id="book" aria-labelledby="book-title">
+          <div class="hub-section-head"><div><span class="hub-kicker">Court booking 101</span><h2 id="book-title">Three booking routes</h2></div><p>The platform depends on who runs the hall. Always confirm the final price, slot duration and cancellation policy before paying.</p></div>
+          <div class="hub__book">
+            <article class="bcard"><span class="bcard__num" aria-hidden="true">01</span><h3>Private halls</h3><p>Choose a private venue in the directory and open its own website or booking partner.</p><ol class="bcard__list"><li>Search by area and compare the hall notes.</li><li>Select <strong>Check Availability</strong> on the venue card.</li><li>Confirm the date, court and rate with the operator.</li></ol></article>
+            <article class="bcard"><span class="bcard__num" aria-hidden="true">02</span><h3>ActiveSG halls</h3><p>Public SportSG courts are booked through ActiveSG with a registered account.</p><ol class="bcard__list"><li>Open <a href="https://activesg.gov.sg/facility-bookings/activities/YLONatwvqJfikKOmB5N9U/venues" target="_blank" rel="noopener">ActiveSG badminton bookings</a>.</li><li>Choose a venue, date and available slot.</li><li>Review current booking or ballot rules before payment.</li></ol></article>
+            <article class="bcard"><span class="bcard__num" aria-hidden="true">03</span><h3>Community clubs</h3><p>People’s Association facilities are listed and booked on OnePA.</p><ol class="bcard__list"><li>Open the <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA badminton search</a>.</li><li>Filter by location, date and facility.</li><li>Sign in and follow that venue’s current conditions.</li></ol></article>
+          </div>
+        </section>
+
+        <section class="hub-block" id="groups" aria-labelledby="groups-title">
+          <div class="hub-section-head"><div><span class="hub-kicker">Find your people</span><h2 id="groups-title">Social groups &amp; ratings</h2></div><p>Start with a clear level, then choose a group whose pace, location and format suit you.</p></div>
+          <div class="hub-social-feature">
+            <div><span class="hub-social-feature__pick">Our starting point</span><h3>Racket Ratings</h3><p>Build a comparable badminton rating, find clubs and ladders, review match history and browse community tournaments.</p><div class="hub-social-feature__chips"><span>Singles</span><span>Doubles</span><span>3v3</span><span>Clubs</span></div></div>
+            <a class="btn btn--primary" href="https://www.racketratings.net/" target="_blank" rel="noopener">Visit Racket Ratings</a>
+          </div>
+          <div class="hub-mini-grid"><article><h3>Meetup groups</h3><p>Search sessions, then ask the organiser about level, shuttles, fees and cancellation rules.</p><a href="https://www.meetup.com/find/?keywords=badminton&amp;location=sg--Singapore" target="_blank" rel="noopener">Search Singapore groups ↗</a></article><article><h3>Neighbourhood play</h3><p>Check your community club’s activities or ask about recurring social badminton sessions.</p><a href="https://www.onepa.gov.sg/courses/search?course=badminton" target="_blank" rel="noopener">Search OnePA activities ↗</a></article><article><h3>Structured improvement</h3><p>Prefer a coach-led group? Find an Élever class by level and venue.</p><a href="classes.html">Explore Élever classes →</a></article></div>
+        </section>
+
+        <section class="hub-block" id="shops" aria-labelledby="shops-title">
+          <div class="hub-section-head"><div><span class="hub-kicker">Gear in person</span><h2 id="shops-title">Physical shops to try</h2></div><p>For rackets and shoes, an in-person fit can be worth the trip. Product range and opening hours change, so check the linked source before visiting.</p></div>
+          <div class="hub-shop-grid">
+            <article><span>East</span><h3>Decathlon Bedok</h3><p>Large multi-sport store at ESR BizPark @ Chai Chee, with badminton gear and restringing services listed.</p><a href="https://www.decathlon.sg/s/sports-stores/bedok" target="_blank" rel="noopener">Official store page ↗</a></article>
+            <article><span>Central</span><h3>Decathlon Orchard</h3><p>Central option at The Centrepoint for trying entry-to-intermediate equipment in person.</p><a href="https://www.decathlon.sg/s/sports-stores/orchard" target="_blank" rel="noopener">Official store page ↗</a></article>
+            <article><span>Queensway</span><h3>Gala Sports</h3><p>A badminton specialist at #01-33 Queensway Shopping Centre, listed in VICTOR Singapore’s authorised-dealer directory.</p><a href="https://www.google.com/maps/search/?api=1&amp;query=Gala%20Sports%201%20Queensway%20Singapore%20149053" target="_blank" rel="noopener">Open in Google Maps ↗</a></article>
+          </div>
+        </section>
+
+        <section class="hub-updates" aria-labelledby="local-updates-title">
+          <div><span class="hub-kicker">Stay updated</span><h2 id="local-updates-title">Your game starts here</h2><p>Join Singapore Shuttle Hub on Telegram, or follow Élever for coaching, events and community updates.</p></div>
+          <div class="hub-updates__links"><a class="btn btn--primary" href="https://t.me/sgshuttlehub" target="_blank" rel="noopener">Join Telegram</a><a href="https://www.instagram.com/eleverbadminton/" target="_blank" rel="noopener">Instagram ↗</a><a href="https://www.facebook.com/eleverbadminton/" target="_blank" rel="noopener">Facebook ↗</a><a href="https://www.tiktok.com/@eleverbadminton" target="_blank" rel="noopener">TikTok ↗</a></div>
+        </section>
+      </div>
+    </section>
   </main>
 
   <footer id="siteFooter"></footer>
 
-  <script src="assets/js/data.js?v=46"></script>
-  <script src="assets/js/site.js?v=46"></script>
-  <script src="assets/js/pages.js?v=46"></script>
-  <script src="assets/js/main.js?v=46"></script>
+  <script src="assets/js/data.js?v=49"></script>
+  <script src="assets/js/site.js?v=49"></script>
+  <script src="assets/js/pages.js?v=49"></script>
+  <script src="assets/js/main.js?v=49"></script>
 </body>
 </html>

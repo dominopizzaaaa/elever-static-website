@@ -442,7 +442,7 @@
                 ' loading="lazy" decoding="async"></div>'
             : '') +
           '<span class="path__num">' + esc(p.num) + '</span>' +
-          '<h3>' + esc(p.name) + '</h3>' +
+          '<h3>' + esc(p.name).toUpperCase() + '</h3>' +
           '<p class="path__headline">' + esc(p.headline) + '</p>' +
           (p.hook ? '<p class="path__hook">' + esc(p.hook) + '</p>' : '') +
           '<p class="path__body">' + esc(p.body) + '</p>' +
@@ -641,10 +641,10 @@
               return '<div class="vcard__venue">' +
                 /* Name left, address right, on one line — the address opens the
                    venue on Google Maps (client, Sep 2026). */
-                '<p class="vcard__venuename">' + esc(v.venue) + sampleTag(v) +
+                '<p class="vcard__venuename"><span><svg class="vcard__venuepin" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M12 21s6-5.1 6-11a6 6 0 1 0-12 0c0 5.9 6 11 6 11Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2" fill="currentColor"/></svg>' + esc(v.venue) + '</span>' + sampleTag(v) +
                   '<a class="vcard__addr" href="' + esc(mapsUrl(v)) + '" target="_blank" rel="noopener"' +
                     ' aria-label="' + esc(v.venue + ', ' + v.addr + ' — open in Google Maps') + '">' +
-                    '<span class="vcard__pin" aria-hidden="true">\u25CE</span>' + esc(v.addr) +
+                    esc(v.addr) +
                   '</a>' +
                 '</p>' +
                 '<ul class="vcard__sessions">' + v.sessions.map(function (s) {
@@ -1143,7 +1143,9 @@
     var mount = el('articleGrid');
     if (!mount) return;
     var filters = el('articleFilters');
-    var cat = 'all';
+    var requested = '';
+    try { requested = new URLSearchParams(window.location.search).get('category') || ''; } catch (_) {}
+    var cat = D.articles.some(function (a) { return a.category === requested; }) ? requested : 'all';
 
     function fmt(d) {
       var parts = String(d).split('-');
@@ -1155,13 +1157,13 @@
       var base = SITE.base || '';
       var rows = D.articles.filter(function (a) { return cat === 'all' || a.category === cat; });
       mount.innerHTML = rows.length ? rows.map(function (a) {
+        var authorName = a.author && typeof a.author === 'object' ? a.author.name : a.author;
         return '<a class="article" href="' + base + 'news/' + esc(a.slug) + '.html">' +
           '<span class="article__cat">' + esc(a.category) + '</span>' +
           '<h3>' + esc(a.title) + sampleTag(a) + '</h3>' +
           '<p>' + esc(a.excerpt) + '</p>' +
           '<div class="article__foot"><span>' + fmt(a.date) +
-            (a.author ? ' · ' + esc(a.author) : '') + '</span>' +
-            '<span>' + esc(a.read) + ' read</span></div>' +
+            (authorName ? ' · ' + esc(authorName) : '') + '</span></div>' +
         '</a>';
       }).join('') : '<p class="sched__empty">Nothing published in this category yet.</p>';
     }
@@ -1169,9 +1171,10 @@
     if (filters) {
       var cats = ['all'].concat(D.articles.map(function (a) { return a.category; })
         .filter(function (v, i, arr) { return arr.indexOf(v) === i; }));
-      filters.innerHTML = cats.map(function (c, i) {
-        return '<button class="sched__filter' + (i === 0 ? ' is-active' : '') + '" data-cat="' + esc(c) + '"' +
-          ' aria-pressed="' + (i === 0) + '">' + (c === 'all' ? 'All articles' : esc(c)) + '</button>';
+      filters.innerHTML = cats.map(function (c) {
+        var active = c === cat;
+        return '<button class="sched__filter' + (active ? ' is-active' : '') + '" data-cat="' + esc(c) + '"' +
+          ' aria-pressed="' + active + '">' + (c === 'all' ? 'All articles' : esc(c)) + '</button>';
       }).join('');
       filters.addEventListener('click', function (e) {
         var b = e.target.closest('.sched__filter');

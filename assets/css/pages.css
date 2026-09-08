@@ -37,24 +37,24 @@
 .phead__crumbs{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:1.1rem}
 .phead__crumbs a{color:var(--accent-light)}
 .phead__crumbs a:hover{text-decoration:underline}
-.phead h1{font-size:clamp(2rem,4.6vw,3.4rem);font-weight:800;line-height:1.04;letter-spacing:-.035em;max-width:16ch;color:#fff}
-.phead h1 em{color:transparent;background:linear-gradient(100deg,var(--accent-light),#c3d3fb);-webkit-background-clip:text;background-clip:text}
+.phead h1{width:fit-content;font-size:clamp(2rem,4.6vw,3.4rem);font-weight:800;line-height:1.04;letter-spacing:-.035em;max-width:18ch;
+  color:transparent;background:linear-gradient(100deg,#4a78e7 0%,#8fabf5 42%,#fff 100%);
+  -webkit-background-clip:text;background-clip:text}
+.phead h1 em{color:inherit;background:none;-webkit-background-clip:initial;background-clip:initial}
 .phead__lead{margin-top:1.1rem;max-width:58ch;color:rgba(255,255,255,.68);font-size:1rem;line-height:1.7}
 .phead__lead + .phead__lead{margin-top:.9rem}
 .phead__lead strong{color:#fff;font-weight:600}
 .phead__lead a{color:var(--accent-light);text-decoration:underline;text-underline-offset:3px}
 .phead__actions{margin-top:1.9rem;display:flex;flex-wrap:wrap;gap:.65rem}
-.phead__finder{display:inline-flex;flex-direction:column;align-items:flex-start;min-width:min(100%,250px);padding:.85rem 1.2rem;
-  color:#fff;text-decoration:none;background:linear-gradient(180deg,rgba(33,81,209,.22),rgba(255,255,255,.04));
-  border:1px solid rgba(143,171,245,.28);border-radius:var(--r-md);
-  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+.phead__finder{display:inline-flex;align-items:center;justify-content:space-between;gap:2rem;min-width:min(100%,245px);padding:.75rem 1.15rem;
+  min-height:46px;color:#fff;text-decoration:none;background:rgba(33,81,209,.2);
+  border:1px solid rgba(143,171,245,.42);border-radius:var(--r-md);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   transition:transform .22s var(--ease),border-color .22s,background .22s,box-shadow .22s}
-.phead__finder > span{font-size:.62rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--accent-light)}
-.phead__finder strong{display:flex;align-items:center;justify-content:space-between;gap:1rem;width:100%;margin-top:.25rem;
-  font-size:1.15rem;font-weight:800;letter-spacing:-.025em;line-height:1.2;color:#fff}
+.phead__finder > span{font-size:1rem;font-weight:500;letter-spacing:-.01em;color:#fff}
 .phead__finder svg{flex:none;transition:transform .22s var(--ease)}
 .phead__finder:hover{transform:translateY(-2px);border-color:rgba(143,171,245,.58);
-  background:linear-gradient(180deg,rgba(33,81,209,.34),rgba(255,255,255,.08));box-shadow:0 12px 32px rgba(0,0,0,.16)}
+  background:rgba(33,81,209,.4);box-shadow:0 12px 32px rgba(0,0,0,.16)}
 .phead__finder:hover svg{transform:translateY(3px)}
 .phead__finder:focus-visible{outline:2px solid #fff;outline-offset:3px}
 .phead .btn--ghost{border-color:rgba(255,255,255,.32);color:#fff;background:transparent}
@@ -270,13 +270,13 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   box-shadow:0 0 0 4px var(--accent-soft)}
 .path__arrow svg{display:block}
 
-.path__num{display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--accent);
-  color:#fff;font-size:.72rem;font-weight:800;letter-spacing:.02em;flex:none}
+.path__num{display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:#fff;
+  border:1.5px solid var(--accent);color:var(--accent);font-size:.72rem;font-weight:800;letter-spacing:.02em;flex:none}
 .path h3{margin:.6rem 0 .45rem;font-size:1.2rem;font-weight:800;letter-spacing:-.025em}
 .path__headline{font-size:.7rem;font-weight:800;letter-spacing:.06em;color:var(--accent);
   line-height:1.5;margin-bottom:.75rem}
 .path__hook{font-size:.9rem;font-weight:700;color:var(--ink);line-height:1.55;margin-bottom:.6rem}
-.path__body{font-size:.88rem;color:var(--muted);line-height:1.65}
+.path__body{font-size:.88rem;color:var(--muted);line-height:1.65;text-align:justify;text-justify:inter-word}
 
 .path__cta{margin-top:auto;padding-top:1rem;font-size:.84rem;font-weight:600;color:var(--accent);
   display:inline-flex;align-items:center;align-self:flex-start}
@@ -323,12 +323,12 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   font:inherit;font-weight:700;font-size:1rem;letter-spacing:-.01em;white-space:nowrap;
   transition:background .25s var(--ease),color .25s var(--ease),box-shadow .25s var(--ease),border-color .25s}
 .ctabs__tab:hover{color:var(--accent-2);background:rgba(255,255,255,.44)}
-.ctabs__tab.is-active{color:var(--accent-2);border-color:rgba(33,81,209,.16);
-  background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(239,244,255,.94));
-  box-shadow:inset 0 1px 0 #fff,0 12px 30px -22px rgba(18,54,155,.75)}
+.ctabs__tab.is-active{color:#fff;border-color:var(--accent);
+  background:linear-gradient(145deg,var(--accent),#2e60df);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 12px 30px -22px rgba(18,54,155,.85)}
 .ctabs__tab.is-active::after{content:'';position:absolute;left:50%;bottom:.38rem;width:1.55rem;height:2px;
-  border-radius:99px;background:var(--accent);transform:translateX(-50%)}
-.ctabs__tab.is-active:hover{color:var(--accent-2)}
+  border-radius:99px;background:rgba(255,255,255,.82);transform:translateX(-50%)}
+.ctabs__tab.is-active:hover{color:#fff;background:var(--accent-hover)}
 .ctabs__tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 /* Intro row at the top of each detail panel. The panel headings were removed
@@ -428,12 +428,12 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 /* Two columns on desktop: the venue name and its address share one line
    (client, Sep 2026) and need the room. Masonry packing via CSS columns keeps
    a one-session card from leaving a hole under an eight-session card. */
-.sched__list{column-width:470px;column-gap:.9rem}
+.sched__list{column-width:470px;column-gap:1rem}
 .sched__list > *{break-inside:avoid;margin-bottom:.9rem}
-.vcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:1.1rem 1.2rem;
-  transition:border-color .25s,box-shadow .25s;display:flex;flex-direction:column;
+.vcard{background:var(--panel);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:1.1rem 1.2rem;
+  box-shadow:0 16px 40px -34px rgba(12,27,64,.5);transition:border-color .25s,box-shadow .25s,transform .25s var(--ease);display:flex;flex-direction:column;
   width:100%;-webkit-column-break-inside:avoid;break-inside:avoid}
-.vcard:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm)}
+.vcard:hover{border-color:rgba(33,81,209,.38);box-shadow:0 22px 48px -34px rgba(33,81,209,.6);transform:translateY(-2px)}
 /* Each area is a <details> drop-down (client, Sep 2026). The summary is the
    whole tap target: the area name and a chevron that turns when it opens.
    list-style:none + ::-webkit-details-marker kills the browser's own triangle
@@ -443,25 +443,29 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 /* Two columns: everything that can wrap on the left, the chevron pinned to
    the right so it never drops onto a second line. */
 .vcard__top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.8rem;align-items:center;
-  padding:1.05rem 1.2rem;cursor:pointer;list-style:none;min-height:44px}
+  padding:1.05rem 1.2rem;cursor:pointer;list-style:none;min-height:54px;
+  background:linear-gradient(110deg,rgba(33,81,209,.1),rgba(74,120,231,.035) 72%,transparent);
+  border-radius:calc(var(--r-lg) - 1px)}
 .vcard__heading{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .6rem;min-width:0}
 .vcard__top::-webkit-details-marker{display:none}
 .vcard__top:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:var(--r-lg)}
 .vcard__chev{flex:none;color:var(--faint);transition:transform .22s var(--ease)}
 .vcard[open] > .vcard__top .vcard__chev{transform:rotate(180deg)}
-.vcard[open] > .vcard__top{border-bottom:1px solid var(--line)}
+.vcard[open] > .vcard__top{border-bottom:1px solid rgba(33,81,209,.14);border-radius:calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0}
 .vcard__body{padding:0 1.2rem 1.1rem}
 .vcard h3{font-size:1.15rem;font-weight:800;margin:0;letter-spacing:-.02em}
 /* A single area can hold more than one venue (e.g. Aljunied = SBH + SBS).
    Each venue block sits under the area header, separated by a hairline. */
-.vcard__venue{margin-top:.9rem}
+.vcard__venue{margin-top:1rem;padding:.15rem}
 .vcard__body > .vcard__venue:first-child{margin-top:1rem}
-.vcard__venue + .vcard__venue{border-top:1px solid var(--line);padding-top:.9rem}
+.vcard__venue + .vcard__venue{border-top:1px solid var(--line);padding-top:1rem}
 /* Venue name and address share one line, the address pushed right and
    linking out to Google Maps (client, Sep 2026). It only drops to a second
    line when the two genuinely cannot fit. */
 .vcard__venuename{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;
   gap:.15rem .9rem;font-size:.9rem;font-weight:700;letter-spacing:-.01em;margin:0 0 .7rem}
+.vcard__venuename > span:first-child{display:inline-flex;align-items:center;gap:.4rem;min-width:0}
+.vcard__venuepin{flex:none;color:var(--accent);transform:translateY(1px)}
 .vcard__addr{flex:1 1 auto;min-width:0;text-align:right;font-size:.76rem;font-weight:500;
   color:var(--muted);line-height:1.5;text-decoration:underline;text-underline-offset:2px;
   text-decoration-color:var(--line);transition:color .2s,text-decoration-color .2s}
@@ -474,20 +478,26 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   .vcard h3{font-size:1rem}
   .vcard__body{padding:0 1rem 1rem}
 }
-.vcard__sessions{list-style:none;display:flex;flex-direction:column;gap:.3rem}
-.vcard__sessions li{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;font-size:.84rem;
-  border-top:1px solid var(--line);padding-top:.4rem}
-.vcard__sessions li:first-child{border-top:0;padding-top:0}
-.vcard__day{font-weight:700;min-width:5.2rem}
-.vcard__time{color:var(--muted)}
+.vcard__sessions{list-style:none;display:flex;flex-direction:column;gap:.42rem}
+.vcard__sessions li{display:grid;grid-template-columns:minmax(5rem,.8fr) minmax(7rem,1fr) auto;gap:.6rem;align-items:center;font-size:.82rem;
+  border:1px solid var(--line);background:var(--panel-2);border-radius:10px;padding:.55rem .65rem}
+.vcard__sessions li:first-child{padding-top:.55rem}
+.vcard__day{font-weight:750;color:var(--navy)}
+.vcard__time{color:var(--muted);font-variant-numeric:tabular-nums}
 /* One chip treatment for every level — blue outline, white fill, blue text,
    not bold (client, Sep 2026). Emergence used to be green; it now matches. */
 .vcard__lvl{margin-left:auto;font-size:.66rem;font-weight:500;padding:.16rem .5rem;
   border-radius:99px;letter-spacing:.04em;
   background:#fff;color:var(--accent);border:1px solid var(--accent)}
-.vcard__actions{display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;margin-top:.9rem}
-.vcard__book{font-size:.78rem;font-weight:600;color:var(--accent)}
-.vcard__book:hover{text-decoration:underline}
+.vcard__actions{display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;margin-top:1rem}
+.vcard__book{display:inline-flex;align-items:center;min-height:38px;padding:.45rem .75rem;border-radius:8px;
+  font-size:.78rem;font-weight:650;color:var(--accent);background:var(--accent-soft);border:1px solid rgba(33,81,209,.14)}
+.vcard__book:hover{background:var(--accent);border-color:var(--accent);color:#fff;text-decoration:none}
+@media(max-width:620px){
+  .vcard__sessions li{grid-template-columns:1fr auto}
+  .vcard__time{grid-column:1}
+  .vcard__lvl{grid-column:2;grid-row:1/3}
+}
 .sched__empty{column-span:all;padding:2rem;text-align:center;color:var(--faint);font-size:.88rem}
 
 /* ---------- CAMPS ---------- */
@@ -555,7 +565,8 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 }
 .etype{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:1.5rem 1.4rem;display:flex;flex-direction:column;transition:border-color .25s,box-shadow .25s}
 .etype:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm)}
-.etype__num{font-size:.66rem;font-weight:700;letter-spacing:.14em;color:var(--accent)}
+.etype__num{display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:#fff;
+  border:1.5px solid var(--accent);color:var(--accent);font-size:.72rem;font-weight:800;letter-spacing:.02em}
 /* Carnivals / Clinics / Competitions read larger than the "Our Services"
    label above them (client, Sep 2026). */
 .etype h3{margin:.55rem 0 .7rem;font-size:clamp(1.4rem,2.2vw,1.75rem);font-weight:800;letter-spacing:-.03em}
@@ -978,7 +989,8 @@ body.has-lightbox{overflow:hidden}
 .article{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
   padding:1.3rem;transition:border-color .25s,box-shadow .25s,transform .25s var(--ease)}
 .article:hover{transform:translateY(-3px);box-shadow:var(--shadow-sm);border-color:var(--line-2)}
-.article__cat{font-size:.62rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:.6rem}
+.article__cat{align-self:flex-start;font-size:.67rem;font-weight:700;letter-spacing:.02em;color:var(--accent);margin-bottom:.75rem;
+  padding:.25rem .58rem;background:var(--accent-soft);border:1px solid rgba(33,81,209,.14);border-radius:999px}
 .article h3{font-size:1.02rem;font-weight:700;line-height:1.35;margin-bottom:.5rem;letter-spacing:-.015em}
 .article p{font-size:.84rem;color:var(--muted);line-height:1.6;margin-bottom:1rem}
 .article__foot{margin-top:auto;display:flex;gap:.7rem;font-size:.72rem;color:var(--faint);font-weight:600}
@@ -990,13 +1002,27 @@ body.has-lightbox{overflow:hidden}
 
 /* ---------- one article page ---------- */
 .post{max-width:66ch}
-.post__meta{display:flex;flex-wrap:wrap;gap:.5rem .9rem;font-size:.78rem;font-weight:600;color:var(--faint);margin-bottom:2rem}
+.post__meta{display:flex;flex-wrap:wrap;gap:.7rem 1rem;align-items:center;font-size:.78rem;font-weight:600;color:var(--faint);margin-bottom:2rem}
 .post__cat{color:var(--accent);text-transform:uppercase;letter-spacing:.11em;font-size:.68rem;font-weight:700}
+.post__authorlink{display:inline-flex;align-items:center;gap:.55rem;color:var(--muted);transition:color .2s}
+.post__authorlink:hover{color:var(--accent)}
+.post__authorlink img{width:36px;height:36px;object-fit:cover;border-radius:50%;border:1px solid var(--line-2)}
+.post__authorlink strong{color:var(--ink);font-weight:700}
 .post p{font-size:1rem;color:var(--muted);line-height:1.8;margin-bottom:1.15rem}
 .post h2{font-size:1.25rem;font-weight:800;letter-spacing:-.02em;color:var(--ink);margin:2.2rem 0 .9rem}
 .post blockquote{margin:1.6rem 0;padding:.2rem 0 .2rem 1.2rem;border-left:3px solid var(--accent)}
 .post blockquote p{font-size:1.05rem;color:var(--ink);font-weight:600;line-height:1.7;margin:0}
 .post blockquote p+p{margin-top:.8rem}
+.post__author{display:flex;align-items:center;gap:.9rem;margin-top:2.4rem;padding:1rem 0;border-block:1px solid var(--line)}
+.post__author img{width:64px;height:64px;object-fit:cover;border-radius:50%;border:1px solid var(--line-2)}
+.post__author div{display:flex;flex-direction:column;gap:.12rem}
+.post__author span{font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.post__author strong{font-size:1rem;color:var(--ink)}
+.post__tags{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;margin-top:1.35rem}
+.post__tags > span{font-size:.8rem;font-weight:700;color:var(--ink);margin-right:.1rem}
+.post__tag{display:inline-flex;align-items:center;min-height:32px;padding:.3rem .7rem;border-radius:999px;
+  border:1px solid rgba(33,81,209,.16);background:var(--accent-soft);color:var(--accent);font-size:.72rem;font-weight:700}
+.post__tag:hover{background:var(--accent);border-color:var(--accent);color:#fff}
 .post__back{display:inline-flex;align-items:center;margin-top:2.6rem;font-size:.84rem;font-weight:600;color:var(--accent)}
 .post__back:hover{text-decoration:underline}
 
@@ -1171,7 +1197,9 @@ body.is-dark .footer{border-top:1px solid rgba(255,255,255,.09)}
   background:radial-gradient(circle,rgba(33,81,209,.13),rgba(33,81,209,.04) 38%,transparent 68%);pointer-events:none}
 .lab__mark{width:min(52vw,430px);margin-bottom:clamp(1rem,2.4vw,1.8rem)}
 .lab__logo{display:block;width:100%;height:auto;margin:0 auto;object-fit:contain;filter:drop-shadow(0 16px 34px rgba(15,64,210,.2))}
-.lab__title{font-size:clamp(2.6rem,11vw,8rem);font-weight:800;line-height:.95;letter-spacing:-.04em;text-transform:uppercase;color:#fff}
+.lab__title{font-size:clamp(2.6rem,11vw,8rem);font-weight:800;line-height:.95;letter-spacing:-.04em;text-transform:uppercase;
+  color:transparent;background:linear-gradient(100deg,#4a78e7 0%,#8fabf5 42%,#fff 100%);
+  -webkit-background-clip:text;background-clip:text}
 .lab__label{margin-top:3.2rem;font-size:.66rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.42)}
 .lab__addr{font-style:normal;margin-top:.9rem;font-size:.92rem;line-height:1.9;color:rgba(255,255,255,.72)}
 .lab__addr a{color:var(--accent-light);text-decoration:underline;text-underline-offset:3px}

@@ -13,7 +13,7 @@ global.window = {};
 require(path.join(root, 'assets/js/data.js'));
 const ARTICLES = global.window.ELEVER_DATA.articles;
 
-const V = '46'; // must match the ?v= cache-busting string used across the site
+const V = '49'; // must match the ?v= cache-busting string used across the site
 
 const esc = s => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -60,11 +60,20 @@ function page(a) {
   const title = `${a.title} — Élever Badminton`;
   const canonical = `https://www.eleverbadminton.com/news/${a.slug}`;
   const image = 'https://www.eleverbadminton.com/assets/img/hero-action.jpg';
+  const author = typeof a.author === 'object' ? a.author : (a.author ? { name: a.author } : null);
+  const authorId = author ? `author-${author.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}` : '';
+  const authorImage = author && author.image ? `../${author.image}` : '';
+  const authorHref = author ? (author.href || `#${authorId}`) : '';
+  const tags = Array.isArray(a.tags) && a.tags.length ? a.tags : [a.category];
 
   const jsonld = JSON.stringify({
     '@context': 'https://schema.org', '@type': 'NewsArticle',
     headline: a.title, description: a.excerpt, datePublished: a.date,
-    author: a.author ? { '@type': 'Person', name: a.author } : undefined,
+    author: author ? {
+      '@type': 'Person', name: author.name,
+      image: author.image ? `https://www.eleverbadminton.com/${author.image}` : undefined,
+      url: `${canonical}#${authorId}`
+    } : undefined,
     publisher: { '@type': 'Organization', name: 'Élever Badminton', url: 'https://www.eleverbadminton.com/' },
     mainEntityOfPage: canonical, articleSection: a.category
   });
@@ -110,12 +119,12 @@ function page(a) {
     <section class="psec">
       <article class="post">
         <div class="post__meta">
-          <span class="post__cat">${esc(a.category)}</span>
           <span>${esc(fmtDate(a.date))}</span>
-          ${a.author ? `<span>Written by ${esc(a.author)}</span>` : ''}
-          <span>${esc(a.read)} read</span>
+          ${author ? `<a class="post__authorlink" href="${esc(authorHref)}" aria-label="View ${esc(author.name)}’s author profile">${authorImage ? `<img src="${esc(authorImage)}" alt="" width="36" height="36">` : ''}<span>Written by <strong>${esc(author.name)}</strong></span></a>` : ''}
         </div>
         ${bodyHtml(a.body)}
+        ${author ? `<aside class="post__author" id="${esc(authorId)}" aria-label="About the author">${authorImage ? `<img src="${esc(authorImage)}" alt="${esc(author.name)}" width="72" height="72">` : ''}<div><span>Author</span><strong>${esc(author.name)}</strong></div></aside>` : ''}
+        <div class="post__tags" aria-label="Article tags"><span>Tags:</span>${tags.map(tag => `<a href="../news.html?category=${encodeURIComponent(tag)}" class="post__tag">${esc(tag)}</a>`).join('')}</div>
         <a class="post__back" href="../news.html">&lsaquo; All articles</a>
       </article>
     </section>

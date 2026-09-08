@@ -20,10 +20,7 @@
      NAV sits on the LEFT, immediately beside the logo. NAV_END sits on the
      right, next to the "Book a class" button, and is empty by default.
 
-     SG Hub is hidden for now — the page (hub.html) is untouched and still
-     works if opened directly. To bring it back, restore this entry:
-         { key: 'hub', href: 'hub.html', label: 'SG Hub' }
-     and the footer link + sitemap entry that went with it. */
+     The SG Hub is a first-class editorial destination and follows News. */
   var NAV = [
     {
       key: 'classes', href: 'classes.html', label: 'Classes',
@@ -37,6 +34,7 @@
        2026). The page <title> and the footer keep the full name. */
     { key: 'lab', href: 'lab.html', label: 'Lab' },
     { key: 'news', href: 'news.html', label: 'News' },
+    { key: 'hub', href: 'hub.html', label: 'SG Hub' },
     { key: 'about', href: 'about.html', label: 'About' },
     { key: 'contact', href: 'contact.html', label: 'Contact' }
   ];
@@ -174,11 +172,10 @@
           '<a href="' + url('lab.html') + '">Performance Lab</a>' +
           '<a href="' + url('about.html') + '">About</a>' +
           '<a href="' + url('news.html') + '">News</a>' +
+          '<a href="' + url('hub.html') + '">Singapore Shuttle Hub</a>' +
           /* About no longer carries its own contact block (client, Sep 2026),
              so the footer names the Contact page explicitly. */
           '<a href="' + url('contact.html') + '">Contact</a>' +
-          /* SG Badminton Hub hidden for now — restore this line to bring it back:
-             '<a href="' + url('hub.html') + '">SG Badminton Hub</a>' */
         '</div>' +
 
         '<div class="footer__col">' +
