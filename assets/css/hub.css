@@ -3,11 +3,9 @@ body[data-page="hub"]{background:#f5f7fb}
 body[data-page="hub"] .footer{margin-top:0}
 body[data-page="hub"] .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 
-.phead--hub{min-height:clamp(490px,58vw,680px);display:flex;align-items:flex-end;padding-bottom:clamp(3.5rem,7vw,6.5rem);overflow:hidden}
-.phead--hub::before{background:linear-gradient(90deg,rgba(2,8,24,.96) 0%,rgba(4,17,51,.88) 48%,rgba(10,40,116,.55) 100%),url('../img/hero-action.jpg') center 40%/cover}
-.phead--hub::after{background:radial-gradient(circle at 78% 28%,rgba(72,131,255,.38),transparent 32%),linear-gradient(115deg,transparent 56%,rgba(33,81,209,.28))}
+/* Standard page header band (no photo hero), same as the other pages.
+   Only the hub-specific eyebrow + proof pills are layered on top. */
 .phead--hub .phead__inner{width:100%}
-.phead--hub h1{max-width:none;white-space:nowrap;font-size:clamp(1.38rem,4.5vw,4.25rem);letter-spacing:-.055em}
 .phead--hub .phead__lead{max-width:72ch;color:rgba(255,255,255,.78);font-size:clamp(.94rem,1.35vw,1.08rem)}
 .hub-hero__eyebrow{margin-bottom:1.1rem;color:#a8c1ff;font-size:.7rem;font-weight:800;letter-spacing:.19em;text-transform:uppercase}
 .hub-hero__proof{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1.9rem}
@@ -162,7 +160,6 @@ body[data-page="hub"] .sr-only{position:absolute;width:1px;height:1px;padding:0;
 .hub-mini-grid{margin-top:.8rem}
 
 @media(max-width:1050px){
-  .phead--hub h1{font-size:clamp(2rem,4.3vw,3.2rem)}
   .hub-player-grid{grid-template-columns:repeat(3,1fr)}
   .hub__grid{grid-template-columns:repeat(2,1fr)}
 }
@@ -187,8 +184,6 @@ body[data-page="hub"] .sr-only{position:absolute;width:1px;height:1px;padding:0;
   .hub-mini-grid{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:620px){
-  .phead--hub{min-height:540px;padding-top:7.4rem}
-  .phead--hub h1{font-size:clamp(.95rem,5.1vw,2.15rem)}
   .hub-hero__proof span{flex:1 1 auto}
   .hub__tabs{padding-inline:1rem}
   .hub__tab{font-size:.78rem}
