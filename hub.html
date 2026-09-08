@@ -21,7 +21,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/style.css?v=49" />
   <link rel="stylesheet" href="assets/css/pages.css?v=49" />
-  <link rel="stylesheet" href="assets/css/hub.css?v=50" />
+  <link rel="stylesheet" href="assets/css/hub.css?v=51" />
 </head>
 <body data-page="hub" data-nav="solid" data-base="">
 
@@ -61,6 +61,21 @@
           <p>Track Singapore’s leading players, move from headlines to official rankings, and find the tournament pages that carry current draws, schedules and results.</p>
         </div>
 
+        <!-- Section sub-navigation. One panel held too many sections, so the
+             content is split into focused sub-panels and this segmented control
+             switches between them (client, Sep 2026). The sliding thumb is a
+             single pseudo-element positioned by JS; the buttons follow the ARIA
+             tablist pattern. -->
+        <div class="hub__subnav" data-subnav="international">
+          <div class="hub__subnav-inner" role="tablist" aria-label="Choose an international section">
+            <span class="hub__subnav-thumb" aria-hidden="true"></span>
+            <button class="hub__subtab is-active" data-subtab="intl-resources" role="tab" id="subtab-intl-resources" aria-selected="true" aria-controls="subpanel-intl-resources">Official links</button>
+            <button class="hub__subtab" data-subtab="intl-players" role="tab" id="subtab-intl-players" aria-selected="false" aria-controls="subpanel-intl-players" tabindex="-1">Players</button>
+            <button class="hub__subtab" data-subtab="intl-calendar" role="tab" id="subtab-intl-calendar" aria-selected="false" aria-controls="subpanel-intl-calendar" tabindex="-1">World Tour calendar</button>
+          </div>
+        </div>
+
+        <div class="hub__subpanel is-active" data-subpanel="intl-resources" id="subpanel-intl-resources" role="tabpanel" aria-labelledby="subtab-intl-resources" tabindex="0">
         <nav class="hub-route-grid" aria-label="Official international badminton resources">
           <a class="hub-route hub-route--feature" href="https://bwfbadminton.com/news/" target="_blank" rel="noopener">
             <span class="hub-route__index">01</span><span><b>BWF News</b><small>Reporting and player stories from the federation</small></span><span aria-hidden="true">↗</span>
@@ -78,7 +93,9 @@
             <span class="hub-route__index">05</span><span><b>Our World Tour News</b><small>Élever’s BWF World Tour coverage</small></span><span aria-hidden="true">→</span>
           </a>
         </nav>
+        </div><!-- /subpanel intl-resources -->
 
+        <div class="hub__subpanel" data-subpanel="intl-players" id="subpanel-intl-players" role="tabpanel" aria-labelledby="subtab-intl-players" tabindex="0" hidden>
         <section class="hub-block teamhub" id="team" aria-labelledby="team-title">
           <div class="hub-section-head">
             <div><span class="hub-kicker">Team Singapore</span><h2 id="team-title">Players to follow</h2></div>
@@ -96,7 +113,9 @@
             <div class="hub-callout__actions"><a class="btn btn--primary" href="https://bwfbadminton.com/rankings/" target="_blank" rel="noopener">Open official rankings</a><a class="btn btn--ghost" href="https://singaporebadminton.org.sg/" target="_blank" rel="noopener">Singapore Badminton Association</a></div>
           </div>
         </section>
+        </div><!-- /subpanel intl-players -->
 
+        <div class="hub__subpanel" data-subpanel="intl-calendar" id="subpanel-intl-calendar" role="tabpanel" aria-labelledby="subtab-intl-calendar" tabindex="0" hidden>
         <section class="hub-block news" id="news" aria-labelledby="newsTitle">
           <div class="hub-section-head">
             <div><span class="hub-kicker">2026 reference</span><h2 id="newsTitle">World Tour calendar</h2></div>
@@ -112,6 +131,7 @@
           <div class="news__more"><button class="btn btn--ghost" id="newsToggle" aria-expanded="false">Show all tournaments</button></div>
           <p class="hub-source-note"><strong>Source note:</strong> this editorial snapshot is retained as a browsing aid. It does not refresh from Wikipedia and should not be treated as official or live. Use the <a href="https://corporate.bwfbadminton.com/events/calendar/" target="_blank" rel="noopener">BWF calendar</a> for current information.</p>
         </section>
+        </div><!-- /subpanel intl-calendar -->
 
         <section class="hub-updates" aria-labelledby="international-updates-title">
           <div><span class="hub-kicker">Stay updated</span><h2 id="international-updates-title">Keep the rally going</h2><p>Join Singapore Shuttle Hub on Telegram, or follow Élever for coaching, events and community updates.</p></div>
@@ -125,6 +145,21 @@
           <p>Discover competitions, search 43 venues, understand each booking route, find a social group and shop for the right gear.</p>
         </div>
 
+        <!-- Local sections split into sub-panels; the segmented control below
+             switches between them so no single view is overwhelming (client,
+             Sep 2026). -->
+        <div class="hub__subnav" data-subnav="local">
+          <div class="hub__subnav-inner" role="tablist" aria-label="Choose a local section">
+            <span class="hub__subnav-thumb" aria-hidden="true"></span>
+            <button class="hub__subtab is-active" data-subtab="local-tournaments" role="tab" id="subtab-local-tournaments" aria-selected="true" aria-controls="subpanel-local-tournaments">Tournaments</button>
+            <button class="hub__subtab" data-subtab="local-courts" role="tab" id="subtab-local-courts" aria-selected="false" aria-controls="subpanel-local-courts" tabindex="-1">Courts</button>
+            <button class="hub__subtab" data-subtab="local-booking" role="tab" id="subtab-local-booking" aria-selected="false" aria-controls="subpanel-local-booking" tabindex="-1">Booking</button>
+            <button class="hub__subtab" data-subtab="local-groups" role="tab" id="subtab-local-groups" aria-selected="false" aria-controls="subpanel-local-groups" tabindex="-1">Groups</button>
+            <button class="hub__subtab" data-subtab="local-shops" role="tab" id="subtab-local-shops" aria-selected="false" aria-controls="subpanel-local-shops" tabindex="-1">Shops</button>
+          </div>
+        </div>
+
+        <div class="hub__subpanel is-active" data-subpanel="local-tournaments" id="subpanel-local-tournaments" role="tabpanel" aria-labelledby="subtab-local-tournaments" tabindex="0">
         <section class="hub-block" id="tournaments" aria-labelledby="tournament-title">
           <div class="hub-section-head">
             <div><span class="hub-kicker">Compete locally</span><h2 id="tournament-title">Find a tournament</h2></div>
@@ -138,7 +173,9 @@
           </div>
           <p class="hub-source-note"><strong>Schedule checked 8 September 2026:</strong> dates and venues above are from the Singapore Badminton Association’s sanctioned-tournament calendar; junior age groups are also listed by Badminton Asia. Registration details can change, so use the linked organiser page before entering.</p>
         </section>
+        </div><!-- /subpanel local-tournaments -->
 
+        <div class="hub__subpanel" data-subpanel="local-courts" id="subpanel-local-courts" role="tabpanel" aria-labelledby="subtab-local-courts" tabindex="0" hidden>
         <section class="hub-block hub-venues" id="halls" aria-labelledby="venue-title">
           <div class="hub-section-head">
             <div><span class="hub-kicker">Island-wide directory</span><h2 id="venue-title">Find a court near you</h2></div>
@@ -160,7 +197,9 @@
           <div class="hub__grid" id="hallGrid"></div>
           <p class="hub-source-note">Addresses are compiled from Google Maps and the SportSG facilities directory. ActiveSG public halls use the ActiveSG booking service; community club courts use <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a>. Spotted an error? <a href="mailto:info@eleverbadminton.com?subject=Singapore%20Shuttle%20Hub%20venue%20update">Tell us</a>.</p>
         </section>
+        </div><!-- /subpanel local-courts -->
 
+        <div class="hub__subpanel" data-subpanel="local-booking" id="subpanel-local-booking" role="tabpanel" aria-labelledby="subtab-local-booking" tabindex="0" hidden>
         <section class="hub-block" id="book" aria-labelledby="book-title">
           <div class="hub-section-head"><div><span class="hub-kicker">Court booking 101</span><h2 id="book-title">Three booking routes</h2></div><p>The platform depends on who runs the hall. Always confirm the final price, slot duration and cancellation policy before paying.</p></div>
           <div class="hub__book">
@@ -169,7 +208,9 @@
             <article class="bcard"><span class="bcard__num" aria-hidden="true">03</span><h3>Community clubs</h3><p>People’s Association facilities are listed and booked on OnePA.</p><ol class="bcard__list"><li>Open the <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA badminton search</a>.</li><li>Filter by location, date and facility.</li><li>Sign in and follow that venue’s current conditions.</li></ol></article>
           </div>
         </section>
+        </div><!-- /subpanel local-booking -->
 
+        <div class="hub__subpanel" data-subpanel="local-groups" id="subpanel-local-groups" role="tabpanel" aria-labelledby="subtab-local-groups" tabindex="0" hidden>
         <section class="hub-block" id="groups" aria-labelledby="groups-title">
           <div class="hub-section-head"><div><span class="hub-kicker">Find your people</span><h2 id="groups-title">Social groups &amp; ratings</h2></div><p>Start with a clear level, then choose a group whose pace, location and format suit you.</p></div>
           <div class="hub-social-feature">
@@ -178,7 +219,9 @@
           </div>
           <div class="hub-mini-grid"><article><h3>Meetup groups</h3><p>Search sessions, then ask the organiser about level, shuttles, fees and cancellation rules.</p><a href="https://www.meetup.com/find/?keywords=badminton&amp;location=sg--Singapore" target="_blank" rel="noopener">Search Singapore groups ↗</a></article><article><h3>Neighbourhood play</h3><p>Check your community club’s activities or ask about recurring social badminton sessions.</p><a href="https://www.onepa.gov.sg/courses/search?course=badminton" target="_blank" rel="noopener">Search OnePA activities ↗</a></article><article><h3>Structured improvement</h3><p>Prefer a coach-led group? Find an Élever class by level and venue.</p><a href="classes.html">Explore Élever classes →</a></article></div>
         </section>
+        </div><!-- /subpanel local-groups -->
 
+        <div class="hub__subpanel" data-subpanel="local-shops" id="subpanel-local-shops" role="tabpanel" aria-labelledby="subtab-local-shops" tabindex="0" hidden>
         <section class="hub-block" id="shops" aria-labelledby="shops-title">
           <div class="hub-section-head"><div><span class="hub-kicker">Gear in person</span><h2 id="shops-title">Physical shops to try</h2></div><p>For rackets and shoes, an in-person fit can be worth the trip. Product range and opening hours change, so check the linked source before visiting.</p></div>
           <div class="hub-shop-grid">
@@ -187,6 +230,7 @@
             <article><span>Queensway</span><h3>Gala Sports</h3><p>A badminton specialist at #01-33 Queensway Shopping Centre, listed in VICTOR Singapore’s authorised-dealer directory.</p><a href="https://www.google.com/maps/search/?api=1&amp;query=Gala%20Sports%201%20Queensway%20Singapore%20149053" target="_blank" rel="noopener">Open in Google Maps ↗</a></article>
           </div>
         </section>
+        </div><!-- /subpanel local-shops -->
 
         <section class="hub-updates" aria-labelledby="local-updates-title">
           <div><span class="hub-kicker">Stay updated</span><h2 id="local-updates-title">Your game starts here</h2><p>Join Singapore Shuttle Hub on Telegram, or follow Élever for coaching, events and community updates.</p></div>
@@ -201,6 +245,6 @@
   <script src="assets/js/data.js?v=49"></script>
   <script src="assets/js/site.js?v=49"></script>
   <script src="assets/js/pages.js?v=49"></script>
-  <script src="assets/js/main.js?v=49"></script>
+  <script src="assets/js/main.js?v=50"></script>
 </body>
 </html>

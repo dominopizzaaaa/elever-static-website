@@ -700,6 +700,9 @@
         p.classList.toggle('is-active', on);
         if (on) p.removeAttribute('hidden'); else p.setAttribute('hidden', '');
       });
+      // A sub-nav thumb cannot be measured while its panel is hidden (zero
+      // width), so re-lay the newly shown panel's thumb after it is visible.
+      layoutSubThumbs();
     }
     if (tabsEl) {
       tabsEl.addEventListener('click', function (e) {
@@ -721,10 +724,108 @@
         if (history.replaceState) history.replaceState(null, '', '#' + order[next]);
       });
     }
+    /* =============================================================
+       SECTION SUB-TABS (segmented control inside each main panel)
+       One panel held too many sections, so each panel's sections are
+       wrapped in sub-panels and switched by a segmented control
+       (client, Sep 2026). Each .hub__subnav is an independent ARIA
+       tablist; a single .hub__subnav-thumb slides to the active button
+       via CSS custom properties measured here.
+       ============================================================= */
+    var subnavs = Array.prototype.slice.call(hub.querySelectorAll('.hub__subnav'));
+
+    // Older deep-links point at section ids that now live inside a sub-panel,
+    // so map each section id to the sub-tab that reveals it.
+    var SECTION_TO_SUBTAB = {
+      team: 'intl-players', news: 'intl-calendar',
+      tournaments: 'local-tournaments', halls: 'local-courts',
+      book: 'local-booking', groups: 'local-groups', shops: 'local-shops'
+    };
+
+    function subPanelsFor(nav) {
+      var scope = nav.closest('.hub__panel') || hub;
+      return Array.prototype.slice.call(scope.querySelectorAll('.hub__subpanel'));
+    }
+
+    // Position a nav's thumb behind its active button. Skips when the nav is
+    // not laid out yet (hidden panel) so we never freeze the thumb at 0.
+    function layoutThumb(nav) {
+      var inner = nav.querySelector('.hub__subnav-inner');
+      var thumb = nav.querySelector('.hub__subnav-thumb');
+      var active = nav.querySelector('.hub__subtab.is-active');
+      if (!inner || !thumb || !active || !active.offsetWidth) return;
+      thumb.style.setProperty('--thumb-x', (active.offsetLeft - inner.scrollLeft) + 'px');
+      thumb.style.setProperty('--thumb-w', active.offsetWidth + 'px');
+      thumb.classList.add('is-ready');
+    }
+    function layoutSubThumbs() {
+      subnavs.forEach(layoutThumb);
+    }
+
+    function activateSubtab(nav, name, focusIt) {
+      var buttons = Array.prototype.slice.call(nav.querySelectorAll('.hub__subtab'));
+      buttons.forEach(function (b) {
+        var on = b.dataset.subtab === name;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-selected', String(on));
+        b.setAttribute('tabindex', on ? '0' : '-1');
+        if (on && focusIt) b.focus();
+      });
+      subPanelsFor(nav).forEach(function (p) {
+        var on = p.dataset.subpanel === name;
+        p.classList.toggle('is-active', on);
+        if (on) p.removeAttribute('hidden'); else p.setAttribute('hidden', '');
+      });
+      layoutThumb(nav);
+    }
+
+    subnavs.forEach(function (nav) {
+      var buttons = Array.prototype.slice.call(nav.querySelectorAll('.hub__subtab'));
+      nav.addEventListener('click', function (e) {
+        var btn = e.target.closest('.hub__subtab');
+        if (btn) activateSubtab(nav, btn.dataset.subtab);
+      });
+      // ARIA tablist keyboard support: arrows / Home / End move focus and
+      // activate, matching the primary tabs' behaviour.
+      nav.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft' && e.key !== 'Home' && e.key !== 'End') return;
+        var order = buttons.map(function (b) { return b.dataset.subtab; });
+        var cur = order.indexOf(document.activeElement.dataset ? document.activeElement.dataset.subtab : order[0]);
+        if (cur < 0) cur = 0;
+        var next = cur;
+        if (e.key === 'ArrowRight') next = (cur + 1) % order.length;
+        else if (e.key === 'ArrowLeft') next = (cur - 1 + order.length) % order.length;
+        else if (e.key === 'Home') next = 0;
+        else if (e.key === 'End') next = order.length - 1;
+        e.preventDefault();
+        activateSubtab(nav, order[next], true);
+      });
+    });
+
+    // Reveal the sub-panel that contains a deep-linked section (e.g. #halls),
+    // returning true when a matching sub-tab was activated.
+    function activateSubForSection(sectionId) {
+      var subName = SECTION_TO_SUBTAB[sectionId];
+      if (!subName) return false;
+      subnavs.forEach(function (nav) {
+        if (nav.querySelector('.hub__subtab[data-subtab="' + subName + '"]')) {
+          activateSubtab(nav, subName);
+        }
+      });
+      return true;
+    }
+
+    window.addEventListener('resize', layoutSubThumbs);
+
+
     /* Deep-link both main tabs and the preserved section aliases so older
-       #book / #groups / #halls / #team links continue to land correctly. */
+       #book / #groups / #halls / #team links continue to land correctly. Each
+       section alias now also reveals the sub-tab that contains it. */
     var TAB_NAMES = Array.prototype.map.call(tabs, function (b) { return b.dataset.tab; });
-    var TAB_ALIASES = { halls: 'local', book: 'local', groups: 'local', team: 'international' };
+    var TAB_ALIASES = {
+      team: 'international', news: 'international',
+      tournaments: 'local', halls: 'local', book: 'local', groups: 'local', shops: 'local'
+    };
     function tabFromHash() {
       var name = (location.hash || '').replace('#', '');
       if (TAB_ALIASES[name]) return TAB_ALIASES[name];
@@ -733,6 +834,8 @@
     function scrollToHashTarget() {
       var name = (location.hash || '').replace('#', '');
       if (!TAB_ALIASES[name]) return;
+      // Reveal the sub-panel first, then scroll to the section inside it.
+      activateSubForSection(name);
       var target = document.getElementById(name);
       if (target) target.scrollIntoView({ block: 'start' });
     }
@@ -756,6 +859,12 @@
       activateTab(initial);
       window.requestAnimationFrame(scrollToHashTarget);
     }
+
+    // Lay out the visible panel's thumb on load. Run again after fonts settle
+    // and on the next frame so the measured button widths are final.
+    window.requestAnimationFrame(layoutSubThumbs);
+    window.addEventListener('load', layoutSubThumbs);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutSubThumbs);
 
     render();
     // Re-render the venue list when the language changes (static text in the
