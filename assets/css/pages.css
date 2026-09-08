@@ -823,22 +823,19 @@ body.has-lightbox{overflow:hidden}
   .elog__where{text-align:left}
 }
 
-/* ---------- TRUSTED BY — one continuously scrolling row ----------
+/* ---------- TRUSTED BY — one row that floats left on its own ----------
    Client, Sep 2026: "one row, logos nearer to each other side by side, and a
    moving scroll like the one on the home page". The track holds the logo set
    twice and slides by exactly -50%, so the loop is seamless. Logos stay in
-   full colour. Hovering pauses it, so a reader can stop on a mark. */
-/* The row is a real scroller so a finger can drag it (client, Sep 2026);
-   pages.js drives the auto-advance by moving scrollLeft and pauses while the
-   reader is moving it. The keyframe animation below is the no-JS fallback —
-   .logorail--js (added by pages.js) turns it off so the two never fight. */
-.logorail{overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;
-  -webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;
+   full colour. Hovering pauses it, so a reader can stop on a mark.
+   The row floats left on its own; the reader cannot scroll it by hand
+   (client, Sep 2026). overflow is hidden and the CSS keyframe animation does
+   all the motion — pages.js only repeats the brand line so a short partner
+   list still fills the width. */
+.logorail{overflow:hidden;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
   mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
-.logorail::-webkit-scrollbar{display:none}
 .logorail__track{display:flex;width:max-content;animation:logorail 20s linear infinite}
-.logorail--js .logorail__track{animation:none}
 .logorail:hover .logorail__track,.logorail:focus-within .logorail__track{animation-play-state:paused}
 .logorail__set{display:flex;align-items:center;gap:clamp(1.6rem,4vw,3.4rem);padding-right:clamp(1.6rem,4vw,3.4rem)}
 .logorail__item{flex:none;display:grid;place-items:center;height:72px}
@@ -846,7 +843,7 @@ body.has-lightbox{overflow:hidden}
 .logorail__item--name{font-size:.85rem;font-weight:700;color:var(--faint);white-space:nowrap}
 @keyframes logorail{to{transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){
-  .logorail{-webkit-mask-image:none;mask-image:none;overflow-x:auto}
+  .logorail{-webkit-mask-image:none;mask-image:none}
   .logorail__track{animation:none}
 }
 

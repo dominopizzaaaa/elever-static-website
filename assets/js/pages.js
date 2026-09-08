@@ -896,11 +896,13 @@
       }).join('');
     }
 
-    /* Trusted by — one row that scrolls continuously, like the Home page
-       marquee (client, Sep 2026). The set is rendered TWICE: the CSS animation
-       translates the track by exactly -50%, so the second copy is in the first
-       copy's place when the loop restarts and the motion has no seam. The
-       duplicate is aria-hidden so the names are announced only once. */
+    /* Trusted by — one row that floats left continuously, like the Home page
+       marquee (client, Sep 2026). The reader cannot scroll it by hand; the CSS
+       keyframe animation translates the track by exactly -50%, so the second
+       half sits where the first was when the loop restarts and the motion has
+       no seam. With only a handful of partners the base set is repeated so each
+       half is wide enough to fill the row and the line always reads full. The
+       duplicated half is aria-hidden so the names are announced only once. */
     var partners = el('eventPartners');
     if (partners) {
       var pbase = SITE.base || '';
@@ -911,9 +913,11 @@
             '</span>'
           : '<span class="logorail__item logorail__item--name">' + esc(p.name) + '</span>';
       }).join('');
-      partners.innerHTML = '<span class="logorail__set">' + logos + '</span>' +
-        '<span class="logorail__set" aria-hidden="true">' + logos + '</span>';
-      initLogoRail(partners.parentElement);
+      /* Repeat the line of brands so a short partner list still fills the row. */
+      var REPEAT = 3;
+      var halfLogos = new Array(REPEAT + 1).join(logos);
+      partners.innerHTML = '<span class="logorail__set">' + halfLogos + '</span>' +
+        '<span class="logorail__set" aria-hidden="true">' + halfLogos + '</span>';
     }
   })();
 
@@ -998,65 +1002,6 @@
     }
     window.addEventListener('hashchange', function () { fromHash(true); });
     fromHash(true);
-  }
-
-  /* Drive the "Trusted by" row by scrolling the container rather than
-     animating the track (client, Sep 2026: "scrolls too slowly and cannot
-     scroll manually"). Because the motion IS the scroll position, a finger
-     swipe, a trackpad or the arrow keys move it like any other scroller; the
-     auto-advance simply pauses while the reader is driving and picks up again
-     once they stop. The CSS keyframe animation stays as the no-JS fallback and
-     is switched off by the .logorail--js class. */
-  function initLogoRail(rail) {
-    if (!rail || !rail.classList.contains('logorail')) return;
-    var track = rail.querySelector('.logorail__track');
-    if (!track) return;
-    rail.classList.add('logorail--js');
-
-    var SPEED = 58;            // px per second — roughly double the old pace
-    var RESUME_AFTER = 1800;   // ms of stillness before it starts again
-    var pos = 0, last = 0, paused = false, resumeTimer = 0;
-
-    /* The set is rendered twice, so half the track is one full pass: jumping
-       back by that much is invisible. */
-    function half() { return track.scrollWidth / 2; }
-    function scrollable() { return rail.scrollWidth - rail.clientWidth > 4; }
-
-    function pause() {
-      paused = true;
-      window.clearTimeout(resumeTimer);
-      resumeTimer = window.setTimeout(function () {
-        pos = rail.scrollLeft;
-        paused = false;
-      }, RESUME_AFTER);
-    }
-
-    ['pointerdown', 'touchstart', 'wheel', 'keydown'].forEach(function (evt) {
-      rail.addEventListener(evt, pause, { passive: true });
-    });
-    rail.addEventListener('mouseenter', function () { paused = true; });
-    rail.addEventListener('mouseleave', function () { pos = rail.scrollLeft; paused = false; });
-    /* A scroll we did not cause means the reader is dragging it. Scroll events
-       are dispatched after our own write has returned, so a flag set around the
-       assignment would always be back to false by the time this runs — compare
-       against the position we asked for instead. */
-    rail.addEventListener('scroll', function () {
-      if (Math.abs(rail.scrollLeft - pos) > 2) pause();
-    }, { passive: true });
-
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    window.requestAnimationFrame(function step(now) {
-      window.requestAnimationFrame(step);
-      if (!last) { last = now; return; }
-      var dt = Math.min(64, now - last);
-      last = now;
-      if (paused || document.hidden || !scrollable()) { pos = rail.scrollLeft; return; }
-      var h = half();
-      pos += SPEED * dt / 1000;
-      if (h > 0 && pos >= h) pos -= h;
-      rail.scrollLeft = pos;
-    });
   }
 
   /* =================================================================
