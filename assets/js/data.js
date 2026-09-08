@@ -714,32 +714,30 @@
         rank: 14, rankAs: 'May 2026',
         note: 'World champion in 2021 — the first Singaporean to win a BWF world title.',
         highlights: ['2021 World Champion', 'Olympian (Tokyo 2020, Paris 2024)'],
-        news: 'Loh Kean Yew badminton'
+        news: 'Loh Kean Yew badminton',
+        bwf: 'https://bwfbadminton.com/player/76115/loh-kean-yew'
       },
       {
         name: 'Yeo Jia Min', discipline: 'Women’s singles', code: 'WS',
         rank: 38, rankAs: 'May 2026',
         note: 'Former World Junior No. 1 and Singapore’s lead women’s singles player.',
         highlights: ['Former World Junior No. 1', 'Paris 2024 round of 16'],
-        news: 'Yeo Jia Min badminton'
+        news: 'Yeo Jia Min badminton',
+        bwf: 'https://bwfbadminton.com/?s=Yeo+Jia+Min'
       },
       {
         name: 'Jason Teh', discipline: 'Men’s singles', code: 'MS',
         note: 'Singapore’s second men’s singles representative on the world tour.',
         highlights: ['SEA Games team medallist', '2022 Commonwealth Games team bronze'],
-        news: 'Jason Teh badminton Singapore'
+        news: 'Jason Teh badminton Singapore',
+        bwf: 'https://bwfbadminton.com/?s=Jason+Teh'
       },
       {
         name: 'Terry Hee', discipline: 'Doubles', code: 'MD',
         note: 'Commonwealth Games mixed doubles champion, now competing in men’s doubles.',
         highlights: ['2022 Commonwealth Games gold (XD)', '2022 India Open champion'],
-        news: 'Terry Hee badminton'
-      },
-      {
-        name: 'Andy Kwek', discipline: 'Men’s doubles', code: 'MD',
-        note: 'Men’s doubles regular on the world tour and in Singapore’s team events.',
-        highlights: ['Swedish Open champion', 'Asia Team Championships bronze'],
-        news: 'Andy Kwek badminton'
+        news: 'Terry Hee badminton',
+        bwf: 'https://bwfbadminton.com/?s=Terry+Hee'
       }
     ],
     /* Where the national team's next competitions come from. The hub reads
@@ -747,6 +745,74 @@
        drift out of step with it. */
     watchFor: ['Singapore Open', 'BWF World Tour Finals', 'World Championships']
   };
+
+  /* ---------------------------------------------------------------
+     RECREATIONAL PLAY GROUPS — SG Hub -> Local -> Play -> Social groups
+     ---------------------------------------------------------------
+     A public list of regular social sessions so a new player can find one
+     and turn up (client, Sep 2026). Each entry needs all five fields
+     below — a group with no day, time or contact is not something a
+     reader can act on, so partial entries are better left out than
+     guessed at:
+
+       name     Group or club name
+       region   Central | West | North | North-East | East
+       day      'Every Tuesday' / 'Saturdays & Sundays'
+       time     '20:00 - 22:00'
+       venue    Where they play
+       level    Who it suits, in the group's own words
+       contact  { label, href } — WhatsApp, Telegram, email or a club page
+       rr       Optional Racket Ratings club page
+
+     THIS LIST IS DELIBERATELY EMPTY until Élever supplies verified
+     details. Nothing here is invented: an unverified time or phone number
+     sends a player to the wrong court. Until it is filled the panel shows
+     Racket Ratings' live club directory and an invitation to be listed.
+     --------------------------------------------------------------- */
+  var PLAY_GROUPS = [];
+
+  /* ---------------------------------------------------------------
+     SHOPS — SG Hub -> Local -> Shop
+     ---------------------------------------------------------------
+     Where to buy rackets, shoes, shuttles and stringing. `kind` files the
+     entry under the "In person" or the "Online & official dealer
+     directories" heading. Ranges, services and opening hours change
+     constantly, so every entry links to the shop's OWN page and the
+     section says so rather than restating stock we cannot keep current.
+     --------------------------------------------------------------- */
+  var SHOPS = [
+    {
+      kind: 'physical', area: 'East', name: 'Decathlon Bedok',
+      desc: 'Large multi-sport store at ESR BizPark @ Chai Chee, with badminton gear and restringing services listed.',
+      href: 'https://www.decathlon.sg/s/sports-stores/bedok', linkLabel: 'Official store page'
+    },
+    {
+      kind: 'physical', area: 'Central', name: 'Decathlon Orchard',
+      desc: 'Central option at The Centrepoint for trying entry-to-intermediate equipment in person.',
+      href: 'https://www.decathlon.sg/s/sports-stores/orchard', linkLabel: 'Official store page'
+    },
+    {
+      kind: 'physical', area: 'Queensway', name: 'Gala Sports',
+      desc: 'A badminton specialist at #01-33 Queensway Shopping Centre, listed in VICTOR Singapore’s authorised-dealer directory.',
+      href: 'https://www.google.com/maps/search/?api=1&query=Gala%20Sports%201%20Queensway%20Singapore%20149053',
+      linkLabel: 'Open in Google Maps'
+    },
+    {
+      kind: 'online', area: 'Online', name: 'Decathlon Singapore',
+      desc: 'Rackets, shoes, shuttles and bags online with click-and-collect at any of its Singapore stores.',
+      href: 'https://www.decathlon.sg/c/badminton', linkLabel: 'Shop online'
+    },
+    {
+      kind: 'online', area: 'Directory', name: 'VICTOR authorised dealers',
+      desc: 'VICTOR Singapore’s own list of authorised stockists — the reliable way to check a shop sells genuine stock.',
+      href: 'https://www.victorsport.com/stores', linkLabel: 'Find a dealer'
+    },
+    {
+      kind: 'online', area: 'Directory', name: 'YONEX store locator',
+      desc: 'YONEX’s official directory of retailers and stringing partners, filterable by country.',
+      href: 'https://www.yonex.com/badminton/dealers/', linkLabel: 'Find a retailer'
+    }
+  ];
 
   window.ELEVER_DATA = {
     coaches: COACHES,
@@ -766,6 +832,8 @@
     partners: PARTNERS,
     articles: ARTICLES,
     racketRatings: RACKET_RATINGS,
+    playGroups: PLAY_GROUPS,
+    shops: SHOPS,
     teamSg: TEAM_SG
   };
 })();

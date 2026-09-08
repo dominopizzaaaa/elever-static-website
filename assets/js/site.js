@@ -34,7 +34,9 @@
        2026). The page <title> and the footer keep the full name. */
     { key: 'lab', href: 'lab.html', label: 'Lab' },
     { key: 'news', href: 'news.html', label: 'News' },
-    { key: 'hub', href: 'hub.html', label: 'SG Hub' },
+    /* Short label in the bar (client, Sep 2026) — the page title, the hero
+       and the footer all keep the full "Singapore Shuttlers Hub". */
+    { key: 'hub', href: 'hub.html', label: 'Hub' },
     { key: 'about', href: 'about.html', label: 'About' },
     { key: 'contact', href: 'contact.html', label: 'Contact' }
   ];
@@ -172,7 +174,7 @@
           '<a href="' + url('lab.html') + '">Performance Lab</a>' +
           '<a href="' + url('about.html') + '">About</a>' +
           '<a href="' + url('news.html') + '">News</a>' +
-          '<a href="' + url('hub.html') + '">Singapore Shuttle Hub</a>' +
+          '<a href="' + url('hub.html') + '">Singapore Shuttlers Hub</a>' +
           /* About no longer carries its own contact block (client, Sep 2026),
              so the footer names the Contact page explicitly. */
           '<a href="' + url('contact.html') + '">Contact</a>' +

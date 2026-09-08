@@ -904,13 +904,10 @@
       }).join('');
     }
 
-    /* Trusted by — one row that floats left continuously, like the Home page
-       marquee (client, Sep 2026). The reader cannot scroll it by hand; the CSS
-       keyframe animation translates the track by exactly -50%, so the second
-       half sits where the first was when the loop restarts and the motion has
-       no seam. With only a handful of partners the base set is repeated so each
-       half is wide enough to fill the row and the line always reads full. The
-       duplicated half is aria-hidden so the names are announced only once. */
+    /* Trusted by — one still row. The continuous marquee is gone (client, Sep
+       2026: "remove scroll function"), and with it the duplicated half it
+       needed for a seamless loop: every partner is rendered exactly once and
+       the row wraps if it runs out of width. */
     var partners = el('eventPartners');
     if (partners) {
       var pbase = SITE.base || '';
@@ -921,11 +918,7 @@
             '</span>'
           : '<span class="logorail__item logorail__item--name">' + esc(p.name) + '</span>';
       }).join('');
-      /* Repeat the line of brands so a short partner list still fills the row. */
-      var REPEAT = 3;
-      var halfLogos = new Array(REPEAT + 1).join(logos);
-      partners.innerHTML = '<span class="logorail__set">' + halfLogos + '</span>' +
-        '<span class="logorail__set" aria-hidden="true">' + halfLogos + '</span>';
+      partners.innerHTML = '<span class="logorail__set">' + logos + '</span>';
     }
   })();
 
@@ -1013,6 +1006,145 @@
   }
 
   /* =================================================================
+     COACH DETAIL OVERLAY
+     -----------------------------------------------------------------
+     A coach card opens here rather than navigating away (client, Sep 2026:
+     "coaches profile should do pop up style like events page"). The overlay
+     chrome is the same .edetail shell the Past Events cards use, so the two
+     read as one interaction; only the body is coach-specific.
+
+     The cards stay real <a href="coaches/<slug>.html"> links: the generated
+     pages remain the canonical, indexable profile and the destination without
+     JavaScript. This only intercepts the click.
+     ================================================================= */
+  function initCoachDetail(scopes, coaches) {
+    var live = scopes.filter(Boolean);
+    if (!live.length) return;
+
+    var base = SITE.base || '';
+    var lastTrigger = null;
+
+    var modal = document.createElement('div');
+    modal.className = 'edetail edetail--coach';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Coach profile');
+    modal.hidden = true;
+    modal.innerHTML =
+      '<button class="edetail__close" type="button" aria-label="Close" title="Close">' +
+        '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">' +
+          '<path d="M6.4 6.4 17.6 17.6M17.6 6.4 6.4 17.6" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>' +
+        '</svg>' +
+      '</button>' +
+      '<div class="edetail__panel" role="document"></div>';
+    document.body.appendChild(modal);
+
+    var panel = modal.querySelector('.edetail__panel');
+    var closeBtn = modal.querySelector('.edetail__close');
+
+    function initials(name) {
+      return String(name || '').split(/\s+/).filter(Boolean)
+        .map(function (part) { return part.charAt(0); }).join('').slice(0, 2).toUpperCase();
+    }
+
+    function render(c) {
+      var facts = [];
+      if (c.role) facts.push(['Role', c.role]);
+      if (c.cert) facts.push(['Certification', c.cert]);
+      if (c.coaching && c.coaching.length) facts.push(['Coaches', c.coaching.join(', ')]);
+      if (c.languages && c.languages.length) facts.push(['Languages', c.languages.join(', ')]);
+
+      var bio = (c.bio || []).map(function (para) {
+        return '<p class="edetail__desc">' + esc(para) + '</p>';
+      }).join('');
+
+      panel.innerHTML =
+        '<header class="edetail__head">' +
+          (c.cert ? '<div class="edetail__types"><span class="edetail__type">' + esc(c.cert) + '</span></div>' : '') +
+          '<h2 class="edetail__title">' + esc(c.name) + sampleTag(c) + '</h2>' +
+          (c.role ? '<p class="edetail__meta">' + esc(c.role) + '</p>' : '') +
+        '</header>' +
+        '<div class="cdetail">' +
+          '<div>' +
+            '<figure class="cdetail__photo">' +
+              (c.photo
+                ? '<img src="' + esc(base + c.photo) + '" alt="' + esc(c.name) + '" width="640" height="640" decoding="async">'
+                : '<span class="cdetail__initials">' + esc(initials(c.name)) + '</span>') +
+            '</figure>' +
+            (facts.length
+              ? '<ul class="cdetail__facts">' + facts.map(function (f) {
+                  return '<li><span>' + esc(f[0]) + '</span><b>' + esc(f[1]) + '</b></li>';
+                }).join('') + '</ul>'
+              : '') +
+          '</div>' +
+          '<div class="cdetail__body">' +
+            bio +
+            (c.achievements && c.achievements.length
+              ? '<div>' +
+                  '<h3 class="edetail__subhead edetail__subhead--plain">Achievements</h3>' +
+                  '<ul class="edetail__servicelist">' + c.achievements.map(function (a) {
+                    return '<li>' + esc(a) + '</li>';
+                  }).join('') + '</ul>' +
+                '</div>'
+              : '') +
+            '<div class="cdetail__actions">' +
+              (c.profilePage === false
+                ? ''
+                : '<a class="btn btn--ghost" href="' + esc(base + 'coaches/' + c.slug + '.html') + '">Open full profile</a>') +
+              '<a class="btn btn--primary" href="' + esc(base + 'classes.html#locations') + '">See classes</a>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+    }
+
+    function open(slug, trigger) {
+      var c = coaches.filter(function (x) { return x.slug === slug; })[0];
+      if (!c) return;
+      lastTrigger = trigger || null;
+      render(c);
+      modal.hidden = false;
+      document.body.classList.add('has-lightbox');
+      panel.scrollTop = 0;
+      closeBtn.focus();
+    }
+
+    function close() {
+      modal.hidden = true;
+      document.body.classList.remove('has-lightbox');
+      if (lastTrigger && lastTrigger.focus) lastTrigger.focus();
+      lastTrigger = null;
+    }
+
+    live.forEach(function (scope) {
+      scope.addEventListener('click', function (ev) {
+        var trigger = ev.target.closest('[data-coach]');
+        if (!trigger) return;
+        /* Let a modified click (new tab / window / download) reach the real
+           profile page rather than swallowing it into the overlay. */
+        if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey || ev.button > 0) return;
+        ev.preventDefault();
+        open(trigger.getAttribute('data-coach'), trigger);
+      });
+    });
+
+    modal.addEventListener('click', function (ev) {
+      if (ev.target.closest('.edetail__close') || ev.target === modal) close();
+    });
+
+    document.addEventListener('keydown', function (ev) {
+      if (modal.hidden) return;
+      if (ev.key === 'Escape') { close(); return; }
+      if (ev.key === 'Tab') {
+        var f = modal.querySelectorAll('button, a[href]');
+        if (!f.length) return;
+        var first = f[0], last = f[f.length - 1];
+        if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last.focus(); }
+        else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first.focus(); }
+      }
+    });
+  }
+
+  /* =================================================================
      COACHES — About page grid
      ================================================================= */
   (function coaches() {
@@ -1025,24 +1157,30 @@
       return String(name || '').split(/\s+/).filter(Boolean).map(function (part) { return part.charAt(0); }).join('').slice(0, 2).toUpperCase();
     }
 
+    /* A coach with a write-up opens the overlay; the <a href> underneath is
+       the real profile page, kept so the card still works without JS and the
+       page stays indexable (see initCoachDetail). A coach with neither — only
+       "to write soon" — is a plain <div> that goes nowhere, as before. */
     function card(c, i) {
-      var tag = c.profilePage === false ? 'div' : 'a';
-      var href = c.profilePage === false ? '' : ' href="' + base + 'coaches/' + esc(c.slug) + '.html"';
+      var hasProfile = c.profilePage !== false;
+      var tag = hasProfile ? 'a' : 'div';
+      var href = hasProfile ? ' href="' + base + 'coaches/' + esc(c.slug) + '.html" data-coach="' + esc(c.slug) + '"' : '';
       var photo = c.photo
         ? '<img src="' + base + esc(c.photo) + '" alt="' + esc(c.name) + '" width="640" height="640" loading="lazy" decoding="async">'
         : '<span class="coach__initials">' + esc(initials(c.name)) + '</span>';
-      return '<' + tag + ' class="coach coach--' + (c.profilePage === false ? 'static' : 'linked') + '"' + href + '>' +
+      return '<' + tag + ' class="coach coach--' + (hasProfile ? 'linked' : 'static') + '"' + href + '>' +
         '<div class="coach__img">' + photo + '</div>' +
         '<div class="coach__body"><h3>' + esc(c.name) + '</h3>' +
           '<p class="coach__role">' + esc(c.role) + '</p>' +
           (c.cert ? '<span class="coach__cert">' + esc(c.cert) + '</span>' : '') +
-          /* No profile page yet: the card simply does not link anywhere. */
-          (c.profilePage === false ? '' : '<p class="coach__more">View profile &rsaquo;</p>') +
+          (hasProfile ? '<p class="coach__more">View profile &rsaquo;</p>' : '') +
         '</div></' + tag + '>';
     }
 
     if (founders) founders.innerHTML = D.coaches.filter(function (c) { return c.group === 'founder'; }).map(card).join('');
     if (team) team.innerHTML = D.coaches.filter(function (c) { return c.group !== 'founder'; }).map(card).join('');
+
+    initCoachDetail([founders, team], D.coaches);
 
     /* The team row scrolls sideways. Scrolling itself is CSS; this only adds
        the two arrows a mouse user would otherwise not get, and only while
@@ -1197,10 +1335,22 @@
           : '') +
         '<div class="tcard__links">' +
           '<a href="' + esc(T.rankingUrl) + '" target="_blank" rel="noopener">Live ranking &#8599;</a>' +
-          '<a href="' + esc(newsUrl(p.news)) + '" target="_blank" rel="noopener">News &#8599;</a>' +
+          '<a href="' + esc(p.bwf || newsUrl(p.news)) + '" target="_blank" rel="noopener">Last matches &#8599;</a>' +
         '</div>' +
       '</article>';
     }).join('');
+
+    /* ---- last matches ----
+       One route per player into BWF's own pages, where the draw and the
+       completed matches are official. We deliberately do not reprint
+       scorelines here: a stale scoreline is worse than a link. */
+    var resultsMount = el('teamResults');
+    if (resultsMount) {
+      resultsMount.innerHTML = T.players.map(function (p) {
+        return '<a class="tnews__chip" href="' + esc(p.bwf || newsUrl(p.news)) + '"' +
+          ' target="_blank" rel="noopener">' + esc(p.name) + ' &#8599;</a>';
+      }).join('');
+    }
 
     /* ---- next competitions ----
        Read from the season calendar that main.js renders, so the two can
@@ -1264,6 +1414,154 @@
           esc(f.label) + ' &#8599;</a>';
       }).join('');
     }
+  })();
+
+  /* =================================================================
+     SG HUB -> INTERNATIONAL -> NEWS
+     -----------------------------------------------------------------
+     Our own reporting, pulled from the same ARTICLES list the News page
+     renders — not a third-party feed (client, Sep 2026). An article
+     qualifies if it carries the BWF World Tour tag/category, OR if it
+     names one of the Singapore players listed in the Players tab, so a
+     piece about Kean Yew or Jia Min surfaces here whatever it is filed
+     under. Matching is on the title, the excerpt and the body text.
+     ================================================================= */
+  (function hubNews() {
+    var mount = el('hubNewsGrid');
+    if (!mount) return;
+
+    var TAG = 'BWF World Tour';
+    var base = SITE.base || '';
+    var players = ((D.teamSg && D.teamSg.players) || []).map(function (p) { return p.name; });
+
+    function fmt(d) {
+      var parts = String(d).split('-');
+      var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return parts.length === 3 ? (Number(parts[2]) + ' ' + months[Number(parts[1]) - 1] + ' ' + parts[0]) : d;
+    }
+
+    /* Title + excerpt + every text block, lower-cased once per article. */
+    function haystack(a) {
+      var parts = [a.title || '', a.excerpt || ''];
+      (a.body || []).forEach(function (b) { if (b && b.text) parts.push(b.text); });
+      return parts.join(' ').toLowerCase();
+    }
+
+    function mentions(a) {
+      var hay = haystack(a);
+      return players.filter(function (name) { return hay.indexOf(name.toLowerCase()) > -1; });
+    }
+
+    var rows = D.articles.map(function (a) {
+      var tagged = a.category === TAG ||
+        (Array.isArray(a.tags) && a.tags.indexOf(TAG) > -1);
+      var named = mentions(a);
+      return { a: a, tagged: tagged, named: named };
+    }).filter(function (r) {
+      return r.tagged || r.named.length;
+    }).sort(function (x, y) {
+      return String(y.a.date).localeCompare(String(x.a.date));
+    });
+
+    if (!rows.length) {
+      mount.innerHTML = '<p class="sched__empty">Nothing published on the World Tour yet — ' +
+        '<a href="' + base + 'news.html">see all our news</a>.</p>';
+      return;
+    }
+
+    mount.innerHTML = rows.map(function (r) {
+      var a = r.a;
+      /* A piece that only qualifies because it names a Singapore player says
+         so, rather than appearing under the World Tour tag it does not carry. */
+      var why = r.tagged ? esc(a.category) : esc(r.named[0]);
+      return '<a class="article" href="' + base + 'news/' + esc(a.slug) + '.html">' +
+        '<span class="article__cat">' + why + '</span>' +
+        '<h3>' + esc(a.title) + sampleTag(a) + '</h3>' +
+        '<p>' + esc(a.excerpt) + '</p>' +
+        '<div class="article__foot"><span>' + fmt(a.date) + '</span>' +
+          (r.named.length ? '<span>' + esc(r.named.join(' · ')) + '</span>' : '') +
+        '</div>' +
+      '</a>';
+    }).join('');
+  })();
+
+  /* =================================================================
+     SG HUB -> LOCAL -> PLAY -> SOCIAL GROUPS
+     Day, time, venue, level and a contact for each recreational group
+     (client, Sep 2026). Reads PLAY_GROUPS from data.js; while that list
+     is empty the panel says so plainly and points at Racket Ratings'
+     live club directory rather than showing an empty grid.
+     ================================================================= */
+  (function playGroups() {
+    var mount = el('playGroups');
+    if (!mount) return;
+
+    var groups = D.playGroups || [];
+    var rrClubs = (D.racketRatings && D.racketRatings.home) || 'https://www.racketratings.net/badminton';
+    (D.racketRatings && D.racketRatings.features || []).forEach(function (f) {
+      if (f.key === 'clubs') rrClubs = f.href;
+    });
+
+    /* The Racket Ratings card directly above already carries the button, so
+       the empty state points at it rather than repeating the same CTA. */
+    if (!groups.length) {
+      mount.innerHTML = '<div class="grpempty">' +
+        '<p>We are compiling a public list of Singapore’s recreational badminton groups — ' +
+        'the day and time they play, where, and who to contact. Until it is ready, the ' +
+        '<a href="' + esc(rrClubs) + '" target="_blank" rel="noopener">Racket Ratings club ' +
+        'directory</a> above is the live list of clubs and ladders you can join today.</p>' +
+        '</div>';
+      return;
+    }
+
+    mount.innerHTML = groups.map(function (g) {
+      var rows = [];
+      if (g.day) rows.push(['Day', esc(g.day)]);
+      if (g.time) rows.push(['Time', esc(g.time)]);
+      if (g.venue) rows.push(['Venue', esc(g.venue)]);
+      if (g.level) rows.push(['Level', esc(g.level)]);
+      if (g.contact && g.contact.href) {
+        rows.push(['Contact', '<a href="' + esc(g.contact.href) + '" target="_blank" rel="noopener">' +
+          esc(g.contact.label || 'Get in touch') + '</a>']);
+      }
+      return '<article class="grpcard">' +
+        '<div class="grpcard__top">' +
+          '<h4>' + esc(g.name) + sampleTag(g) + '</h4>' +
+          (g.region ? '<span class="grpcard__region">' + esc(g.region) + '</span>' : '') +
+        '</div>' +
+        '<dl class="grpcard__meta">' + rows.map(function (r) {
+          return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>';
+        }).join('') + '</dl>' +
+        (g.rr ? '<a class="grpcard__rr" href="' + esc(g.rr) + '" target="_blank" rel="noopener">' +
+          'See this club on Racket Ratings &rsaquo;</a>' : '') +
+      '</article>';
+    }).join('');
+  })();
+
+  /* =================================================================
+     SG HUB -> LOCAL -> SHOP
+     Two lists off one array — `kind` decides which heading an entry
+     lands under (client, Sep 2026: online AND physical).
+     ================================================================= */
+  (function shops() {
+    var physical = el('shopsPhysical');
+    var online = el('shopsOnline');
+    if (!physical && !online) return;
+
+    function cards(kind) {
+      return (D.shops || []).filter(function (sh) { return sh.kind === kind; }).map(function (sh) {
+        return '<article>' +
+          (sh.area ? '<span>' + esc(sh.area) + '</span>' : '') +
+          '<h3>' + esc(sh.name) + '</h3>' +
+          '<p>' + esc(sh.desc) + '</p>' +
+          '<a href="' + esc(sh.href) + '" target="_blank" rel="noopener">' +
+            esc(sh.linkLabel || 'Visit') + ' &#8599;</a>' +
+        '</article>';
+      }).join('');
+    }
+
+    if (physical) physical.innerHTML = cards('physical');
+    if (online) online.innerHTML = cards('online');
   })();
 
   /* =================================================================

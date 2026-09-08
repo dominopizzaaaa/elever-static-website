@@ -72,7 +72,7 @@ body.has-dark-head .nav.scrolled{background:rgba(255,255,255,.88);border-color:v
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 body.has-dark-head .nav.scrolled .nav__logo{color:var(--ink)}
 body.has-dark-head .nav.scrolled .nav__logo span{color:var(--accent)}
-body.has-dark-head .nav.scrolled .nav__link{color:var(--muted)}
+body.has-dark-head .nav.scrolled .nav__link{color:var(--ink)}
 body.has-dark-head .nav.scrolled .nav__link:hover{color:var(--ink);background:var(--bg-2)}
 body.has-dark-head .nav.scrolled .nav__link.is-current{color:var(--accent)}
 body.has-dark-head .nav.scrolled .nav__burger span{background:var(--ink)}
@@ -90,7 +90,12 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
    aligned, from EB logo and book a class button to the words in the black
    section to the words in the white section".) */
 .psec{padding:4.2rem var(--gutter);max-width:calc(var(--maxw) + 2 * var(--gutter));margin:0 auto}
-.psec--alt{background:var(--bg-2);max-width:none;border-block:1px solid var(--line)}
+/* A section break is one thin, faint horizontal rule — nothing else. The
+   alternating grey fills are gone (client, Sep 2026: "use a horizontal thin
+   and faint line similar to elevenlabs.io ... instead of the current one
+   where different sections have different grey shades"). No vertical rules:
+   the client asked for the horizontal treatment only. */
+.psec--alt{background:transparent;max-width:none;border-block:1px solid var(--rule)}
 /* The band runs edge to edge; its inner column sits on the same line as
    everything else because .psec--alt already carries the gutter as padding. */
 .psec--alt > .psec__inner{max-width:var(--maxw);margin:0 auto;padding:0}
@@ -141,7 +146,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 /* All three statements bold and black (client, Sep 2026) — the third line used
    to be brand blue. */
 .tagline{margin-top:1.8rem;font-size:clamp(1.05rem,2vw,1.4rem);font-weight:800;color:var(--ink);
-  letter-spacing:-.02em;line-height:1.7;max-width:24ch}
+  letter-spacing:-.02em;line-height:1.3;max-width:24ch}
 .tagline em{color:inherit;font-style:normal;font-weight:inherit}
 .tagline--cards{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;max-width:none;font-size:.9rem;line-height:1.45}
 .tagline--cards span{background:var(--ink);color:#fff;border-radius:var(--r-md);padding:1rem 1.05rem}
@@ -270,8 +275,11 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   box-shadow:0 0 0 4px var(--accent-soft)}
 .path__arrow svg{display:block}
 
-.path__num{display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:#fff;
-  border:1.5px solid var(--accent);color:var(--accent);font-size:.72rem;font-weight:800;letter-spacing:.02em;flex:none}
+/* 01 / 02 / 03 / 04 — a smaller ring drawn with a hairline (client, Sep
+   2026: "reducing size of circle and thinner line"). The Events page step
+   numbers below use exactly the same figures. */
+.path__num{display:grid;place-items:center;width:1.6rem;height:1.6rem;border-radius:50%;background:#fff;
+  border:1px solid var(--accent);color:var(--accent);font-size:.62rem;font-weight:800;letter-spacing:.02em;flex:none}
 .path h3{margin:.6rem 0 .45rem;font-size:1.2rem;font-weight:800;letter-spacing:-.025em}
 .path__headline{font-size:.7rem;font-weight:800;letter-spacing:.06em;color:var(--accent);
   line-height:1.5;margin-bottom:.75rem}
@@ -421,6 +429,13 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   font-size:.82rem;font-weight:600;padding:.5rem .9rem;min-height:40px;border-radius:99px;cursor:pointer;transition:.2s}
 .sched__filter:hover{border-color:var(--line-2);color:var(--ink)}
 .sched__filter.is-active{background:var(--accent);border-color:var(--accent);color:#fff}
+/* Past Events (All / Carnivals / Clinics / Competitions): the chips take the
+   same colours as the type tag printed on each event card — blue on pale
+   blue — and the same 4px corner, so the filter and the thing it filters read
+   as one set (client, Sep 2026). */
+#showcaseFilters .sched__filter{border-radius:4px}
+#showcaseFilters .sched__filter.is-active{background:var(--accent-soft);color:var(--accent);
+  border-color:rgba(33,81,209,.16)}
 /* Masonry-style packing via CSS columns. Venue cards vary a lot in height
    (1 session vs 8), so a normal grid leaves big gaps under short cards. Column
    flow lets each card take only the height it needs and packs the next card
@@ -498,16 +513,21 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .vcard__sessions li.vcard__row--sameday::before{left:calc(.15rem + var(--day-col) + .6rem)}
 .vcard__sessions li:first-child{padding-top:.3rem}
 .vcard__sessions li:last-child{padding-bottom:.15rem}
-.vcard__day{font-weight:750;color:var(--navy);white-space:nowrap}
+.vcard__day{font-weight:700;color:var(--navy);white-space:nowrap}
 /* A repeated day keeps its (empty) grid cell on desktop so the time column
    stays aligned; on the stacked phone layout it is removed so the row does
    not leave a blank line. */
 .vcard__day--repeat{min-height:1px}
-.vcard__time{color:var(--muted);font-variant-numeric:tabular-nums}
-/* One chip treatment for every level — blue outline, white fill, blue text,
-   not bold (client, Sep 2026). Emergence used to be green; it now matches. */
-.vcard__lvl{margin-left:auto;font-size:.66rem;font-weight:500;padding:.16rem .5rem;
-  border-radius:99px;letter-spacing:.04em;
+/* No tabular figures here: Montserrat's tabular digits are visibly wider and
+   flatter than its proportional ones, which made the timings read as a
+   different typeface from everything else on the page (client, Sep 2026). */
+.vcard__time{color:var(--muted)}
+/* One chip treatment for every level — blue outline, white fill, blue text
+   (client, Sep 2026). Emergence used to be green; it now matches. The weight
+   and letter-spacing follow the site's other small labels so "Essentials" and
+   "Emergence" no longer look set in a different face (client, Sep 2026). */
+.vcard__lvl{margin-left:auto;font-size:.7rem;font-weight:600;padding:.16rem .5rem;
+  border-radius:99px;letter-spacing:0;
   background:#fff;color:var(--accent);border:1px solid var(--accent)}
 .vcard__actions{display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;margin-top:1rem}
 .vcard__book{display:inline-flex;align-items:center;min-height:38px;padding:.45rem .9rem;border-radius:8px;
@@ -590,8 +610,8 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 }
 .etype{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:1.5rem 1.4rem;display:flex;flex-direction:column;transition:border-color .25s,box-shadow .25s}
 .etype:hover{border-color:var(--line-2);box-shadow:var(--shadow-sm)}
-.etype__num{display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:#fff;
-  border:1.5px solid var(--accent);color:var(--accent);font-size:.72rem;font-weight:800;letter-spacing:.02em}
+.etype__num{display:grid;place-items:center;width:1.6rem;height:1.6rem;border-radius:50%;background:#fff;
+  border:1px solid var(--accent);color:var(--accent);font-size:.62rem;font-weight:800;letter-spacing:.02em}
 /* Carnivals / Clinics / Competitions read larger than the "Our Services"
    label above them (client, Sep 2026). */
 .etype h3{margin:.55rem 0 .7rem;font-size:clamp(1.4rem,2.2vw,1.75rem);font-weight:800;letter-spacing:-.03em}
@@ -665,9 +685,12 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
    Deliberately minimal — one photo, the type on top of the title and a
    date/venue line. The write-up, services, embedded reel and full photo set
    are behind a tap, in the .edetail overlay (client, Sep 2026). */
-.eshowcase{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;align-items:start}
-.ecov{border-radius:var(--r-lg)}
-.ecov__open{display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;
+/* align-items:stretch + a full-height button makes every card in a row the
+   same height, and .ecov__title reserves two lines so a one-line title does
+   not leave a short card beside a two-line one (client, Sep 2026). */
+.eshowcase{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;align-items:stretch}
+.ecov{border-radius:var(--r-lg);height:100%}
+.ecov__open{display:flex;flex-direction:column;width:100%;height:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;
   border:1px solid var(--line);background:var(--panel);border-radius:var(--r-lg);overflow:hidden;padding:0;
   transition:transform .3s var(--ease),box-shadow .3s,border-color .3s}
 .ecov__open:hover{transform:translateY(-4px);box-shadow:var(--shadow-md,0 18px 44px -20px rgba(8,10,16,.4));border-color:var(--line-2)}
@@ -677,12 +700,15 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .ecov__open:hover .ecov__media img{transform:scale(1.06)}
 .ecov__scrim{position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(180deg,rgba(8,10,16,.05) 0%,rgba(8,10,16,0) 45%)}
-.ecov__body{display:block;padding:.9rem 1.05rem 1.05rem}
+.ecov__body{display:flex;flex-direction:column;flex:1 1 auto;padding:.9rem 1.05rem 1.05rem}
 /* Type sits on top of the title (client, Sep 2026). */
 .ecov__types{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.5rem}
 .ecov__type{font-size:.64rem;font-weight:750;letter-spacing:.01em;color:var(--accent);
   background:var(--accent-soft);padding:.2rem .5rem;border-radius:4px}
-.ecov__title{display:block;font-size:1.02rem;font-weight:800;letter-spacing:-.02em;line-height:1.35;color:var(--ink)}
+/* Two lines are reserved whether the title needs them or not, so the date
+   line and the hover cue sit on the same baseline across every card. */
+.ecov__title{display:block;font-size:1.02rem;font-weight:800;letter-spacing:-.02em;line-height:1.35;color:var(--ink);
+  min-height:2.7em}
 .ecov__meta{display:block;margin-top:.3rem;font-size:.8rem;color:var(--muted);line-height:1.5}
 .ecov__sep{margin:0 .5rem}
 /* "View event / View gallery" cue appears below the date on hover (client,
@@ -736,7 +762,9 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
    (client, Sep 2026: "the logo can don't box?"). */
 .edetail__partnerlist{display:flex;width:100%;flex-wrap:wrap;align-items:center;gap:1.4rem}
 .edetail__partner{display:flex;align-items:center}
-.edetail__partner img{width:min(100%,320px);max-height:5rem;object-fit:contain;object-position:left center}
+/* Dialled back from 320px / 5rem — the mark was outsizing the copy beside it
+   (client, Sep 2026: "reduce partner logo size a bit"). */
+.edetail__partner img{width:min(100%,210px);max-height:3.2rem;object-fit:contain;object-position:left center}
 .edetail__partner span{font-size:.92rem;font-weight:700}
 
 .edetail__gallery{padding:1.6rem clamp(1.3rem,3.4vw,2.4rem) 2rem}
@@ -859,29 +887,20 @@ body.has-lightbox{overflow:hidden}
   .elog__where{text-align:left}
 }
 
-/* ---------- TRUSTED BY — one row that floats left on its own ----------
-   Client, Sep 2026: "one row, logos nearer to each other side by side, and a
-   moving scroll like the one on the home page". The track holds the logo set
-   twice and slides by exactly -50%, so the loop is seamless. Logos stay in
-   full colour. Hovering pauses it, so a reader can stop on a mark.
-   The row floats left on its own; the reader cannot scroll it by hand
-   (client, Sep 2026). overflow is hidden and the CSS keyframe animation does
-   all the motion — pages.js only repeats the brand line so a short partner
-   list still fills the width. */
-.logorail{overflow:hidden;
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
-  mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
-.logorail__track{display:flex;width:max-content;animation:logorail 20s linear infinite}
-.logorail:hover .logorail__track,.logorail:focus-within .logorail__track{animation-play-state:paused}
-.logorail__set{display:flex;align-items:center;gap:clamp(1.6rem,4vw,3.4rem);padding-right:clamp(1.6rem,4vw,3.4rem)}
-.logorail__item{flex:none;display:grid;place-items:center;height:72px}
-.logorail__item img{max-height:56px;max-width:180px;width:auto;object-fit:contain}
+/* ---------- TRUSTED BY — one still row of logos ----------
+   The row used to float left on a continuous marquee. The scroll is gone
+   (client, Sep 2026: "remove scroll function"): every logo is on the page at
+   once, wrapping onto a second line only when the row genuinely runs out of
+   width, and nothing moves. pages.js renders the set exactly once. */
+/* The row lives outside .psec__inner (it is a sibling of it), so it caps
+   itself to the same content column the heading above it uses. */
+.logorail{overflow:visible;max-width:var(--maxw);margin-inline:auto}
+.logorail__track{display:flex;flex-wrap:wrap;width:auto}
+.logorail__set{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;
+  gap:clamp(1.4rem,3.4vw,2.8rem) clamp(1.6rem,4vw,3.4rem);width:100%}
+.logorail__item{flex:none;display:grid;place-items:center;height:64px}
+.logorail__item img{max-height:50px;max-width:160px;width:auto;object-fit:contain}
 .logorail__item--name{font-size:.85rem;font-weight:700;color:var(--faint);white-space:nowrap}
-@keyframes logorail{to{transform:translateX(-50%)}}
-@media(prefers-reduced-motion:reduce){
-  .logorail{-webkit-mask-image:none;mask-image:none}
-  .logorail__track{animation:none}
-}
 
 /* ---------- FEATURED ON (press) ---------- */
 .featured{margin-top:2rem;padding-top:1.6rem;border-top:1px solid var(--line)}
@@ -998,7 +1017,46 @@ body.has-lightbox{overflow:hidden}
 .coach__role{font-size:.74rem;color:var(--muted);line-height:1.4}
 .coach__cert{display:inline-block;margin-top:.45rem;font-size:.6rem;font-weight:700;letter-spacing:.07em;
   text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.16rem .4rem;border-radius:4px}
-.coach__more{margin-top:.6rem;font-size:.72rem;font-weight:600;color:var(--accent)}
+/* "View profile" only appears on hover / keyboard focus, exactly like the
+   Past Events cover cards (client, Sep 2026). It grows into place so the
+   resting card stays clean and nothing below it jumps. */
+.coach__more{display:inline-flex;align-items:center;gap:.3rem;margin-top:0;
+  font-size:.72rem;font-weight:600;color:var(--accent);
+  max-height:0;opacity:0;overflow:hidden;transform:translateY(-4px);
+  transition:max-height .28s var(--ease),opacity .28s,transform .28s var(--ease),margin-top .28s var(--ease)}
+.coach:hover .coach__more,.coach:focus-visible .coach__more,
+.coach:focus-within .coach__more{max-height:1.6rem;opacity:1;transform:none;margin-top:.6rem}
+/* Touch devices have no hover, so the cue stays visible there. */
+@media(hover:none){
+  .coach__more{max-height:1.6rem;opacity:1;transform:none;margin-top:.6rem}
+}
+@media(prefers-reduced-motion:reduce){.coach__more{transition:none}}
+
+/* ---------- COACH DETAIL OVERLAY ----------
+   Coaches open in the same press-in overlay the Past Events cards use
+   (client, Sep 2026: "coaches profile should do pop up style like events
+   page"). The overlay chrome — backdrop, close button, panel, animation — is
+   .edetail, shared with Events; only the body below is coach-specific. The
+   generated coaches/<slug>.html pages stay for deep links and search, and the
+   overlay links out to them. */
+.cdetail{display:grid;grid-template-columns:220px minmax(0,1fr);gap:1.6rem 2rem;align-items:start;
+  padding:1.6rem clamp(1.3rem,3.4vw,2.4rem) 2rem}
+.cdetail__photo{margin:0;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--line);background:var(--panel-2)}
+.cdetail__photo img{width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;display:block}
+.cdetail__initials{display:grid;place-items:center;width:100%;aspect-ratio:1/1;font-size:2.4rem;font-weight:800;
+  letter-spacing:.04em;color:var(--accent);background:var(--accent-soft)}
+.cdetail__facts{list-style:none;display:flex;flex-direction:column;gap:.5rem;margin:1rem 0 0;
+  border-top:1px solid var(--line);padding-top:.9rem}
+.cdetail__facts li{display:flex;gap:1rem;justify-content:space-between;font-size:.8rem;line-height:1.45}
+.cdetail__facts span{color:var(--faint);font-weight:600;flex:none}
+.cdetail__facts b{font-weight:700;text-align:right}
+.cdetail__body > * + *{margin-top:1rem}
+.cdetail__body .edetail__desc + .edetail__desc{margin-top:.9rem}
+.cdetail__actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.6rem}
+@media(max-width:700px){
+  .cdetail{grid-template-columns:1fr;gap:1.2rem}
+  .cdetail__photo{max-width:220px}
+}
 
 .profile{display:grid;grid-template-columns:300px 1fr;gap:2.4rem;align-items:start}
 @media(max-width:860px){.profile{grid-template-columns:1fr;gap:1.6rem}}
@@ -1304,7 +1362,8 @@ body.is-dark .footer{border-top:1px solid rgba(255,255,255,.09)}
 
 .grpempty{grid-column:1/-1;background:var(--panel-2);border:1px dashed var(--line-2);border-radius:var(--r-lg);
   padding:2rem 1.5rem;text-align:center}
-.grpempty p{color:var(--muted);font-size:.88rem;max-width:54ch;margin:0 auto 1.1rem;line-height:1.65}
+.grpempty p{color:var(--muted);font-size:.88rem;max-width:58ch;margin:0 auto;line-height:1.65}
+.grpempty p a{color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:3px}
 
 .grp__add{display:flex;flex-wrap:wrap;gap:.9rem;align-items:center;justify-content:space-between;
   margin-top:1.1rem;background:var(--panel-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:1.1rem 1.3rem}

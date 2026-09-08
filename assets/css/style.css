@@ -15,6 +15,11 @@
   --muted:#596273;           /* secondary text */
   --faint:#84899a;           /* tertiary text */
   --line:#e0e4ec;            /* quiet dividers */
+  /* Section separator. Sections used to be told apart by alternating grey
+     fills; they are now all white and split by one thin, faint horizontal
+     rule instead (client, Sep 2026 — the ElevenLabs treatment, without the
+     vertical rules). Change it here and every section break follows. */
+  --rule:rgba(12,27,64,.09);
   --line-2:#ccd2db;          /* controls and card borders */
   --secondary:#e0e4ec;
   --accent:#2151D1;          /* brand blue */
@@ -42,11 +47,17 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;font-size:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+/* One lever for the whole content scale. Every content size on the site is
+   written in rem, so dropping the root from 16px to 15px takes the headings,
+   body copy, labels and chips down together by ~6% (client, Sep 2026: "still
+   feels a bit big"). The nav and the footer are deliberately EXEMPT — their
+   sizes and paddings are pinned in px below so the site chrome keeps the
+   proportions it already had. */
+html{scroll-behavior:smooth;font-size:93.75%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{
   background:var(--bg);color:var(--ink);
   font-family:'Montserrat',system-ui,-apple-system,sans-serif;
-  font-size:15px;line-height:1.6;
+  font-size:.94rem;line-height:1.6;
   overflow-x:hidden;-webkit-font-smoothing:antialiased;
   letter-spacing:-.005em;
 }
@@ -75,15 +86,19 @@ em{font-style:normal;color:var(--accent)}
 .btn--ghost:hover{border-color:var(--ink);background:var(--bg-2)}
 .btn:active{transform:scale(.98)}
 
-/* ===================== NAV ===================== */
+/* ===================== NAV =====================
+   The nav is exempt from the site-wide type scale (html{font-size:93.75%}):
+   every size and rhythm value here is px, so shrinking the content type never
+   moves the chrome (client, Sep 2026: reduce the content fonts, "not
+   including nav bar and footer"). */
 .nav{position:fixed;top:0;left:0;right:0;z-index:900;
-  padding:1rem var(--gutter);transition:background .3s,padding .3s,border-color .3s;border-bottom:1px solid transparent}
+  padding:16px var(--gutter);transition:background .3s,padding .3s,border-color .3s;border-bottom:1px solid transparent}
 /* The row itself lives in a capped, centred container so the logo lines up
    with the page copy underneath it rather than hugging the viewport edge. */
 .nav__inner{max-width:var(--maxw);margin:0 auto;width:100%;
-  display:flex;align-items:center;justify-content:flex-start;gap:clamp(1rem,2.5vw,2rem)}
-.nav.scrolled{background:rgba(255,255,255,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:.7rem var(--gutter);border-color:var(--line)}
-.nav__logo{font-weight:800;font-size:.98rem;letter-spacing:.03em;color:#fff;white-space:nowrap;display:inline-flex;align-items:center;gap:.55rem}
+  display:flex;align-items:center;justify-content:flex-start;gap:clamp(16px,2.5vw,32px)}
+.nav.scrolled{background:rgba(255,255,255,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:11px var(--gutter);border-color:var(--line)}
+.nav__logo{font-weight:800;font-size:15.7px;letter-spacing:.03em;color:#fff;white-space:nowrap;display:inline-flex;align-items:center;gap:9px}
 .nav.scrolled .nav__logo{color:var(--ink)}
 .nav__logo span{color:var(--accent-light);margin:0 .2em}
 .nav.scrolled .nav__logo span{color:var(--accent)}
@@ -95,17 +110,20 @@ em{font-style:normal;color:var(--accent)}
 .nav.scrolled .nav__logo__img--light{opacity:0}
 .nav__logo__text{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 
-.nav__links{display:flex;align-items:center;gap:.25rem;flex:1 1 auto;min-width:0}
-.nav__end{display:flex;align-items:center;gap:.25rem;margin-left:auto;padding-left:1rem}
-.nav__link{font-size:.875rem;color:rgba(255,255,255,.85);font-weight:500;transition:color .2s,background .2s;
-  padding:.5rem .7rem;border-radius:var(--r-sm);display:inline-flex;align-items:center;gap:.3rem;min-height:38px}
-.nav.scrolled .nav__link{color:var(--muted)}
+.nav__links{display:flex;align-items:center;gap:4px;flex:1 1 auto;min-width:0}
+.nav__end{display:flex;align-items:center;gap:4px;margin-left:auto;padding-left:16px}
+.nav__link{font-size:14px;color:rgba(255,255,255,.85);font-weight:500;transition:color .2s,background .2s;
+  padding:8px 11px;border-radius:var(--r-sm);display:inline-flex;align-items:center;gap:5px;min-height:38px}
+/* Every tab that is NOT the current page reads plain black on the solid nav
+   (client, Sep 2026) — it used to sit back as grey. Only the current tab is
+   brand blue, so the active state is the one thing that stands out. */
+.nav.scrolled .nav__link{color:var(--ink)}
 .nav__link:hover{color:#fff;background:rgba(255,255,255,.1)}
 .nav.scrolled .nav__link:hover{color:var(--ink);background:var(--bg-2)}
 .nav__link.is-current{color:#fff}
 .nav.scrolled .nav__link.is-current{color:var(--accent)}
-.nav__cta{background:var(--accent);color:#fff!important;padding:.55rem 1.05rem;border-radius:8px;
-  font-weight:600;font-size:.875rem;margin-left:.6rem;min-height:38px;display:inline-flex;align-items:center;
+.nav__cta{background:var(--accent);color:#fff!important;padding:9px 17px;border-radius:8px;
+  font-weight:600;font-size:14px;margin-left:10px;min-height:38px;display:inline-flex;align-items:center;
   flex:none;white-space:nowrap;transition:background .2s}
 .nav__cta:hover{background:var(--accent-hover)}
 .nav__cta:active{background:var(--accent-press)}
@@ -114,14 +132,16 @@ em{font-style:normal;color:var(--accent)}
 .nav__group{position:relative}
 .nav__chev{opacity:.7;transition:transform .2s}
 .nav__group:hover .nav__chev,.nav__group:focus-within .nav__chev{transform:rotate(180deg)}
-.nav__menu{position:absolute;top:calc(100% + .45rem);left:0;min-width:250px;background:#fff;border:1px solid var(--line);
-  border-radius:14px;box-shadow:0 20px 44px -22px rgba(0,0,0,.30);padding:.4rem;
+.nav__menu{position:absolute;top:calc(100% + 7px);left:0;min-width:250px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;box-shadow:0 20px 44px -22px rgba(0,0,0,.30);padding:6px;
   opacity:0;visibility:hidden;transform:translateY(-5px);transition:opacity .18s,transform .18s,visibility .18s;z-index:950}
 .nav__group:hover .nav__menu,.nav__group:focus-within .nav__menu{opacity:1;visibility:visible;transform:none}
-.nav__menu-item{display:block;padding:.65rem .8rem;border-radius:9px;transition:background .18s}
+.nav__menu-item{display:block;padding:10px 13px;border-radius:9px;transition:background .18s}
 .nav__menu-item:hover{background:var(--bg-2)}
-.nav__menu-item b{display:block;font-size:.88rem;font-weight:600;color:var(--ink)}
-.nav__menu-item small{display:block;font-size:.76rem;color:var(--faint);margin-top:.12rem;line-height:1.4}
+/* "Regular Classes" / "Camps" sit at the same weight as the tabs above them
+   rather than bolded (client, Sep 2026). <b> stays for the semantics. */
+.nav__menu-item b{display:block;font-size:14px;font-weight:500;color:var(--ink)}
+.nav__menu-item small{display:block;font-size:12px;color:var(--faint);margin-top:2px;line-height:1.4}
 .nav__menu-item.is-current b{color:var(--accent)}
 
 .nav__burger{display:none;flex-direction:column;gap:5px;background:none;border:0;z-index:901;
@@ -312,7 +332,7 @@ em{font-style:normal;color:var(--accent)}
 .gcard__list a{color:var(--accent);font-weight:600}
 
 /* ===================== WORLD TOUR CALENDAR ===================== */
-.news{padding:4.5rem 0;background:var(--bg-2)}
+.news{padding:4.5rem 0}
 .news__hint{color:var(--muted);font-size:.88rem;margin-top:.9rem;max-width:60ch}
 .news__filters{display:flex;gap:.4rem;margin-top:1.4rem;flex-wrap:wrap}
 .news__filter{padding:.5rem 1rem;min-height:40px;border-radius:100px;border:1px solid var(--line);background:#fff;color:var(--muted);font-family:inherit;font-size:.82rem;font-weight:600;transition:.2s;cursor:pointer}
@@ -357,14 +377,16 @@ em{font-style:normal;color:var(--accent)}
 .cta .btn--ghost{border:1px solid rgba(255,255,255,.3);color:#fff;background:transparent}
 .cta .btn--ghost:hover{border-color:#fff;background:rgba(255,255,255,.08)}
 
-/* ===================== FOOTER ===================== */
-.footer{padding:4rem var(--gutter) 2rem;background:var(--ink);color:#fff}
-.footer__inner{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:2.5rem}
-.footer__col{display:flex;flex-direction:column;gap:.55rem;align-items:flex-start}
-.footer__col h4{font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--faint);margin-bottom:.35rem}
-.footer__col a{color:rgba(255,255,255,.68);font-size:.86rem;transition:color .2s}
+/* ===================== FOOTER =====================
+   Pinned in px like the nav, so the site-wide content type scale leaves the
+   footer where it is (client, Sep 2026). */
+.footer{padding:64px var(--gutter) 32px;background:var(--ink);color:#fff}
+.footer__inner{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:40px}
+.footer__col{display:flex;flex-direction:column;gap:9px;align-items:flex-start}
+.footer__col h4{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+.footer__col a{color:rgba(255,255,255,.68);font-size:14px;transition:color .2s}
 .footer__col a:hover{color:#fff}
-.footer__brand{font-weight:800;font-size:1.05rem;letter-spacing:.03em;color:#fff}
+.footer__brand{font-weight:800;font-size:17px;letter-spacing:.03em;color:#fff}
 .footer__brand span{color:var(--accent-light);margin:0 .2em}
 .footer__brand__mark{position:relative;display:block;width:auto;height:42px;aspect-ratio:637/189;margin:0}
 .footer__brand__img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:left center}
@@ -373,18 +395,18 @@ em{font-style:normal;color:var(--accent)}
 .footer__brand__text{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 /* The tagline is the brand line, so it carries real weight rather than
    sitting back as quiet grey copy. */
-.footer__tag{color:rgba(255,255,255,.9);font-weight:700;font-size:.9rem;margin:.6rem 0 1.2rem;max-width:34ch;line-height:1.65;letter-spacing:-.01em}
+.footer__tag{color:rgba(255,255,255,.9);font-weight:700;font-size:14px;margin:10px 0 19px;max-width:34ch;line-height:1.65;letter-spacing:-.01em}
 /* Socials are marks, not words — a row of circular icon buttons. The label
    stays in aria-label + <title> so screen readers still hear the platform. */
-.footer__socials{display:flex;gap:.5rem;flex-wrap:wrap}
-.footer__socials a{display:grid;place-items:center;width:2.4rem;height:2.4rem;border-radius:50%;
+.footer__socials{display:flex;gap:8px;flex-wrap:wrap}
+.footer__socials a{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;
   color:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.18);
   transition:color .2s,border-color .2s,background .2s,transform .2s var(--ease)}
 .footer__socials a:hover{color:#fff;border-color:#fff;background:rgba(255,255,255,.1);transform:translateY(-2px)}
 .footer__socials svg{width:18px;height:18px;display:block}
-.footer__addr{font-style:normal;color:rgba(255,255,255,.55);font-size:.82rem;line-height:1.7;margin-top:.3rem}
-.footer__base{max-width:var(--maxw);margin:2.8rem auto 0;padding-top:1.6rem;border-top:1px solid rgba(255,255,255,.1);
-  display:flex;flex-wrap:wrap;gap:.5rem 2rem;justify-content:space-between;color:rgba(255,255,255,.42);font-size:.76rem}
+.footer__addr{font-style:normal;color:rgba(255,255,255,.55);font-size:13px;line-height:1.7;margin-top:5px}
+.footer__base{max-width:var(--maxw);margin:45px auto 0;padding-top:26px;border-top:1px solid rgba(255,255,255,.1);
+  display:flex;flex-wrap:wrap;gap:8px 32px;justify-content:space-between;color:rgba(255,255,255,.42);font-size:12px}
 .footer__base a{color:rgba(255,255,255,.6);text-decoration:underline;text-underline-offset:3px}
 .footer__base a:hover{color:#fff}
 
@@ -401,38 +423,38 @@ button{cursor:pointer;background:none;border:0;color:inherit}
 
 /* ===================== RESPONSIVE ===================== */
 @media(max-width:1180px) and (min-width:901px){
-  .nav{gap:.9rem;padding-left:clamp(1rem,3vw,2rem);padding-right:clamp(1rem,3vw,2rem)}
-  .nav__link{font-size:.82rem;padding-left:.5rem;padding-right:.5rem}
-  .nav__end{padding-left:.4rem}
-  .nav__cta{padding:.5rem .85rem;font-size:.82rem}
+  .nav{gap:14px;padding-left:clamp(16px,3vw,32px);padding-right:clamp(16px,3vw,32px)}
+  .nav__link{font-size:13px;padding-left:8px;padding-right:8px}
+  .nav__end{padding-left:6px}
+  .nav__cta{padding:8px 14px;font-size:13px}
 }
 @media(max-width:1000px){
   .hub__grid,.hub__book,.hub__groups{grid-template-columns:repeat(2,1fr)}
-  .footer__inner{grid-template-columns:1fr 1fr;gap:2rem}
+  .footer__inner{grid-template-columns:1fr 1fr;gap:32px}
 }
 @media(max-width:900px){
   .news__timeline{grid-template-columns:1fr}
   .nav__links{position:fixed;inset:0;background:#fff;flex-direction:column;justify-content:flex-start;align-items:stretch;
-    gap:.3rem;transform:translateX(100%);transition:transform .4s var(--ease);padding:5.5rem clamp(1.25rem,5vw,3rem) 2rem;
+    gap:5px;transform:translateX(100%);transition:transform .4s var(--ease);padding:88px clamp(20px,5vw,48px) 32px;
     min-height:100dvh;overflow-y:auto;-webkit-overflow-scrolling:touch}
   .nav.open .nav__links{transform:none}
-  .nav__links .nav__link{color:var(--ink);font-size:1rem;font-weight:600;padding:.85rem .2rem;border-bottom:1px solid var(--line);border-radius:0;justify-content:space-between}
+  .nav__links .nav__link{color:var(--ink);font-size:16px;font-weight:600;padding:14px 3px;border-bottom:1px solid var(--line);border-radius:0;justify-content:space-between}
   .nav.scrolled .nav__links .nav__link{color:var(--ink)}
   .nav__links .nav__link:hover{background:transparent}
   .nav__group{display:flex;flex-direction:column}
   .nav__menu{position:static;opacity:1;visibility:visible;transform:none;box-shadow:none;border:0;
-    min-width:0;padding:0 0 .5rem;max-height:0;overflow:hidden;transition:max-height .3s var(--ease)}
+    min-width:0;padding:0 0 8px;max-height:0;overflow:hidden;transition:max-height .3s var(--ease)}
   .nav__group.is-open .nav__menu{max-height:320px}
   .nav__group.is-open .nav__chev{transform:rotate(180deg)}
-  .nav__menu-item{padding:.6rem .9rem}
+  .nav__menu-item{padding:10px 14px}
   .nav__end{flex-direction:column;align-items:stretch;margin-left:0;padding-left:0;gap:0}
   /* "Book a class" is in the bar, not in the burger panel (client, Sep 2026).
      .nav__links is position:fixed here, so the CTA and the burger are the only
      things left in the flow row — margin-left:auto pins them to the right.
      z-index 901 matches the burger so the button stays tappable while the
      panel is open. */
-  .nav__inner{gap:.6rem}
-  .nav__cta{margin-left:auto;padding:.55rem .95rem;font-size:.82rem;position:relative;z-index:901}
+  .nav__inner{gap:10px}
+  .nav__cta{margin-left:auto;padding:9px 15px;font-size:13px;position:relative;z-index:901}
   .nav__burger{display:flex;margin-left:0}
   .nav__logo__mark{height:34px}
 }
@@ -443,20 +465,20 @@ button{cursor:pointer;background:none;border:0;color:inherit}
 }
 @media(max-width:600px){
   .nav__logo__mark{height:30px}
-  .nav__cta{padding:.5rem .8rem;font-size:.78rem}
+  .nav__cta{padding:8px 13px;font-size:12.5px}
   .footer__brand__mark{height:36px}
   .hub__grid,.hub__book,.hub__groups{grid-template-columns:1fr}
   .hub__controls{flex-direction:column;align-items:stretch}
-  .footer__inner{grid-template-columns:1fr;gap:1.8rem}
-  .footer__base{flex-direction:column;gap:.4rem}
+  .footer__inner{grid-template-columns:1fr;gap:29px}
+  .footer__base{flex-direction:column;gap:6px}
   .cta__actions .btn{width:100%}
   .hero__actions{width:min(100%,280px);flex-direction:column}
   .hero__link{width:100%}
   .news__filters button{flex:1 1 130px}
 }
 @media(max-width:360px){
-  .nav__inner{gap:.4rem}
-  .nav__cta{padding:.45rem .7rem;font-size:.74rem}
+  .nav__inner{gap:6px}
+  .nav__cta{padding:7px 11px;font-size:12px}
   .nav__burger{min-width:38px}
 }
 @media(prefers-reduced-motion:reduce){

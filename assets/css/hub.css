@@ -1,5 +1,8 @@
-/* Singapore Shuttle Hub — page-only presentation. */
-body[data-page="hub"]{background:#f5f7fb}
+/* Singapore Shuttlers Hub — page-only presentation.
+   The page used to sit on its own pale grey (#f5f7fb) while the rest of the
+   site was white. Sections are now told apart by one thin faint horizontal
+   rule, the same as everywhere else (client, Sep 2026). */
+body[data-page="hub"]{background:#fff}
 body[data-page="hub"] .footer{margin-top:0}
 body[data-page="hub"] .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 
@@ -7,13 +10,17 @@ body[data-page="hub"] .sr-only{position:absolute;width:1px;height:1px;padding:0;
    Only the hub-specific eyebrow + proof pills are layered on top. */
 .phead--hub .phead__inner{width:100%}
 .phead--hub .phead__lead{max-width:72ch;color:rgba(255,255,255,.78);font-size:clamp(.94rem,1.35vw,1.08rem)}
-.hub-hero__eyebrow{margin-bottom:1.1rem;color:#a8c1ff;font-size:.7rem;font-weight:800;letter-spacing:.19em;text-transform:uppercase}
+/* The name is the headline; the by-line sits under it at a smaller size
+   (client, Sep 2026). The old all-caps eyebrow above the headline is gone. */
+.phead--hub h1{max-width:none;white-space:nowrap}
+.hub-hero__by{margin-top:.5rem;color:rgba(255,255,255,.72);font-size:clamp(.85rem,1.5vw,1.05rem);font-weight:600;letter-spacing:-.01em}
+@media(max-width:560px){.phead--hub h1{white-space:normal}}
 .hub-hero__proof{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1.9rem}
 .hub-hero__proof span{display:flex;align-items:baseline;gap:.4rem;padding:.58rem .88rem;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(4,14,42,.48);color:rgba(255,255,255,.74);font-size:.72rem;font-weight:600;backdrop-filter:blur(12px)}
 .hub-hero__proof b{color:#fff;font-size:.88rem}
 
-.hub{--hub-blue:#2151d1;--hub-navy:#071633;--hub-mist:#eef3ff;padding:0 0 0;background:#f5f7fb}
-.hub__tabs{top:62px;margin:0;padding-top:.8rem;padding-bottom:.8rem;background:rgba(245,247,251,.92);border-bottom:1px solid #dfe5ef}
+.hub{--hub-blue:#2151d1;--hub-navy:#071633;--hub-mist:#eef3ff;padding:0 0 0;background:#fff}
+.hub__tabs{top:62px;margin:0;padding-top:.8rem;padding-bottom:.8rem;background:rgba(255,255,255,.92);border-bottom:1px solid var(--rule)}
 .hub__tabs-inner{justify-content:center}
 .hub__tab{position:relative;min-width:180px;border:0;border-radius:10px;background:transparent;color:#526077;font-size:.83rem;letter-spacing:.01em}
 .hub__tab:hover{border:0;background:#e8edf7;color:#071633}
@@ -28,7 +35,7 @@ body[data-page="hub"] .sr-only{position:absolute;width:1px;height:1px;padding:0;
    --thumb-w so the thumb glides between segments. The whole control is a soft,
    inset "track" that echoes the primary tabs without competing with them. */
 .hub__subnav{width:min(var(--maxw),calc(100% - 2 * var(--gutter)));margin:1.6rem auto 0;
-  position:sticky;top:128px;z-index:5;padding:.4rem 0;background:#f5f7fb}
+  position:sticky;top:128px;z-index:5;padding:.4rem 0;background:#fff}
 .hub__subnav-inner{position:relative;display:flex;gap:.25rem;padding:.32rem;
   background:#e9eef8;border:1px solid #dbe3f0;border-radius:14px;
   box-shadow:inset 0 1px 2px rgba(7,22,51,.06);overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
@@ -85,8 +92,17 @@ body[data-page="hub"] .sr-only{position:absolute;width:1px;height:1px;padding:0;
 .hub-route > span:last-child{color:#2151d1;font-size:1.2rem}
 .hub-route--feature > span:last-child{color:#8fabf5}
 
-.hub-block{margin-top:clamp(4rem,8vw,7rem);scroll-margin-top:145px}
-.hub-section-head{display:grid;grid-template-columns:minmax(250px,.8fr) minmax(300px,1fr);gap:clamp(2rem,6vw,6rem);align-items:end;margin-bottom:1.6rem;padding-bottom:1.4rem;border-bottom:1px solid #dbe1eb}
+/* One faint horizontal rule marks each section break — no fills, and no
+   vertical rules (client, Sep 2026). The first block in a sub-panel keeps the
+   rule off, since the sub-nav above it is already a boundary. */
+.hub-block{margin-top:clamp(2.4rem,4.5vw,3.6rem);padding-top:clamp(2.4rem,4.5vw,3.6rem);
+  border-top:1px solid var(--rule);scroll-margin-top:145px}
+.hub__subpanel > .hub-block:first-child{border-top:0;padding-top:0}
+.hub-section-head{display:grid;grid-template-columns:minmax(250px,.8fr) minmax(300px,1fr);gap:clamp(2rem,6vw,6rem);align-items:end;margin-bottom:1.6rem;padding-bottom:1.4rem;border-bottom:1px solid var(--rule)}
+/* Heading inside a section that carries more than one list (Shop). */
+.hub-subhead{margin:1.6rem 0 .8rem;font-size:.7rem;font-weight:800;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--accent)}
+.hub-subhead:first-of-type{margin-top:0}
 .hub-player-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.75rem}
 .hub-player{min-height:245px;padding:1.25rem;display:flex;flex-direction:column;border:1px solid #dde3ed;border-radius:16px;background:#fff}
 .hub-player > span{color:#2151d1;font-size:.62rem;font-weight:800;letter-spacing:.15em}
@@ -102,7 +118,7 @@ body[data-page="hub"] .sr-only{position:absolute;width:1px;height:1px;padding:0;
 .hub .news__filters{margin:0 0 1rem}
 .hub .news__timeline{max-width:none;padding:0;grid-template-columns:repeat(2,minmax(0,1fr))}
 .hub .news__more{margin-top:1rem;text-align:center}
-.hub-source-note{margin-top:1.25rem;padding:1rem 1.1rem;border-left:3px solid #2151d1;background:#edf3ff;color:#5c687b;font-size:.76rem;line-height:1.65}
+.hub-source-note{margin-top:1.25rem;padding:.9rem 0 0;border-top:1px solid var(--rule);color:#5c687b;font-size:.76rem;line-height:1.65}
 .hub-source-note a{color:#1744bd;font-weight:700;text-decoration:underline}
 
 .hub-updates{margin-top:clamp(4rem,8vw,7rem);padding:clamp(1.7rem,4vw,3rem);display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center;border-radius:22px;background:#071633;color:#fff;box-shadow:0 26px 60px -38px rgba(7,22,51,.8)}
@@ -131,12 +147,59 @@ body[data-page="hub"] .sr-only{position:absolute;width:1px;height:1px;padding:0;
 .hub-discovery--dated > a{margin-top:auto}
 
 .hub__toolbar{max-width:none;padding:0;margin:0}
-.hub__controls{max-width:none;margin:0 0 1rem;padding:1.1rem;display:grid;grid-template-columns:minmax(250px,1fr) minmax(400px,1.4fr);background:#eaf0fb;border-color:#d4ddec}
+.hub__controls{max-width:none;margin:0 0 1rem;padding:1.1rem;display:grid;grid-template-columns:minmax(250px,1fr) minmax(340px,1.4fr);background:#fff;border-color:var(--line)}
 .hub__search{min-width:0}
-.hub__filters{align-items:end}
-.hub__filter{padding:.56rem .8rem;min-height:42px;border:1px solid #cdd6e4;border-radius:999px;background:#fff;color:#526077;font:600 .72rem 'Montserrat',sans-serif;cursor:pointer}
+.hub__filters{align-items:end;gap:.5rem}
+.hub__filter{padding:.56rem .9rem;min-height:42px;border:1px solid #cdd6e4;border-radius:999px;background:#fff;color:#526077;font:600 .74rem 'Montserrat',sans-serif;cursor:pointer}
 .hub__filter.is-active{background:#071633;border-color:#071633;color:#fff}
-.hub__filter--elever.is-active{background:#2151d1;border-color:#2151d1}
+.hub__filter--elever.is-active{background:#2151d1;border-color:#2151d1;color:#fff}
+
+/* ---------- Region / Type: checkbox drop-downs ----------
+   Native <details>, so the open/close state, the click target and the
+   keyboard all come for free; main.js only reads the boxes (client, Sep 2026:
+   "filters should be a dropdown with checkboxes"). More than one region or
+   type can be on at once, which a row of single-choice chips could not do. */
+.fdrop{position:relative}
+.fdrop__btn{display:inline-flex;align-items:center;gap:.45rem;
+  padding:.56rem .9rem;min-height:42px;border:1px solid #cdd6e4;border-radius:999px;
+  background:#fff;color:#526077;font:600 .74rem 'Montserrat',sans-serif;cursor:pointer;
+  list-style:none;white-space:nowrap;transition:border-color .2s,color .2s,background .2s}
+.fdrop__btn::-webkit-details-marker{display:none}
+.fdrop__btn:hover{border-color:#9fb2d6;color:#071633}
+.fdrop__btn:focus-visible{outline:2px solid #2151d1;outline-offset:2px}
+.fdrop.is-set > .fdrop__btn{background:#071633;border-color:#071633;color:#fff}
+.fdrop[open] > .fdrop__btn{border-color:#2151d1}
+.fdrop__count{display:none;min-width:1.15rem;height:1.15rem;padding:0 .25rem;border-radius:999px;
+  background:#2151d1;color:#fff;font-size:.62rem;font-weight:800;line-height:1.15rem;text-align:center}
+.fdrop.is-set .fdrop__count{display:inline-block}
+.fdrop__chev{flex:none;opacity:.7;transition:transform .2s}
+.fdrop[open] .fdrop__chev{transform:rotate(180deg)}
+
+.fdrop__menu{position:absolute;z-index:20;top:calc(100% + .4rem);left:0;min-width:190px;
+  padding:.35rem;background:#fff;border:1px solid #dbe3f0;border-radius:12px;
+  box-shadow:0 20px 44px -22px rgba(7,22,51,.42);display:grid;gap:.1rem}
+.fdrop__opt{display:flex;align-items:center;gap:.6rem;padding:.5rem .6rem;border-radius:8px;
+  cursor:pointer;color:#26344c;font-size:.78rem;font-weight:600;min-height:38px}
+.fdrop__opt:hover{background:#f2f5fc}
+.fdrop__opt input{width:16px;height:16px;flex:none;accent-color:#2151d1;cursor:pointer;margin:0}
+.fdrop__clear{align-self:center;padding:.4rem .55rem;border:0;background:none;cursor:pointer;
+  color:#2151d1;font:700 .72rem 'Montserrat',sans-serif;text-decoration:underline;text-underline-offset:3px}
+/* The menu is absolutely positioned, so on a phone it is pinned to the left
+   of its own button and given room to breathe rather than sitting half
+   off-screen beside a narrow chip. */
+@media(max-width:620px){
+  .fdrop{position:static}
+  .fdrop__menu{left:0;right:0;min-width:0}
+}
+@media(prefers-reduced-motion:reduce){.fdrop__chev{transition:none}}
+
+/* Compete: the Register button sits at the foot of every tournament card.
+   The selector carries the element as well as the class so it beats the
+   generic `.hub-discovery a` link styling above, which would otherwise repaint
+   a white-on-blue button in link blue. */
+.hub-discovery a.hub-discovery__register{display:inline-flex;align-self:flex-start;margin-top:auto;
+  gap:.35rem;color:#fff;font-size:.8rem;font-weight:700}
+.hub-discovery a.hub-discovery__register:hover{color:#fff}
 .hub-venue-resultbar{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1rem;color:#707b8d;font-size:.73rem}
 .hub-venue-resultbar .hub__count{margin:0;padding:0;color:#071633;font-size:.82rem}
 .hub-venue-resultbar a{color:#2151d1;font-weight:700}
@@ -146,6 +209,7 @@ body[data-page="hub"] .sr-only{position:absolute;width:1px;height:1px;padding:0;
 .hub .hcard__link--book{min-width:145px;justify-content:center}
 .hub .hcard__class-link{color:#2151d1;border-color:#b9caf5;background:#edf3ff}
 .hub__empty{grid-column:1/-1;padding:2rem;border:1px dashed #bfc9d8;border-radius:16px;text-align:center;color:#687386;background:#fff}
+.hub__empty a{color:#2151d1;font-weight:700}
 
 .hub__book{max-width:none;padding:0;gap:.8rem}
 .hub .bcard{border-radius:16px;border-color:#dce3ed}
@@ -185,14 +249,15 @@ body[data-page="hub"] .sr-only{position:absolute;width:1px;height:1px;padding:0;
 }
 @media(max-width:620px){
   .hub-hero__proof span{flex:1 1 auto}
+  .hub__filters{display:flex;flex-wrap:wrap}
+  .fdrop,.fdrop__btn{width:auto}
   .hub__tabs{padding-inline:1rem}
   .hub__tab{font-size:.78rem}
   .hub-player-grid,.hub__grid,.hub-mini-grid{grid-template-columns:1fr}
   .hub-player{min-height:200px}
   .hub-checklist span{padding:.75rem .7rem}
   .hub-venue-resultbar{align-items:flex-start;flex-direction:column}
-  .hub__filters{display:grid;grid-template-columns:repeat(2,1fr);width:100%}
-  .hub__filter{padding-inline:.5rem}
+  .hub__filter{padding-inline:.7rem}
   .hub-social-feature{grid-template-columns:1fr}
   .hub-social-feature .btn{width:100%}
   .hub-updates__links .btn{width:100%}

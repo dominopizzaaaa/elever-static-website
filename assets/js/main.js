@@ -513,72 +513,97 @@
        link to our own class booking rather than a court-hire page. */
     var VENUES = [
       // ---------- PRIVATE HALLS ----------
-      { id: 'wyse', name: 'Wyse Active Hub', area: 'Jurong East', type: 'private', addr: '1 Venture Avenue, #03-01, Perennial Business City, S608521', meta: 'Air-conditioned \u00b7 32 courts (SG\u2019s largest)', book: 'https://wyseactivehub.rezerv.co/', bookLabel: 'Book on Rezerv', bookNote: 'Court booking runs on Rezerv (also in the Dungeon app).', elever: true },
-      { id: 'fernvale', name: 'Fernvale Village', area: 'Sengkang', type: 'private', addr: '61 Fernvale Link, S799956', meta: 'Air-conditioned \u00b7 badminton & pickleball', book: 'https://booking.fernvalevillage.com/', bookLabel: 'Book a court', elever: true },
-      { id: 'arina', name: 'The Sports Arina @ Jalan Kayu', area: 'Sengkang West', type: 'private', addr: '28 Fernvale Road, S799951', meta: 'Air-conditioned \u00b7 4 badminton courts', book: 'https://playtomic.com/clubs/tsa-jalan-kayu', bookLabel: 'Book on Playtomic', bookNote: 'Bookings are handled in the Playtomic app.' },
-      { id: 'sbhsims', name: 'Singapore Badminton Hall (SBH @ Sims)', area: 'Geylang', type: 'private', addr: '1 Lorong 23 Geylang, S388352', meta: '16 courts + VIP \u00b7 Tel 6744 4111', book: 'https://playtomic.com/clubs/sbh-sims', bookLabel: 'Book on Playtomic', bookNote: 'SBH moved court booking to Playtomic in Aug 2025.', elever: true },
-      { id: 'sbhexpo', name: 'SBH East Coast @ Expo', area: 'Changi', type: 'private', addr: 'Singapore Expo, Carpark J, Changi South Ave 1, S486150', meta: 'SG\u2019s largest private hall \u00b7 22+ courts', book: 'https://playtomic.com/clubs/sbh-east-coast-expo', bookLabel: 'Book on Playtomic', bookNote: 'SBH moved court booking to Playtomic in Aug 2025.', elever: true },
-      { id: 'obapasirris', name: 'OBA Arena @ Pasir Ris', area: 'Pasir Ris', type: 'private', addr: '3A Pasir Ris Drive 6, S519422', meta: 'Academy-operated arena', book: 'https://www.optimumbadmintonacademy.com/', bookLabel: 'Booking info' },
-      { id: 'obapunggol', name: 'OBA Arena @ Punggol', area: 'Punggol', type: 'private', addr: '11 Northshore Drive, S828670', meta: 'Covered arena', book: 'https://www.optimumbadmintonacademy.com/court-booking', bookLabel: 'Book a court', bookNote: 'Court hire is arranged through Optimum Badminton Academy.' },
-      { id: 'citysprouts', name: 'City Sprouts @ Bedok', area: 'Bedok', type: 'private', addr: '200 Bedok North Avenue 1', meta: 'Community hub \u00b7 courts by XY Badminton', book: 'https://xyacademy.rezerv.co/', bookLabel: 'Book on Rezerv' },
-      { id: 'kff', name: 'KFF Badminton Arena / Singapore Badminton Stadium', area: 'Geylang', type: 'private', addr: '100 Guillemard Road, S399718', meta: 'Historic SBA venue \u00b7 12 courts (reopened 2025)', book: 'https://booking.singaporebadminton.org.sg/', bookLabel: 'Book a court', bookNote: 'Run by the Singapore Badminton Association on its own booking site.', elever: true },
-      { id: 'smash', name: 'Smash Arena', area: 'Joo Koon', type: 'private', addr: '511 Upper Jurong Road, D\u2019Arena, Blk B L2, S638366', meta: '9 doubles + 1 single \u00b7 Taraflex flooring', book: 'https://booking.smasharena.sg/', bookLabel: 'Book a court' },
-      { id: 'cereza', name: 'Cereza Sports Hall', area: 'Eunos', type: 'private', addr: '3 Chin Cheng Avenue, S429401', meta: '4 courts \u00b7 rubber-mat flooring', book: 'https://cereza.skedda.com/booking', bookLabel: 'Book on Skedda' },
+      { id: 'wyse', name: 'Wyse Active Hub', area: 'Jurong East', region: 'West', type: 'private', addr: '1 Venture Avenue, #03-01, Perennial Business City, S608521', meta: 'Air-conditioned \u00b7 32 courts (SG\u2019s largest)', book: 'https://wyseactivehub.rezerv.co/', bookLabel: 'Book on Rezerv', bookNote: 'Court booking runs on Rezerv (also in the Dungeon app).', elever: true },
+      { id: 'fernvale', name: 'Fernvale Village', area: 'Sengkang', region: 'North-East', type: 'private', addr: '61 Fernvale Link, S799956', meta: 'Air-conditioned \u00b7 badminton & pickleball', book: 'https://booking.fernvalevillage.com/', bookLabel: 'Book a court', elever: true },
+      { id: 'arina', name: 'The Sports Arina @ Jalan Kayu', area: 'Sengkang West', region: 'North-East', type: 'private', addr: '28 Fernvale Road, S799951', meta: 'Air-conditioned \u00b7 4 badminton courts', book: 'https://playtomic.com/clubs/tsa-jalan-kayu', bookLabel: 'Book on Playtomic', bookNote: 'Bookings are handled in the Playtomic app.' },
+      { id: 'sbhsims', name: 'Singapore Badminton Hall (SBH @ Sims)', area: 'Geylang', region: 'East', type: 'private', addr: '1 Lorong 23 Geylang, S388352', meta: '16 courts + VIP \u00b7 Tel 6744 4111', book: 'https://playtomic.com/clubs/sbh-sims', bookLabel: 'Book on Playtomic', bookNote: 'SBH moved court booking to Playtomic in Aug 2025.', elever: true },
+      { id: 'sbhexpo', name: 'SBH East Coast @ Expo', area: 'Changi', region: 'East', type: 'private', addr: 'Singapore Expo, Carpark J, Changi South Ave 1, S486150', meta: 'SG\u2019s largest private hall \u00b7 22+ courts', book: 'https://playtomic.com/clubs/sbh-east-coast-expo', bookLabel: 'Book on Playtomic', bookNote: 'SBH moved court booking to Playtomic in Aug 2025.', elever: true },
+      { id: 'obapasirris', name: 'OBA Arena @ Pasir Ris', area: 'Pasir Ris', region: 'East', type: 'private', addr: '3A Pasir Ris Drive 6, S519422', meta: 'Academy-operated arena', book: 'https://www.optimumbadmintonacademy.com/', bookLabel: 'Booking info' },
+      { id: 'obapunggol', name: 'OBA Arena @ Punggol', area: 'Punggol', region: 'North-East', type: 'private', addr: '11 Northshore Drive, S828670', meta: 'Covered arena', book: 'https://www.optimumbadmintonacademy.com/court-booking', bookLabel: 'Book a court', bookNote: 'Court hire is arranged through Optimum Badminton Academy.' },
+      { id: 'citysprouts', name: 'City Sprouts @ Bedok', area: 'Bedok', region: 'East', type: 'private', addr: '200 Bedok North Avenue 1', meta: 'Community hub \u00b7 courts by XY Badminton', book: 'https://xyacademy.rezerv.co/', bookLabel: 'Book on Rezerv' },
+      { id: 'kff', name: 'KFF Badminton Arena / Singapore Badminton Stadium', area: 'Geylang', region: 'East', type: 'private', addr: '100 Guillemard Road, S399718', meta: 'Historic SBA venue \u00b7 12 courts (reopened 2025)', book: 'https://booking.singaporebadminton.org.sg/', bookLabel: 'Book a court', bookNote: 'Run by the Singapore Badminton Association on its own booking site.', elever: true },
+      { id: 'smash', name: 'Smash Arena', area: 'Joo Koon', region: 'West', type: 'private', addr: '511 Upper Jurong Road, D\u2019Arena, Blk B L2, S638366', meta: '9 doubles + 1 single \u00b7 Taraflex flooring', book: 'https://booking.smasharena.sg/', bookLabel: 'Book a court' },
+      { id: 'cereza', name: 'Cereza Sports Hall', area: 'Eunos', region: 'East', type: 'private', addr: '3 Chin Cheng Avenue, S429401', meta: '4 courts \u00b7 rubber-mat flooring', book: 'https://cereza.skedda.com/booking', bookLabel: 'Book on Skedda' },
       // Kovan's old kovansports.com domain has lapsed and now redirects to an
       // unrelated site, so no URL is linked — only the number that still works.
-      { id: 'kovan', name: 'Kovan Sports Centre', area: 'Hougang', type: 'private', addr: '60 Hougang Street 21, S538738', meta: 'Indoor courts', bookable: false, bookNote: 'No online booking \u2014 call 6286 0256 to check court availability.', phone: '+6562860256' },
+      { id: 'kovan', name: 'Kovan Sports Centre', area: 'Hougang', region: 'North-East', type: 'private', addr: '60 Hougang Street 21, S538738', meta: 'Indoor courts', bookable: false, bookNote: 'No online booking \u2014 call 6286 0256 to check court availability.', phone: '+6562860256' },
 
       // ---------- ACTIVESG PUBLIC SPORT CENTRES ----------
-      { id: 'ocbc', name: 'OCBC Arena', area: 'Kallang', type: 'activesg', addr: '5 Stadium Drive, S397631 (Singapore Sports Hub)', meta: 'Air-conditioned arena', book: 'https://www.sportshub.com.sg/', bookLabel: 'Booking info' },
-      { id: 'oth', name: 'Our Tampines Hub — Tampines Sport Centre', area: 'Tampines', type: 'activesg', addr: '1 Tampines Walk, S528523', meta: 'Flagship ActiveSG hall \u00b7 ~20 courts' },
-      { id: 'bishan', name: 'Bishan Sport Centre', area: 'Bishan', type: 'activesg', addr: '5 Bishan Street 14, S579783' },
-      { id: 'canberra', name: 'Bukit Canberra Sport Centre', area: 'Sembawang', type: 'activesg', addr: '21 Canberra Link, S756973' },
-      { id: 'gombak', name: 'Bukit Gombak Sport Centre', area: 'Bukit Batok', type: 'activesg', addr: '810 Bukit Batok West Ave 5, S659088' },
-      { id: 'cck', name: 'Choa Chu Kang Sport Centre', area: 'Choa Chu Kang', type: 'activesg', addr: '1 Choa Chu Kang Street 53, S689236' },
-      { id: 'clementi', name: 'Clementi Sport Centre', area: 'Clementi', type: 'activesg', addr: '518 Clementi Avenue 3, S129907' },
-      { id: 'delta', name: 'Delta Sport Centre', area: 'Tiong Bahru', type: 'activesg', addr: '900 Tiong Bahru Road, S158790' },
-      { id: 'heartbeat', name: 'Heartbeat @ Bedok Sport Centre', area: 'Bedok', type: 'activesg', addr: '11 Bedok North Street 1, S469662' },
-      { id: 'hougang', name: 'Hougang Sport Centre', area: 'Hougang', type: 'activesg', addr: '93 Hougang Avenue 4, S538832' },
-      { id: 'jurongeast', name: 'Jurong East Sport Centre', area: 'Jurong East', type: 'activesg', addr: '21 Jurong East Street 31, S609517' },
-      { id: 'jurongwest', name: 'Jurong West Sport Centre', area: 'Jurong West', type: 'activesg', addr: '20 Jurong West Street 93, S648965' },
-      { id: 'pasirris', name: 'Pasir Ris Sport Centre', area: 'Pasir Ris', type: 'activesg', addr: '120 Pasir Ris Central, S519640' },
-      { id: 'queenstown', name: 'Queenstown Sport Centre', area: 'Queenstown', type: 'activesg', addr: '473 Stirling Road, S148948' },
-      { id: 'sengkang', name: 'Sengkang Sport Centre', area: 'Sengkang', type: 'activesg', addr: '57 Anchorvale Road, S544964' },
-      { id: 'senja', name: 'Senja-Cashew Sport Centre', area: 'Bukit Panjang', type: 'activesg', addr: '101 Bukit Panjang Road, S679910' },
-      { id: 'serangoon', name: 'Serangoon Sport Centre', area: 'Serangoon', type: 'activesg', addr: '35 Yio Chu Kang Road, S545552' },
-      { id: 'wilfred', name: 'St. Wilfred Sport Centre', area: 'Kallang', type: 'activesg', addr: '3 St. Wilfred Road, S327920' },
-      { id: 'toapayoh', name: 'Toa Payoh Sport Centre', area: 'Toa Payoh', type: 'activesg', addr: '301 Lorong 6 Toa Payoh, S319392' },
-      { id: 'woodlands', name: 'Woodlands Sport Centre', area: 'Woodlands', type: 'activesg', addr: '1 Woodlands Street 13, S738597' },
-      { id: 'yck', name: 'Yio Chu Kang Sport Centre', area: 'Ang Mo Kio', type: 'activesg', addr: '200 Ang Mo Kio Avenue 9, S569770' },
-      { id: 'yishun', name: 'Yishun Sport Centre', area: 'Yishun', type: 'activesg', addr: '101 Yishun Avenue 1, S769130' },
-      { id: 'evans', name: 'MOE (Evans) Sport Hall', area: 'Bukit Timah', type: 'activesg', addr: '21 Evans Road, S259366' },
-
-      // ---------- COUNTRY / SOCIAL CLUBS (members) ----------
-      // Members-only. Links go to the club's own public facility page rather
-      // than a member-login wall a non-member cannot get past.
-      { id: 'csc', name: 'Chinese Swimming Club', area: 'Katong', type: 'club', addr: '21 Amber Road, S439870', meta: 'Members only', book: 'https://www.chineseswimmingclub.org.sg/facilities-services/overview/book-a-venue/', bookLabel: 'Venue booking info', bookNote: 'Members only \u2014 book through the club\u2019s member portal.' },
-      { id: 'ssc', name: 'Singapore Swimming Club', area: 'Tanjong Rhu', type: 'club', addr: '45 Tanjong Rhu Road, S436899', meta: 'Members only', book: 'https://www.sswimclub.org.sg/', bookLabel: 'Club website', bookNote: 'Members only \u2014 courts are booked in the members\u2019 portal after login.' },
-      { id: 'warren', name: 'Warren Golf & Country Club', area: 'Dover', type: 'club', addr: '23 Folkestone Road, S139599', meta: 'Members only \u00b7 Tel 6778 0127', book: 'https://warren.org.sg/sports-facilities/', bookLabel: 'Facilities info', bookNote: 'Members only \u2014 contact the club to check court availability.', phone: '+6567780127' },
+      { id: 'ocbc', name: 'OCBC Arena', area: 'Kallang', region: 'Central', type: 'activesg', addr: '5 Stadium Drive, S397631 (Singapore Sports Hub)', meta: 'Air-conditioned arena', book: 'https://www.sportshub.com.sg/', bookLabel: 'Booking info' },
+      { id: 'oth', name: 'Our Tampines Hub — Tampines Sport Centre', area: 'Tampines', region: 'East', type: 'activesg', addr: '1 Tampines Walk, S528523', meta: 'Flagship ActiveSG hall \u00b7 ~20 courts' },
+      { id: 'bishan', name: 'Bishan Sport Centre', area: 'Bishan', region: 'Central', type: 'activesg', addr: '5 Bishan Street 14, S579783' },
+      { id: 'canberra', name: 'Bukit Canberra Sport Centre', area: 'Sembawang', region: 'North', type: 'activesg', addr: '21 Canberra Link, S756973' },
+      { id: 'gombak', name: 'Bukit Gombak Sport Centre', area: 'Bukit Batok', region: 'West', type: 'activesg', addr: '810 Bukit Batok West Ave 5, S659088' },
+      { id: 'cck', name: 'Choa Chu Kang Sport Centre', area: 'Choa Chu Kang', region: 'West', type: 'activesg', addr: '1 Choa Chu Kang Street 53, S689236' },
+      { id: 'clementi', name: 'Clementi Sport Centre', area: 'Clementi', region: 'West', type: 'activesg', addr: '518 Clementi Avenue 3, S129907' },
+      { id: 'delta', name: 'Delta Sport Centre', area: 'Tiong Bahru', region: 'Central', type: 'activesg', addr: '900 Tiong Bahru Road, S158790' },
+      { id: 'heartbeat', name: 'Heartbeat @ Bedok Sport Centre', area: 'Bedok', region: 'East', type: 'activesg', addr: '11 Bedok North Street 1, S469662' },
+      { id: 'hougang', name: 'Hougang Sport Centre', area: 'Hougang', region: 'North-East', type: 'activesg', addr: '93 Hougang Avenue 4, S538832' },
+      { id: 'jurongeast', name: 'Jurong East Sport Centre', area: 'Jurong East', region: 'West', type: 'activesg', addr: '21 Jurong East Street 31, S609517' },
+      { id: 'jurongwest', name: 'Jurong West Sport Centre', area: 'Jurong West', region: 'West', type: 'activesg', addr: '20 Jurong West Street 93, S648965' },
+      { id: 'pasirris', name: 'Pasir Ris Sport Centre', area: 'Pasir Ris', region: 'East', type: 'activesg', addr: '120 Pasir Ris Central, S519640' },
+      { id: 'queenstown', name: 'Queenstown Sport Centre', area: 'Queenstown', region: 'Central', type: 'activesg', addr: '473 Stirling Road, S148948' },
+      { id: 'sengkang', name: 'Sengkang Sport Centre', area: 'Sengkang', region: 'North-East', type: 'activesg', addr: '57 Anchorvale Road, S544964' },
+      { id: 'senja', name: 'Senja-Cashew Sport Centre', area: 'Bukit Panjang', region: 'West', type: 'activesg', addr: '101 Bukit Panjang Road, S679910' },
+      { id: 'serangoon', name: 'Serangoon Sport Centre', area: 'Serangoon', region: 'North-East', type: 'activesg', addr: '35 Yio Chu Kang Road, S545552' },
+      { id: 'wilfred', name: 'St. Wilfred Sport Centre', area: 'Kallang', region: 'Central', type: 'activesg', addr: '3 St. Wilfred Road, S327920' },
+      { id: 'toapayoh', name: 'Toa Payoh Sport Centre', area: 'Toa Payoh', region: 'Central', type: 'activesg', addr: '301 Lorong 6 Toa Payoh, S319392' },
+      { id: 'woodlands', name: 'Woodlands Sport Centre', area: 'Woodlands', region: 'North', type: 'activesg', addr: '1 Woodlands Street 13, S738597' },
+      { id: 'yck', name: 'Yio Chu Kang Sport Centre', area: 'Ang Mo Kio', region: 'North-East', type: 'activesg', addr: '200 Ang Mo Kio Avenue 9, S569770' },
+      { id: 'yishun', name: 'Yishun Sport Centre', area: 'Yishun', region: 'North', type: 'activesg', addr: '101 Yishun Avenue 1, S769130' },
+      { id: 'evans', name: 'MOE (Evans) Sport Hall', area: 'Bukit Timah', region: 'Central', type: 'activesg', addr: '21 Evans Road, S259366' },
 
       // ---------- ÉLEVER REGULAR CLASS VENUES (schools & community clubs) ----------
       // These are not public court-hire venues: school halls are used under a
       // hire arrangement and CC courts are balloted on OnePA. Linking a "book a
       // court" button here would be misleading, so each one links to the thing
       // a visitor can actually do — book an Élever class at that venue.
-      { id: 'acsbarker', name: 'Anglo-Chinese School (Barker Road)', area: 'Newton', type: 'elever', addr: '60 Barker Road, S309919', meta: '\u00c9lever class venue \u00b7 school hall', book: 'https://wa.me/6589214221', bookLabel: 'Book an \u00c9lever class', bookNote: 'School hall \u2014 not open for public court hire. Élever classes run here.', elever: true },
-      { id: 'bidadari', name: 'Bidadari Community Club', area: 'Bidadari', type: 'elever', addr: '11 Bidadari Park Drive, S367905', meta: '\u00c9lever class venue \u00b7 community club', book: 'https://wa.me/6589214221', bookLabel: 'Book an \u00c9lever class', bookNote: 'CC courts are balloted on OnePA; Élever classes are booked with us.', altBook: 'https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS', altBookLabel: 'Public courts on OnePA', elever: true },
-      { id: 'cantonment', name: 'Cantonment Primary School', area: 'Tanjong Pagar', type: 'elever', addr: '1 Cantonment Close, S088256', meta: '\u00c9lever class venue \u00b7 school hall', book: 'https://wa.me/6589214221', bookLabel: 'Book an \u00c9lever class', bookNote: 'School hall \u2014 not open for public court hire. Élever classes run here.', elever: true },
-      { id: 'northvista', name: 'North Vista Primary School', area: 'Sengkang', type: 'elever', addr: '31 Rivervale Drive, S545132', meta: '\u00c9lever class venue \u00b7 school hall', book: 'https://wa.me/6589214221', bookLabel: 'Book an \u00c9lever class', bookNote: 'School hall \u2014 not open for public court hire. Élever classes run here.', elever: true },
-      { id: 'scgs', name: "Singapore Chinese Girls' School", area: 'Novena', type: 'elever', addr: '190 Dunearn Road, S309437', meta: '\u00c9lever class venue \u00b7 school hall', book: 'https://wa.me/6589214221', bookLabel: 'Book an \u00c9lever class', bookNote: 'School hall \u2014 not open for public court hire. Élever classes run here.', elever: true }
+      { id: 'acsbarker', name: 'Anglo-Chinese School (Barker Road)', area: 'Newton', region: 'Central', type: 'elever', addr: '60 Barker Road, S309919', meta: '\u00c9lever class venue \u00b7 school hall', book: 'https://wa.me/6589214221', bookLabel: 'Book an \u00c9lever class', bookNote: 'School hall \u2014 not open for public court hire. Élever classes run here.', elever: true },
+      { id: 'bidadari', name: 'Bidadari Community Club', area: 'Bidadari', region: 'Central', type: 'cc', addr: '11 Bidadari Park Drive, S367905', meta: '\u00c9lever class venue \u00b7 community club', book: 'https://wa.me/6589214221', bookLabel: 'Book an \u00c9lever class', bookNote: 'CC courts are balloted on OnePA; Élever classes are booked with us.', altBook: 'https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS', altBookLabel: 'Public courts on OnePA', elever: true },
+      { id: 'cantonment', name: 'Cantonment Primary School', area: 'Tanjong Pagar', region: 'Central', type: 'elever', addr: '1 Cantonment Close, S088256', meta: '\u00c9lever class venue \u00b7 school hall', book: 'https://wa.me/6589214221', bookLabel: 'Book an \u00c9lever class', bookNote: 'School hall \u2014 not open for public court hire. Élever classes run here.', elever: true },
+      { id: 'northvista', name: 'North Vista Primary School', area: 'Sengkang', region: 'North-East', type: 'elever', addr: '31 Rivervale Drive, S545132', meta: '\u00c9lever class venue \u00b7 school hall', book: 'https://wa.me/6589214221', bookLabel: 'Book an \u00c9lever class', bookNote: 'School hall \u2014 not open for public court hire. Élever classes run here.', elever: true },
+      { id: 'scgs', name: "Singapore Chinese Girls' School", area: 'Novena', region: 'Central', type: 'elever', addr: '190 Dunearn Road, S309437', meta: '\u00c9lever class venue \u00b7 school hall', book: 'https://wa.me/6589214221', bookLabel: 'Book an \u00c9lever class', bookNote: 'School hall \u2014 not open for public court hire. Élever classes run here.', elever: true }
     ];
 
     var ACTIVESG_BOOK = 'https://activesg.gov.sg/facility-bookings/activities/YLONatwvqJfikKOmB5N9U/venues';
 
+    /* ---------- Compete: local tournaments ----------
+       Every card carries the four things a player needs before entering —
+       dates, location, age groups and a way to register (client, Sep 2026).
+       `register` is the ORGANISER's own entry page, never ours: registration
+       windows open and close on their schedule, so the button routes there
+       rather than implying entry is open today. Schedule verified against the
+       SBA sanctioned-tournament calendar on 8 Sep 2026. */
+    var LOCAL_EVENTS = [
+      {
+        tag: 'Upcoming · Tier 2', name: 'KSA Challenge 2026',
+        date: '28 Nov – 4 Dec 2026', where: 'Fernvale Village',
+        ages: 'See organiser notice',
+        register: 'https://singaporebadminton.org.sg/events/'
+      },
+      {
+        tag: 'Upcoming · Junior', name: 'Singapore Junior International Series 2026',
+        date: '7 – 13 Dec 2026', where: 'Wyse Active Hub',
+        ages: 'U13 · U15 · U17 · U19',
+        register: 'https://badmintonasia.org/calendar/singapore-junior-international-series-2026/'
+      },
+      {
+        tag: 'Upcoming · Tier 2', name: 'Papago Badminton Carnival',
+        date: '14 – 24 Dec 2026', where: 'KFF Badminton Arena',
+        ages: 'See organiser notice',
+        register: 'https://singaporebadminton.org.sg/events/'
+      }
+    ];
+
     function loc(v) { return { name: v.name, area: v.area, meta: v.meta }; }
 
+    /* Members-only country and social clubs were dropped from the directory
+       (client, Sep 2026: "no need country clubs") — a member-login wall is not
+       something a visitor can act on. Community club courts, which anyone can
+       ballot for on OnePA, stay as their own type. */
     var TYPE_LABEL = {
       private: 'Private hall', activesg: 'ActiveSG', dus: 'ActiveSG DUS',
-      club: 'Club / CC', elever: 'Élever venue'
+      cc: 'Community club', elever: 'Élever venue'
     };
 
     var grid = document.getElementById('hallGrid');
@@ -589,7 +614,14 @@
     var panels = hub.querySelectorAll('.hub__panel');
     var tabs = tabsEl ? tabsEl.querySelectorAll('.hub__tab') : [];
 
-    var currentType = 'all';
+    /* Region and Type are multi-select drop-downs, so each holds a SET of
+       chosen values rather than one (client, Sep 2026). An empty set means "no
+       restriction" — that is what replaced the old "All venues" chip. `elever`
+       stays a separate cross-cutting toggle: a hall can be both a private
+       venue and a place we teach. */
+    var pickedRegions = [];
+    var pickedTypes = [];
+    var eleverOnly = false;
     var query = '';
 
     /* Header stat: keep the headline number honest by reading it off the
@@ -606,10 +638,9 @@
 
     function render() {
       var list = VENUES.filter(function (v) {
-        // "Élever classes" is a cross-cutting flag (a hall can be both a private
-        // venue and an Élever class venue), so it filters on v.elever, not v.type.
-        if (currentType === 'elever') { if (!v.elever) return false; }
-        else if (currentType !== 'all' && v.type !== currentType) return false;
+        if (eleverOnly && !v.elever) return false;
+        if (pickedRegions.length && pickedRegions.indexOf(v.region) === -1) return false;
+        if (pickedTypes.length && pickedTypes.indexOf(v.type) === -1) return false;
         if (query) {
           var l = loc(v);
           var hay = (v.name + ' ' + v.area + ' ' + v.addr + ' ' + l.name + ' ' + l.area).toLowerCase();
@@ -661,16 +692,78 @@
       }).join('');
     }
 
-    // filters
-    if (filtersEl) {
-      filtersEl.addEventListener('click', function (e) {
-        var btn = e.target.closest('.hub__filter');
-        if (!btn) return;
-        filtersEl.querySelectorAll('.hub__filter').forEach(function (b) { b.classList.remove('is-active'); b.setAttribute('aria-pressed', 'false'); });
-        btn.classList.add('is-active'); btn.setAttribute('aria-pressed', 'true');
-        currentType = btn.dataset.type;
-        render();
+    /* ---- filters: two checkbox drop-downs + one toggle ----
+       The drop-downs are native <details>, so they open, close and take the
+       keyboard without any of that being written here. This reads the boxes,
+       keeps each button's count badge in step, and re-renders. */
+    var eleverBtn = document.getElementById('hallElever');
+    var clearBtn = document.getElementById('hallClear');
+
+    function readDrop(group) {
+      if (!filtersEl) return [];
+      var d = filtersEl.querySelector('.fdrop[data-group="' + group + '"]');
+      if (!d) return [];
+      return Array.prototype.filter.call(d.querySelectorAll('input[type=checkbox]'), function (b) {
+        return b.checked;
+      }).map(function (b) { return b.value; });
+    }
+
+    function syncFilterChrome() {
+      if (!filtersEl) return;
+      filtersEl.querySelectorAll('.fdrop').forEach(function (d) {
+        var n = d.querySelectorAll('input[type=checkbox]:checked').length;
+        var badge = d.querySelector('.fdrop__count');
+        if (badge) badge.textContent = n ? String(n) : '';
+        d.classList.toggle('is-set', n > 0);
       });
+      if (eleverBtn) {
+        eleverBtn.classList.toggle('is-active', eleverOnly);
+        eleverBtn.setAttribute('aria-pressed', String(eleverOnly));
+      }
+      if (clearBtn) {
+        clearBtn.hidden = !(eleverOnly || pickedRegions.length || pickedTypes.length);
+      }
+    }
+
+    function applyFilters() {
+      pickedRegions = readDrop('region');
+      pickedTypes = readDrop('type');
+      syncFilterChrome();
+      render();
+    }
+
+    if (filtersEl) {
+      filtersEl.addEventListener('change', function (e) {
+        if (e.target.matches('input[type=checkbox]')) applyFilters();
+      });
+      if (eleverBtn) {
+        eleverBtn.addEventListener('click', function () { eleverOnly = !eleverOnly; applyFilters(); });
+      }
+      if (clearBtn) {
+        clearBtn.addEventListener('click', function () {
+          filtersEl.querySelectorAll('input[type=checkbox]').forEach(function (b) { b.checked = false; });
+          eleverOnly = false;
+          applyFilters();
+        });
+      }
+      /* One drop-down open at a time, and a click anywhere else closes it —
+         otherwise two open menus overlap the cards beneath them. */
+      filtersEl.addEventListener('toggle', function (e) {
+        var d = e.target;
+        if (!d.classList || !d.classList.contains('fdrop') || !d.open) return;
+        filtersEl.querySelectorAll('.fdrop[open]').forEach(function (other) {
+          if (other !== d) other.open = false;
+        });
+      }, true);
+      document.addEventListener('click', function (e) {
+        if (filtersEl.contains(e.target)) return;
+        filtersEl.querySelectorAll('.fdrop[open]').forEach(function (d) { d.open = false; });
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        filtersEl.querySelectorAll('.fdrop[open]').forEach(function (d) { d.open = false; });
+      });
+      syncFilterChrome();
     }
     // search
     if (searchEl) {
@@ -730,7 +823,7 @@
     // the nested "Play" group resolve to their nested sub-tab; the parent
     // "Play" tab is opened separately (see activateSubForSection).
     var SECTION_TO_SUBTAB = {
-      team: 'intl-players', news: 'intl-calendar',
+      team: 'intl-players', news: 'intl-tour', official: 'intl-tour', hubnews: 'intl-news',
       tournaments: 'local-compete', shops: 'local-shop',
       halls: 'play-courts', book: 'play-courts', groups: 'play-groups'
     };
@@ -822,6 +915,19 @@
     }
 
     window.addEventListener('resize', layoutSubThumbs);
+    /* A thumb measured before the segmented control has taken its final width
+       (web fonts still loading, a panel revealed a moment ago) sits at the
+       button's content width rather than its flexed width. Watching each track
+       re-lays the thumb whenever that width actually settles, instead of
+       relying on load / fonts.ready having fired at the right moment. */
+    if (typeof ResizeObserver === 'function') {
+      var thumbRO = new ResizeObserver(function () { layoutSubThumbs(); });
+      subnavs.forEach(function (nav) {
+        var inner = nav.querySelector('.hub__subnav-inner');
+        if (inner) thumbRO.observe(inner);
+        nav.querySelectorAll('.hub__subtab').forEach(function (b) { thumbRO.observe(b); });
+      });
+    }
 
 
     /* Deep-link both main tabs and the preserved section aliases so older
@@ -829,7 +935,7 @@
        section alias now also reveals the sub-tab that contains it. */
     var TAB_NAMES = Array.prototype.map.call(tabs, function (b) { return b.dataset.tab; });
     var TAB_ALIASES = {
-      team: 'international', news: 'international',
+      team: 'international', news: 'international', official: 'international', hubnews: 'international',
       tournaments: 'local', halls: 'local', book: 'local', groups: 'local', shops: 'local'
     };
     function tabFromHash() {
@@ -871,6 +977,29 @@
     window.requestAnimationFrame(layoutSubThumbs);
     window.addEventListener('load', layoutSubThumbs);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutSubThumbs);
+
+    var localEventsMount = document.getElementById('localEvents');
+    if (localEventsMount) {
+      localEventsMount.innerHTML = LOCAL_EVENTS.length
+        ? LOCAL_EVENTS.map(function (e) {
+            return '<article class="hub-discovery hub-discovery--dated">' +
+              '<span class="hub-discovery__tag">' + esc(e.tag) + '</span>' +
+              '<h3>' + esc(e.name) + '</h3>' +
+              '<dl class="hub-event-facts">' +
+                '<div><dt>Date</dt><dd>' + esc(e.date) + '</dd></div>' +
+                '<div><dt>Location</dt><dd>' + esc(e.where) + '</dd></div>' +
+                '<div><dt>Age groups</dt><dd>' + esc(e.ages) + '</dd></div>' +
+              '</dl>' +
+              '<a class="btn btn--primary hub-discovery__register" href="' + attr(e.register) + '"' +
+                ' target="_blank" rel="noopener">Register ' +
+                '<span aria-hidden="true">\u2197</span>' +
+                '<span class="sr-only"> for ' + esc(e.name) + ' on the organiser\u2019s site</span></a>' +
+            '</article>';
+          }).join('')
+        : '<p class="hub__empty">No local tournaments listed right now. ' +
+          '<a href="https://singaporebadminton.org.sg/events/" target="_blank" rel="noopener">' +
+          'Check the SBA calendar \u2197</a></p>';
+    }
 
     render();
     // Re-render the venue list when the language changes (static text in the
