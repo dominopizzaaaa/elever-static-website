@@ -455,10 +455,11 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .vcard__body{padding:0 1.2rem 1.1rem}
 .vcard h3{font-size:1.15rem;font-weight:800;margin:0;letter-spacing:-.02em}
 /* A single area can hold more than one venue (e.g. Aljunied = SBH + SBS).
-   Each venue block sits under the area header, separated by a hairline. */
-.vcard__venue{margin-top:1rem;padding:.15rem}
+   Each venue is its own bordered box — the border marks the location, while
+   faint hairlines inside split the day/timeslot rows (client, Sep 2026). */
+.vcard__venue{margin-top:1rem;padding:.9rem 1rem;border:1px solid var(--line-2);border-radius:12px;background:var(--panel)}
 .vcard__body > .vcard__venue:first-child{margin-top:1rem}
-.vcard__venue + .vcard__venue{border-top:1px solid var(--line);padding-top:1rem}
+.vcard__venue + .vcard__venue{margin-top:.9rem}
 /* Venue name and address share one line, the address pushed right and
    linking out to Google Maps (client, Sep 2026). It only drops to a second
    line when the two genuinely cannot fit. */
@@ -478,11 +479,20 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   .vcard h3{font-size:1rem}
   .vcard__body{padding:0 1rem 1rem}
 }
-.vcard__sessions{list-style:none;display:flex;flex-direction:column;gap:.42rem}
+/* Rows are split by faint hairlines rather than individual boxes — the box
+   is now the venue, the faint line splits the days/timeslots (client, Sep
+   2026). */
+.vcard__sessions{list-style:none;display:flex;flex-direction:column}
 .vcard__sessions li{display:grid;grid-template-columns:minmax(5rem,.8fr) minmax(7rem,1fr) auto;gap:.6rem;align-items:center;font-size:.82rem;
-  border:1px solid var(--line);background:var(--panel-2);border-radius:10px;padding:.55rem .65rem}
-.vcard__sessions li:first-child{padding-top:.55rem}
+  padding:.6rem .15rem}
+.vcard__sessions li + li{border-top:1px solid var(--line)}
+.vcard__sessions li:first-child{padding-top:.3rem}
+.vcard__sessions li:last-child{padding-bottom:.15rem}
 .vcard__day{font-weight:750;color:var(--navy)}
+/* A repeated day keeps its (empty) grid cell on desktop so the time column
+   stays aligned; on the stacked phone layout it is removed so the row does
+   not leave a blank line. */
+.vcard__day--repeat{min-height:1px}
 .vcard__time{color:var(--muted);font-variant-numeric:tabular-nums}
 /* One chip treatment for every level — blue outline, white fill, blue text,
    not bold (client, Sep 2026). Emergence used to be green; it now matches. */
@@ -495,6 +505,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .vcard__book:hover{background:var(--accent);border-color:var(--accent);color:#fff;text-decoration:none}
 @media(max-width:620px){
   .vcard__sessions li{grid-template-columns:1fr auto}
+  .vcard__day--repeat{display:none}
   .vcard__time{grid-column:1}
   .vcard__lvl{grid-column:2;grid-row:1/3}
 }

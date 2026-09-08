@@ -647,8 +647,16 @@
                     esc(v.addr) +
                   '</a>' +
                 '</p>' +
-                '<ul class="vcard__sessions">' + v.sessions.map(function (s) {
-                  return '<li><span class="vcard__day">' + esc(s.day) + '</span>' +
+                '<ul class="vcard__sessions">' + v.sessions.map(function (s, i, arr) {
+                  /* Repeated day labels are dropped: a run of same-day sessions
+                     shows the day only on its first row (client, Sep 2026).
+                     The empty cell keeps the grid columns aligned, and an
+                     aria-label still announces the day for assistive tech. */
+                  var sameAsPrev = i > 0 && arr[i - 1].day === s.day;
+                  var dayCell = sameAsPrev
+                    ? '<span class="vcard__day vcard__day--repeat" aria-label="' + esc(s.day) + '"></span>'
+                    : '<span class="vcard__day">' + esc(s.day) + '</span>';
+                  return '<li>' + dayCell +
                     '<span class="vcard__time">' + esc(s.time) + '</span>' +
                     '<span class="vcard__lvl">' + esc(s.level) + '</span>' +
                     '</li>';
