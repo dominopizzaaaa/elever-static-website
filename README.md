@@ -81,8 +81,6 @@ info@eleverbadminton.com · WhatsApp +65 8921 4221
 ## Still needed from Élever
 
 - Home hero photos (the Google Drive set) — the current four are interim
-- The EPL logo as `assets/img/brand/epl-logo-white.png` — `lab.html` picks it up
-  automatically and falls back to the wordmark until it exists
 - Real class days, times, levels and venues (currently sample data in `CLASSES`)
 - Age ranges, ability levels and grading checkpoints for the four pathways (deliberately
   omitted rather than guessed)

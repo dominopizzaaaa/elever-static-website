@@ -44,6 +44,19 @@
 .phead__lead strong{color:#fff;font-weight:600}
 .phead__lead a{color:var(--accent-light);text-decoration:underline;text-underline-offset:3px}
 .phead__actions{margin-top:1.9rem;display:flex;flex-wrap:wrap;gap:.65rem}
+.phead__finder{display:inline-flex;flex-direction:column;align-items:flex-start;min-width:min(100%,250px);padding:.85rem 1.2rem;
+  color:#fff;text-decoration:none;background:linear-gradient(180deg,rgba(33,81,209,.22),rgba(255,255,255,.04));
+  border:1px solid rgba(143,171,245,.28);border-radius:var(--r-md);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  transition:transform .22s var(--ease),border-color .22s,background .22s,box-shadow .22s}
+.phead__finder > span{font-size:.62rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--accent-light)}
+.phead__finder strong{display:flex;align-items:center;justify-content:space-between;gap:1rem;width:100%;margin-top:.25rem;
+  font-size:1.15rem;font-weight:800;letter-spacing:-.025em;line-height:1.2;color:#fff}
+.phead__finder svg{flex:none;transition:transform .22s var(--ease)}
+.phead__finder:hover{transform:translateY(-2px);border-color:rgba(143,171,245,.58);
+  background:linear-gradient(180deg,rgba(33,81,209,.34),rgba(255,255,255,.08));box-shadow:0 12px 32px rgba(0,0,0,.16)}
+.phead__finder:hover svg{transform:translateY(3px)}
+.phead__finder:focus-visible{outline:2px solid #fff;outline-offset:3px}
 .phead .btn--ghost{border-color:rgba(255,255,255,.32);color:#fff;background:transparent}
 .phead .btn--ghost:hover{border-color:#fff;background:rgba(255,255,255,.1)}
 
@@ -1153,15 +1166,12 @@ body.is-dark .footer{border-top:1px solid rgba(255,255,255,.09)}
   body.is-dark .nav.open .nav__links .nav__link.is-current{color:var(--accent)}
 }
 
-.lab{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
-  padding:9rem clamp(1.25rem,5vw,3rem) 6rem;background:#000;color:#fff}
-/* The EPL mark: the logo when the file is there, the wordmark when it is not
-   (see the comment in lab.html). Both states occupy the same slot. */
-.lab__mark{font-size:.68rem;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:var(--accent-light);margin-bottom:2.2rem}
-.lab__logo{width:auto;height:clamp(46px,7vw,74px);margin:0 auto;object-fit:contain}
-.lab__markword{display:none}
-.lab__mark--fallback .lab__logo{display:none}
-.lab__mark--fallback .lab__markword{display:inline}
+.lab{position:relative;isolation:isolate;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  padding:8rem clamp(1.25rem,5vw,3rem) 5rem;overflow:hidden;background:#000;color:#fff}
+.lab::before{content:"";position:absolute;z-index:-1;top:2%;left:50%;width:min(90vw,760px);aspect-ratio:1;transform:translateX(-50%);
+  background:radial-gradient(circle,rgba(33,81,209,.13),rgba(33,81,209,.04) 38%,transparent 68%);pointer-events:none}
+.lab__mark{width:min(52vw,430px);margin-bottom:clamp(1rem,2.4vw,1.8rem)}
+.lab__logo{display:block;width:100%;height:auto;margin:0 auto;object-fit:contain;filter:drop-shadow(0 16px 34px rgba(15,64,210,.2))}
 .lab__title{font-size:clamp(2.6rem,11vw,8rem);font-weight:800;line-height:.95;letter-spacing:-.04em;text-transform:uppercase;color:#fff}
 .lab__label{margin-top:3.2rem;font-size:.66rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.42)}
 .lab__addr{font-style:normal;margin-top:.9rem;font-size:.92rem;line-height:1.9;color:rgba(255,255,255,.72)}
@@ -1175,6 +1185,11 @@ body.is-dark .footer{border-top:1px solid rgba(255,255,255,.09)}
 .lab__social:focus-visible{outline:2px solid var(--accent-light);outline-offset:3px}
 .lab .btn--ghost{border-color:rgba(255,255,255,.28);color:#fff;background:transparent}
 .lab .btn--ghost:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+@media(max-width:560px){
+  .phead__finder{width:100%;min-width:0}
+  .lab{padding-top:7rem;padding-bottom:4rem}
+  .lab__mark{width:min(86vw,340px);margin-bottom:.8rem}
+}
 
 /* =====================================================================
    RACKET RATINGS + RECREATIONAL PLAY GROUPS  (SG Hub → Groups tab)

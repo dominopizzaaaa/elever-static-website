@@ -237,9 +237,8 @@ Legend: `[x]` done · `[~]` done as far as the supplied assets allow · `[ ]` de
 
 - [x] **Moved next to Classes in the nav** (was on the far right).
 - [x] **Renamed to 'Lab'** in the nav.
-- [~] **EPL logo replaces the 'ÉLEVER PERFORMANCE LAB' wording on the page** — the markup now looks
-  for `assets/img/brand/epl-logo-white.png` and falls back to the current wording until that file
-  exists. Drop Chin's logo in at that path and it appears; no code change needed.
+- [x] **EPL logo replaces the 'ÉLEVER PERFORMANCE LAB' wording on the page** — the supplied artwork
+  is trimmed and web-optimised at `assets/img/brand/epl-logo.png`.
 
 ## 9. Footer
 
@@ -255,8 +254,7 @@ Legend: `[x]` done · `[~]` done as far as the supplied assets allow · `[ ]` de
   the grey banded sections and the footer all start on the same line, and the *Book a class* button
   lines up with the footer's right edge.
 - Home, Classes, Camps, Events, About, Contact, Lab, News, Privacy and a coach page: no JavaScript
-  errors, no broken images (the one deliberate exception is the EPL logo, which triggers the
-  wordmark fallback by design).
+  errors or broken images.
 - Hero slideshow verified frame by frame — one photo visible per quarter of the loop, crossfading,
   and the first frame is never blank.
 - Camp and event viewers measured: the photo now finishes 8px above the thumbnail strip instead of
@@ -272,8 +270,7 @@ Legend: `[x]` done · `[~]` done as far as the supplied assets allow · `[ ]` de
 | 2 | What We Do tile photos | Optional: a chosen shot per pillar |
 | 3 | Group / Private class descriptions | Copy (Chin) |
 | 4 | Contact box UI | Client's direction |
-| 5 | EPL logo | `epl-logo-white.png` (Chin) |
-| 6 | Press cover photos | Confirm we may use the publications' images |
-| 7 | New Home page style | Client's direction |
+| 5 | Press cover photos | Confirm we may use the publications' images |
+| 6 | New Home page style | Client's direction |
 
 </details>
