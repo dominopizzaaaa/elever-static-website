@@ -50,6 +50,19 @@ body[data-page="hub"] .sr-only{position:absolute;width:1px;height:1px;padding:0;
 .hub__subtab.is-active{color:#071633}
 .hub__subtab:focus-visible{outline:2px solid #2151d1;outline-offset:2px}
 
+/* Nested sub-tabs (e.g. Court Booking / Social Groups inside "Play"): a
+   second, quieter level. Not sticky, aligns to the same centered content
+   column as the sections, and its track only spans its content so it reads
+   as subordinate to the main row. */
+.hub__subnav--nested{position:static;top:auto;background:transparent;
+  width:min(var(--maxw),calc(100% - 2 * var(--gutter)));margin:clamp(1.6rem,3vw,2.4rem) auto 1.2rem;
+  padding:0;display:flex}
+.hub__subnav--nested .hub__subnav-inner{flex:0 1 auto;background:#eef2fa;border-color:#e0e7f4}
+.hub__subnav--nested .hub__subtab{flex:0 0 auto;min-height:38px;padding:.45rem 1rem;font-size:.75rem}
+/* Sections directly inside a Play sub-panel already carry the top margin via
+   the nested nav above them, so drop the tall first-child gap. */
+.hub__subpanel .hub__subnav--nested + .hub__subpanel > .hub-block:first-child{margin-top:0}
+
 .hub__subpanel{animation:hubSubIn .38s cubic-bezier(.22,.61,.36,1) both}
 .hub__subpanel[hidden]{display:none}
 .hub__subpanel:focus{outline:none}

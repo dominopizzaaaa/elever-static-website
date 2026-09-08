@@ -19,9 +19,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=49" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=49" />
-  <link rel="stylesheet" href="assets/css/hub.css?v=51" />
+  <link rel="stylesheet" href="assets/css/style.css?v=52" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=52" />
+  <link rel="stylesheet" href="assets/css/hub.css?v=52" />
 </head>
 <body data-page="hub" data-nav="solid" data-base="">
 
@@ -144,21 +144,81 @@
           <p>Discover competitions, search 43 venues, understand each booking route, find a social group and shop for the right gear.</p>
         </div>
 
-        <!-- Local sections split into sub-panels; the segmented control below
-             switches between them so no single view is overwhelming (client,
-             Sep 2026). -->
+        <!-- Local sections split into three groups — Shop, Play, Compete —
+             switched by the segmented control below. "Play" carries its own
+             nested Court Booking / Social Groups sub-tabs (client, Sep 2026). -->
         <div class="hub__subnav" data-subnav="local">
           <div class="hub__subnav-inner" role="tablist" aria-label="Choose a local section">
             <span class="hub__subnav-thumb" aria-hidden="true"></span>
-            <button class="hub__subtab is-active" data-subtab="local-tournaments" role="tab" id="subtab-local-tournaments" aria-selected="true" aria-controls="subpanel-local-tournaments">Tournaments</button>
-            <button class="hub__subtab" data-subtab="local-courts" role="tab" id="subtab-local-courts" aria-selected="false" aria-controls="subpanel-local-courts" tabindex="-1">Courts</button>
-            <button class="hub__subtab" data-subtab="local-booking" role="tab" id="subtab-local-booking" aria-selected="false" aria-controls="subpanel-local-booking" tabindex="-1">Booking</button>
-            <button class="hub__subtab" data-subtab="local-groups" role="tab" id="subtab-local-groups" aria-selected="false" aria-controls="subpanel-local-groups" tabindex="-1">Groups</button>
-            <button class="hub__subtab" data-subtab="local-shops" role="tab" id="subtab-local-shops" aria-selected="false" aria-controls="subpanel-local-shops" tabindex="-1">Shops</button>
+            <button class="hub__subtab is-active" data-subtab="local-shop" role="tab" id="subtab-local-shop" aria-selected="true" aria-controls="subpanel-local-shop">Shop</button>
+            <button class="hub__subtab" data-subtab="local-play" role="tab" id="subtab-local-play" aria-selected="false" aria-controls="subpanel-local-play" tabindex="-1">Play</button>
+            <button class="hub__subtab" data-subtab="local-compete" role="tab" id="subtab-local-compete" aria-selected="false" aria-controls="subpanel-local-compete" tabindex="-1">Compete</button>
           </div>
         </div>
 
-        <div class="hub__subpanel is-active" data-subpanel="local-tournaments" id="subpanel-local-tournaments" role="tabpanel" aria-labelledby="subtab-local-tournaments" tabindex="0">
+        <div class="hub__subpanel is-active" data-subpanel="local-shop" id="subpanel-local-shop" role="tabpanel" aria-labelledby="subtab-local-shop" tabindex="0">
+        <section class="hub-block" id="shops" aria-labelledby="shops-title">
+          <div class="hub-section-head"><div><span class="hub-kicker">Gear in person</span><h2 id="shops-title">Physical shops to try</h2></div><p>For rackets and shoes, an in-person fit can be worth the trip. Product range and opening hours change, so check the linked source before visiting.</p></div>
+          <div class="hub-shop-grid">
+            <article><span>East</span><h3>Decathlon Bedok</h3><p>Large multi-sport store at ESR BizPark @ Chai Chee, with badminton gear and restringing services listed.</p><a href="https://www.decathlon.sg/s/sports-stores/bedok" target="_blank" rel="noopener">Official store page ↗</a></article>
+            <article><span>Central</span><h3>Decathlon Orchard</h3><p>Central option at The Centrepoint for trying entry-to-intermediate equipment in person.</p><a href="https://www.decathlon.sg/s/sports-stores/orchard" target="_blank" rel="noopener">Official store page ↗</a></article>
+            <article><span>Queensway</span><h3>Gala Sports</h3><p>A badminton specialist at #01-33 Queensway Shopping Centre, listed in VICTOR Singapore’s authorised-dealer directory.</p><a href="https://www.google.com/maps/search/?api=1&amp;query=Gala%20Sports%201%20Queensway%20Singapore%20149053" target="_blank" rel="noopener">Open in Google Maps ↗</a></article>
+          </div>
+        </section>
+        </div><!-- /subpanel local-shop -->
+
+        <div class="hub__subpanel" data-subpanel="local-play" id="subpanel-local-play" role="tabpanel" aria-labelledby="subtab-local-play" tabindex="0" hidden>
+          <!-- Nested Play sub-tabs: Court Booking + Social Groups. -->
+          <div class="hub__subnav hub__subnav--nested" data-subnav="local-play">
+            <div class="hub__subnav-inner" role="tablist" aria-label="Choose a Play section">
+              <span class="hub__subnav-thumb" aria-hidden="true"></span>
+              <button class="hub__subtab is-active" data-subtab="play-courts" role="tab" id="subtab-play-courts" aria-selected="true" aria-controls="subpanel-play-courts">Court Booking</button>
+              <button class="hub__subtab" data-subtab="play-groups" role="tab" id="subtab-play-groups" aria-selected="false" aria-controls="subpanel-play-groups" tabindex="-1">Social Groups</button>
+            </div>
+          </div>
+
+          <div class="hub__subpanel is-active" data-subpanel="play-courts" id="subpanel-play-courts" role="tabpanel" aria-labelledby="subtab-play-courts" tabindex="0">
+          <section class="hub-block hub-venues" id="halls" aria-labelledby="venue-title">
+            <div class="hub-section-head">
+              <div><span class="hub-kicker">Island-wide directory</span><h2 id="venue-title">Find a court near you</h2></div>
+              <p>Search private halls, ActiveSG facilities, clubs and Élever class venues. Availability and booking rules remain with each venue.</p>
+            </div>
+            <div class="hub__book hub__book--compact">
+              <article class="bcard"><span class="bcard__num" aria-hidden="true">01</span><h3>Private halls</h3><p>Pick a venue below and open its own site or booking partner via <strong>Check Availability</strong>. Confirm the date, court and rate with the operator.</p></article>
+              <article class="bcard"><span class="bcard__num" aria-hidden="true">02</span><h3>ActiveSG halls</h3><p>Public SportSG courts are booked through <a href="https://activesg.gov.sg/facility-bookings/activities/YLONatwvqJfikKOmB5N9U/venues" target="_blank" rel="noopener">ActiveSG</a> with a registered account. Peak slots are balloted about 14 days ahead.</p></article>
+              <article class="bcard"><span class="bcard__num" aria-hidden="true">03</span><h3>Community clubs</h3><p>People’s Association facilities are listed and booked on <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a>. Sign in and follow that venue’s conditions.</p></article>
+            </div>
+            <div class="hub__toolbar">
+              <div class="hub__controls">
+                <div class="hub__search"><label class="hub__search-label" for="hallSearch">Search all 43 venues</label><input type="search" id="hallSearch" placeholder="Try Tampines, Jurong or a venue name" aria-describedby="hallCount" /></div>
+                <div class="hub__filters" id="hallFilters" role="group" aria-label="Filter venues by type">
+                  <button class="hub__filter is-active" data-type="all" aria-pressed="true">All venues</button>
+                  <button class="hub__filter hub__filter--elever" data-type="elever" aria-pressed="false">Élever classes</button>
+                  <button class="hub__filter" data-type="private" aria-pressed="false">Private halls</button>
+                  <button class="hub__filter" data-type="activesg" aria-pressed="false">ActiveSG</button>
+                  <button class="hub__filter" data-type="club" aria-pressed="false">Clubs</button>
+                </div>
+              </div>
+            </div>
+            <div class="hub-venue-resultbar"><p class="hub__count" id="hallCount" aria-live="polite"></p><p>Élever-tagged venues also link to our <a href="classes.html">class schedule</a>.</p></div>
+            <div class="hub__grid" id="hallGrid"></div>
+            <p class="hub-source-note">Addresses are compiled from Google Maps and the SportSG facilities directory. ActiveSG public halls use the ActiveSG booking service; community club courts use <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a>. Spotted an error? <a href="mailto:info@eleverbadminton.com?subject=Singapore%20Shuttle%20Hub%20venue%20update">Tell us</a>.</p>
+          </section>
+          </div><!-- /subpanel play-courts -->
+
+          <div class="hub__subpanel" data-subpanel="play-groups" id="subpanel-play-groups" role="tabpanel" aria-labelledby="subtab-play-groups" tabindex="0" hidden>
+          <section class="hub-block" id="groups" aria-labelledby="groups-title">
+            <div class="hub-section-head"><div><span class="hub-kicker">Find your people</span><h2 id="groups-title">Social groups &amp; ratings</h2></div><p>Start with a clear level, then choose a group whose pace, location and format suit you.</p></div>
+            <div class="hub-social-feature">
+              <div><span class="hub-social-feature__pick">Our starting point</span><h3>Racket Ratings</h3><p>Build a comparable badminton rating, find clubs and ladders, review match history and browse community tournaments.</p><div class="hub-social-feature__chips"><span>Singles</span><span>Doubles</span><span>3v3</span><span>Clubs</span></div></div>
+              <a class="btn btn--primary" href="https://www.racketratings.net/" target="_blank" rel="noopener">Visit Racket Ratings</a>
+            </div>
+            <div class="hub-mini-grid"><article><h3>Meetup groups</h3><p>Search sessions, then ask the organiser about level, shuttles, fees and cancellation rules.</p><a href="https://www.meetup.com/find/?keywords=badminton&amp;location=sg--Singapore" target="_blank" rel="noopener">Search Singapore groups ↗</a></article><article><h3>Neighbourhood play</h3><p>Check your community club’s activities or ask about recurring social badminton sessions.</p><a href="https://www.onepa.gov.sg/courses/search?course=badminton" target="_blank" rel="noopener">Search OnePA activities ↗</a></article><article><h3>Structured improvement</h3><p>Prefer a coach-led group? Find an Élever class by level and venue.</p><a href="classes.html">Explore Élever classes →</a></article></div>
+          </section>
+          </div><!-- /subpanel play-groups -->
+        </div><!-- /subpanel local-play -->
+
+        <div class="hub__subpanel" data-subpanel="local-compete" id="subpanel-local-compete" role="tabpanel" aria-labelledby="subtab-local-compete" tabindex="0" hidden>
         <section class="hub-block" id="tournaments" aria-labelledby="tournament-title">
           <div class="hub-section-head">
             <div><span class="hub-kicker">Compete locally</span><h2 id="tournament-title">Find a tournament</h2></div>
@@ -172,64 +232,7 @@
           </div>
           <p class="hub-source-note"><strong>Schedule checked 8 September 2026:</strong> dates and venues above are from the Singapore Badminton Association’s sanctioned-tournament calendar; junior age groups are also listed by Badminton Asia. Registration details can change, so use the linked organiser page before entering.</p>
         </section>
-        </div><!-- /subpanel local-tournaments -->
-
-        <div class="hub__subpanel" data-subpanel="local-courts" id="subpanel-local-courts" role="tabpanel" aria-labelledby="subtab-local-courts" tabindex="0" hidden>
-        <section class="hub-block hub-venues" id="halls" aria-labelledby="venue-title">
-          <div class="hub-section-head">
-            <div><span class="hub-kicker">Island-wide directory</span><h2 id="venue-title">Find a court near you</h2></div>
-            <p>Search private halls, ActiveSG facilities, clubs and Élever class venues. Availability and booking rules remain with each venue.</p>
-          </div>
-          <div class="hub__toolbar">
-            <div class="hub__controls">
-              <div class="hub__search"><label class="hub__search-label" for="hallSearch">Search all 43 venues</label><input type="search" id="hallSearch" placeholder="Try Tampines, Jurong or a venue name" aria-describedby="hallCount" /></div>
-              <div class="hub__filters" id="hallFilters" role="group" aria-label="Filter venues by type">
-                <button class="hub__filter is-active" data-type="all" aria-pressed="true">All venues</button>
-                <button class="hub__filter hub__filter--elever" data-type="elever" aria-pressed="false">Élever classes</button>
-                <button class="hub__filter" data-type="private" aria-pressed="false">Private halls</button>
-                <button class="hub__filter" data-type="activesg" aria-pressed="false">ActiveSG</button>
-                <button class="hub__filter" data-type="club" aria-pressed="false">Clubs</button>
-              </div>
-            </div>
-          </div>
-          <div class="hub-venue-resultbar"><p class="hub__count" id="hallCount" aria-live="polite"></p><p>Élever-tagged venues also link to our <a href="classes.html">class schedule</a>.</p></div>
-          <div class="hub__grid" id="hallGrid"></div>
-          <p class="hub-source-note">Addresses are compiled from Google Maps and the SportSG facilities directory. ActiveSG public halls use the ActiveSG booking service; community club courts use <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a>. Spotted an error? <a href="mailto:info@eleverbadminton.com?subject=Singapore%20Shuttle%20Hub%20venue%20update">Tell us</a>.</p>
-        </section>
-        </div><!-- /subpanel local-courts -->
-
-        <div class="hub__subpanel" data-subpanel="local-booking" id="subpanel-local-booking" role="tabpanel" aria-labelledby="subtab-local-booking" tabindex="0" hidden>
-        <section class="hub-block" id="book" aria-labelledby="book-title">
-          <div class="hub-section-head"><div><span class="hub-kicker">Court booking 101</span><h2 id="book-title">Three booking routes</h2></div><p>The platform depends on who runs the hall. Always confirm the final price, slot duration and cancellation policy before paying.</p></div>
-          <div class="hub__book">
-            <article class="bcard"><span class="bcard__num" aria-hidden="true">01</span><h3>Private halls</h3><p>Choose a private venue in the directory and open its own website or booking partner.</p><ol class="bcard__list"><li>Search by area and compare the hall notes.</li><li>Select <strong>Check Availability</strong> on the venue card.</li><li>Confirm the date, court and rate with the operator.</li></ol></article>
-            <article class="bcard"><span class="bcard__num" aria-hidden="true">02</span><h3>ActiveSG halls</h3><p>Public SportSG courts are booked through ActiveSG with a registered account.</p><ol class="bcard__list"><li>Open <a href="https://activesg.gov.sg/facility-bookings/activities/YLONatwvqJfikKOmB5N9U/venues" target="_blank" rel="noopener">ActiveSG badminton bookings</a>.</li><li>Choose a venue, date and available slot.</li><li>Review current booking or ballot rules before payment.</li></ol></article>
-            <article class="bcard"><span class="bcard__num" aria-hidden="true">03</span><h3>Community clubs</h3><p>People’s Association facilities are listed and booked on OnePA.</p><ol class="bcard__list"><li>Open the <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA badminton search</a>.</li><li>Filter by location, date and facility.</li><li>Sign in and follow that venue’s current conditions.</li></ol></article>
-          </div>
-        </section>
-        </div><!-- /subpanel local-booking -->
-
-        <div class="hub__subpanel" data-subpanel="local-groups" id="subpanel-local-groups" role="tabpanel" aria-labelledby="subtab-local-groups" tabindex="0" hidden>
-        <section class="hub-block" id="groups" aria-labelledby="groups-title">
-          <div class="hub-section-head"><div><span class="hub-kicker">Find your people</span><h2 id="groups-title">Social groups &amp; ratings</h2></div><p>Start with a clear level, then choose a group whose pace, location and format suit you.</p></div>
-          <div class="hub-social-feature">
-            <div><span class="hub-social-feature__pick">Our starting point</span><h3>Racket Ratings</h3><p>Build a comparable badminton rating, find clubs and ladders, review match history and browse community tournaments.</p><div class="hub-social-feature__chips"><span>Singles</span><span>Doubles</span><span>3v3</span><span>Clubs</span></div></div>
-            <a class="btn btn--primary" href="https://www.racketratings.net/" target="_blank" rel="noopener">Visit Racket Ratings</a>
-          </div>
-          <div class="hub-mini-grid"><article><h3>Meetup groups</h3><p>Search sessions, then ask the organiser about level, shuttles, fees and cancellation rules.</p><a href="https://www.meetup.com/find/?keywords=badminton&amp;location=sg--Singapore" target="_blank" rel="noopener">Search Singapore groups ↗</a></article><article><h3>Neighbourhood play</h3><p>Check your community club’s activities or ask about recurring social badminton sessions.</p><a href="https://www.onepa.gov.sg/courses/search?course=badminton" target="_blank" rel="noopener">Search OnePA activities ↗</a></article><article><h3>Structured improvement</h3><p>Prefer a coach-led group? Find an Élever class by level and venue.</p><a href="classes.html">Explore Élever classes →</a></article></div>
-        </section>
-        </div><!-- /subpanel local-groups -->
-
-        <div class="hub__subpanel" data-subpanel="local-shops" id="subpanel-local-shops" role="tabpanel" aria-labelledby="subtab-local-shops" tabindex="0" hidden>
-        <section class="hub-block" id="shops" aria-labelledby="shops-title">
-          <div class="hub-section-head"><div><span class="hub-kicker">Gear in person</span><h2 id="shops-title">Physical shops to try</h2></div><p>For rackets and shoes, an in-person fit can be worth the trip. Product range and opening hours change, so check the linked source before visiting.</p></div>
-          <div class="hub-shop-grid">
-            <article><span>East</span><h3>Decathlon Bedok</h3><p>Large multi-sport store at ESR BizPark @ Chai Chee, with badminton gear and restringing services listed.</p><a href="https://www.decathlon.sg/s/sports-stores/bedok" target="_blank" rel="noopener">Official store page ↗</a></article>
-            <article><span>Central</span><h3>Decathlon Orchard</h3><p>Central option at The Centrepoint for trying entry-to-intermediate equipment in person.</p><a href="https://www.decathlon.sg/s/sports-stores/orchard" target="_blank" rel="noopener">Official store page ↗</a></article>
-            <article><span>Queensway</span><h3>Gala Sports</h3><p>A badminton specialist at #01-33 Queensway Shopping Centre, listed in VICTOR Singapore’s authorised-dealer directory.</p><a href="https://www.google.com/maps/search/?api=1&amp;query=Gala%20Sports%201%20Queensway%20Singapore%20149053" target="_blank" rel="noopener">Open in Google Maps ↗</a></article>
-          </div>
-        </section>
-        </div><!-- /subpanel local-shops -->
+        </div><!-- /subpanel local-compete -->
 
         <section class="hub-updates" aria-labelledby="local-updates-title">
           <div><span class="hub-kicker">Stay updated</span><h2 id="local-updates-title">Your game starts here</h2><p>Join Singapore Shuttle Hub on Telegram, or follow Élever for coaching, events and community updates.</p></div>
@@ -244,6 +247,6 @@
   <script src="assets/js/data.js?v=49"></script>
   <script src="assets/js/site.js?v=49"></script>
   <script src="assets/js/pages.js?v=49"></script>
-  <script src="assets/js/main.js?v=50"></script>
+  <script src="assets/js/main.js?v=52"></script>
 </body>
 </html>

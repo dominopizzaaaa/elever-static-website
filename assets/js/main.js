@@ -628,12 +628,9 @@
       grid.innerHTML = list.map(function (v) {
         var l = loc(v);
         var book = v.book || (v.type === 'activesg' ? ACTIVESG_BOOK : '');
-        var note = v.bookNote || (v.type === 'activesg'
-          ? 'Peak slots are balloted about 14 days ahead; off-peak is first-come.'
-          : '');
 
-        var actions = '<a class="hcard__link" href="' + mapsUrl(v) + '" target="_blank" rel="noopener" aria-label="' +
-          attr('Open ' + l.name + ' in Google Maps') + '">Map \u2197</a>';
+        // Address doubles as the map link, so a separate "Map" button is dropped.
+        var actions = '';
 
         if (v.bookable === false) {
           // No working public booking page — say so instead of linking nowhere.
@@ -644,11 +641,8 @@
         } else if (book) {
           actions += '<a class="hcard__link hcard__link--book" href="' + attr(book) + '" target="_blank" rel="noopener" aria-label="' +
             attr('Check availability at ' + l.name) + '">Check Availability</a>';
-          if (v.altBook) {
-            actions += '<a class="hcard__link" href="' + attr(v.altBook) + '" target="_blank" rel="noopener">' +
-              esc(v.altBookLabel || 'Other booking') + ' \u2197</a>';
-          }
         }
+        // "Élever venue" and "Élever classes" are merged into one link.
         if (v.elever) {
           actions += '<a class="hcard__link hcard__class-link" href="classes.html">Élever classes</a>';
         }
@@ -658,14 +652,11 @@
             '<h3 class="hcard__name">' + esc(l.name) + '</h3>' +
             '<div class="hcard__tags">' +
               '<span class="hcard__tag hcard__tag--' + v.type + '">' + (TYPE_LABEL[v.type] || v.type) + '</span>' +
-              (v.elever && v.type !== 'elever' ? '<span class="hcard__tag hcard__tag--elever">Élever venue</span>' : '') +
             '</div>' +
           '</div>' +
-          '<p class="hcard__area">' + esc(l.area) + '</p>' +
-          '<p class="hcard__addr">' + esc(v.addr) + '</p>' +
-          (l.meta ? '<p class="hcard__meta">' + esc(l.meta) + '</p>' : '') +
+          '<a class="hcard__addr" href="' + mapsUrl(v) + '" target="_blank" rel="noopener" aria-label="' +
+            attr('Open ' + l.name + ' in Google Maps') + '">' + esc(v.addr) + ' \u2197</a>' +
           '<div class="hcard__actions">' + actions + '</div>' +
-          (note ? '<p class="hcard__booknote">' + esc(note) + '</p>' : '') +
         '</article>';
       }).join('');
     }
@@ -735,16 +726,25 @@
     var subnavs = Array.prototype.slice.call(hub.querySelectorAll('.hub__subnav'));
 
     // Older deep-links point at section ids that now live inside a sub-panel,
-    // so map each section id to the sub-tab that reveals it.
+    // so map each section id to the sub-tab that reveals it. Sections inside
+    // the nested "Play" group resolve to their nested sub-tab; the parent
+    // "Play" tab is opened separately (see activateSubForSection).
     var SECTION_TO_SUBTAB = {
       team: 'intl-players', news: 'intl-calendar',
-      tournaments: 'local-tournaments', halls: 'local-courts',
-      book: 'local-booking', groups: 'local-groups', shops: 'local-shops'
+      tournaments: 'local-compete', shops: 'local-shop',
+      halls: 'play-courts', book: 'play-courts', groups: 'play-groups'
     };
+    // Nested sub-tabs live under a parent sub-tab that must be opened too.
+    var SUBTAB_PARENT = { 'play-courts': 'local-play', 'play-groups': 'local-play' };
 
     function subPanelsFor(nav) {
-      var scope = nav.closest('.hub__panel') || hub;
-      return Array.prototype.slice.call(scope.querySelectorAll('.hub__subpanel'));
+      // Sub-panels are the nav's sibling elements, so scope to the nav's
+      // parent and take only its direct .hub__subpanel children. This keeps a
+      // nested nav (inside a sub-panel) from claiming its parent's panels.
+      var scope = nav.parentElement || hub;
+      return Array.prototype.filter.call(scope.children, function (el) {
+        return el.classList && el.classList.contains('hub__subpanel');
+      });
     }
 
     // Position a nav's thumb behind its active button. Skips when the nav is
@@ -776,7 +776,9 @@
         p.classList.toggle('is-active', on);
         if (on) p.removeAttribute('hidden'); else p.setAttribute('hidden', '');
       });
-      layoutThumb(nav);
+      // Revealing a sub-panel may expose a nested sub-nav that could not be
+      // measured while hidden, so re-lay every thumb, not just this nav's.
+      layoutSubThumbs();
     }
 
     subnavs.forEach(function (nav) {
@@ -803,14 +805,18 @@
     });
 
     // Reveal the sub-panel that contains a deep-linked section (e.g. #halls),
-    // returning true when a matching sub-tab was activated.
+    // returning true when a matching sub-tab was activated. Nested sections
+    // also need their parent sub-tab opened first.
     function activateSubForSection(sectionId) {
       var subName = SECTION_TO_SUBTAB[sectionId];
       if (!subName) return false;
-      subnavs.forEach(function (nav) {
-        if (nav.querySelector('.hub__subtab[data-subtab="' + subName + '"]')) {
-          activateSubtab(nav, subName);
-        }
+      var names = SUBTAB_PARENT[subName] ? [SUBTAB_PARENT[subName], subName] : [subName];
+      names.forEach(function (name) {
+        subnavs.forEach(function (nav) {
+          if (nav.querySelector('.hub__subtab[data-subtab="' + name + '"]')) {
+            activateSubtab(nav, name);
+          }
+        });
       });
       return true;
     }
