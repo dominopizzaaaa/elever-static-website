@@ -763,9 +763,18 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .edetail__partnerlist{display:flex;width:100%;flex-wrap:wrap;align-items:center;gap:1.4rem}
 .edetail__partner{display:flex;align-items:center}
 /* Dialled back from 320px / 5rem — the mark was outsizing the copy beside it
-   (client, Sep 2026: "reduce partner logo size a bit"). */
-.edetail__partner img{width:min(100%,210px);max-height:3.2rem;object-fit:contain;object-position:left center}
+   (client, Sep 2026: "reduce partner logo size a bit").
+   Marks arrive in every proportion — wide wordmarks, square lockups, the odd
+   portrait one — so they are set to a common height rather than a common
+   width, which is what puts them on one optical baseline; max-width then
+   reins in the very wide ones. */
+.edetail__partner img{height:3.4rem;width:auto;max-width:210px;object-fit:contain;object-position:left center}
 .edetail__partner span{font-size:.92rem;font-weight:700}
+/* A carnival's sponsor wall runs past a dozen marks, so it is set smaller and
+   tighter than the headline partner row above it — one quiet band rather than
+   a second row of equally weighted logos. */
+.edetail__partnerlist--dense{gap:1.15rem 1.7rem}
+.edetail__partnerlist--dense .edetail__partner img{height:2.3rem;max-width:142px}
 
 .edetail__gallery{padding:1.6rem clamp(1.3rem,3.4vw,2.4rem) 2rem}
 .edetail__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}

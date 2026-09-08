@@ -250,10 +250,31 @@
     var panel = modal.querySelector('.edetail__panel');
     var closeBtn = modal.querySelector('.edetail__close');
 
+    /* Partners and sponsors are the same shape and render the same way, so one
+       builder serves both; sponsors get a tighter row because a carnival
+       carries far more of them than an event has headline partners. */
+    function logoBlock(list, heading, rowClass) {
+      if (!list.length) return '';
+      return '<div class="edetail__partners">' +
+        '<h3 class="edetail__subhead edetail__subhead--plain">' + esc(heading) + '</h3>' +
+        '<div class="edetail__partnerlist' + (rowClass ? ' ' + rowClass : '') + '">' +
+          list.map(function (item) {
+            var brand = typeof item === 'string' ? { name: item } : item;
+            return '<div class="edetail__partner">' +
+              (brand.logo
+                ? '<img src="' + esc((SITE.base || '') + brand.logo) + '" alt="' +
+                    esc(brand.name || heading) + '" loading="lazy" decoding="async">'
+                : '<span>' + esc(brand.name) + '</span>') +
+            '</div>';
+          }).join('') + '</div>' +
+      '</div>';
+    }
+
     function render(e, idx) {
       var photos = e.photos || [];
       var total = photos.length;
       var partners = e.partners || [];
+      var sponsors = e.sponsors || [];
       var chips = typeList(e.type).map(function (t) {
         return '<span class="edetail__type">' + esc(t) + '</span>';
       }).join('');
@@ -275,7 +296,7 @@
             '<span>' + esc(e.where) + '</span>' +
           '</p>' +
         '</header>' +
-        (e.description || (e.services && e.services.length) || partners.length
+        (e.description || (e.services && e.services.length) || partners.length || sponsors.length
           ? '<div class="edetail__story">' +
               (e.description ? '<p class="edetail__desc">' + esc(e.description) + '</p>' : '') +
               (e.services && e.services.length
@@ -286,20 +307,8 @@
                     }).join('') + '</ul>' +
                   '</div>'
                 : '') +
-              (partners.length
-                ? '<div class="edetail__partners">' +
-                    '<h3 class="edetail__subhead edetail__subhead--plain">Partner</h3>' +
-                    '<div class="edetail__partnerlist">' + partners.map(function (p) {
-                      var partner = typeof p === 'string' ? { name: p } : p;
-                      return '<div class="edetail__partner">' +
-                        (partner.logo
-                          ? '<img src="' + esc((SITE.base || '') + partner.logo) + '" alt="' +
-                              esc(partner.name || 'Event partner') + '" loading="lazy" decoding="async">'
-                          : '<span>' + esc(partner.name) + '</span>') +
-                      '</div>';
-                    }).join('') + '</div>' +
-                  '</div>'
-                : '') +
+              logoBlock(partners, partners.length > 1 ? 'Partners' : 'Partner') +
+              logoBlock(sponsors, sponsors.length > 1 ? 'Sponsors' : 'Sponsor', 'edetail__partnerlist--dense') +
             '</div>'
           : '') +
         '<div class="edetail__gallery">' +
@@ -850,7 +859,8 @@
         var photos = e.photos || [];
         var cover = photos[0] || '';
         var total = photos.length;
-        var hasStory = !!(e.description || (e.services && e.services.length) || e.insta);
+        var hasStory = !!(e.description || (e.services && e.services.length) ||
+          (e.partners && e.partners.length) || (e.sponsors && e.sponsors.length) || e.insta);
 
         var chips = typeList(e.type).map(function (t) {
           return '<span class="ecov__type">' + esc(t) + '</span>';

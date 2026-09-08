@@ -399,6 +399,9 @@
        description — one short paragraph on what the day was.
        services    — a list of what Élever provided end to end.
        partners    — partner names with an optional supplied logo.
+       sponsors    — same shape as partners, rendered below them in a
+                     smaller row; a sponsor that is also a standing partner
+                     points at the one export rather than a second copy.
      An earlier `insta` embed was dropped in Sep 2026 — the reel took up too
      much room next to the photo gallery. */
   var EVENT_PHOTO_BASE = 'assets/img/events/';
@@ -474,7 +477,10 @@
         'asics-summit-2026-6.jpg',
         'asics-summit-2026-7.jpg',
         'asics-summit-2026-8.jpg',
-        'asics-summit-2026-9.jpg'
+        'asics-summit-2026-9.jpg',
+        'asics-summit-2026-10.jpg',
+        'asics-summit-2026-11.jpg',
+        'asics-summit-2026-12.jpg'
       ]
     },
     {
@@ -483,6 +489,26 @@
       when: '23 May 2026',
       where: 'St. Patrick’s School',
       slug: 'joo-chiat-carnival-2026',
+      partners: [
+        { name: 'People\u2019s Association', logo: 'assets/img/partners/peoples-association.png' },
+        { name: 'Joo Chiat Community Sports Network', logo: 'assets/img/partners/joo-chiat-csn.png' },
+        { name: 'East Side Best Side', logo: 'assets/img/partners/east-side-best-side.png' }
+      ],
+      sponsors: [
+        { name: '1TCM', logo: 'assets/img/partners/1tcm.png' },
+        { name: 'ASICS', logo: 'assets/img/partners/asics.png' },
+        { name: 'Cuckoo', logo: 'assets/img/partners/cuckoo.png' },
+        { name: 'JK Technology', logo: 'assets/img/partners/jk-technology.png' },
+        { name: 'Liang Yi', logo: 'assets/img/partners/liang-yi.png' },
+        { name: 'moodytiger', logo: 'assets/img/partners/moodytiger.png' },
+        { name: 'noomoo', logo: 'assets/img/partners/noomoo.png' },
+        { name: 'Sportsmed', logo: 'assets/img/partners/sportsmed.png' },
+        { name: 'The Prime Circle', logo: 'assets/img/partners/the-prime-circle.png' },
+        { name: 'Thomson Health', logo: 'assets/img/partners/thomson-health.png' },
+        { name: 'Timber Actually', logo: 'assets/img/partners/timber-actually.png' },
+        { name: 'Truly Nuts', logo: 'assets/img/partners/truly-nuts.png' },
+        { name: 'Wabi Studios', logo: 'assets/img/partners/wabi-studios.png' }
+      ],
       photos: [
         'joo-chiat-carnival-2026-1.jpg',
         'joo-chiat-carnival-2026-2.jpg',

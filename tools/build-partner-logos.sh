@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Exports supplied partner artwork for the Events page:
+# Exports supplied partner and sponsor artwork for the Events page:
 #   assets/img/partners/<slug>.png   max 480px on the long edge
 #   SingHealth Community Hospitals  max 960px for the event detail
 #
@@ -7,9 +7,12 @@
 # a white chip. 480px is comfortably past the ~52px used in the logo rail,
 # retina included; the event-detail mark gets the roomier exception above.
 #
-# Sources live in assets/img/Photos/Partners/ as "<Partner Name>.png" and are
-# never modified; <slug> is that name lowercased and hyphenated, and must match
-# the `logo` path in PARTNERS in assets/js/data.js.
+# Sources live in assets/img/Photos/Partners/ as "<Partner Name>.png" (or .jpg
+# where that is all the sponsor supplied — the export is PNG either way) and
+# are never modified; <slug> is that name lowercased and hyphenated, and must
+# match the `logo` path in PARTNERS, or in an event's `partners` / `sponsors`
+# list, in assets/js/data.js. One file per mark: a sponsor that is also a
+# standing partner reuses the same export rather than a second copy.
 #
 # Run after adding a logo:   bash tools/build-partner-logos.sh
 set -euo pipefail
@@ -21,10 +24,20 @@ mkdir -p "$OUT"
 
 # A logo supplied on a lot of empty canvas would be drawn far smaller than the
 # rest of the row, so it is centre-cropped to its mark first. "height width".
+# Values are measured off the supplied file, with a little margin left around
+# the mark; only well-centred artwork belongs here, since sips crops from the
+# centre and would clip anything sitting off to one side.
 crop_for() {
   case "$1" in
-    truly-nuts) echo "2900 5760" ;;
-    *)          echo "" ;;
+    truly-nuts)       echo "2900 5760" ;;
+    joo-chiat-csn)    echo "1300 3050" ;;
+    the-prime-circle) echo "1060 1000" ;;
+    cuckoo)           echo "1200 7500" ;;
+    1tcm)             echo "4250 3550" ;;
+    # Its mark sits low in the supplied canvas, so the crop stays symmetric
+    # about the centre and only takes back what it can without clipping.
+    east-side-best-side) echo "1690 1150" ;;
+    *)                echo "" ;;
   esac
 }
 
@@ -38,8 +51,7 @@ max_edge_for() {
 }
 
 n=0
-for f in "$SRC"/*.png; do
-  [ -e "$f" ] || continue
+while IFS= read -r f; do
   # "People_s Association.png" -> "peoples-association.png"
   slug="$(basename "${f%.*}" | tr '[:upper:]' '[:lower:]' | tr -d "_'" | tr ' ' '-')"
   out="$OUT/$slug.png"
@@ -53,6 +65,6 @@ for f in "$SRC"/*.png; do
   fi
   n=$((n+1))
   echo "partners/$slug.png"
-done
+done < <(find "$SRC" -maxdepth 1 -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) | LC_ALL=C sort)
 
 echo "partners: $n logos"
