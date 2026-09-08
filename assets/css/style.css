@@ -200,8 +200,8 @@ em{font-style:normal;color:var(--accent)}
 .line--accent i{color:transparent;background:linear-gradient(100deg,var(--accent-light),#c3d3fb);-webkit-background-clip:text;background-clip:text}
 .hero__sub{max-width:none;white-space:nowrap;color:#fff;font-weight:700;text-transform:uppercase;letter-spacing:.03em;font-size:clamp(.8rem,1.6vw,1.15rem);margin:1.4rem auto 2rem;line-height:1.6}
 .hero__actions{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center;margin-top:clamp(2.2rem,6vh,4.5rem)}
-.hero__link{pointer-events:auto;display:inline-flex;align-items:center;justify-content:center;min-width:164px;min-height:48px;
-  padding:.75rem 1.15rem;border:1px solid rgba(255,255,255,.26);border-radius:999px;color:#fff;background:rgba(255,255,255,.055);
+.hero__link{pointer-events:auto;display:inline-flex;align-items:center;justify-content:center;min-height:44px;
+  padding:.6rem 1.4rem;border:1px solid rgba(255,255,255,.26);border-radius:12px;color:#fff;background:rgba(255,255,255,.055);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font-size:.9rem;font-weight:650;transition:transform .22s var(--ease),background .22s,border-color .22s}
 .hero__link span{font-size:1.35rem;line-height:1;transition:transform .22s var(--ease)}
 .hero__link--primary{background:var(--accent);border-color:var(--accent);box-shadow:0 16px 42px -20px rgba(33,81,209,.95)}
