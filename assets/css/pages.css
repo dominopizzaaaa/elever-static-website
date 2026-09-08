@@ -323,12 +323,12 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   font:inherit;font-weight:700;font-size:1rem;letter-spacing:-.01em;white-space:nowrap;
   transition:background .25s var(--ease),color .25s var(--ease),box-shadow .25s var(--ease),border-color .25s}
 .ctabs__tab:hover{color:var(--accent-2);background:rgba(255,255,255,.44)}
-.ctabs__tab.is-active{color:#fff;border-color:var(--accent);
-  background:linear-gradient(145deg,var(--accent),#2e60df);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 12px 30px -22px rgba(18,54,155,.85)}
+.ctabs__tab.is-active{color:var(--accent-2);border-color:rgba(33,81,209,.16);
+  background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(239,244,255,.94));
+  box-shadow:inset 0 1px 0 #fff,0 12px 30px -22px rgba(18,54,155,.75)}
 .ctabs__tab.is-active::after{content:'';position:absolute;left:50%;bottom:.38rem;width:1.55rem;height:2px;
-  border-radius:99px;background:rgba(255,255,255,.82);transform:translateX(-50%)}
-.ctabs__tab.is-active:hover{color:#fff;background:var(--accent-hover)}
+  border-radius:99px;background:var(--accent);transform:translateX(-50%)}
+.ctabs__tab.is-active:hover{color:var(--accent-2)}
 .ctabs__tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 /* Intro row at the top of each detail panel. The panel headings were removed
@@ -443,7 +443,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 /* Two columns: everything that can wrap on the left, the chevron pinned to
    the right so it never drops onto a second line. */
 .vcard__top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.8rem;align-items:center;
-  padding:1.05rem 1.2rem;cursor:pointer;list-style:none;min-height:54px;
+  padding:.7rem 1.2rem;cursor:pointer;list-style:none;min-height:46px;
   background:linear-gradient(110deg,rgba(33,81,209,.1),rgba(74,120,231,.035) 72%,transparent);
   border-radius:calc(var(--r-lg) - 1px)}
 .vcard__heading{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .6rem;min-width:0}
@@ -474,7 +474,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .vcard__addr .vcard__pin{margin-right:.25rem;font-size:.72rem;opacity:.75}
 @media(max-width:560px){
   .vcard__addr{text-align:left;flex-basis:100%}
-  .vcard__top{padding:.95rem 1rem;gap:.5rem}
+  .vcard__top{padding:.65rem 1rem;gap:.5rem}
   .vcard__heading{gap:.35rem .45rem}
   .vcard h3{font-size:1rem}
   .vcard__body{padding:0 1rem 1rem}
@@ -511,9 +511,9 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   border-radius:99px;letter-spacing:.04em;
   background:#fff;color:var(--accent);border:1px solid var(--accent)}
 .vcard__actions{display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;margin-top:1rem}
-.vcard__book{display:inline-flex;align-items:center;min-height:38px;padding:.45rem .75rem;border-radius:8px;
-  font-size:.78rem;font-weight:650;color:var(--accent);background:var(--accent-soft);border:1px solid rgba(33,81,209,.14)}
-.vcard__book:hover{background:var(--accent);border-color:var(--accent);color:#fff;text-decoration:none}
+.vcard__book{display:inline-flex;align-items:center;min-height:38px;padding:.45rem .9rem;border-radius:8px;
+  font-size:.78rem;font-weight:650;color:#fff;background:var(--accent);border:1px solid var(--accent)}
+.vcard__book:hover{background:var(--accent-hover);border-color:var(--accent-hover);color:#fff;text-decoration:none}
 @media(max-width:620px){
   .vcard__sessions li{grid-template-columns:1fr auto}
   .vcard__day--repeat{display:none}
