@@ -466,7 +466,6 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .vcard__venuename{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;
   gap:.15rem .9rem;font-size:.9rem;font-weight:700;letter-spacing:-.01em;margin:0 0 .7rem}
 .vcard__venuename > span:first-child{display:inline-flex;align-items:center;gap:.4rem;min-width:0}
-.vcard__venuepin{flex:none;color:var(--accent);transform:translateY(1px)}
 .vcard__addr{flex:1 1 auto;min-width:0;text-align:right;font-size:.76rem;font-weight:500;
   color:var(--muted);line-height:1.5;text-decoration:underline;text-underline-offset:2px;
   text-decoration-color:var(--line);transition:color .2s,text-decoration-color .2s}

@@ -641,7 +641,7 @@
               return '<div class="vcard__venue">' +
                 /* Name left, address right, on one line — the address opens the
                    venue on Google Maps (client, Sep 2026). */
-                '<p class="vcard__venuename"><span><svg class="vcard__venuepin" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M12 21s6-5.1 6-11a6 6 0 1 0-12 0c0 5.9 6 11 6 11Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2" fill="currentColor"/></svg>' + esc(v.venue) + '</span>' + sampleTag(v) +
+                '<p class="vcard__venuename"><span>' + esc(v.venue) + '</span>' + sampleTag(v) +
                   '<a class="vcard__addr" href="' + esc(mapsUrl(v)) + '" target="_blank" rel="noopener"' +
                     ' aria-label="' + esc(v.venue + ', ' + v.addr + ' — open in Google Maps') + '">' +
                     esc(v.addr) +
