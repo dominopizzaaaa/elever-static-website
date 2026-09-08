@@ -307,27 +307,29 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   .path:hover .path__media img{transform:none}
 }
 
-/* ---------- CLASS TYPE TABS ----------
-   An editorial mode rail: indexed, flat and ruled rather than pill-shaped,
-   so it reads as navigation instead of competing with booking CTAs. */
-.ctabs{max-width:720px;margin-bottom:1.5rem}
-.ctabs__rail{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-  overflow:hidden;border:1px solid rgba(33,81,209,.17);border-radius:12px;
-  background:rgba(255,255,255,.62);box-shadow:inset 0 1px 0 rgba(255,255,255,.9)}
-.ctabs__rail::after{content:'';position:absolute;left:0;bottom:0;width:50%;height:3px;
-  background:var(--accent);transform:translateX(0);transition:transform .38s var(--ease);pointer-events:none}
-.ctabs[data-active="1"] .ctabs__rail::after{transform:translateX(100%)}
-.ctabs__tab{min-width:0;min-height:78px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
-  gap:.22rem;padding:1rem 1.25rem;border:0;border-radius:0;cursor:pointer;background:transparent;color:#59637c;
-  font:inherit;text-align:left;transition:background .25s var(--ease),color .25s var(--ease)}
-.ctabs__tab + .ctabs__tab{border-left:1px solid rgba(33,81,209,.14)}
-.ctabs__tab:hover{color:var(--ink);background:rgba(33,81,209,.035)}
-.ctabs__tab.is-active{color:var(--accent-2);background:rgba(33,81,209,.045)}
-.ctabs__index{font-size:.58rem;font-weight:800;line-height:1.2;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--faint);transition:color .25s}
-.ctabs__tab.is-active .ctabs__index{color:var(--accent)}
-.ctabs__label{font-size:1.05rem;font-weight:800;line-height:1.25;letter-spacing:-.02em;white-space:nowrap}
-.ctabs__tab:focus-visible{position:relative;z-index:1;outline:2px solid var(--accent);outline-offset:-4px}
+/* ---------- CLASS TYPE TABS (ElevenLabs-style) ---------- */
+.ctabs{position:relative;isolation:isolate;overflow:hidden;
+  background:linear-gradient(135deg,rgba(255,255,255,.96),rgba(225,235,255,.8));
+  border:1px solid rgba(33,81,209,.17);border-radius:calc(var(--r-lg) + 8px);
+  padding:.5rem;box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 20px 48px -34px rgba(33,81,209,.7);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);margin-bottom:1.4rem}
+.ctabs::before{content:'';position:absolute;z-index:-1;pointer-events:none;width:18rem;height:18rem;
+  top:-14rem;left:8%;border-radius:50%;background:rgba(107,145,244,.26);filter:blur(24px)}
+.ctabs__rail{position:relative;display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none}
+.ctabs__rail::-webkit-scrollbar{display:none}
+.ctabs__tab{flex:1 1 0;min-width:max-content;display:inline-flex;align-items:center;justify-content:center;
+  position:relative;gap:.6rem;padding:.9rem 1.4rem 1rem;border:1px solid transparent;
+  border-radius:calc(var(--r-lg) + 2px);cursor:pointer;background:transparent;color:#59637c;
+  font:inherit;font-weight:700;font-size:1rem;letter-spacing:-.01em;white-space:nowrap;
+  transition:background .25s var(--ease),color .25s var(--ease),box-shadow .25s var(--ease),border-color .25s}
+.ctabs__tab:hover{color:var(--accent-2);background:rgba(255,255,255,.44)}
+.ctabs__tab.is-active{color:var(--accent-2);border-color:rgba(33,81,209,.16);
+  background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(239,244,255,.94));
+  box-shadow:inset 0 1px 0 #fff,0 12px 30px -22px rgba(18,54,155,.75)}
+.ctabs__tab.is-active::after{content:'';position:absolute;left:50%;bottom:.38rem;width:1.55rem;height:2px;
+  border-radius:99px;background:var(--accent);transform:translateX(-50%)}
+.ctabs__tab.is-active:hover{color:var(--accent-2)}
+.ctabs__tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 /* Intro row at the top of each detail panel. The panel headings were removed
    (the tab already names the panel), so the description leads. */
@@ -361,14 +363,11 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .orbdetail{animation:showcaseFade .35s var(--ease)}
 @keyframes showcaseFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){
-  .orbdetail,.ctabs__tab,.ctabs__track,.ctabs__rail::after{transition:none;animation:none}
+  .orbdetail,.ctabs__tab,.ctabs__track{transition:none;animation:none}
 }
 @media(max-width:560px){
-  .ctabs{width:100%;margin-bottom:1.3rem}
-  .ctabs__rail{border-radius:10px}
-  .ctabs__tab{min-height:64px;padding:.72rem .85rem}
-  .ctabs__index{font-size:.5rem;letter-spacing:.11em}
-  .ctabs__label{font-size:.87rem}
+  .ctabs{border-radius:var(--r-lg)}
+  .ctabs__tab{padding:.75rem 1rem;font-size:.92rem}
   /* The two arrows cost ~90px of a 350px-wide phone — a quarter of the panel,
      and the squeeze showed up in the venue list. The tabs above and a
      left/right swipe already move between the pages on touch, so the arrows
