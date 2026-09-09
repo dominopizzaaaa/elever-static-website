@@ -868,32 +868,38 @@
   var SHOPS = [
     {
       kind: 'physical', area: 'East', name: 'Decathlon Bedok',
+      address: 'ESR BizPark @ Chai Chee', categories: ['shoes', 'stringing', 'rackets', 'apparel'],
       desc: 'Large multi-sport store at ESR BizPark @ Chai Chee, with badminton gear and restringing services listed.',
       href: 'https://www.decathlon.sg/s/sports-stores/bedok', linkLabel: 'Official store page'
     },
     {
       kind: 'physical', area: 'Central', name: 'Decathlon Orchard',
+      address: 'The Centrepoint, Orchard Road', categories: ['shoes', 'rackets', 'apparel'],
       desc: 'Central option at The Centrepoint for trying entry-to-intermediate equipment in person.',
       href: 'https://www.decathlon.sg/s/sports-stores/orchard', linkLabel: 'Official store page'
     },
     {
       kind: 'physical', area: 'Queensway', name: 'Gala Sports',
+      address: '#01-33, Queensway Shopping Centre', categories: ['rackets'],
       desc: 'A badminton specialist at #01-33 Queensway Shopping Centre, listed in VICTOR Singapore’s authorised-dealer directory.',
       href: 'https://www.google.com/maps/search/?api=1&query=Gala%20Sports%201%20Queensway%20Singapore%20149053',
       linkLabel: 'Open in Google Maps'
     },
     {
       kind: 'online', area: 'Online', name: 'Decathlon Singapore',
+      categories: ['shoes', 'rackets', 'apparel'],
       desc: 'Rackets, shoes, shuttles and bags online with click-and-collect at any of its Singapore stores.',
       href: 'https://www.decathlon.sg/c/badminton', linkLabel: 'Shop online'
     },
     {
       kind: 'online', area: 'Directory', name: 'VICTOR authorised dealers',
+      categories: ['shoes', 'rackets', 'apparel'],
       desc: 'VICTOR Singapore’s own list of authorised stockists — the reliable way to check a shop sells genuine stock.',
       href: 'https://www.victorsport.com/stores', linkLabel: 'Find a dealer'
     },
     {
       kind: 'online', area: 'Directory', name: 'YONEX store locator',
+      categories: ['shoes', 'stringing', 'rackets', 'apparel'],
       desc: 'YONEX’s official directory of retailers and stringing partners, filterable by country.',
       href: 'https://www.yonex.com/badminton/dealers/', linkLabel: 'Find a retailer'
     }

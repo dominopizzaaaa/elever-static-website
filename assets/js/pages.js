@@ -1563,21 +1563,30 @@
     var mount = el('playGroups');
     if (!mount) return;
 
+    var preview = el('groupPreview');
+    if (preview) {
+      preview.innerHTML = D.classes.slice(0, 3).map(function (venue) {
+        var session = venue.sessions[0];
+        return '<li><a class="hub-session" href="classes.html#schedule">' +
+          '<span class="hub-session__dot" aria-hidden="true"></span>' +
+          '<span class="hub-session__name"><strong>Élever · ' + esc(venue.area) + '</strong>' +
+            '<small>' + esc(session.level) + ' group class</small></span>' +
+          '<span class="hub-session__when"><strong>' + esc(session.day) + '</strong>' + esc(session.time) + '</span>' +
+          '</a></li>';
+      }).join('');
+    }
+
     var groups = D.playGroups || [];
     var rrClubs = (D.racketRatings && D.racketRatings.home) || 'https://www.racketratings.net/badminton';
     (D.racketRatings && D.racketRatings.features || []).forEach(function (f) {
       if (f.key === 'clubs') rrClubs = f.href;
     });
 
-    /* The Racket Ratings card directly above already carries the button, so
-       the empty state points at it rather than repeating the same CTA. */
     if (!groups.length) {
       mount.innerHTML = '<div class="grpempty">' +
-        '<p>We are compiling a public list of Singapore’s recreational badminton groups — ' +
-        'the day and time they play, where, and who to contact. Until it is ready, the ' +
-        '<a href="' + esc(rrClubs) + '" target="_blank" rel="noopener">Racket Ratings club ' +
-        'directory</a> above is the live list of clubs and ladders you can join today.</p>' +
-        '</div>';
+        '<p>Social group listings are being compiled. For now, explore the ' +
+        '<a href="' + esc(rrClubs) + '" target="_blank" rel="noopener">Racket Ratings club directory</a> ' +
+        'and confirm session details with the organiser.</p></div>';
       return;
     }
 
@@ -1615,20 +1624,52 @@
     var online = el('shopsOnline');
     if (!physical && !online) return;
 
-    function cards(kind) {
-      return (D.shops || []).filter(function (sh) { return sh.kind === kind; }).map(function (sh) {
+    var search = el('shopSearch');
+    var filters = el('shopFilters');
+    var count = el('shopCount');
+    var category = 'all';
+
+    function cards(list, kind) {
+      var matches = list.filter(function (sh) { return sh.kind === kind; });
+      if (!matches.length) return '<p class="hub__empty">No ' + (kind === 'physical' ? 'physical' : 'online') +
+        ' shops match. Try another search or choose All.</p>';
+      return matches.map(function (sh) {
         return '<article>' +
           (sh.area ? '<span>' + esc(sh.area) + '</span>' : '') +
-          '<h3>' + esc(sh.name) + '</h3>' +
-          '<p>' + esc(sh.desc) + '</p>' +
-          '<a href="' + esc(sh.href) + '" target="_blank" rel="noopener">' +
-            esc(sh.linkLabel || 'Visit') + ' &#8599;</a>' +
+          '<h4>' + esc(sh.name) + '</h4>' +
+          '<p>' + esc(sh.address || sh.desc) + '</p>' +
+          '<a class="hub-text-button" href="' + esc(sh.href) + '" target="_blank" rel="noopener" aria-label="' +
+            esc((sh.area === 'Directory' ? 'Find a dealer' : 'View') + ' — ' + sh.name) + '">' +
+            (sh.area === 'Directory' ? 'Find a dealer' : 'View') + ' <span aria-hidden="true">↗</span></a>' +
         '</article>';
       }).join('');
     }
 
-    if (physical) physical.innerHTML = cards('physical');
-    if (online) online.innerHTML = cards('online');
+    function render() {
+      var query = search ? search.value.trim().toLowerCase() : '';
+      var list = (D.shops || []).filter(function (sh) {
+        var haystack = [sh.name, sh.area, sh.address || '', sh.desc, sh.categories.join(' ')].join(' ').toLowerCase();
+        return (category === 'all' || sh.categories.indexOf(category) !== -1) && haystack.indexOf(query) !== -1;
+      });
+      if (physical) physical.innerHTML = cards(list, 'physical');
+      if (online) online.innerHTML = cards(list, 'online');
+      if (count) count.textContent = list.length + (list.length === 1 ? ' listing' : ' listings') +
+        (category === 'all' ? ' · All gear & services' : ' · ' + category.charAt(0).toUpperCase() + category.slice(1));
+    }
+
+    if (search) search.addEventListener('input', render);
+    if (filters) filters.addEventListener('click', function (e) {
+      var button = e.target.closest('button[data-category]');
+      if (!button) return;
+      category = button.dataset.category;
+      filters.querySelectorAll('button').forEach(function (item) {
+        var active = item === button;
+        item.classList.toggle('is-active', active);
+        item.setAttribute('aria-pressed', String(active));
+      });
+      render();
+    });
+    render();
   })();
 
   /* =================================================================

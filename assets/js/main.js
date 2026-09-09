@@ -721,6 +721,13 @@
         if (e.key !== 'Escape') return;
         filtersEl.querySelectorAll('.fdrop[open]').forEach(function (d) { d.open = false; });
       });
+      var initialType = new URLSearchParams(location.search).get('type');
+      if (initialType) {
+        filtersEl.querySelectorAll('.fdrop[data-group="type"] input').forEach(function (box) {
+          box.checked = box.value === initialType;
+        });
+        pickedTypes = readDrop('type');
+      }
       syncFilterChrome();
     }
     // search
@@ -767,7 +774,7 @@
     var TAB_NAMES = Array.prototype.map.call(tabs, function (b) { return b.dataset.tab; });
     var TAB_ALIASES = {
       team: 'international', news: 'international',
-      tournaments: 'local', halls: 'local', groups: 'local', shops: 'local'
+      tournaments: 'local', play: 'local', halls: 'local', groups: 'local', shops: 'local'
     };
     function tabFromHash() {
       var name = (location.hash || '').replace('#', '');

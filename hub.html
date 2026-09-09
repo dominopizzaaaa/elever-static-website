@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/style.css?v=59" />
   <link rel="stylesheet" href="assets/css/pages.css?v=59" />
-  <link rel="stylesheet" href="assets/css/hub.css?v=59" />
+  <link rel="stylesheet" href="assets/css/hub.css?v=60" />
 </head>
 <body data-page="hub" data-nav="solid" data-base="">
 
@@ -48,12 +48,12 @@
 
       <div class="hub__tabs" id="hubTabs">
         <div class="hub__tabs-inner" role="tablist" aria-label="Choose international or local badminton">
-          <button class="hub__tab is-active" data-tab="international" role="tab" id="tab-international" aria-selected="true" aria-controls="panel-international">International</button>
-          <button class="hub__tab" data-tab="local" role="tab" id="tab-local" aria-selected="false" aria-controls="panel-local" tabindex="-1">Local</button>
+          <button class="hub__tab" data-tab="international" role="tab" id="tab-international" aria-selected="false" aria-controls="panel-international" tabindex="-1">International</button>
+          <button class="hub__tab is-active" data-tab="local" role="tab" id="tab-local" aria-selected="true" aria-controls="panel-local">Local</button>
         </div>
       </div>
 
-      <div class="hub__panel is-active" data-panel="international" id="panel-international" role="tabpanel" aria-labelledby="tab-international" tabindex="0">
+      <div class="hub__panel" data-panel="international" id="panel-international" role="tabpanel" aria-labelledby="tab-international" tabindex="0" hidden>
         <div class="hub-panel-intro">
           <div><span class="hub-kicker">Beyond our shores</span><h2>Follow the world game</h2></div>
           <p>The current BWF World Tour stop, news from around the game, and Singapore’s national players — together on one page.</p>
@@ -123,63 +123,72 @@
         </section>
       </div>
 
-      <div class="hub__panel" data-panel="local" id="panel-local" role="tabpanel" aria-labelledby="tab-local" tabindex="0" hidden>
-        <div class="hub-panel-intro">
-          <div><span class="hub-kicker">Your next game</span><h2>Play badminton in Singapore</h2></div>
-          <p>Find a court or social group, shop for badminton gear, and discover local competitions.</p>
-        </div>
-
-        <nav class="hub-anchor-nav" aria-label="Local sections">
-          <a href="#halls">Play</a>
-          <a href="#groups">Social groups</a>
-          <a href="#shops">Shop</a>
-          <a href="#tournaments">Compete</a>
-        </nav>
-
-        <section class="hub-block hub-play-card" id="halls" aria-labelledby="halls-title">
-          <div class="hub-section-head">
-            <div><span class="hub-kicker">Play</span><h2 id="halls-title">Find and book a court</h2></div>
-            <p>Use the dedicated court directory to search private halls, ActiveSG facilities, community club courts and Élever class venues.</p>
+      <div class="hub__panel hub-local is-active" data-panel="local" id="panel-local" role="tabpanel" aria-labelledby="tab-local" tabindex="0">
+        <section class="hub-local-row" id="play" aria-labelledby="play-title">
+          <div class="hub-local-label">
+            <h2 id="play-title">Play</h2>
+            <p>Find your people, pick a court, and make time for your next game of badminton in Singapore.</p>
           </div>
-          <a class="hub-directory-link" href="courts.html#halls">
-            <span><b>Singapore court directory</b><small><span id="statVenuesInline">34</span> verified listings, filters and booking guidance</small></span>
-            <span aria-hidden="true">View directory →</span>
-          </a>
-        </section>
-
-        <section class="hub-block" id="groups" aria-labelledby="groups-title">
-          <div class="hub-section-head"><div><span class="hub-kicker">Play together</span><h2 id="groups-title">Social groups</h2></div><p>We only list groups backed by usable public details. Until that directory grows, these established services are the safest place to start.</p></div>
-          <div class="hub-social-feature">
-            <div><span class="hub-social-feature__pick">Our starting point</span><h3>Racket Ratings</h3><p>Build a comparable badminton rating, then browse clubs and ladders across Singapore to find a regular group at your level.</p><div class="hub-social-feature__chips"><span>Singles</span><span>Doubles</span><span>3v3</span><span>Clubs</span></div></div>
-            <a class="btn btn--primary" href="https://www.racketratings.net/badminton/clubs" target="_blank" rel="noopener">Browse clubs on Racket Ratings</a>
-          </div>
-          <div class="grp__grid" id="playGroups"></div>
-          <div class="grp__add">
-            <div><b>Run a regular session?</b><span>Send us the day, time, venue, level and a contact and we will list it here for free.</span></div>
-            <a class="btn btn--primary" href="mailto:info@eleverbadminton.com?subject=Add%20our%20badminton%20group%20to%20Singapore%20Shuttlers%20Hub">List your group</a>
-          </div>
-          <div class="hub-mini-grid"><article><h3>Meetup groups</h3><p>Ask the organiser about level, shuttles, fees and cancellation rules before joining.</p><a href="https://www.meetup.com/find/?keywords=badminton&amp;location=sg--Singapore" target="_blank" rel="noopener">Search Singapore groups ↗</a></article><article><h3>Neighbourhood play</h3><p>Check your community club’s activities or ask about recurring social badminton sessions.</p><a href="https://www.onepa.gov.sg/courses/search?course=badminton" target="_blank" rel="noopener">Search OnePA activities ↗</a></article><article><h3>Structured improvement</h3><p>Prefer a coach-led group? Find an Élever class by level and venue.</p><a href="classes.html">Explore Élever classes →</a></article></div>
-        </section>
-
-        <section class="hub-block" id="shops" aria-labelledby="shops-title">
-          <div class="hub-section-head"><div><span class="hub-kicker">Shop</span><h2 id="shops-title">Where to shop</h2></div><p>Product range, stringing services and opening hours change often, so every entry links to the shop’s own page.</p></div>
-          <h3 class="hub-subhead">In person</h3>
-          <div class="hub-shop-grid" id="shopsPhysical"></div>
-          <h3 class="hub-subhead">Online &amp; official dealer directories</h3>
-          <div class="hub-shop-grid" id="shopsOnline"></div>
-          <div class="grp__add">
-            <div><b>Run a badminton shop or stringing service?</b><span>Send us your name, area, what you stock and a link, and we will add you to this list.</span></div>
-            <a class="btn btn--primary" href="mailto:info@eleverbadminton.com?subject=Add%20our%20shop%20to%20Singapore%20Shuttlers%20Hub">List your shop</a>
+          <div class="hub-local-content hub-play-grid">
+            <section class="hub-play-panel" id="groups" aria-labelledby="groups-title">
+              <div class="hub-play-panel__head"><h3 id="groups-title">Find a group</h3><span class="hub-kicker">Get on court</span></div>
+              <ul class="hub-session-list" id="groupPreview"></ul>
+              <details class="hub-group-more" id="groupMore">
+                <summary class="hub-text-button">View more <span aria-hidden="true">↓</span></summary>
+                <div class="hub-group-more__body">
+                  <a class="hub-group-resource" href="classes.html#schedule"><strong>Élever group classes <span aria-hidden="true">→</span></strong><span>See all venues, levels and weekly sessions.</span></a>
+                  <a class="hub-group-resource" href="https://www.racketratings.net/badminton/clubs" target="_blank" rel="noopener"><strong>Racket Ratings <span aria-hidden="true">↗</span></strong><span>Find social clubs and ladders at your level.</span></a>
+                  <a class="hub-group-resource" href="https://www.meetup.com/find/?keywords=badminton&amp;location=sg--Singapore" target="_blank" rel="noopener"><strong>Meetup groups <span aria-hidden="true">↗</span></strong><span>Check session times and fees with the organiser.</span></a>
+                  <a class="hub-group-resource" href="https://www.onepa.gov.sg/courses/search?course=badminton" target="_blank" rel="noopener"><strong>Neighbourhood play <span aria-hidden="true">↗</span></strong><span>Explore badminton activities at community clubs.</span></a>
+                  <div class="grp__grid" id="playGroups"></div>
+                  <a class="hub-text-link" href="mailto:info@eleverbadminton.com?subject=Add%20our%20badminton%20group%20to%20Singapore%20Shuttlers%20Hub">List your group →</a>
+                </div>
+              </details>
+            </section>
+            <section class="hub-play-panel" id="halls" aria-labelledby="halls-title">
+              <div class="hub-play-panel__head"><h3 id="halls-title">Find a court</h3><span class="hub-kicker">Across Singapore</span></div>
+              <nav class="hub-court-types" aria-label="Browse courts by type">
+                <a href="courts.html?type=private#halls"><span>Private halls</span><span aria-hidden="true">→</span></a>
+                <a href="courts.html?type=activesg#halls"><span>ActiveSG halls</span><span aria-hidden="true">→</span></a>
+                <a href="courts.html?type=cc#halls"><span>Community clubs</span><span aria-hidden="true">→</span></a>
+              </nav>
+              <div class="hub-play-panel__foot"><span><b id="statVenuesInline">34</b> venues to explore</span><a class="hub-text-button" href="courts.html#halls" aria-label="View Singapore court directory">View directory <span aria-hidden="true">→</span></a></div>
+            </section>
           </div>
         </section>
 
-        <section class="hub-block" id="tournaments" aria-labelledby="tournament-title">
-          <div class="hub-section-head">
-            <div><span class="hub-kicker">Compete</span><h2 id="tournament-title">Find a tournament</h2></div>
-            <p>Registration windows are set by each organiser. Each button opens the organiser’s own page rather than claiming entry is currently open.</p>
+        <section class="hub-local-row" id="shops" aria-labelledby="shops-title">
+          <div class="hub-local-label">
+            <h2 id="shops-title">Shop</h2>
+            <p>Find what you need, from shoes and rackets to your next restring.</p>
+            <div class="hub-listing-invite"><p>Run a shop and want to be listed?</p><a class="hub-text-button" href="mailto:info@eleverbadminton.com?subject=Add%20our%20shop%20to%20Singapore%20Shuttlers%20Hub">Contact us <span aria-hidden="true">→</span></a></div>
           </div>
-          <div class="hub-discovery-grid" id="localEvents"></div>
-          <p class="hub-source-note"><strong>Schedule checked 8 September 2026:</strong> dates and venues are from the Singapore Badminton Association’s sanctioned-tournament calendar. Registration details can change, so check the linked organiser page before entering.</p>
+          <div class="hub-local-content">
+            <div class="hub-shop-tools">
+              <div class="hub__search"><label class="hub__search-label" for="shopSearch">Find gear &amp; services</label><input type="search" id="shopSearch" placeholder="Search shops, gear or an area" aria-describedby="shopCount" /></div>
+              <fieldset class="hub-shop-filters" id="shopFilters"><legend class="sr-only">Filter shops by product or service</legend>
+                <button class="hub__filter is-active" type="button" data-category="all" aria-pressed="true">All</button>
+                <button class="hub__filter" type="button" data-category="shoes" aria-pressed="false">Shoes</button>
+                <button class="hub__filter" type="button" data-category="stringing" aria-pressed="false">Stringing</button>
+                <button class="hub__filter" type="button" data-category="rackets" aria-pressed="false">Rackets</button>
+                <button class="hub__filter" type="button" data-category="apparel" aria-pressed="false">Apparel</button>
+              </fieldset>
+            </div>
+            <p class="hub-shop-count" id="shopCount" role="status"></p>
+            <div class="hub-shop-columns">
+              <section aria-labelledby="physical-shops-title"><h3 class="hub-subhead" id="physical-shops-title">Physical</h3><div class="hub-shop-grid" id="shopsPhysical"></div></section>
+              <section aria-labelledby="online-shops-title"><h3 class="hub-subhead" id="online-shops-title">Online</h3><div class="hub-shop-grid" id="shopsOnline"></div></section>
+            </div>
+            <p class="hub-shop-note">Online includes official dealer directories. Check each shop’s page for current stock, services and opening hours.</p>
+          </div>
+        </section>
+
+        <section class="hub-local-row" id="tournaments" aria-labelledby="tournament-title">
+          <div class="hub-local-label"><h2 id="tournament-title">Compete</h2><p>Upcoming local tournaments. Find your next challenge and take your game a little further.</p></div>
+          <div class="hub-local-content">
+            <div class="hub-competition-row"><div class="hub-discovery-grid" id="localEvents"></div><a class="hub-competition-more" href="https://singaporebadminton.org.sg/events/" target="_blank" rel="noopener" aria-label="View more tournaments on the SBA calendar">View more <span aria-hidden="true">→</span></a></div>
+            <p class="hub-source-note"><strong>Schedule checked 8 September 2026.</strong> Dates and venues follow the SBA sanctioned-tournament calendar. Register opens the organiser’s page; confirm entry windows and age groups before entering.</p>
+          </div>
         </section>
 
         <section class="hub-updates" aria-labelledby="local-updates-title">
@@ -192,9 +201,9 @@
 
   <footer id="siteFooter"></footer>
 
-  <script src="assets/js/data.js?v=59"></script>
+  <script src="assets/js/data.js?v=60"></script>
   <script src="assets/js/site.js?v=59"></script>
-  <script src="assets/js/pages.js?v=59"></script>
-  <script src="assets/js/main.js?v=59"></script>
+  <script src="assets/js/pages.js?v=60"></script>
+  <script src="assets/js/main.js?v=60"></script>
 </body>
 </html>

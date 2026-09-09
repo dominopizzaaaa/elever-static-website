@@ -355,6 +355,9 @@ async function runViewport(browser, viewport, name) {
 
   await open(page, '/hub.html', name + ' Hub');
   assert.equal(await page.locator('#hubTabs .hub__tab').count(), 2);
+  assert.equal(await page.locator('#tab-local').getAttribute('aria-selected'), 'true');
+  assert.equal(await page.locator('#panel-international').isVisible(), false);
+  await page.locator('#tab-international').click();
   assert.equal((await page.locator('.hub-hero__by').textContent()).trim(), 'BY ÉLEVER BADMINTON');
   const hubType = await page.evaluate(() => {
     const byline = document.querySelector('.hub-hero__by');
@@ -381,12 +384,76 @@ async function runViewport(browser, viewport, name) {
   await page.locator('#tab-local').click();
   assert.equal(await page.locator('#panel-local[hidden]').count(), 0);
   assert.ok(await page.getByRole('link', { name: /Singapore court directory/ }).count());
-  const localOrder = await page.locator('#halls, #groups, #shops, #tournaments').evaluateAll(nodes =>
+  const localOrder = await page.locator('.hub-local-row').evaluateAll(nodes =>
     nodes.map(node => ({ id: node.id, y: node.getBoundingClientRect().y })));
-  assert.deepEqual(localOrder.map(item => item.id), ['halls', 'groups', 'shops', 'tournaments']);
+  assert.deepEqual(localOrder.map(item => item.id), ['play', 'shops', 'tournaments']);
   assert.ok(localOrder.every((item, index) => !index || item.y > localOrder[index - 1].y),
     name + ' Local Hub sections are out of order');
+  assert.equal(await page.locator('#groupPreview li').count(), 3);
+  assert.equal(await page.locator('.hub-court-types a').count(), 3);
+  if (viewport.width > 1050) {
+    const groups = await page.locator('#groups').boundingBox();
+    const halls = await page.locator('#halls').boundingBox();
+    const label = await page.locator('#play .hub-local-label').boundingBox();
+    assert.ok(label.x < groups.x && groups.x < halls.x && Math.abs(groups.y - halls.y) < 1,
+      name + ' Play does not match the label / groups / courts sketch layout');
+    for (const id of ['shopsPhysical', 'shopsOnline']) {
+      const boxes = await page.locator('#' + id + ' article').evaluateAll(nodes => nodes.map(node => {
+        const box = node.getBoundingClientRect();
+        return { x: box.x, y: box.y };
+      }));
+      assert.ok(boxes[0].y === boxes[1].y && boxes[0].x < boxes[1].x && boxes[2].y > boxes[0].y,
+        name + ' ' + id + ' is not a two-column card grid');
+    }
+  }
+  await page.locator('#groupMore summary').click();
+  assert.equal(await page.getByRole('link', { name: /See all venues, levels and weekly sessions/ }).isVisible(), true);
+  await checkNoOverflow(page, name + ' expanded groups');
+  await page.locator('#groupMore summary').click();
+  assert.equal(await page.locator('#shopsPhysical article').count(), 3);
+  assert.equal(await page.locator('#shopsOnline article').count(), 3);
+  await page.locator('#shopFilters').getByRole('button', { name: 'Stringing', exact: true }).click();
+  assert.equal(await page.locator('#shopFilters [data-category="stringing"]').getAttribute('aria-pressed'), 'true');
+  assert.equal(await page.locator('#shopsPhysical article').count(), 1);
+  assert.equal(await page.locator('#shopsOnline article').count(), 1);
+  await page.locator('#shopSearch').fill('  BEDOK  ');
+  assert.equal(await page.locator('#shopsPhysical article').count(), 1);
+  assert.equal(await page.locator('#shopsOnline article').count(), 0);
+  await page.locator('#shopSearch').fill('no-such-shop');
+  assert.ok((await page.locator('#shopCount').textContent()).startsWith('0 listings'));
+  assert.equal(await page.locator('#shops .hub__empty').count(), 2);
+  await page.locator('#shopSearch').fill('');
+  await page.locator('#shopFilters').getByRole('button', { name: 'All', exact: true }).click();
+  assert.equal(await page.locator('#shopsPhysical article, #shopsOnline article').count(), 6);
+  assert.equal(await page.locator('#localEvents article').count(), 2);
+  assert.equal(await page.locator('#localEvents .hub-discovery__register').count(), 2);
+  await checkNoOverflow(page, name + ' Local Hub interactions');
+  await page.mouse.move(viewport.width - 5, viewport.height - 5);
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   await page.screenshot({ path: path.join(outDir, name + '-hub-local.png'), fullPage: true });
+  if (viewport.width > 1050) {
+    await page.locator('#play').evaluate(node => node.scrollIntoView({ block: 'start', behavior: 'instant' }));
+    await page.screenshot({ path: path.join(outDir, name + '-hub-layout.png'), fullPage: false });
+  }
+  for (const [type, expected] of [['private', 10], ['activesg', 19], ['cc', 1]]) {
+    await page.locator('.hub-court-types a[href*="type=' + type + '"]').click();
+    await page.waitForURL('**/courts.html?type=' + type + '#halls');
+    assert.equal(await page.locator('#hallGrid .hcard').count(), expected);
+    assert.equal(await page.locator('#hallFilters input[value="' + type + '"]').isChecked(), true);
+    await page.locator('#hallClear').click();
+    assert.equal(await page.locator('#hallGrid .hcard').count(), 34);
+    await open(page, '/hub.html#local', name + ' return to Local Hub');
+  }
+  await page.goto(base + '/hub.html#shops');
+  assert.equal(await page.locator('#tab-local').getAttribute('aria-selected'), 'true');
+  await page.goto(base + '/hub.html#international');
+  assert.equal(await page.locator('#tab-international').getAttribute('aria-selected'), 'true');
+  await page.locator('#tab-international').focus();
+  await page.keyboard.press('ArrowRight');
+  assert.equal(await page.locator('#tab-local').getAttribute('aria-selected'), 'true');
+  assert.equal(await page.locator('#tab-local').evaluate(node => node === document.activeElement), true);
+  await page.keyboard.press('Home');
+  assert.equal(await page.locator('#tab-international').getAttribute('aria-selected'), 'true');
 
   await open(page, '/courts.html', name + ' Courts');
   assert.equal(await page.getByText('Cereza Sports Hall', { exact: true }).count(), 0);
