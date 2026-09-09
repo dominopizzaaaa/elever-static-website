@@ -558,12 +558,19 @@ async function crawlAllPages(browser) {
   for (const route of allHtmlRoutes()) {
     await open(page, route, 'full-crawl ' + route);
     const icons = await page.locator('link[rel~="icon"]').count();
-    assert.ok(icons >= 2, route + ' does not expose both PNG and ICO favicons');
+    assert.ok(icons >= 2, route + ' does not expose both primary and fallback favicons');
     const iconHrefs = await page.locator('link[rel~="icon"]').evaluateAll(nodes => nodes.map(node => node.href));
-    assert.ok(iconHrefs.some(href => href.includes('eb-icon-black.png?v=59')),
-      route + ' is missing the versioned PNG favicon');
-    assert.ok(iconHrefs.some(href => href.includes('favicon.ico?v=59')),
-      route + ' is missing the versioned ICO fallback');
+    if (['/classes.html', '/hub.html', '/lab.html'].includes(route)) {
+      assert.ok(iconHrefs.some(href => href.includes('/assets/img/brand/eb-icon-black.png?v=60')),
+        route + ' is missing the root-absolute PNG favicon fallback');
+      assert.ok(iconHrefs.some(href => href.includes('/assets/img/brand/eb-icon-blue-black.svg?v=60')),
+        route + ' is missing the blue-to-black SVG favicon');
+    } else {
+      assert.ok(iconHrefs.some(href => href.includes('eb-icon-black.png?v=59')),
+        route + ' is missing the versioned PNG favicon');
+      assert.ok(iconHrefs.some(href => href.includes('favicon.ico?v=59')),
+        route + ' is missing the versioned ICO fallback');
+    }
 
     if (route.startsWith('/coaches/')) {
       assert.equal(await page.locator('.phead__crumbs').count(), 0, route + ' still has breadcrumbs');

@@ -184,3 +184,6 @@ a documented editorial fallback · `[?]` waiting for client input
   schedule.
 - [x] Optically size the four Trusted by marks individually so SBA no longer
   appears materially smaller than ASICS, and verify desktop and phone layouts.
+- [x] Favicon follow-up: give Classes, Hub, and Lab a cache-busted,
+  root-absolute blue-to-black shuttle icon so clean routes cannot retain or
+  resolve to the stale white favicon.

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="brand-fade" x1="28" y1="24" x2="220" y2="232" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4a78e7"/>
+      <stop offset="0.5" stop-color="#2151d1"/>
+      <stop offset="1" stop-color="#05070d"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke="url(#brand-fade)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M128 18 88 84 27 54c4 35 19 55 54 76l16 48h62l16-48c35-21 50-41 54-76l-61 30Z"/>
+    <path d="m88 84 29 43M168 84l-29 43M81 130c25-15 69-15 94 0"/>
+    <path d="M97 178h62v18c0 25-13 42-31 42s-31-17-31-42Z"/>
+  </g>
+</svg>
