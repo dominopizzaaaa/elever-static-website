@@ -1649,6 +1649,37 @@
     if (contactForm) {
       var contactTopic = contactForm.querySelector('[name="Topic"]');
       var contactName = contactForm.querySelector('[name="Name"]');
+      var contactPanels = contactForm.querySelectorAll('[data-contact-panel]');
+
+      function syncContactFields() {
+        var topic = contactTopic ? contactTopic.value : '';
+        contactPanels.forEach(function (panel) {
+          var active = panel.getAttribute('data-contact-panel') === topic;
+          panel.hidden = !active;
+          panel.querySelectorAll('input, select, textarea').forEach(function (field) {
+            field.disabled = !active;
+            field.required = active && field.hasAttribute('data-required');
+            if (!active) {
+              field.removeAttribute('aria-invalid');
+              field.removeAttribute('aria-describedby');
+              var error = field.closest('label') && field.closest('label').querySelector('.field-error');
+              if (error) error.remove();
+            }
+          });
+        });
+        if (contactTopic) {
+          var activePanel = contactForm.querySelector('[data-contact-panel="' + topic + '"]');
+          if (activePanel) contactTopic.setAttribute('aria-controls', activePanel.id);
+          else contactTopic.removeAttribute('aria-controls');
+        }
+      }
+
+      if (contactTopic) {
+        contactTopic.addEventListener('change', syncContactFields);
+        syncContactFields();
+      }
+      contactForm.addEventListener('reset', function () { window.setTimeout(syncContactFields, 0); });
+
       document.querySelectorAll('[data-contact-topic]').forEach(function (link) {
         link.addEventListener('click', function () {
           if (contactTopic) {
@@ -1711,8 +1742,11 @@
 
         var payload = { subject: subject };
         var lines = [];
-        new FormData(form).forEach(function (v, k) {
+        var formData = new FormData(form);
+        var hasMobile = String(formData.get('Mobile') || '').trim();
+        formData.forEach(function (v, k) {
           if (k === 'consent') return;
+          if (k === 'Country code' && !hasMobile) return;
           payload[k] = v;
           if (String(v).trim()) lines.push(k + ': ' + v);
         });
@@ -1722,7 +1756,7 @@
             '?subject=' + encodeURIComponent(subject) +
             '&body=' + encodeURIComponent(lines.join('\n'));
           if (status) {
-            status.textContent = msg || 'Opening your email app — press send and we will reply within 1 working day.';
+            status.textContent = msg || 'Opening your email app — press send to complete your enquiry.';
             status.className = 'lead__status lead__status--ok';
           }
         }
@@ -1743,7 +1777,7 @@
           if (resp.ok) {
             form.reset();
             if (status) {
-              status.textContent = 'Thanks — your message has been sent. We will reply within 1 working day.';
+              status.textContent = 'Thanks — your message has been sent.';
               status.className = 'lead__status lead__status--ok';
             }
           } else {

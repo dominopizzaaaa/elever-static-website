@@ -85,6 +85,9 @@ h1,h2,h3,h4,h5,h6{color:var(--ink-soft)}
 .btn--primary{background:var(--accent);color:var(--on-accent)}
 .btn--primary:hover{background:var(--accent-hover)}
 .btn--primary:active{background:var(--accent-press)}
+.btn--secondary{border:1px solid var(--line-2);background:var(--secondary);color:var(--ink-soft);cursor:pointer}
+.btn--secondary:hover{border-color:#b9c1ce;background:#d4d9e3}
+.btn--secondary:active{border-color:var(--accent-press);background:#c8d0dc}
 .btn--ghost{border:1px solid var(--line-2);color:var(--ink);background:#fff}
 .btn--ghost:hover{border-color:var(--ink);background:var(--bg-2)}
 .btn:active{transform:scale(.98)}

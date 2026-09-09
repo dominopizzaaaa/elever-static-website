@@ -54,6 +54,123 @@ async function open(page, route, label) {
   await checkNoOverflow(page, label);
 }
 
+async function checkContact(page, viewport, name) {
+  await open(page, '/contact.html', name + ' Contact');
+  const form = page.locator('#contact-form');
+  const topic = form.locator('[name="Topic"]');
+
+  assert.equal(await form.getByRole('heading', { name: 'Get in touch' }).count(), 1);
+  assert.equal(await page.getByText('Tell us what you need', { exact: true }).count(), 0);
+  assert.equal(await page.getByText(/Usually replies within one working day/i).count(), 0);
+  assert.equal(await page.getByText('Player details, if relevant', { exact: true }).count(), 0);
+  assert.equal(await page.getByText('01', { exact: true }).count(), 0);
+  assert.equal(await page.getByText('02', { exact: true }).count(), 0);
+  assert.deepEqual(await topic.locator('option').allTextContents(),
+    ['Choose an enquiry type', 'Classes', 'Events', 'Careers', 'Others']);
+  assert.equal(await form.locator('[name="Country code"]').inputValue(), '+65');
+  assert.equal(await form.locator('[name="Mobile"]').getAttribute('required'), null);
+  assert.equal(await form.locator('[data-contact-panel]:visible').count(), 0);
+  assert.equal(await form.getByRole('button', { name: 'Send message' })
+    .evaluate(node => getComputedStyle(node).backgroundColor), 'rgb(224, 228, 236)');
+
+  const expectations = {
+    Classes: {
+      panel: '#contact-fields-classes',
+      names: ['Name of student', 'Age of student', 'Preferred class type', 'Preferred area'],
+      optional: ['Message'],
+      values: { 'Name of student': 'Alex Tan', 'Age of student': '12',
+        'Preferred class type': 'Group classes', 'Preferred area': 'East', Message: 'Weekend mornings.' }
+    },
+    Events: {
+      panel: '#contact-fields-events',
+      names: ['Organisation', 'Event type'],
+      optional: ['Estimated number of participants', 'Message'],
+      values: { Organisation: 'Example School', 'Event type': 'Clinic',
+        'Estimated number of participants': '80', Message: 'A school holiday clinic.' }
+    },
+    Careers: {
+      panel: '#contact-fields-careers',
+      names: ['Age', 'Role of interest', 'Experience and qualifications', 'Availability'],
+      optional: ['CV or profile URL', 'Message'],
+      values: { Age: '24', 'Role of interest': 'Badminton Coach',
+        'Experience and qualifications': 'Two years of assistant coaching.', Availability: 'Within one month',
+        'CV or profile URL': 'https://example.com/cv', Message: 'Available on weekday evenings.' }
+    },
+    Others: {
+      panel: '#contact-fields-others', names: ['Message'], optional: [],
+      values: { Message: 'I have another question.' }
+    }
+  };
+
+  for (const [value, expected] of Object.entries(expectations)) {
+    await topic.selectOption({ label: value });
+    assert.equal(await form.locator('[data-contact-panel]:visible').count(), 1,
+      name + ' Contact should show exactly one conditional section for ' + value);
+    assert.equal(await form.locator(expected.panel).isVisible(), true);
+    assert.deepEqual(await form.locator(expected.panel + ' [required]').evaluateAll(nodes => nodes.map(node => node.name)),
+      expected.names);
+    assert.deepEqual(await form.locator('[data-contact-panel][hidden] input:not([disabled]), ' +
+      '[data-contact-panel][hidden] select:not([disabled]), [data-contact-panel][hidden] textarea:not([disabled])')
+      .allTextContents(), []);
+    for (const [fieldName, fieldValue] of Object.entries(expected.values)) {
+      const field = form.locator(expected.panel + ' [name="' + fieldName + '"]');
+      if (await field.evaluate(node => node.tagName === 'SELECT')) await field.selectOption({ label: fieldValue });
+      else await field.fill(fieldValue);
+    }
+  }
+
+  await topic.selectOption({ label: 'Classes' });
+  await form.locator('[name="Name"]').fill('Jamie Lim');
+  await form.locator('[name="Email"]').fill('jamie@example.com');
+  await form.locator('[name="Mobile"]').fill('81234567');
+  await form.locator('[name="consent"]').check();
+  await form.locator('#contact-student-name').fill('');
+  await form.getByRole('button', { name: 'Send message' }).click();
+  assert.equal(await form.locator('#contact-student-name').getAttribute('aria-invalid'), 'true');
+  assert.ok((await form.locator('.lead__status').textContent()).includes('highlighted fields'));
+
+  await form.locator('#contact-student-name').fill('Alex Tan');
+  const requestPromise = page.waitForRequest(request => request.url().endsWith('/api/contact') && request.method() === 'POST');
+  await page.route('**/api/contact', route => route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }));
+  await form.getByRole('button', { name: 'Send message' }).click();
+  const request = await requestPromise;
+  await page.waitForFunction(() => document.querySelector('#contact-form .lead__status').textContent
+    .includes('message has been sent'));
+  const payload = request.postDataJSON();
+  assert.deepEqual(payload, {
+    subject: 'Website enquiry', Name: 'Jamie Lim', Email: 'jamie@example.com',
+    'Country code': '+65', Mobile: '81234567', Topic: 'Classes',
+    'Name of student': 'Alex Tan', 'Age of student': '12', 'Preferred class type': 'Group classes',
+    'Preferred area': 'East', Message: 'Weekend mornings.'
+  });
+  assert.equal(await form.locator('[data-contact-panel]:visible').count(), 0,
+    name + ' Contact did not reset its conditional fields after submission');
+
+  await page.getByRole('link', { name: /Start an event brief/ }).click();
+  assert.equal(await topic.inputValue(), 'Events');
+  assert.equal(await form.locator('#contact-fields-events').isVisible(), true);
+  await page.waitForTimeout(450);
+  const anchorPosition = await page.evaluate(() => ({
+    headingTop: document.querySelector('#contact-form h2').getBoundingClientRect().top,
+    navBottom: document.querySelector('.nav').getBoundingClientRect().bottom
+  }));
+  assert.ok(anchorPosition.headingTop >= anchorPosition.navBottom + 8,
+    name + ' Contact form heading is hidden under the fixed navigation after an anchor jump');
+  await page.waitForFunction(() => document.querySelector('#contact-form [name="Name"]') === document.activeElement);
+  assert.ok(await form.locator('[name="Name"]').evaluate(node => node === document.activeElement),
+    name + ' contextual Events shortcut did not focus Name');
+  await checkNoOverflow(page, name + ' Contact interactions');
+  if (viewport.width <= 640) {
+    const phoneParts = await form.locator('.contact-phone > *').evaluateAll(nodes =>
+      nodes.map(node => ({ y: node.getBoundingClientRect().y, width: node.getBoundingClientRect().width })));
+    assert.equal(phoneParts.length, 2);
+    assert.ok(Math.abs(phoneParts[0].y - phoneParts[1].y) < 1, name + ' country code is not left of Mobile');
+    assert.ok(phoneParts[0].width >= 100 && phoneParts[1].width > phoneParts[0].width,
+      name + ' phone fields are not proportioned correctly');
+  }
+  await page.screenshot({ path: path.join(outDir, name + '-contact-events.png'), fullPage: true });
+}
+
 async function runViewport(browser, viewport, name) {
   const context = await browser.newContext({ viewport });
   const page = await context.newPage();
@@ -281,7 +398,9 @@ async function runViewport(browser, viewport, name) {
   assert.equal(await page.locator('#hallGrid .hcard').count(), 2);
   await page.locator('#hallSearch').fill('');
 
-  for (const route of ['/contact.html', '/camps.html', '/lab.html', '/privacy.html']) {
+  await checkContact(page, viewport, name);
+
+  for (const route of ['/camps.html', '/lab.html', '/privacy.html']) {
     await open(page, route, name + ' ' + route);
   }
   await context.close();

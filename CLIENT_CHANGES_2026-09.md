@@ -68,8 +68,35 @@ a documented editorial fallback · `[?]` waiting for client input
 
 ## 6. Contact
 
-- [?] Redesign the Contact UI after the client supplies the new direction. The
-  current UI is deliberately retained; no speculative redesign is included.
+- [x] Remove the `01` and `02` step markers.
+- [x] Change the form heading from `Tell us what you need` to `Get in touch`
+  and remove the explanatory sentence below it.
+- [x] Remove `Your` from the Name label.
+- [x] Add a country-code selector beside Mobile, defaulting to Singapore
+  (`SG +65`) and retaining common international alternatives.
+- [x] Remove `(optional)` wording and identify compulsory fields with an
+  asterisk plus a visible required-fields key.
+- [x] Replace the old detailed topic list with `Classes`, `Events`, `Careers`,
+  and `Others`.
+- [x] Remove the `Player details, if relevant` divider and keep all
+  enquiry-specific fields hidden and disabled until a topic is selected.
+- [x] Classes: require student name, student age, preferred class type (Group
+  classes / Private Classes / Holiday Camps), and preferred area; include a
+  message field.
+- [x] Events: require organisation and event type (Carnival / Clinic /
+  Competition); use `Estimated number of participants` for event size and
+  include a message field.
+- [x] Careers: use the shared required name field, then require age, role of
+  interest, relevant experience/qualifications, and availability; include an
+  optional CV/portfolio/LinkedIn URL and message.
+- [x] Others: show a required message field.
+- [x] Remove both `Usually replies within one working day` messages.
+- [x] Use the approved secondary grey for the `Send message` button, with
+  distinct hover, active, focus, and disabled states.
+- [x] Update the contact endpoint to include and validate every new conditional
+  field while omitting hidden sections and an unused country code.
+- [x] Verify every conditional state, required-field validation, payload,
+  contextual Events shortcut, and desktop/tablet/phone layouts.
 
 ## 7. Singapore Shuttlers Hub
 

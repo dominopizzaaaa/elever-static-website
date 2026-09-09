@@ -18,7 +18,7 @@ rather than one long scrolling page.
 | News | `news.html` | Articles, filterable by category, newsletter signup |
 | SG Badminton Hub | `hub.html` | International World Tour/news and local Play, Shop, and Compete guides |
 | Courts | `courts.html` | Dedicated Singapore badminton-court directory with operator-specific booking guidance |
-| Contact | `contact.html` | Enquiry form plus WhatsApp and email routes |
+| Contact | `contact.html` | Conditional Classes / Events / Careers / Others enquiry form plus WhatsApp and email routes |
 | Privacy | `privacy.html` | PDPA privacy notice draft (needs completion — see below) |
 
 ## Editing content — start here

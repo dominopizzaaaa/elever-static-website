@@ -9,7 +9,19 @@ const TO = 'info@eleverbadminton.com';
 // if you use a different verified sender.
 const FROM = process.env.FROM_EMAIL || 'Elever Website <noreply@eleverbadminton.com>';
 
-const FIELDS = ['Name', 'Email', 'Mobile', 'Topic', 'Player age', 'Preferred area', 'Message'];
+const FIELDS = [
+  'Name', 'Email', 'Country code', 'Mobile', 'Topic',
+  'Name of student', 'Age of student', 'Preferred class type', 'Preferred area',
+  'Organisation', 'Event type', 'Estimated number of participants',
+  'Age', 'Role of interest', 'Experience and qualifications', 'Availability',
+  'CV or profile URL', 'Child age', 'Holiday', 'Message'
+];
+const REQUIRED_BY_TOPIC = {
+  Classes: ['Name of student', 'Age of student', 'Preferred class type', 'Preferred area'],
+  Events: ['Organisation', 'Event type'],
+  Careers: ['Age', 'Role of interest', 'Experience and qualifications', 'Availability'],
+  Others: ['Message'],
+};
 
 function escapeHtml(s) {
   return String(s)
@@ -39,15 +51,29 @@ module.exports = async function handler(req, res) {
 
   const name = String(body.Name || '').trim();
   const email = String(body.Email || '').trim();
-  if (!name || !email) {
-    return res.status(400).json({ error: 'Name and email are required.' });
-  }
+  const countryCode = String(body['Country code'] || '').trim();
+  const mobile = String(body.Mobile || '').trim();
+  const topic = String(body.Topic || '').trim();
+  const subject = String(body.subject || 'Website enquiry');
+  if (!email) return res.status(400).json({ error: 'Email is required.' });
   // Basic email sanity check.
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: 'Please enter a valid email address.' });
   }
-
-  const subject = String(body.subject || 'Website enquiry');
+  if (topic || subject === 'Website enquiry') {
+    if (!name || !REQUIRED_BY_TOPIC[topic]) {
+      return res.status(400).json({ error: 'Name and a valid enquiry type are required.' });
+    }
+    if (mobile && !countryCode) {
+      return res.status(400).json({ error: 'A country code is required with a mobile number.' });
+    }
+    const missingTopicField = REQUIRED_BY_TOPIC[topic].find(function (field) {
+      return !String(body[field] || '').trim();
+    });
+    if (missingTopicField) {
+      return res.status(400).json({ error: missingTopicField + ' is required for ' + topic.toLowerCase() + ' enquiries.' });
+    }
+  }
 
   const rows = FIELDS
     .filter(function (k) { return String(body[k] || '').trim(); })
