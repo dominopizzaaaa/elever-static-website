@@ -225,6 +225,22 @@ async function runViewport(browser, viewport, name) {
   assert.deepEqual(await page.locator('#eventPartners img').evaluateAll(nodes =>
     nodes.slice(0, 4).map(node => node.alt)),
     ['ASICS', 'People’s Association', 'Singapore Badminton Association', 'SingHealth Community Hospitals']);
+  await page.waitForFunction(() => Array.from(document.querySelectorAll('#eventPartners img'))
+    .every(image => image.complete && image.naturalWidth > 0));
+  const partnerBoxes = await page.locator('#eventPartners .logorail__item').evaluateAll(nodes =>
+    nodes.map(node => {
+      const image = node.querySelector('img');
+      const box = image.getBoundingClientRect();
+      return { key: node.dataset.partner, width: box.width, height: box.height };
+    }));
+  assert.deepEqual(partnerBoxes.map(item => item.key), ['asics', 'pa', 'sba', 'singhealth']);
+  assert.ok(partnerBoxes.every(item => item.width >= 70 && item.height >= 45),
+    name + ' a Trusted By logo renders materially undersized: ' + JSON.stringify(partnerBoxes));
+  const sbaBox = partnerBoxes.find(item => item.key === 'sba');
+  const asicsBox = partnerBoxes.find(item => item.key === 'asics');
+  assert.ok(sbaBox.width >= asicsBox.width * 0.7,
+    name + ' SBA logo is still visually too narrow beside ASICS: ' + JSON.stringify(partnerBoxes));
+  await page.locator('.trusted-inline').screenshot({ path: path.join(outDir, name + '-trusted-by.png') });
   assert.equal(await page.locator('.ecov').first().evaluate(node => getComputedStyle(node).borderRadius), '8px');
   const eventTrigger = page.locator('.ecov__open').first();
   await eventTrigger.click();
@@ -379,6 +395,28 @@ async function runViewport(browser, viewport, name) {
   assert.ok(await page.locator('.hcard__addr').first().evaluate(node =>
     getComputedStyle(node).textDecorationLine.includes('underline')));
   assert.equal(await page.locator('#hallGrid .hcard').count(), 34);
+  assert.equal(await page.locator('#hallGrid .hcard__hours').count(), 34);
+  assert.equal(await page.locator('#hallGrid .hcard__hours > a').count(), 34);
+  const courtHours = await page.locator('#hallGrid .hcard').evaluateAll(cards => cards.map(card => {
+    const venue = card.querySelector('.hcard__name').textContent.trim();
+    const row = card.querySelector('.hcard__hours');
+    const source = row && row.querySelector('a');
+    return { venue, label: row && row.querySelector('span').textContent.trim(),
+      hours: source && source.textContent.trim(), source: source && source.href };
+  }));
+  courtHours.forEach(item => {
+    assert.equal(item.label, 'Hours', name + ' hours label missing for ' + item.venue);
+    assert.ok(item.hours && item.hours.length >= 12, name + ' hours missing for ' + item.venue);
+    assert.ok(item.source && /^(https?:|file:)/.test(item.source),
+      name + ' hours source missing for ' + item.venue);
+  });
+  assert.ok(courtHours.some(item => item.hours.includes('Public DUS')),
+    name + ' DUS hours are not distinguished');
+  assert.ok(courtHours.some(item => item.hours.includes('no public court hire')),
+    name + ' school access is not distinguished from public hours');
+  await page.locator('#hallGrid .hcard').first().screenshot({
+    path: path.join(outDir, name + '-court-hours.png')
+  });
   const courtTypes = await page.locator('#hallGrid .hcard__tag').evaluateAll(tags => tags.reduce((counts, tag) => {
     const className = Array.from(tag.classList).find(name => name.indexOf('hcard__tag--') === 0);
     const type = className.replace('hcard__tag--', '');
@@ -455,9 +493,9 @@ async function crawlAllPages(browser) {
     const icons = await page.locator('link[rel~="icon"]').count();
     assert.ok(icons >= 2, route + ' does not expose both PNG and ICO favicons');
     const iconHrefs = await page.locator('link[rel~="icon"]').evaluateAll(nodes => nodes.map(node => node.href));
-    assert.ok(iconHrefs.some(href => href.includes('eb-icon-black.png?v=58')),
+    assert.ok(iconHrefs.some(href => href.includes('eb-icon-black.png?v=59')),
       route + ' is missing the versioned PNG favicon');
-    assert.ok(iconHrefs.some(href => href.includes('favicon.ico?v=58')),
+    assert.ok(iconHrefs.some(href => href.includes('favicon.ico?v=59')),
       route + ' is missing the versioned ICO fallback');
 
     if (route.startsWith('/coaches/')) {

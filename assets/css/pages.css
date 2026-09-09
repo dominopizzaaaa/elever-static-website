@@ -915,11 +915,27 @@ body.has-lightbox{overflow:hidden}
 .logorail__track{display:flex;flex-wrap:wrap;width:auto}
 .logorail__set{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;
   gap:clamp(1.4rem,3.4vw,2.8rem) clamp(1.6rem,4vw,3.4rem);width:100%}
-.logorail__item{flex:none;display:grid;place-items:center;height:64px}
-.logorail__item img{max-height:50px;max-width:160px;width:auto;object-fit:contain}
+.logorail__item{flex:none;display:grid;place-items:center;height:104px}
+/* Optical dimensions are deliberately logo-specific. Equal CSS heights made
+   the square SBA artwork look tiny beside the long ASICS wordmark; these
+   boxes balance the visible marks while preserving every original aspect
+   ratio. */
+.logorail__item img{display:block;width:auto;height:auto;object-fit:contain}
+.logorail__item--asics img{width:150px}
+.logorail__item--pa img{width:88px}
+.logorail__item--sba img{width:108px}
+.logorail__item--singhealth img{width:170px}
 .logorail__item--name{font-size:.85rem;font-weight:700;color:var(--faint);white-space:nowrap}
 .trusted-inline{margin-top:3.4rem;padding-top:3rem;border-top:1px solid var(--rule)}
 .trusted-inline .psec__head{margin-bottom:1.25rem}
+@media(max-width:520px){
+  .logorail__set{gap:1rem 1.5rem}
+  .logorail__item{height:88px}
+  .logorail__item--asics img{width:126px}
+  .logorail__item--pa img{width:74px}
+  .logorail__item--sba img{width:92px}
+  .logorail__item--singhealth img{width:144px}
+}
 
 /* ---------- FEATURED ON (press) ---------- */
 .featured{margin-top:2rem;padding-top:1.6rem;border-top:1px solid var(--line)}

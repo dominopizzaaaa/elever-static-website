@@ -122,6 +122,9 @@ a documented editorial fallback · `[?]` waiting for client input
   source, removing centres that do not actually list badminton courts.
 - [x] Courts: preserve operator-specific booking labels, notes, and alternate
   OnePA links instead of rendering every action as `Check Availability`.
+- [x] Courts follow-up: add linked, source-checked operating or bookable hours
+  to all 34 hall cards; clearly distinguish public hours, DUS/CC booking
+  bands, venue-only hours, and school class-only access.
 - [?] Social groups: retain an honest Racket Ratings fallback until the client
   supplies the preferred UI and verified group schedules/contacts.
 - [x] Shop: retain verified physical and online badminton retailers/stringers.
@@ -168,3 +171,16 @@ a documented editorial fallback · `[?]` waiting for client input
 - [x] Confirm no unintended files (screenshots, DNS backup, source drop folder)
   are included in the release commit.
 - [x] Commit the completed release on `main` and push to `origin/main`.
+
+## 11. Follow-up — venue hours and Trusted by logo balance
+
+- [x] Add an hours row and a source link to every court-directory card.
+- [x] Use official ActiveSG facility pages for all public SportSG/DUS hours,
+  including the published MOE Evans and weekend DUS schedules.
+- [x] Use each private operator's published page where available; label City
+  Sprouts' 9am–11pm value as venue hours because tenant hours may vary.
+- [x] Keep ACS Barker and SCGS truthful as non-public school halls; show the
+  verified Élever Sunday class window only for SCGS and do not invent an ACS
+  schedule.
+- [x] Optically size the four Trusted by marks individually so SBA no longer
+  appears materially smaller than ASICS, and verify desktop and phone layouts.

@@ -649,10 +649,10 @@
      Entries with no logo render as a name chip rather than a fake mark, so
      the ones we have a mark for are listed first. */
   var PARTNERS = [
-    { name: 'ASICS', logo: 'assets/img/partners/asics.png' },
-    { name: 'People\u2019s Association', logo: 'assets/img/partners/peoples-association.png' },
-    { name: 'Singapore Badminton Association', logo: 'assets/img/partners/sba.png' },
-    { name: 'SingHealth Community Hospitals', logo: 'assets/img/partners/singhealth-community-hospitals.png' }
+    { key: 'asics', name: 'ASICS', logo: 'assets/img/partners/asics.png' },
+    { key: 'pa', name: 'People\u2019s Association', logo: 'assets/img/partners/peoples-association.png' },
+    { key: 'sba', name: 'Singapore Badminton Association', logo: 'assets/img/partners/sba.png' },
+    { key: 'singhealth', name: 'SingHealth Community Hospitals', logo: 'assets/img/partners/singhealth-community-hospitals.png' }
   ];
 
   /* Curated third-party coverage for the Singapore Shuttlers Hub. Dates and

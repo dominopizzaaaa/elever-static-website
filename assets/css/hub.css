@@ -185,6 +185,13 @@ body[data-page="hub"] .sr-only{position:absolute;width:1px;height:1px;padding:0;
 .hub .hcard__link--alt{color:#1744bd;border-color:#b9caf5;background:#f3f6fd}
 .hub .hcard__tag--dus{color:#1744bd;border-color:#9eb1dc;background:#edf3ff}
 .hub .hcard__addr{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.hub .hcard__hours{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.35rem .55rem;
+  align-items:start;margin-top:.75rem;font-size:.72rem;line-height:1.5;color:#344054}
+.hub .hcard__hours span{font-size:.58rem;font-weight:800;letter-spacing:.1em;
+  line-height:1.8;text-transform:uppercase;color:#687386}
+.hub .hcard__hours a{color:#344054;text-decoration:underline;text-decoration-color:#b6c0ce;
+  text-decoration-thickness:1px;text-underline-offset:3px;transition:color .2s,text-decoration-color .2s}
+.hub .hcard__hours a:hover{color:#2151d1;text-decoration-color:#2151d1}
 .hub .hcard__note{margin-top:.7rem;color:#687386;font-size:.7rem;line-height:1.55}
 .hub__empty{grid-column:1/-1;padding:2rem;border:1px dashed #bfc9d8;border-radius:16px;text-align:center;color:#687386;background:#fff}
 .hub__empty a{color:#2151d1;font-weight:700}

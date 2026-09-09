@@ -945,7 +945,7 @@
       var pbase = SITE.base || '';
       var logos = D.partners.map(function (p) {
         return p.logo
-          ? '<span class="logorail__item">' +
+          ? '<span class="logorail__item logorail__item--' + esc(p.key || 'brand') + '" data-partner="' + esc(p.key || '') + '">' +
               '<img src="' + esc(pbase + p.logo) + '" alt="' + esc(p.name) + '" loading="lazy" decoding="async">' +
             '</span>'
           : '<span class="logorail__item logorail__item--name">' + esc(p.name) + '</span>';
