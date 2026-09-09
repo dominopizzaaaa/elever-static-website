@@ -50,10 +50,18 @@ max_edge_for() {
   esac
 }
 
+slug_for() {
+  case "$1" in
+    SBA|sba)                          echo "sba" ;;
+    "SCH Transparent")              echo "singhealth-community-hospitals" ;;
+    *) printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | tr -d "_'" | tr ' ' '-' ;;
+  esac
+}
+
 n=0
 while IFS= read -r f; do
   # "People_s Association.png" -> "peoples-association.png"
-  slug="$(basename "${f%.*}" | tr '[:upper:]' '[:lower:]' | tr -d "_'" | tr ' ' '-')"
+  slug="$(slug_for "$(basename "${f%.*}")")"
   out="$OUT/$slug.png"
   crop="$(crop_for "$slug")"
   max_edge="$(max_edge_for "$slug")"

@@ -12,6 +12,12 @@
   var SITE = window.ELEVER_SITE || {};
   var BOOK = SITE.bookUrl || 'https://wa.me/6589214221';
   var EMAIL = SITE.email || 'info@eleverbadminton.com';
+  var WHATSAPP_NUMBER = '6589214221';
+  var EVENT_ENQUIRY = 'Hi, I am interested in working with Élever Badminton to organise an event. Could you share more about the options available and how we can get started? Thank you!';
+
+  function whatsapp(message) {
+    return 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message);
+  }
 
   function esc(s) {
     return String(s == null ? '' : s)
@@ -57,6 +63,7 @@
     var activeGallery = 0;
     var activePhoto = 0;
     var lastTrigger = null;
+    var coveredDialog = null;
 
     var modal = document.createElement('div');
     modal.className = 'lightbox';
@@ -140,6 +147,13 @@
       activeGallery = galleryIndex;
       activePhoto = photoIndex;
       lastTrigger = trigger || null;
+      coveredDialog = lastTrigger && lastTrigger.closest
+        ? lastTrigger.closest('[role="dialog"][aria-modal="true"]')
+        : null;
+      if (coveredDialog) {
+        coveredDialog.setAttribute('aria-hidden', 'true');
+        coveredDialog.setAttribute('inert', '');
+      }
       buildStrip();
       show();
       modal.hidden = false;
@@ -149,6 +163,10 @@
 
     function close() {
       modal.hidden = true;
+      if (coveredDialog) {
+        coveredDialog.removeAttribute('aria-hidden');
+        coveredDialog.removeAttribute('inert');
+      }
       // The event detail overlay can be open beneath the lightbox; keep the
       // scroll lock while it is still showing.
       var det = document.querySelector('.edetail');
@@ -156,6 +174,7 @@
       // Send focus back where it came from so the keyboard user is not lost.
       if (lastTrigger && lastTrigger.focus) lastTrigger.focus();
       lastTrigger = null;
+      coveredDialog = null;
     }
 
     function step(dir) {
@@ -633,7 +652,9 @@
       var openByDefault = !window.matchMedia('(max-width:900px)').matches;
 
       listMount.innerHTML = areas.map(function (g) {
-        var book = g.venues[0].book || BOOK;
+        var groupMessage = 'Hi, I am interested in the group classes at ' + g.area +
+          ' and would like to enquire more. Please let me know if there’s availability. Thank you!';
+        var book = whatsapp(groupMessage);
         return '<details class="vcard" id="area-' + esc(g.area.toLowerCase().replace(/[^a-z0-9]+/g, '-')) + '"' +
             (openByDefault ? ' open' : '') + '>' +
           '<summary class="vcard__top">' +
@@ -844,7 +865,8 @@
           }).join('')
         : '<div class="ecard__empty">' +
             '<p>No public events are scheduled at this time. If you are looking to partner with us, or want to inquire about hosting a private event at our venue, please get in touch with our team for availability and services.</p>' +
-            '<a class="btn btn--primary" href="contact.html">Request a proposal</a>' +
+            '<a class="btn btn--primary" href="' + esc(whatsapp(EVENT_ENQUIRY)) +
+              '" target="_blank" rel="noopener">Work with us</a>' +
           '</div>';
     }
 
@@ -1058,19 +1080,22 @@
     }
 
     function render(c) {
-      var facts = [];
-      if (c.role) facts.push(['Role', c.role]);
-      if (c.cert) facts.push(['Certification', c.cert]);
-      if (c.coaching && c.coaching.length) facts.push(['Coaches', c.coaching.join(', ')]);
-      if (c.languages && c.languages.length) facts.push(['Languages', c.languages.join(', ')]);
-
-      var bio = (c.bio || []).map(function (para) {
-        return '<p class="edetail__desc">' + esc(para) + '</p>';
-      }).join('');
+      var certifications = (c.certifications || []).filter(function (certification) {
+        return certification && certification.name && certification.href;
+      });
+      var shortBio = c.shortBio || ((c.bio || [])[0] || '');
+      var certificationBlock = certifications.length
+        ? '<div class="cdetail__certifications">' +
+            '<p class="cdetail__label">Certifications</p>' +
+            '<div class="cdetail__certs">' + certifications.map(function (certification) {
+              return '<a class="cdetail__cert" href="' + esc(certification.href) +
+                '" target="_blank" rel="noopener">' + esc(certification.name) + '</a>';
+            }).join('') + '</div>' +
+          '</div>'
+        : '';
 
       panel.innerHTML =
         '<header class="edetail__head">' +
-          (c.cert ? '<div class="edetail__types"><span class="edetail__type">' + esc(c.cert) + '</span></div>' : '') +
           '<h2 class="edetail__title">' + esc(c.name) + sampleTag(c) + '</h2>' +
           (c.role ? '<p class="edetail__meta">' + esc(c.role) + '</p>' : '') +
         '</header>' +
@@ -1081,14 +1106,10 @@
                 ? '<img src="' + esc(base + c.photo) + '" alt="' + esc(c.name) + '" width="640" height="640" decoding="async">'
                 : '<span class="cdetail__initials">' + esc(initials(c.name)) + '</span>') +
             '</figure>' +
-            (facts.length
-              ? '<ul class="cdetail__facts">' + facts.map(function (f) {
-                  return '<li><span>' + esc(f[0]) + '</span><b>' + esc(f[1]) + '</b></li>';
-                }).join('') + '</ul>'
-              : '') +
+            certificationBlock +
           '</div>' +
           '<div class="cdetail__body">' +
-            bio +
+            (shortBio ? '<p class="edetail__desc">' + esc(shortBio) + '</p>' : '') +
             (c.achievements && c.achievements.length
               ? '<div>' +
                   '<h3 class="edetail__subhead edetail__subhead--plain">Achievements</h3>' +
@@ -1100,8 +1121,7 @@
             '<div class="cdetail__actions">' +
               (c.profilePage === false
                 ? ''
-                : '<a class="btn btn--ghost" href="' + esc(base + 'coaches/' + c.slug + '.html') + '">Open full profile</a>') +
-              '<a class="btn btn--primary" href="' + esc(base + 'classes.html#locations') + '">See classes</a>' +
+                : '<a class="btn btn--primary" href="' + esc(base + 'coaches/' + c.slug + '.html') + '">View full profile</a>') +
             '</div>' +
           '</div>' +
         '</div>';
@@ -1178,12 +1198,19 @@
       var photo = c.photo
         ? '<img src="' + base + esc(c.photo) + '" alt="' + esc(c.name) + '" width="640" height="640" loading="lazy" decoding="async">'
         : '<span class="coach__initials">' + esc(initials(c.name)) + '</span>';
+      var certifications = (c.certifications || []).filter(function (certification) {
+        return certification && certification.name;
+      });
       return '<' + tag + ' class="coach coach--' + (hasProfile ? 'linked' : 'static') + '"' + href + '>' +
         '<div class="coach__img">' + photo + '</div>' +
         '<div class="coach__body"><h3>' + esc(c.name) + '</h3>' +
           '<p class="coach__role">' + esc(c.role) + '</p>' +
-          (c.cert ? '<span class="coach__cert">' + esc(c.cert) + '</span>' : '') +
-          (hasProfile ? '<p class="coach__more">View profile &rsaquo;</p>' : '') +
+          (certifications.length
+            ? '<p class="coach__cert">' + certifications.map(function (certification) {
+                return esc(certification.name);
+              }).join(' · ') + '</p>'
+            : '') +
+          (hasProfile ? '<p class="coach__more">View more <span aria-hidden="true">&rsaquo;</span></p>' : '') +
         '</div></' + tag + '>';
     }
 
@@ -1431,10 +1458,9 @@
      -----------------------------------------------------------------
      Our own reporting, pulled from the same ARTICLES list the News page
      renders — not a third-party feed (client, Sep 2026). An article
-     qualifies if it carries the BWF World Tour tag/category, OR if it
-     names one of the Singapore players listed in the Players tab, so a
-     piece about Kean Yew or Jia Min surfaces here whatever it is filed
-     under. Matching is on the title, the excerpt and the body text.
+     qualifies only if it carries the BWF World Tour tag/category, matching
+     the client-requested filter. Player-focused coverage from other
+     publishers is kept in the separate external-news list below.
      ================================================================= */
   (function hubNews() {
     var mount = el('hubNewsGrid');
@@ -1468,7 +1494,7 @@
       var named = mentions(a);
       return { a: a, tagged: tagged, named: named };
     }).filter(function (r) {
-      return r.tagged || r.named.length;
+      return r.tagged;
     }).sort(function (x, y) {
       return String(y.a.date).localeCompare(String(x.a.date));
     });
@@ -1481,16 +1507,47 @@
 
     mount.innerHTML = rows.map(function (r) {
       var a = r.a;
-      /* A piece that only qualifies because it names a Singapore player says
-         so, rather than appearing under the World Tour tag it does not carry. */
-      var why = r.tagged ? esc(a.category) : esc(r.named[0]);
       return '<a class="article" href="' + base + 'news/' + esc(a.slug) + '.html">' +
-        '<span class="article__cat">' + why + '</span>' +
+        '<span class="article__cat">' + esc(TAG) + '</span>' +
         '<h3>' + esc(a.title) + sampleTag(a) + '</h3>' +
         '<p>' + esc(a.excerpt) + '</p>' +
         '<div class="article__foot"><span>' + fmt(a.date) + '</span>' +
           (r.named.length ? '<span>' + esc(r.named.join(' · ')) + '</span>' : '') +
         '</div>' +
+      '</a>';
+    }).join('');
+  })();
+
+  /* Curated external coverage is intentionally stored as explicit links in
+     data.js. Browsers cannot reliably scrape publisher sites client-side, and
+     a small attributed list is both faster and more honest than pretending it
+     is a live feed. */
+  (function externalHubNews() {
+    var mount = el('externalNewsGrid');
+    if (!mount) return;
+
+    function fmt(d) {
+      var parts = String(d || '').split('-');
+      var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return parts.length === 3
+        ? Number(parts[2]) + ' ' + months[Number(parts[1]) - 1] + ' ' + parts[0]
+        : String(d || '');
+    }
+
+    var rows = (D.externalNews || []).slice().sort(function (a, b) {
+      return String(b.date || '').localeCompare(String(a.date || ''));
+    });
+
+    if (!rows.length) {
+      mount.innerHTML = '<p class="sched__empty">External coverage will be added as verified publisher links become available.</p>';
+      return;
+    }
+
+    mount.innerHTML = rows.map(function (item) {
+      return '<a class="article article--external" href="' + esc(item.url) + '" target="_blank" rel="noopener">' +
+        '<span class="article__cat">' + esc(item.topic || 'Singapore badminton') + '</span>' +
+        '<h3>' + esc(item.title) + '</h3>' +
+        '<div class="article__foot"><span>' + esc(item.publisher) + '</span><span>' + fmt(item.date) + ' &#8599;</span></div>' +
       '</a>';
     }).join('');
   })();

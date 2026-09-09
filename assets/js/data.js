@@ -24,7 +24,9 @@
     {
       slug: 'loh-kean-hean', name: 'Loh Kean Hean', photo: 'assets/img/coaches/loh-kean-hean.jpg',
       role: 'Co-Founder · Technical Director', cert: 'BWF Level 1', group: 'founder',
+      certifications: [{ name: 'BWF Level 1', href: 'https://development.bwfbadminton.com/coaches/level-1' }],
       coaching: ['Emergence', 'Elite'], languages: ['English', 'Mandarin'],
+      shortBio: "Kean Hean is the Co-Founder and Technical Director of Élever Badminton, where he leads the academy's coaching philosophy and designs its training programmes for players of all ages and abilities.",
       bio: [
         "Kean Hean is the Co-Founder and Technical Director of Élever Badminton, where he leads the academy's coaching philosophy and designs its training programmes for players of all ages and abilities.",
         "A former Singapore National Team athlete, Kean Hean represented Singapore for over 12 years, reaching a career-high world ranking of No. 22 in Men's Doubles. His achievements include a bronze medal at the 2022 Commonwealth Games and six SEA Games medals, bringing world-class experience into every programme.",
@@ -36,6 +38,7 @@
     {
       slug: 'eng-chin-an', name: 'Eng Chin An', photo: 'assets/img/coaches/eng-chin-an.jpg',
       role: 'Co-Founder', cert: '', group: 'founder',
+      certifications: [],
       coaching: ['Essentials', 'Emergence'], languages: ['English', 'Mandarin'],
       bio: ['To write soon'],
       placeholder: true,
@@ -44,7 +47,12 @@
     {
       slug: 'ong-keng-yang', name: 'Ong Keng Yang', photo: 'assets/img/coaches/ong-keng-yang.jpg',
       role: 'Performance Manager · Strength & Conditioning Coach', cert: '', group: 'team',
+      certifications: [
+        { name: 'ASCA Level 1', href: 'https://www.strengthandconditioning.org/courses-accreditation/level-01' },
+        { name: 'Level 1 Sports Trainer', href: 'https://sma.org.au/safer-sport-courses/level-1-sports-trainer/' }
+      ],
       coaching: ['Emergence', 'Elite'], languages: ['English', 'Mandarin'],
+      shortBio: "Keng Yang is the Performance Manager and Lead of Strength & Conditioning (S&C) at Élever Badminton, where he oversees the academy's physical development programmes and works closely with Technical Director Kean Hean to maximise player performance through evidence-based training.",
       bio: [
         "Keng Yang is the Performance Manager and Lead of Strength & Conditioning (S&C) at Élever Badminton, where he oversees the academy's physical development programmes and works closely with Technical Director Kean Hean to maximise player performance through evidence-based training.",
         "A graduate of Nanyang Technological University in Sports Science and Management, Keng Yang also serves as the Strength & Conditioning Coach for Singapore's National Team and National Training Squad at the High Performance Sport Institute. Working alongside the country's top badminton athletes gives him first-hand insight into the physical standards and demands of elite competition.",
@@ -56,7 +64,9 @@
     {
       slug: 'shawn-wong', name: 'Shawn Wong', photo: 'assets/img/coaches/shawn-wong.jpg',
       role: 'Senior Coach', cert: 'BWF Level 1', group: 'team',
+      certifications: [{ name: 'BWF Level 1', href: 'https://development.bwfbadminton.com/coaches/level-1' }],
       coaching: ['Exploration', 'Essentials'], languages: ['English', 'Mandarin'],
+      shortBio: 'Shawn is a Senior Coach at Élever Badminton, bringing over 25 years of coaching experience across schools, recreational programmes, and competitive youth development.',
       bio: [
         'Shawn is a Senior Coach at Élever Badminton, bringing over 25 years of coaching experience across schools, recreational programmes, and competitive youth development.',
         "Throughout his career, Shawn has guided players from complete beginners to championship-winning school teams. Since 2010, he has led Singapore Chinese Girls' School to multiple National School Games titles across the Junior and Senior divisions, while also coaching at Rosyth, Montfort Secondary, and Presbyterian High. His extensive experience has helped countless young athletes build strong technical foundations and achieve success at both the Zonal and National levels.",
@@ -68,7 +78,9 @@
     {
       slug: 'torance-jng', name: 'Torance Jng', photo: 'assets/img/coaches/torance-jng.jpg',
       role: 'Development Coach', cert: 'BWF Level 1', group: 'team',
+      certifications: [{ name: 'BWF Level 1', href: 'https://development.bwfbadminton.com/coaches/level-1' }],
       coaching: ['Exploration', 'Essentials'], languages: ['English', 'Mandarin'],
+      shortBio: "Torance is a Development Coach at Élever Badminton, bringing over eight years of elite competitive experience to the court and representing the highest standard of his generation's badminton talent.",
       bio: [
         "Torance is a Development Coach at Élever Badminton, bringing over eight years of elite competitive experience to the court and representing the highest standard of his generation's badminton talent.",
         'Having honed his foundation at the Singapore Sports School, Torance rapidly progressed to the National Intermediate Squad, where he trained and competed from 2016 to 2019. As an ex-national player, he has amassed an impressive portfolio of achievements, including capturing an international title. His journey from a dedicated national athlete to a coach speaks volumes about the relentless hard work and discipline required to succeed on the international stage.',
@@ -80,7 +92,9 @@
     {
       slug: 'lim-su-qi', name: 'Lim Su Qi', photo: 'assets/img/coaches/lim-su-qi.jpg',
       role: 'Development Coach', cert: 'BWF Level 1', group: 'team',
+      certifications: [{ name: 'BWF Level 1', href: 'https://development.bwfbadminton.com/coaches/level-1' }],
       coaching: ['Exploration', 'Essentials'], languages: ['English', 'Mandarin'],
+      shortBio: 'Su Qi is a Development Coach at Élever Badminton, drawing on over 14 years of elite competitive experience and more than five years of dedicated coaching to shape the next generation of young athletes.',
       bio: [
         'Su Qi is a Development Coach at Élever Badminton, drawing on over 14 years of elite competitive experience and more than five years of dedicated coaching to shape the next generation of young athletes.',
         'A former Singapore National Team athlete, Su Qi specialised in the doubles event and has proudly represented the nation on major international stages. Her notable appearances include the Badminton Asia Team Championship 2024, the ASEAN School Games 2019, and reaching the Top 16 in the Women’s Doubles at the World University Games 2023. Her extensive track record features a Women’s Doubles Championship title at the Bravesword Series 2022, a runner-up finish at the Singapore National Open Championship 2024, and consistent podium finishes across numerous national and international youth challenges. Today, she remains a formidable competitor in the local circuit, actively playing for the SIM Women’s Team and securing top placement in both SUNIG and IVP competitions.',
@@ -92,7 +106,9 @@
     {
       slug: 'grace-tan', name: 'Grace Tan', photo: 'assets/img/coaches/grace-tan.jpg',
       role: 'Development Coach', cert: 'BWF Level 1', group: 'team',
+      certifications: [{ name: 'BWF Level 1', href: 'https://development.bwfbadminton.com/coaches/level-1' }],
       coaching: ['Exploration', 'Essentials'], languages: ['English', 'Mandarin'],
+      shortBio: 'Grace is a Development Coach at Élever Badminton, drawing on over 13 years of competitive experience including her time in the National Intermediate Squad.',
       bio: [
         'Grace is a Development Coach at Élever Badminton, drawing on over 13 years of competitive experience including her time in the National Intermediate Squad.',
         'Having first picked up a racket in Primary 3, Grace rose through the ranks to the National Intermediate Squad, earning podium finishes throughout her school years. A true all-rounder, she has claimed local podium finishes across women’s singles, women’s doubles, and mixed doubles, and finished among the Top 8 at the Asian University Badminton Championship - a testament to her versatility across every discipline of the game.',
@@ -104,7 +120,9 @@
     {
       slug: 'hassan', name: 'Hassan', photo: 'assets/img/coaches/hassan.jpg',
       role: 'Development Coach', cert: 'BWF Level 1', group: 'team',
+      certifications: [{ name: 'BWF Level 1', href: 'https://development.bwfbadminton.com/coaches/level-1' }],
       coaching: ['Essentials'], languages: ['English', 'Malay'],
+      shortBio: 'Hassan is a Development Coach at Élever Badminton, bringing 16 years of coaching experience - a journey he turned into his full-time calling in 2023.',
       bio: [
         'Hassan is a Development Coach at Élever Badminton, bringing 16 years of coaching experience - a journey he turned into his full-time calling in 2023.',
         'Hassan’s love for badminton began at 13, and by 15 he was representing his school. A familiar face on Singapore’s community tournament circuit - including the Cheers, Berita Harian, and Temasya tournaments - he still travels overseas for friendly matches with other clubs and keeps playing competitively to keep up with the modern game. His belief is simple: to coach today’s players well, he must never stop being one.',
@@ -116,7 +134,9 @@
     {
       slug: 'jaren-ong', name: 'Jaren Ong', photo: 'assets/img/coaches/jaren-ong.jpg',
       role: 'Development Coach', cert: 'BWF Level 1', group: 'team',
+      certifications: [{ name: 'BWF Level 1', href: 'https://development.bwfbadminton.com/coaches/level-1' }],
       coaching: ['Essentials', 'Emergence'], languages: ['English', 'Mandarin'],
+      shortBio: 'Jaren is a Development Coach at Élever Badminton, bringing five years of coaching experience across more than a dozen of schools, academies and clubs in Singapore - a coaching journey that never stops evolving since he began at just 16.',
       bio: [
         'Jaren is a Development Coach at Élever Badminton, bringing five years of coaching experience across more than a dozen of schools, academies and clubs in Singapore - a coaching journey that never stops evolving since he began at just 16.',
         'Since then, he has prepared school teams for the National School Games and trained national deaf players with the Singapore Deaf Sports Association in preparation for the 2022 ASEAN Games. A four-year National School Games competitor himself, Jaren understands exactly what his students experience on court - because he has lived it.',
@@ -128,7 +148,9 @@
     {
       slug: 'uzair', name: 'Uzair', photo: 'assets/img/coaches/uzair.jpg',
       role: 'Development Coach', cert: 'BWF Level 1', group: 'team',
+      certifications: [{ name: 'BWF Level 1', href: 'https://development.bwfbadminton.com/coaches/level-1' }],
       coaching: ['Exploration', 'Essentials'], languages: ['English', 'Malay'],
+      shortBio: 'Uzair is a Development Coach at Élever Badminton, bringing over 20 years of coaching experience as a BWF Level 1 Certified Coach.',
       bio: [
         'Uzair is a Development Coach at Élever Badminton, bringing over 20 years of coaching experience as a BWF Level 1 Certified Coach.',
         'A competitive player for more than 15 years, Uzair is a champion and podium finisher in multiple local tournaments, and has competed internationally at the Morning Cup in Taiwan, in Newcastle, Australia and across Malaysia. Over the past two decades, he has worked extensively with adult recreational and competitive players - giving him a deep understanding of how grown-up learners improve fast.',
@@ -140,7 +162,9 @@
     {
       slug: 'elsa-lai', name: 'Elsa Lai', photo: 'assets/img/coaches/elsa-lai.jpg',
       role: 'Development Coach', cert: '', group: 'team',
+      certifications: [],
       coaching: ['Exploration'], languages: ['English', 'Mandarin'],
+      shortBio: 'Elsa is a Development Coach at Élever Badminton, bringing a decade of elite competitive experience as a former Singapore National player.',
       bio: [
         'Elsa is a Development Coach at Élever Badminton, bringing a decade of elite competitive experience as a former Singapore National player.',
         'Over a 10-year playing career, Elsa competed on some of badminton’s biggest stages - representing Singapore at the SEA Games 2023 and the Uber Cup 2024, and taking on the world’s best young talents at the World Junior Championship in 2022 and 2023. Having progressed from the junior circuit to the senior international stage, she understands firsthand every step of the journey her young students are just beginning.',
@@ -152,7 +176,9 @@
     {
       slug: 'thong-kin-yu', name: 'Thong Kin Yu', photo: 'assets/img/coaches/thong-kin-yu.jpg',
       role: 'Development Coach', cert: '', group: 'team',
+      certifications: [],
       coaching: ['Exploration', 'Essentials'], languages: ['English', 'Mandarin'],
+      shortBio: 'Kin Yu is a Development Coach at Élever Badminton and a competitive player with the SMU badminton team, bringing seven years of playing experience.',
       bio: [
         'Kin Yu is a Development Coach at Élever Badminton and a competitive player with the SMU badminton team, bringing seven years of playing experience.',
         'Kin Yu’s badminton journey began at six years old - running around the court, dragging his racket along the concrete floor, simply because it was fun. That joy never left. He began formal training in Secondary 1, finished second at the Tampines Meridian Age Group Tournament 2018 (U17), and today represents Singapore Management University’s competitive badminton team.',
@@ -164,6 +190,7 @@
     {
       slug: 'robin-chio', name: 'Robin Chio', photo: 'assets/img/coaches/robin-chio.jpg',
       role: 'Development Coach', cert: '', group: 'team',
+      certifications: [],
       coaching: ['Exploration', 'Essentials'], languages: ['English'],
       bio: ['To be added'],
       placeholder: true,
@@ -172,7 +199,9 @@
     {
       slug: 'ryan-lim', name: 'Ryan Lim', photo: 'assets/img/coaches/ryan-lim.jpg',
       role: 'Assistant Coach', cert: '', group: 'team',
+      certifications: [],
       coaching: ['Exploration'], languages: ['English'],
+      shortBio: 'Ryan is an Assistant Coach at Élever Badminton, guided by a simple belief: no two students learn the same way.',
       bio: [
         'Ryan is an Assistant Coach at Élever Badminton, guided by a simple belief: no two students learn the same way.',
         'Having picked up badminton at 13 and spent four years competing, Ryan knows what it’s like to learn the sport from scratch - and he brings that understanding into every class. Coaching under the guidance of Élever Badminton’s senior coaching team, he adapts his approach to suit each student, making sure every player builds solid foundations before moving on to more advanced skills.',
@@ -184,7 +213,9 @@
     {
       slug: 'jaden-chiang', name: 'Jaden Chiang', photo: 'assets/img/coaches/jaden-chiang.jpg',
       role: 'Assistant Coach', cert: '', group: 'team',
+      certifications: [],
       coaching: ['Exploration'], languages: ['English', 'Mandarin'],
+      shortBio: 'Jaden is an Assistant Coach at Élever Badminton, bringing over seven years of playing experience and an active competitor still climbing the ranks of Singapore’s tertiary badminton scene.',
       bio: [
         'Jaden is an Assistant Coach at Élever Badminton, bringing over seven years of playing experience and an active competitor still climbing the ranks of Singapore’s tertiary badminton scene.',
         'Jaden picked up his first racket at 13 - later than most competitive players - yet within four years of training, he earned his place representing ITE at the IVP Games 2025 and Singapore Polytechnic at the POL-ITE Games 2026. His journey from late starter to tertiary-level competitor is proof of what discipline, resilience, and the right attitude can achieve - the very values he now instils in his students.',
@@ -620,10 +651,38 @@
   var PARTNERS = [
     { name: 'ASICS', logo: 'assets/img/partners/asics.png' },
     { name: 'People\u2019s Association', logo: 'assets/img/partners/peoples-association.png' },
-    { name: 'Wabi Studios', logo: 'assets/img/partners/wabi-studios.png' },
-    { name: 'Truly Nuts', logo: 'assets/img/partners/truly-nuts.png' },
-    { name: 'Timber Actually', logo: 'assets/img/partners/timber-actually.png' },
-    { name: 'JK Technology', logo: 'assets/img/partners/jk-technology.png' }
+    { name: 'Singapore Badminton Association', logo: 'assets/img/partners/sba.png' },
+    { name: 'SingHealth Community Hospitals', logo: 'assets/img/partners/singhealth-community-hospitals.png' }
+  ];
+
+  /* Curated third-party coverage for the Singapore Shuttlers Hub. Dates and
+     topics are stored explicitly so the hub can filter and sort the links
+     without inferring facts from the headline. */
+  var EXTERNAL_NEWS = [
+    {
+      title: 'Loh Kean Yew crashes out of BWF World Championships after another loss to Victor Lai',
+      publisher: 'Red Hot Singapore', date: '2026-08-20',
+      url: 'https://www.redhot.sg/loh-kean-yew-crashes-out-of-bwf-world-championships-after-another-loss-to-victor-lai-708088.html',
+      topic: 'Loh Kean Yew'
+    },
+    {
+      title: "Loh Kean Yew misses opportunity to win S'pore Badminton Open men's singles final",
+      publisher: 'Mothership', date: '2026-05-31',
+      url: 'https://mothership.sg/2026/05/loh-kean-yew-singapore-badminton-open/',
+      topic: 'Loh Kean Yew'
+    },
+    {
+      title: 'Loh Kean Yew mara ke separuh akhir Kejohanan Badminton Terbuka SG',
+      publisher: 'BERITA Mediacorp', date: '2026-05-29',
+      url: 'https://berita.mediacorp.sg/sukan/loh-kean-yew-mara-ke-separuh-akhir-kejohanan-badminton-terbuka-sg-1034706',
+      topic: 'Loh Kean Yew · Yeo Jia Min · Jason Teh'
+    },
+    {
+      title: 'Tur BWF 2026: Gloria Emanuelle Widjaja Punya Tandem Baru dari Singapura',
+      publisher: 'detikSport', date: '2026-01-13',
+      url: 'https://sport.detik.com/raket/d-8304923/tur-bwf-2026-gloria-emanuelle-widjaja-punya-tandem-baru-dari-singapura',
+      topic: 'Terry Hee'
+    }
   ];
 
   /* ---------------------------------------------------------------
@@ -857,6 +916,7 @@
     eventGroupLabel: EVENT_GROUP_LABEL,
     partners: PARTNERS,
     articles: ARTICLES,
+    externalNews: EXTERNAL_NEWS,
     racketRatings: RACKET_RATINGS,
     playGroups: PLAY_GROUPS,
     shops: SHOPS,

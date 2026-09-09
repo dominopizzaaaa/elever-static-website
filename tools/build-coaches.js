@@ -13,7 +13,7 @@ global.window = {};
 require(path.join(root, 'assets/js/data.js'));
 const COACHES = global.window.ELEVER_DATA.coaches;
 
-const V = '56'; // must match the ?v= cache-busting string used across the site
+const V = '58'; // must match the ?v= cache-busting string used across the site
 
 const esc = s => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -29,6 +29,9 @@ function page(c) {
   const sample = c.placeholder
     ? ' <span class="sample" title="Sample content — replace in assets/js/data.js">sample bio</span>' : '';
   const achievements = Array.isArray(c.achievements) ? c.achievements : [];
+  const certifications = Array.isArray(c.certifications)
+    ? c.certifications.filter(certification => certification && certification.name && certification.href)
+    : [];
   const bioHtml = bioParagraphs
     .filter(Boolean)
     .map(p => `<p class="profile__bio">${esc(p)}</p>`)
@@ -39,6 +42,15 @@ function page(c) {
             ${achievements.map(a => `<li>${esc(a)}</li>`).join('\n            ')}
           </ul>`
     : '';
+  const certificationHtml = certifications.length
+    ? `<div class="profile__certifications">
+          <p class="profile__label">Certifications</p>
+          <div class="profile__certs">
+            ${certifications.map(certification => `<a class="profile__cert" href="${esc(certification.href)}" target="_blank" rel="noopener">${esc(certification.name)}</a>`).join('\n            ')}
+          </div>
+        </div>`
+    : '';
+  const certificationBlock = certificationHtml ? '\n        ' + certificationHtml : '';
 
   const jsonld = JSON.stringify({
     '@context': 'https://schema.org', '@type': 'Person',
@@ -63,7 +75,8 @@ function page(c) {
   <meta name="twitter:title" content="${esc(title)}" />
   <meta name="twitter:description" content="${esc(desc)}" />
   <meta name="twitter:image" content="${esc(image)}" />
-  <link rel="icon" type="image/png" href="../assets/img/brand/eb-icon-black.png" />
+  <link rel="icon" type="image/png" href="../assets/img/brand/eb-icon-black.png?v=${V}" />
+  <link rel="icon" href="../favicon.ico?v=${V}" sizes="any" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -77,42 +90,25 @@ function page(c) {
   <header id="siteHeader"></header>
 
   <main id="main">
-    <section class="phead">
+    <section class="phead phead--coach">
       <div class="phead__inner">
-        <p class="phead__crumbs"><a href="../index.html">Home</a> · <a href="../about.html">About</a> · Coaches</p>
         <h1>${esc(c.name)}</h1>
-        <p class="phead__lead">${esc(c.role)}${c.cert ? ' · ' + esc(c.cert) : ''}</p>
+        <p class="phead__lead">${esc(c.role)}</p>
       </div>
     </section>
 
     <section class="psec">
-      <div class="profile">
-        <div>
-          <figure class="profile__photo">
-            <img src="../${esc(c.photo)}" alt="${esc(c.name)}, ${esc(c.role)} at Élever Badminton" width="640" height="640" loading="lazy" decoding="async" />
-          </figure>
-          <ul class="profile__meta">
-            <li><span>Role</span><b>${esc(c.role)}</b></li>
-            ${c.cert ? `<li><span>Certification</span><b>${esc(c.cert)}</b></li>` : ''}
-            <li><span>Coaches</span><b>${esc(c.coaching.join(', '))}</b></li>
-            <li><span>Languages</span><b>${esc(c.languages.join(', '))}</b></li>
-          </ul>
-        </div>
-        <div>
-          <h2 style="font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.9rem">About ${esc(c.name.split(' ')[0])}${sample}</h2>
+      <div class="profile profile--single">
+        <figure class="profile__photo">
+          <img src="../${esc(c.photo)}" alt="${esc(c.name)}, ${esc(c.role)} at Élever Badminton" width="640" height="640" loading="lazy" decoding="async" />
+        </figure>${certificationBlock}
+        <div class="profile__content">
+          <h2 style="font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.9rem">About ${esc(c.name)}${sample}</h2>
           ${bioHtml}
           ${achievementHtml}
 
-          <h2 style="font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:2.4rem 0 1rem">On court</h2>
-          <div class="gallery">
-            <div class="gallery__ph">Add action photos for ${esc(c.name)}<br>to <code>assets/img/coaches/${esc(c.slug)}/</code></div>
-            <div class="gallery__ph">Photo 2</div>
-            <div class="gallery__ph">Photo 3</div>
-          </div>
-
-          <div style="margin-top:2.4rem;display:flex;gap:.8rem;flex-wrap:wrap">
-            <a class="btn btn--primary" href="../classes.html#locations">See classes</a>
-            <a class="btn btn--ghost" href="../about.html">All coaches</a>
+          <div class="profile__actions">
+            <a class="btn btn--ghost" href="../about.html#coaches">View all coaches</a>
           </div>
         </div>
       </div>

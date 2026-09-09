@@ -1,0 +1,418 @@
+#!/usr/bin/env node
+'use strict';
+
+const assert = require('assert/strict');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+
+function loadPlaywright() {
+  if (process.env.ELEVER_PLAYWRIGHT) return require(process.env.ELEVER_PLAYWRIGHT);
+  try { return require('playwright'); } catch (_) {
+    const codexRuntime = path.join(os.homedir(),
+      '.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+    if (fs.existsSync(codexRuntime)) return require(codexRuntime);
+  }
+  throw new Error('Playwright was not found. Install it locally or set ELEVER_PLAYWRIGHT to its module directory.');
+}
+
+const { chromium } = loadPlaywright();
+
+const base = process.env.ELEVER_BASE_URL || 'http://localhost:8080';
+const macChrome = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const executablePath = process.env.ELEVER_CHROME || (fs.existsSync(macChrome) ? macChrome : null);
+const outDir = process.env.ELEVER_SCREENSHOT_DIR || '/tmp/elever-release-review';
+const repoRoot = path.resolve(__dirname, '..');
+const consoleErrors = [];
+const pageErrors = [];
+const failedResponses = [];
+
+function attachDiagnostics(page, label) {
+  page.on('console', message => {
+    if (message.type() === 'error') consoleErrors.push(label + ': ' + message.text());
+  });
+  page.on('pageerror', error => pageErrors.push(label + ': ' + error.message));
+  page.on('response', response => {
+    if (response.url().startsWith(base) && response.status() >= 400) {
+      failedResponses.push(label + ': ' + response.status() + ' ' + response.url());
+    }
+  });
+}
+
+async function checkNoOverflow(page, label) {
+  const dims = await page.evaluate(() => ({
+    scroll: document.documentElement.scrollWidth,
+    client: document.documentElement.clientWidth
+  }));
+  assert.ok(dims.scroll <= dims.client + 1,
+    label + ' overflows horizontally (' + dims.scroll + ' > ' + dims.client + ')');
+}
+
+async function open(page, route, label) {
+  const response = await page.goto(base + route, { waitUntil: 'networkidle' });
+  assert.ok(response && response.ok(), label + ' did not load');
+  await checkNoOverflow(page, label);
+}
+
+async function runViewport(browser, viewport, name) {
+  const context = await browser.newContext({ viewport });
+  const page = await context.newPage();
+  attachDiagnostics(page, name);
+
+  await open(page, '/', name + ' Home');
+  assert.equal(await page.locator('.hero__slides, .hero__slide, .hero__tint, .hero__overlay').count(), 0,
+    name + ' Home must retain the approved static cover, not the retired slideshow');
+  assert.deepEqual(await page.locator('.hero__link').allTextContents(), ['CLASSES', 'EVENTS']);
+  const actionBoxes = await page.locator('.hero__link').evaluateAll(nodes =>
+    nodes.map(node => ({ x: node.getBoundingClientRect().x, y: node.getBoundingClientRect().y,
+      width: node.getBoundingClientRect().width, height: node.getBoundingClientRect().height })));
+  assert.equal(actionBoxes.length, 2);
+  assert.ok(Math.abs(actionBoxes[0].width - actionBoxes[1].width) < 1, name + ' Home CTA widths differ');
+  assert.ok(Math.abs(actionBoxes[0].y - actionBoxes[1].y) < 1, name + ' Home CTAs are not side by side');
+  assert.ok(actionBoxes.every(box => box.height >= 44), name + ' Home CTA is below 44px');
+  const promiseBoxes = await page.locator('.hero__promise span').evaluateAll(nodes =>
+    nodes.map(node => ({ y: node.getBoundingClientRect().y })));
+  if (viewport.width <= 560) {
+    assert.ok(promiseBoxes[0].y < promiseBoxes[1].y && promiseBoxes[1].y < promiseBoxes[2].y,
+      name + ' promise is not three rows');
+  } else {
+    assert.ok(Math.max(...promiseBoxes.map(box => box.y)) - Math.min(...promiseBoxes.map(box => box.y)) < 2,
+      name + ' promise is not one row');
+  }
+  await page.screenshot({ path: path.join(outDir, name + '-home.png'), fullPage: true });
+
+  await open(page, '/classes.html', name + ' Classes');
+  const privateLink = page.locator('a.btn--primary', { hasText: 'Enquire more' });
+  assert.equal(await privateLink.count(), 1);
+  assert.equal(new URL(await privateLink.getAttribute('href')).searchParams.get('text'),
+    'Hi, I am interested in the private classes and would like to enquire more. Please let me know how I can arrange the sessions. Thank you!');
+  const firstArea = (await page.locator('.vcard h3').first().textContent()).trim();
+  assert.equal(new URL(await page.locator('.vcard__book').first().getAttribute('href')).searchParams.get('text'),
+    'Hi, I am interested in the group classes at ' + firstArea + ' and would like to enquire more. Please let me know if there’s availability. Thank you!');
+  const groupMessages = await page.locator('.vcard').evaluateAll(cards => cards.map(card => ({
+    location: card.querySelector('h3').textContent.trim(),
+    message: new URL(card.querySelector('.vcard__book').href).searchParams.get('text')
+  })));
+  groupMessages.forEach(item => assert.equal(item.message,
+    'Hi, I am interested in the group classes at ' + item.location +
+    ' and would like to enquire more. Please let me know if there’s availability. Thank you!'));
+  const rowBox = await page.locator('.vcard__sessions li').first().boundingBox();
+  const chipBox = await page.locator('.vcard__sessions li').first().locator('.vcard__lvl').boundingBox();
+  assert.ok(rowBox && chipBox && chipBox.x + chipBox.width > rowBox.x + rowBox.width - 8,
+    name + ' class type is not right aligned');
+
+  await open(page, '/events.html', name + ' Events');
+  const workLink = page.getByRole('link', { name: 'Work with us' }).first();
+  assert.equal(new URL(await workLink.getAttribute('href')).searchParams.get('text'),
+    'Hi, I am interested in working with Élever Badminton to organise an event. Could you share more about the options available and how we can get started? Thank you!');
+  assert.deepEqual(await page.locator('#eventPartners img').evaluateAll(nodes =>
+    nodes.slice(0, 4).map(node => node.alt)),
+    ['ASICS', 'People’s Association', 'Singapore Badminton Association', 'SingHealth Community Hospitals']);
+  assert.equal(await page.locator('.ecov').first().evaluate(node => getComputedStyle(node).borderRadius), '8px');
+  const eventTrigger = page.locator('.ecov__open').first();
+  await eventTrigger.click();
+  await page.locator('.edetail:not([hidden])').waitFor();
+  await page.screenshot({ path: path.join(outDir, name + '-events-modal.png'), fullPage: false });
+  const galleryItem = page.locator('.edetail:not([hidden]) .edetail__tile').first();
+  if (await galleryItem.count()) {
+    await galleryItem.click();
+    const lightbox = page.locator('.lightbox:not([hidden])');
+    await lightbox.waitFor();
+    assert.equal(await page.locator('.edetail:not([hidden])').getAttribute('aria-hidden'), 'true',
+      name + ' event popup remains exposed to assistive technology beneath the lightbox');
+    assert.ok(await page.locator('.edetail:not([hidden])').evaluate(node => node.hasAttribute('inert')),
+      name + ' event popup is not inert beneath the lightbox');
+    await page.waitForFunction(() => {
+      const image = document.querySelector('.lightbox:not([hidden]) .lightbox__img');
+      return image && image.complete && image.naturalWidth > 0 &&
+        image.getBoundingClientRect().width > 0 && image.getBoundingClientRect().height > 0;
+    });
+    await page.screenshot({ path: path.join(outDir, name + '-events-lightbox.png'), fullPage: false });
+    const lightboxStage = await lightbox.locator('.lightbox__stage').boundingBox();
+    const lightboxImage = await lightbox.locator('.lightbox__img').boundingBox();
+    assert.ok(lightboxStage && lightboxStage.x >= 0 &&
+      lightboxStage.x + lightboxStage.width <= viewport.width + 1,
+      name + ' lightbox stage overflows the viewport');
+    assert.ok(lightboxImage && lightboxImage.width > 0 && lightboxImage.height > 0,
+      name + ' lightbox image did not render');
+    const closeBox = await lightbox.locator('.lightbox__close').boundingBox();
+    assert.ok(closeBox && closeBox.x >= 0 && closeBox.y >= 0 &&
+      closeBox.x + closeBox.width <= viewport.width && closeBox.y + closeBox.height <= viewport.height,
+      name + ' lightbox close is offscreen');
+    await lightbox.locator('.lightbox__close').click();
+    assert.equal(await page.locator('.edetail:not([hidden])').count(), 1,
+      name + ' event popup did not remain after closing photo');
+    assert.equal(await page.locator('.edetail:not([hidden])').getAttribute('aria-hidden'), null,
+      name + ' event popup remained hidden from assistive technology after closing photo');
+    assert.equal(await page.locator('.edetail:not([hidden])').evaluate(node => node.hasAttribute('inert')), false,
+      name + ' event popup remained inert after closing photo');
+  }
+  await page.keyboard.press('Escape');
+  await page.locator('.ecov__open', { hasText: 'Joo Chiat Badminton Carnival 2026' }).click();
+  const sponsorDialog = page.locator('.edetail:not([hidden])');
+  await sponsorDialog.waitFor();
+  await sponsorDialog.locator('img[alt="Cuckoo"], img[alt="noomoo"]').evaluateAll(images =>
+    Promise.all(images.map(image => image.decode ? image.decode() : Promise.resolve())));
+  const logoSizes = await sponsorDialog.locator('.edetail__partner img').evaluateAll(nodes =>
+    nodes.map(node => {
+      const box = node.parentElement.getBoundingClientRect();
+      const image = node.getBoundingClientRect();
+      return { alt: node.alt.toLowerCase(), width: box.width, height: box.height,
+        objectFit: getComputedStyle(node).objectFit,
+        contained: image.left >= box.left - 1 && image.top >= box.top - 1 &&
+          image.right <= box.right + 1 && image.bottom <= box.bottom + 1 };
+    }));
+  const cuckoo = logoSizes.find(item => item.alt === 'cuckoo');
+  const noomoo = logoSizes.find(item => item.alt === 'noomoo');
+  assert.ok(cuckoo && noomoo, name + ' Cuckoo/Noomoo sponsor logos are missing');
+  assert.ok(Math.abs(cuckoo.width - noomoo.width) < 1 && Math.abs(cuckoo.height - noomoo.height) < 1,
+    name + ' Cuckoo/Noomoo logo containers are inconsistent');
+  assert.equal(cuckoo.objectFit, 'contain');
+  assert.equal(noomoo.objectFit, 'contain');
+  assert.ok(logoSizes.every(item => item.contained), name + ' event logo escaped its bounding box');
+  await page.screenshot({ path: path.join(outDir, name + '-events-sponsors.png'), fullPage: false });
+  await page.keyboard.press('Escape');
+  assert.ok(await page.locator('.ecov__open', { hasText: 'Joo Chiat Badminton Carnival 2026' })
+    .evaluate(node => node === document.activeElement), name + ' event focus did not return');
+
+  await open(page, '/news.html', name + ' News');
+  const filterBoxes = await page.locator('#articleFilters .sched__filter').evaluateAll(nodes =>
+    nodes.map(node => ({ x: node.getBoundingClientRect().x, y: node.getBoundingClientRect().y,
+      width: node.getBoundingClientRect().width })));
+  assert.ok(filterBoxes.length > 1);
+  assert.ok(filterBoxes[1].x - (filterBoxes[0].x + filterBoxes[0].width) >= 7 || filterBoxes[1].y > filterBoxes[0].y,
+    name + ' News filters have no gap');
+  const secondFilter = page.locator('#articleFilters .sched__filter').nth(1);
+  await secondFilter.click();
+  assert.ok(await secondFilter.evaluate(node => node.classList.contains('is-active')),
+    name + ' News filter did not become active');
+  await page.keyboard.press('Tab');
+  const keyboardFilter = page.locator('#articleFilters .sched__filter').nth(2);
+  assert.ok(await keyboardFilter.evaluate(node => node === document.activeElement && node.matches(':focus-visible')),
+    name + ' News filters are not keyboard focusable');
+  assert.notEqual(await keyboardFilter.evaluate(node => getComputedStyle(node).outlineStyle), 'none',
+    name + ' News filter has no focus indicator');
+
+  await open(page, '/about.html', name + ' About');
+  assert.ok(await page.locator('.coach__more', { hasText: 'View more' }).count() >= 1);
+  const coachTrigger = page.locator('[data-coach="loh-kean-hean"]');
+  await coachTrigger.click();
+  const coachDialog = page.locator('.edetail--coach:not([hidden])');
+  await coachDialog.waitFor();
+  await page.screenshot({ path: path.join(outDir, name + '-coach-modal.png'), fullPage: false });
+  assert.equal(await coachDialog.getByText('BWF Level 1', { exact: true }).count(), 1);
+  assert.equal(await coachDialog.getByText('Languages', { exact: true }).count(), 0);
+  assert.equal(await coachDialog.getByText('Coaches', { exact: true }).count(), 0);
+  assert.equal(await coachDialog.getByRole('link', { name: 'See classes' }).count(), 0);
+  assert.equal(await coachDialog.getByRole('link', { name: 'View full profile' }).count(), 1);
+  await page.keyboard.press('Escape');
+  assert.ok(await coachTrigger.evaluate(node => node === document.activeElement), name + ' coach focus did not return');
+
+  await open(page, '/coaches/ong-keng-yang.html', name + ' Coach profile');
+  assert.equal(await page.getByText('HOME · ABOUT · COACHES', { exact: true }).count(), 0);
+  assert.equal(await page.getByRole('link', { name: 'See classes' }).count(), 0);
+  assert.equal(await page.getByRole('link', { name: 'View all coaches' }).count(), 1);
+  assert.equal(await page.getByRole('link', { name: 'ASCA Level 1' }).count(), 1);
+  assert.equal(await page.getByRole('link', { name: 'Level 1 Sports Trainer' }).count(), 1);
+  assert.equal(await page.locator('.profile__bio').first().evaluate(node => getComputedStyle(node).textAlign), 'justify');
+  const coachHeading = await page.locator('.phead--coach h1').boundingBox();
+  assert.ok(coachHeading && Math.abs((coachHeading.x + coachHeading.width / 2) - viewport.width / 2) < 2,
+    name + ' coach heading is not centred');
+  await page.screenshot({ path: path.join(outDir, name + '-coach-profile.png'), fullPage: true });
+
+  await open(page, '/hub.html', name + ' Hub');
+  assert.equal(await page.locator('#hubTabs .hub__tab').count(), 2);
+  assert.equal((await page.locator('.hub-hero__by').textContent()).trim(), 'BY ÉLEVER BADMINTON');
+  const hubType = await page.evaluate(() => {
+    const byline = document.querySelector('.hub-hero__by');
+    const description = document.querySelector('.phead--hub .phead__lead');
+    return {
+      bylineSize: parseFloat(getComputedStyle(byline).fontSize),
+      bylineColor: getComputedStyle(byline).color,
+      descriptionSize: parseFloat(getComputedStyle(description).fontSize),
+      description: description.textContent
+    };
+  });
+  assert.ok(hubType.bylineSize > hubType.descriptionSize, name + ' Hub byline is not larger than its description');
+  assert.equal(hubType.bylineColor, 'rgb(143, 171, 245)');
+  assert.ok(hubType.description.includes('Singapore Shuttlers Hub'));
+  assert.equal(await page.locator('#newsTimeline .ncard').count(), 1);
+  assert.ok((await page.locator('#newsTimeline').textContent()).includes('YONEX SUNRISE Vietnam Open 2026'));
+  assert.ok((await page.locator('#newsTimeline').textContent()).includes('Jason Teh Jia Heng'));
+  assert.ok((await page.locator('#newsTimeline a', { hasText: 'Official event page' }).getAttribute('href'))
+    .includes('/tournament/5220/'));
+  assert.ok((await page.locator('#newsTimeline a', { hasText: 'Full BWF calendar' }).getAttribute('href'))
+    .includes('/calendar/2026/'));
+  assert.ok(await page.locator('#externalNewsGrid .article--external').count() >= 4);
+  assert.equal(await page.getByText('Singapore Junior International Series 2026', { exact: true }).count(), 0);
+  await page.locator('#tab-local').click();
+  assert.equal(await page.locator('#panel-local[hidden]').count(), 0);
+  assert.ok(await page.getByRole('link', { name: /Singapore court directory/ }).count());
+  const localOrder = await page.locator('#halls, #groups, #shops, #tournaments').evaluateAll(nodes =>
+    nodes.map(node => ({ id: node.id, y: node.getBoundingClientRect().y })));
+  assert.deepEqual(localOrder.map(item => item.id), ['halls', 'groups', 'shops', 'tournaments']);
+  assert.ok(localOrder.every((item, index) => !index || item.y > localOrder[index - 1].y),
+    name + ' Local Hub sections are out of order');
+  await page.screenshot({ path: path.join(outDir, name + '-hub-local.png'), fullPage: true });
+
+  await open(page, '/courts.html', name + ' Courts');
+  assert.equal(await page.getByText('Cereza Sports Hall', { exact: true }).count(), 0);
+  assert.equal(await page.getByText('Kovan Sports Centre', { exact: true }).count(), 0);
+  assert.ok(await page.getByText('Bishan Clubhouse', { exact: true }).count());
+  assert.ok(await page.locator('.hcard__addr').first().evaluate(node =>
+    getComputedStyle(node).textDecorationLine.includes('underline')));
+  assert.equal(await page.locator('#hallGrid .hcard').count(), 34);
+  const courtTypes = await page.locator('#hallGrid .hcard__tag').evaluateAll(tags => tags.reduce((counts, tag) => {
+    const className = Array.from(tag.classList).find(name => name.indexOf('hcard__tag--') === 0);
+    const type = className.replace('hcard__tag--', '');
+    counts[type] = (counts[type] || 0) + 1;
+    return counts;
+  }, {}));
+  assert.deepEqual(courtTypes, { private: 10, activesg: 19, elever: 2, cc: 1, dus: 2 });
+  const activeSgRoutes = await page.locator('#hallGrid .hcard').evaluateAll(cards => cards
+    .filter(card => card.querySelector('.hcard__tag--activesg, .hcard__tag--dus'))
+    .map(card => Array.from(card.querySelectorAll('a')).map(link => link.href)));
+  assert.ok(activeSgRoutes.every(routes => routes.some(url => url.includes('activesg.gov.sg/venues/'))),
+    name + ' an ActiveSG venue lacks its direct official booking route');
+  const courtActions = await page.locator('#hallGrid .hcard__actions a').allTextContents();
+  ['Book on ActiveSG', 'Book on Rezerv', 'Book on Playtomic', 'Public courts on OnePA']
+    .forEach(label => assert.ok(courtActions.includes(label), name + ' court action is missing: ' + label));
+  await page.locator('#hallSearch').fill('Bishan');
+  assert.equal(await page.locator('#hallGrid .hcard').count(), 2);
+  await page.locator('#hallSearch').fill('');
+
+  for (const route of ['/contact.html', '/camps.html', '/lab.html', '/privacy.html']) {
+    await open(page, route, name + ' ' + route);
+  }
+  await context.close();
+}
+
+async function checkEventLandscape(browser) {
+  const viewport = { width: 844, height: 390 };
+  const context = await browser.newContext({ viewport });
+  const page = await context.newPage();
+  attachDiagnostics(page, 'phone-landscape');
+  await open(page, '/events.html', 'phone-landscape Events');
+  await page.locator('.ecov__open').first().click();
+  await page.locator('.edetail:not([hidden]) .edetail__tile').first().click();
+  const lightbox = page.locator('.lightbox:not([hidden])');
+  await page.waitForFunction(() => {
+    const image = document.querySelector('.lightbox:not([hidden]) .lightbox__img');
+    return image && image.complete && image.naturalWidth > 0 &&
+      image.getBoundingClientRect().width > 0 && image.getBoundingClientRect().height > 0;
+  });
+  const closeBox = await lightbox.locator('.lightbox__close').boundingBox();
+  const imageBox = await lightbox.locator('.lightbox__img').boundingBox();
+  assert.ok(closeBox && closeBox.x >= 0 && closeBox.y >= 0 &&
+    closeBox.x + closeBox.width <= viewport.width && closeBox.y + closeBox.height <= viewport.height,
+    'phone-landscape lightbox close is offscreen');
+  assert.ok(imageBox && imageBox.width > 0 && imageBox.height > 0,
+    'phone-landscape lightbox image did not render');
+  await page.screenshot({ path: path.join(outDir, 'phone-landscape-events-lightbox.png'), fullPage: false });
+  await lightbox.locator('.lightbox__close').click();
+  assert.equal(await page.locator('.edetail:not([hidden])').count(), 1,
+    'phone-landscape event popup did not remain after closing photo');
+  await context.close();
+}
+
+function allHtmlRoutes() {
+  const roots = fs.readdirSync(repoRoot)
+    .filter(name => name.endsWith('.html'));
+  const nested = ['coaches', 'news'].flatMap(directory =>
+    fs.readdirSync(path.join(repoRoot, directory))
+      .filter(name => name.endsWith('.html'))
+      .map(name => directory + '/' + name));
+  return roots.concat(nested).sort().map(file => '/' + file);
+}
+
+async function crawlAllPages(browser) {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const page = await context.newPage();
+  attachDiagnostics(page, 'full-crawl');
+  const checked = new Set();
+
+  for (const route of allHtmlRoutes()) {
+    await open(page, route, 'full-crawl ' + route);
+    const icons = await page.locator('link[rel~="icon"]').count();
+    assert.ok(icons >= 2, route + ' does not expose both PNG and ICO favicons');
+    const iconHrefs = await page.locator('link[rel~="icon"]').evaluateAll(nodes => nodes.map(node => node.href));
+    assert.ok(iconHrefs.some(href => href.includes('eb-icon-black.png?v=58')),
+      route + ' is missing the versioned PNG favicon');
+    assert.ok(iconHrefs.some(href => href.includes('favicon.ico?v=58')),
+      route + ' is missing the versioned ICO fallback');
+
+    if (route.startsWith('/coaches/')) {
+      assert.equal(await page.locator('.phead__crumbs').count(), 0, route + ' still has breadcrumbs');
+      assert.equal(await page.locator('.profile__meta').count(), 0, route + ' still has pathway/language metadata');
+      assert.equal(await page.getByRole('link', { name: 'See classes' }).count(), 0, route + ' still has See classes');
+      assert.equal(await page.getByRole('link', { name: 'View all coaches' }).count(), 1,
+        route + ' is missing View all coaches');
+      assert.equal(await page.locator('.profile--single').count(), 1, route + ' is not a centred single-column profile');
+      assert.equal(await page.locator('.profile__bio').first().evaluate(node => getComputedStyle(node).textAlign),
+        'justify', route + ' biography is not justified');
+      const certificationLinks = await page.locator('.profile__cert').evaluateAll(nodes =>
+        nodes.map(node => ({ name: node.textContent.trim(), href: node.href })));
+      certificationLinks.forEach(link => {
+        const expected = {
+          'BWF Level 1': 'https://development.bwfbadminton.com/coaches/level-1',
+          'ASCA Level 1': 'https://www.strengthandconditioning.org/courses-accreditation/level-01',
+          'Level 1 Sports Trainer': 'https://sma.org.au/safer-sport-courses/level-1-sports-trainer/'
+        }[link.name];
+        assert.equal(link.href, expected, route + ' has an incorrect certification link for ' + link.name);
+      });
+    }
+
+    const cappedRules = await page.locator('.psec--alt').evaluateAll(nodes => nodes.map(node => {
+      const before = getComputedStyle(node, '::before');
+      const after = getComputedStyle(node, '::after');
+      return { before: parseFloat(before.width), after: parseFloat(after.width), viewport: innerWidth };
+    }));
+    cappedRules.forEach(rule => {
+      assert.ok(rule.before <= 1181 && rule.after <= 1181,
+        route + ' has a section separator wider than the shared content width');
+      if (rule.viewport > 1181) assert.ok(rule.before < rule.viewport && rule.after < rule.viewport,
+        route + ' has a full-viewport section separator');
+    });
+    const references = await page.locator('a[href], img[src], script[src], link[href], source[src], form[action]')
+      .evaluateAll(nodes => nodes.map(node =>
+        node.getAttribute('href') || node.getAttribute('src') || node.getAttribute('action'))
+        .filter(Boolean));
+
+    for (const reference of references) {
+      if (/^(?:mailto:|tel:|javascript:|data:)/i.test(reference) || reference === '#') continue;
+      const target = new URL(reference, page.url());
+      if (target.origin !== new URL(base).origin) continue;
+      target.hash = '';
+      if (checked.has(target.href)) continue;
+      checked.add(target.href);
+      const response = await context.request.get(target.href, { maxRedirects: 5 });
+      assert.ok(response.status() < 400,
+        route + ' references missing local resource ' + target.pathname + ' (' + response.status() + ')');
+    }
+  }
+  await context.close();
+}
+
+(async () => {
+  fs.mkdirSync(outDir, { recursive: true });
+  const launchOptions = { headless: true };
+  if (executablePath) launchOptions.executablePath = executablePath;
+  const browser = await chromium.launch(launchOptions);
+  try {
+    await runViewport(browser, { width: 1440, height: 1000 }, 'desktop');
+    await runViewport(browser, { width: 768, height: 1024 }, 'tablet');
+    await runViewport(browser, { width: 390, height: 844 }, 'phone-390');
+    await runViewport(browser, { width: 320, height: 568 }, 'phone-320-short');
+    await checkEventLandscape(browser);
+    await crawlAllPages(browser);
+  } finally {
+    await browser.close();
+  }
+  assert.deepEqual(pageErrors, [], 'Page errors:\n' + pageErrors.join('\n'));
+  assert.deepEqual(consoleErrors, [], 'Console errors:\n' + consoleErrors.join('\n'));
+  assert.deepEqual(failedResponses, [], 'Failed local responses:\n' + failedResponses.join('\n'));
+  console.log('Browser verification passed. Screenshots: ' + outDir);
+})().catch(error => {
+  console.error(error.stack || error);
+  process.exitCode = 1;
+});

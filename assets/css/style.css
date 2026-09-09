@@ -64,6 +64,9 @@ body{
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none;text-underline-offset:.18em}
 em{font-style:normal;color:var(--accent)}
+/* Deep navy is the approved heading colour on light surfaces. Components on
+   dark/photo backgrounds keep their explicit white or gradient overrides. */
+h1,h2,h3,h4,h5,h6{color:var(--ink-soft)}
 
 /* ---------- Accessibility ---------- */
 .skip-link{position:fixed;top:-100px;left:1rem;z-index:10001;background:var(--accent);color:#fff;padding:.8rem 1.1rem;border-radius:0 0 8px 8px;font-weight:700;font-size:.9rem;transition:top .2s ease;min-height:44px;display:inline-flex;align-items:center}
@@ -166,37 +169,11 @@ em{font-style:normal;color:var(--accent)}
   background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
   background-size:clamp(56px,8vw,112px) clamp(56px,8vw,112px);
   -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 50%,#000,transparent 78%);mask-image:radial-gradient(ellipse 75% 60% at 50% 50%,#000,transparent 78%)}
-.hero::after{content:'';position:absolute;inset:auto 8% 8%;height:1px;z-index:-1;pointer-events:none;
+.hero::after{content:'';position:absolute;left:max(var(--gutter),calc((100% - var(--maxw))/2));right:max(var(--gutter),calc((100% - var(--maxw))/2));bottom:clamp(5.7rem,12vh,7.4rem);height:1px;z-index:1;pointer-events:none;
   background:linear-gradient(90deg,transparent,rgba(74,120,231,.8),transparent)}
 .hero__glow{position:absolute;z-index:-1;border-radius:50%;filter:blur(2px);pointer-events:none;mix-blend-mode:screen}
 .hero__glow--one{width:min(48vw,620px);aspect-ratio:1;right:-17%;top:-24%;background:radial-gradient(circle,rgba(33,81,209,.38),transparent 69%)}
 .hero__glow--two{width:min(52vw,700px);aspect-ratio:1;left:-26%;bottom:-36%;background:radial-gradient(circle,rgba(33,81,209,.34),transparent 69%)}
-/* ---- hero slideshow ----
-   Four photos crossfade on a 34s loop, each with the slow Ken Burns zoom the
-   client asked to keep. Each slide owns a quarter of the loop, so slide n
-   starts 34s / 4 = 8.5s after the one before it. Change the number of slides
-   in index.html and these delays have to change with it.
-
-   .hero__slides also carries the FIRST photo as a plain background: every
-   slide is transparent for the first moment of the loop, and without it the
-   hero would open on a blank frame before slide 1 fades up. */
-.hero__slides{position:absolute;inset:0;overflow:hidden;
-  background-size:cover;background-position:center 30%}
-.hero__slide{position:absolute;inset:0;background-size:cover;background-position:center 30%;
-  opacity:0;transform:scale(1.05);
-  animation:heroFade 34s var(--ease) infinite,kenburns 34s ease-in-out infinite}
-.hero__slide:nth-child(1){animation-delay:0s,0s}
-.hero__slide:nth-child(2){animation-delay:8.5s,8.5s}
-.hero__slide:nth-child(3){animation-delay:17s,17s}
-.hero__slide:nth-child(4){animation-delay:25.5s,25.5s}
-/* Visible for a quarter of the loop, with a 2s crossfade at each end. */
-@keyframes heroFade{0%{opacity:0}3%{opacity:1}25%{opacity:1}30%{opacity:0}100%{opacity:0}}
-@keyframes kenburns{0%{transform:scale(1.05)}30%{transform:scale(1.15) translateY(-1.5%)}100%{transform:scale(1.15) translateY(-1.5%)}}
-/* Brand blue wash over the photos — the tint the Development Pathway cards
-   use, dialled back so the white headline still reads first. */
-.hero__tint{position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(180deg,rgba(33,81,209,.34),rgba(12,28,78,.44))}
-.hero__overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,.28) 42%,rgba(0,0,0,.72) 100%)}
 /* Centred inside the shared content column: logo, taglines and the About
    button stack in the middle of the screen, the tiles sit below. */
 .hero__content{position:relative;z-index:2;max-width:720px;margin:0 auto;width:100%;pointer-events:none;text-align:center;display:flex;flex-direction:column;align-items:center}
@@ -219,9 +196,9 @@ em{font-style:normal;color:var(--accent)}
 .hero__title .line i:nth-child(8){transition-delay:.23s}
 .line--accent i{color:transparent;background:linear-gradient(100deg,var(--accent-light),#c3d3fb);-webkit-background-clip:text;background-clip:text}
 .hero__sub{max-width:none;white-space:nowrap;color:#fff;font-weight:700;text-transform:uppercase;letter-spacing:.03em;font-size:clamp(.8rem,1.6vw,1.15rem);margin:1.4rem auto 2rem;line-height:1.6}
-.hero__actions{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center;margin-top:clamp(2.2rem,6vh,4.5rem)}
+.hero__actions{display:flex;gap:.7rem;flex-wrap:nowrap;justify-content:center;margin-top:clamp(2.2rem,6vh,4.5rem)}
 .hero__link{pointer-events:auto;display:inline-flex;align-items:center;justify-content:center;min-height:44px;
-  padding:.6rem 1.4rem;border:1px solid rgba(255,255,255,.26);border-radius:12px;color:#fff;background:rgba(255,255,255,.055);
+  width:8.6rem;padding:.6rem 1.4rem;border:1px solid rgba(255,255,255,.26);border-radius:12px;color:#fff;background:rgba(255,255,255,.055);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font-size:.9rem;font-weight:650;transition:transform .22s var(--ease),background .22s,border-color .22s}
 .hero__link span{font-size:1.35rem;line-height:1;transition:transform .22s var(--ease)}
 .hero__link--primary{background:var(--accent);border-color:var(--accent);box-shadow:0 16px 42px -20px rgba(33,81,209,.95)}
@@ -229,6 +206,9 @@ em{font-style:normal;color:var(--accent)}
 .hero__link--primary:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
 .hero__link:hover span{transform:translateX(3px)}
 .hero__link:active{background:var(--accent-press);border-color:var(--accent-press);transform:translateY(0)}
+.hero__promise{position:absolute;z-index:2;left:var(--gutter);right:var(--gutter);bottom:clamp(2rem,5.2vh,3.3rem);
+  display:flex;justify-content:center;gap:.35em;color:rgba(255,255,255,.86);font-size:clamp(.66rem,1vw,.82rem);
+  font-weight:700;letter-spacing:.075em;line-height:1.5;text-align:center;white-space:nowrap}
 /* The five What We Do tiles live inside the hero image. They keep their own
    rounded, tinted look (see .pillar in pages.css) but sit in a shorter,
    full-width band near the foot of the hero so the photo still fills the
@@ -381,6 +361,7 @@ em{font-style:normal;color:var(--accent)}
    Pinned in px like the nav, so the site-wide content type scale leaves the
    footer where it is (client, Sep 2026). */
 .footer{padding:64px var(--gutter) 32px;background:var(--ink);color:#fff}
+.footer h4{color:var(--faint)}
 .footer__inner{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:40px}
 .footer__col{display:flex;flex-direction:column;gap:9px;align-items:flex-start}
 .footer__col h4{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
@@ -472,8 +453,11 @@ button{cursor:pointer;background:none;border:0;color:inherit}
   .footer__inner{grid-template-columns:1fr;gap:29px}
   .footer__base{flex-direction:column;gap:6px}
   .cta__actions .btn{width:100%}
-  .hero__actions{width:min(100%,280px);flex-direction:column}
-  .hero__link{width:100%}
+  .hero::after{bottom:7.2rem}
+  .hero__actions{width:auto;flex-direction:row;flex-wrap:nowrap}
+  .hero__link{width:8.6rem;padding-inline:1rem}
+  .hero__promise{bottom:1.45rem;display:block;white-space:normal;font-size:.66rem;letter-spacing:.065em;line-height:1.75}
+  .hero__promise span{display:block}
   .news__filters button{flex:1 1 130px}
 }
 @media(max-width:360px){
@@ -487,6 +471,4 @@ button{cursor:pointer;background:none;border:0;color:inherit}
   .reveal,.hero__title .line i{opacity:1;transform:none}
   .marquee__track,.hero__scroll span{animation:none!important;transform:none!important}
   /* No crossfade or zoom: hold the first slide still and hide the rest. */
-  .hero__slide{animation:none!important;transform:none!important;opacity:0}
-  .hero__slide:nth-child(1){opacity:1}
 }

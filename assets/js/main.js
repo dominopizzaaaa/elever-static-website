@@ -1,7 +1,7 @@
 /* =====================================================================
    ÉLEVER BADMINTON — Interactive layer
    - Nav behaviour, magnetic buttons, 3D tilt, scroll reveals
-   - Singapore Shuttle Hub venue directory + world-tour calendar
+   - Singapore Shuttlers Hub interactions, court directory + world-tour stop
    ===================================================================== */
 (function () {
   'use strict';
@@ -157,9 +157,8 @@
      ===================================================================== */
   (function seasonNews() {
     var mount = document.getElementById('newsTimeline');
-    if (!mount) return;
 
-    var BWF_CAL = 'https://corporate.bwfbadminton.com/events/calendar/2026/all/0/-1';
+    var BWF_CAL = 'https://corporate.bwfbadminton.com/events/calendar/2026/remaining/0/-1/';
 
     var EVENTS = [
       { date: '6–11 January', start: '2026-01-06', end: '2026-01-11', name: 'Malaysia Open', grade: 'Super 1000', host: 'Kuala Lumpur, Malaysia', href: 'https://en.wikipedia.org/wiki/2026_Malaysia_Open_(badminton)', champions: { ms: 'Kunlavut Vitidsarn', ws: 'An Se-young', md: 'Kim Won-ho / Seo Seung-jae', wd: 'Liu Shengshu / Tan Ning', xd: 'Feng Yanzhe / Huang Dongping' } },
@@ -184,7 +183,13 @@
       { date: '4–9 August', start: '2026-08-04', end: '2026-08-09', name: 'Korea Masters', grade: 'Super 300', host: 'Asan, Korea', href: 'https://en.wikipedia.org/wiki/2026_Korea_Masters', champions: { ms: 'Zhu Xuanchen', ws: 'Ashmita Chaliha', md: 'Tee Kai Wun / Yap Roy King', wd: 'Luo Yi / Wang Tingge', xd: 'Yuta Watanabe / Maya Taguchi' } },
       { date: '17–23 August', start: '2026-08-17', end: '2026-08-23', name: 'World Championships', grade: 'World Championships', host: 'New Delhi, India', href: 'https://en.wikipedia.org/wiki/2026_BWF_World_Championships', champions: { ms: 'Alex Lanier', ws: 'An Se-young', md: 'Liang Weikeng / Wang Chang', wd: 'Baek Ha-na / Lee So-hee', xd: 'Thom Gicquel / Delphine Delrue' } },
       { date: '1–6 September', start: '2026-09-01', end: '2026-09-06', name: 'China Masters', grade: 'Super 750', host: 'Shenzhen, China', href: 'https://en.wikipedia.org/wiki/2026_China_Masters' },
-      { date: '22–27 September', start: '2026-09-22', end: '2026-09-27', name: 'Vietnam Open', grade: 'Super 100', host: 'Ho Chi Minh City, Vietnam' },
+      {
+        date: '8–13 September', start: '2026-09-08', end: '2026-09-13',
+        name: 'YONEX SUNRISE Vietnam Open 2026', grade: 'Super 100',
+        host: 'Nguyen Du Stadium, Ho Chi Minh City, Vietnam',
+        href: 'https://bwfworldtour.bwfbadminton.com/tournament/5220/yonex-sunrise-vietnam-open-2026/players/',
+        note: 'The published player list currently confirms Jason Teh Jia Heng as the only Singapore entry.'
+      },
       { date: '6–11 October', start: '2026-10-06', end: '2026-10-11', name: 'Arctic Open', grade: 'Super 500', host: 'Vantaa, Finland', href: 'https://en.wikipedia.org/wiki/2026_Arctic_Open' },
       { date: '13–18 October', start: '2026-10-13', end: '2026-10-18', name: 'Denmark Open', grade: 'Super 750', host: 'Odense, Denmark' },
       { date: '20–25 October', start: '2026-10-20', end: '2026-10-25', name: 'French Open', grade: 'Super 750', host: 'Paris, France' },
@@ -372,10 +377,6 @@
       return rows ? '<ul class="ncard__champs">' + rows + '</ul>' : '';
     }
 
-    var VISIBLE = 4;
-    var expanded = false;
-    var currentFilter = 'all';
-
     function render() {
       // Recomputed every render, so the page stays right even if the tab has
       // been left open across midnight.
@@ -389,42 +390,27 @@
         return copy;
       });
 
-      var done = normalised.filter(function (e) { return e.status === 'done'; })
-        .sort(function (a, b) { return dayStamp(b.end) - dayStamp(a.end); });
       var live = normalised.filter(function (e) { return e.status === 'live'; });
       var up = normalised.filter(function (e) { return e.status === 'upcoming'; })
         .sort(function (a, b) { return dayStamp(a.start) - dayStamp(b.start); });
-
-      var list;
-      if (currentFilter === 'done') list = done;
-      else if (currentFilter === 'upcoming') list = live.concat(up);
-      else list = live.concat(done).concat(up);
-
-      var shown = expanded ? list : list.slice(0, VISIBLE);
-      var latestDoneName = done.length ? done[0].name : '';
+      // The Hub is a concise now/next briefing, not a duplicate of BWF's full
+      // calendar. A live event wins; otherwise show the nearest upcoming stop.
+      var shown = live.length ? live.slice(0, 1) : up.slice(0, 1);
 
       mount.innerHTML = shown.map(function (ev) {
         var cls = 'ncard' +
-          (ev.name === latestDoneName ? ' ncard--latest' : '') +
           (ev.status === 'upcoming' ? ' ncard--next' : '') +
           (ev.status === 'live' ? ' ncard--live' : '');
         var badge = ev.status === 'live' ? ' · Live now'
-          : (ev.name === latestDoneName ? ' · Latest result'
-          : (ev.status === 'upcoming' ? ' · Upcoming' : ''));
+          : (ev.status === 'upcoming' ? ' · Next stop' : '');
 
         var champs = ev.status === 'done' ? championsFor(ev) : null;
         var body;
-        if (champs) {
-          body = championsHtml(champs);
-        } else if (ev.status === 'done') {
-          body = '<p class="ncard__result ncard__result--muted">Finished — champions not published yet. ' +
-            'Open the official BWF page for the full draw.</p>';
-        } else if (ev.status === 'live') {
-          body = '<p class="ncard__result">Being played now. Open BWF for live draws and scores.</p>';
-        } else {
-          body = '<p class="ncard__result">' +
-            esc(ev.note || ('Starts ' + ev.date + '. Draws and entries on BWF.')) + '</p>';
-        }
+        if (champs) body = championsHtml(champs);
+        else body = '<p class="ncard__result">' +
+          esc(ev.note || (ev.status === 'live'
+            ? 'Being played now. Open BWF for the live draw and scores.'
+            : 'Starts ' + ev.date + '. Entries and draws are published by BWF.')) + '</p>';
 
         return '<article class="' + cls + '">' +
           '<div class="ncard__head">' +
@@ -434,56 +420,26 @@
           '<h4 class="ncard__name">' + esc(ev.name) + '</h4>' +
           (ev.host ? '<p class="ncard__host">' + esc(ev.host) + '</p>' : '') +
           body +
-          '<a class="ncard__link" href="' + BWF_CAL + '" target="_blank" rel="noopener">' +
-            (ev.status === 'done' ? 'Verify results on BWF' : 'Check details on BWF') + ' ↗</a>' +
+          '<div class="ncard__actions">' +
+            '<a class="btn btn--primary" href="' + esc(ev.href || BWF_CAL) + '" target="_blank" rel="noopener">Official event page</a>' +
+            '<a class="btn btn--ghost" href="' + BWF_CAL + '" target="_blank" rel="noopener">Full BWF calendar</a>' +
+          '</div>' +
         '</article>';
       }).join('');
 
-      if (toggleBtn) {
-        if (list.length > VISIBLE) {
-          toggleBtn.style.display = '';
-          toggleBtn.textContent = expanded ? 'Show less' : 'Show all ' + list.length + ' tournaments';
-          toggleBtn.setAttribute('aria-expanded', String(expanded));
-        } else {
-          toggleBtn.style.display = 'none';
-        }
-      }
-
-      // The "updated" line reflects real data rather than a date typed into
-      // the markup, so it can never go stale on its own.
       var stampEl = document.getElementById('newsStamp');
       if (stampEl) {
-        var n = normalised.filter(function (e) { return e.status === 'done'; }).length;
-        stampEl.textContent = n + ' of ' + EVENTS.length +
-          ' listed events have passed by date. Static editorial reference — verify on BWF.';
+        stampEl.textContent = shown.length
+          ? (shown[0].status === 'live' ? 'Current as of 9 September 2026.' : 'Next listed stop as of 9 September 2026.')
+          : 'No remaining 2026 stop is listed here. Open the full BWF calendar.';
       }
-    }
-
-    var toggleBtn = document.getElementById('newsToggle');
-    if (toggleBtn) {
-      toggleBtn.addEventListener('click', function () { expanded = !expanded; render(); });
-    }
-
-    var filters = document.getElementById('newsFilters');
-    if (filters) {
-      filters.addEventListener('click', function (e) {
-        var btn = e.target.closest('.news__filter');
-        if (!btn) return;
-        filters.querySelectorAll('.news__filter').forEach(function (b) {
-          b.classList.remove('is-active'); b.setAttribute('aria-pressed', 'false');
-        });
-        btn.classList.add('is-active'); btn.setAttribute('aria-pressed', 'true');
-        currentFilter = btn.dataset.filter;
-        expanded = false;
-        render();
-      });
     }
 
     /* Published so the Team Singapore panel can list the same upcoming
        events without keeping a second copy of the calendar. */
     window.ELEVER_SEASON = EVENTS;
 
-    render();
+    if (mount) render();
     // Keep this calendar as an explicitly static editorial reference. The old
     // Wikipedia refresh is intentionally disabled: BWF remains the source of
     // truth for current schedules, draws and results.
@@ -499,7 +455,7 @@
     var hub = document.getElementById('hub');
     if (!hub) return;
 
-    // type: 'private' | 'activesg' | 'club' | 'elever'
+    // type: 'private' | 'activesg' | 'dus' | 'cc' | 'elever'
     // elever: true on any venue where Élever runs regular classes (cross-cutting).
     // book: direct booking URL where publicly available; otherwise omitted.
     // The English name/area/meta below are the fallback / default-language values.
@@ -523,35 +479,29 @@
       { id: 'citysprouts', name: 'City Sprouts @ Bedok', area: 'Bedok', region: 'East', type: 'private', addr: '200 Bedok North Avenue 1', meta: 'Community hub \u00b7 courts by XY Badminton', book: 'https://xyacademy.rezerv.co/', bookLabel: 'Book on Rezerv' },
       { id: 'kff', name: 'KFF Badminton Arena / Singapore Badminton Stadium', area: 'Geylang', region: 'East', type: 'private', addr: '100 Guillemard Road, S399718', meta: 'Historic SBA venue \u00b7 12 courts (reopened 2025)', book: 'https://booking.singaporebadminton.org.sg/', bookLabel: 'Book a court', bookNote: 'Run by the Singapore Badminton Association on its own booking site.', elever: true },
       { id: 'smash', name: 'Smash Arena', area: 'Joo Koon', region: 'West', type: 'private', addr: '511 Upper Jurong Road, D\u2019Arena, Blk B L2, S638366', meta: '9 doubles + 1 single \u00b7 Taraflex flooring', book: 'https://booking.smasharena.sg/', bookLabel: 'Book a court' },
-      { id: 'cereza', name: 'Cereza Sports Hall', area: 'Eunos', region: 'East', type: 'private', addr: '3 Chin Cheng Avenue, S429401', meta: '4 courts \u00b7 rubber-mat flooring', book: 'https://cereza.skedda.com/booking', bookLabel: 'Book on Skedda' },
-      // Kovan's old kovansports.com domain has lapsed and now redirects to an
-      // unrelated site, so no URL is linked — only the number that still works.
-      { id: 'kovan', name: 'Kovan Sports Centre', area: 'Hougang', region: 'North-East', type: 'private', addr: '60 Hougang Street 21, S538738', meta: 'Indoor courts', bookable: false, bookNote: 'No online booking \u2014 call 6286 0256 to check court availability.', phone: '+6562860256' },
 
-      // ---------- ACTIVESG PUBLIC SPORT CENTRES ----------
-      { id: 'ocbc', name: 'OCBC Arena', area: 'Kallang', region: 'Central', type: 'activesg', addr: '5 Stadium Drive, S397631 (Singapore Sports Hub)', meta: 'Air-conditioned arena', book: 'https://www.sportshub.com.sg/', bookLabel: 'Booking info' },
-      { id: 'oth', name: 'Our Tampines Hub — Tampines Sport Centre', area: 'Tampines', region: 'East', type: 'activesg', addr: '1 Tampines Walk, S528523', meta: 'Flagship ActiveSG hall \u00b7 ~20 courts' },
-      { id: 'bishan', name: 'Bishan Sport Centre', area: 'Bishan', region: 'Central', type: 'activesg', addr: '5 Bishan Street 14, S579783' },
-      { id: 'canberra', name: 'Bukit Canberra Sport Centre', area: 'Sembawang', region: 'North', type: 'activesg', addr: '21 Canberra Link, S756973' },
-      { id: 'gombak', name: 'Bukit Gombak Sport Centre', area: 'Bukit Batok', region: 'West', type: 'activesg', addr: '810 Bukit Batok West Ave 5, S659088' },
-      { id: 'cck', name: 'Choa Chu Kang Sport Centre', area: 'Choa Chu Kang', region: 'West', type: 'activesg', addr: '1 Choa Chu Kang Street 53, S689236' },
-      { id: 'clementi', name: 'Clementi Sport Centre', area: 'Clementi', region: 'West', type: 'activesg', addr: '518 Clementi Avenue 3, S129907' },
-      { id: 'delta', name: 'Delta Sport Centre', area: 'Tiong Bahru', region: 'Central', type: 'activesg', addr: '900 Tiong Bahru Road, S158790' },
-      { id: 'heartbeat', name: 'Heartbeat @ Bedok Sport Centre', area: 'Bedok', region: 'East', type: 'activesg', addr: '11 Bedok North Street 1, S469662' },
-      { id: 'hougang', name: 'Hougang Sport Centre', area: 'Hougang', region: 'North-East', type: 'activesg', addr: '93 Hougang Avenue 4, S538832' },
-      { id: 'jurongeast', name: 'Jurong East Sport Centre', area: 'Jurong East', region: 'West', type: 'activesg', addr: '21 Jurong East Street 31, S609517' },
-      { id: 'jurongwest', name: 'Jurong West Sport Centre', area: 'Jurong West', region: 'West', type: 'activesg', addr: '20 Jurong West Street 93, S648965' },
-      { id: 'pasirris', name: 'Pasir Ris Sport Centre', area: 'Pasir Ris', region: 'East', type: 'activesg', addr: '120 Pasir Ris Central, S519640' },
-      { id: 'queenstown', name: 'Queenstown Sport Centre', area: 'Queenstown', region: 'Central', type: 'activesg', addr: '473 Stirling Road, S148948' },
-      { id: 'sengkang', name: 'Sengkang Sport Centre', area: 'Sengkang', region: 'North-East', type: 'activesg', addr: '57 Anchorvale Road, S544964' },
-      { id: 'senja', name: 'Senja-Cashew Sport Centre', area: 'Bukit Panjang', region: 'West', type: 'activesg', addr: '101 Bukit Panjang Road, S679910' },
-      { id: 'serangoon', name: 'Serangoon Sport Centre', area: 'Serangoon', region: 'North-East', type: 'activesg', addr: '35 Yio Chu Kang Road, S545552' },
-      { id: 'wilfred', name: 'St. Wilfred Sport Centre', area: 'Kallang', region: 'Central', type: 'activesg', addr: '3 St. Wilfred Road, S327920' },
-      { id: 'toapayoh', name: 'Toa Payoh Sport Centre', area: 'Toa Payoh', region: 'Central', type: 'activesg', addr: '301 Lorong 6 Toa Payoh, S319392' },
-      { id: 'woodlands', name: 'Woodlands Sport Centre', area: 'Woodlands', region: 'North', type: 'activesg', addr: '1 Woodlands Street 13, S738597' },
-      { id: 'yck', name: 'Yio Chu Kang Sport Centre', area: 'Ang Mo Kio', region: 'North-East', type: 'activesg', addr: '200 Ang Mo Kio Avenue 9, S569770' },
-      { id: 'yishun', name: 'Yishun Sport Centre', area: 'Yishun', region: 'North', type: 'activesg', addr: '101 Yishun Avenue 1, S769130' },
-      { id: 'evans', name: 'MOE (Evans) Sport Hall', area: 'Bukit Timah', region: 'Central', type: 'activesg', addr: '21 Evans Road, S259366' },
+      // ---------- ACTIVESG PUBLIC SPORT HALLS ----------
+      // Official names and badminton availability checked against ActiveSG's
+      // venue picker in September 2026. All use the official badminton flow.
+      { id: 'oth', name: 'Our Tampines Hub - Community Auditorium', area: 'Tampines', region: 'East', type: 'activesg', addr: '1 Tampines Walk, S528523', meta: 'ActiveSG badminton venue', book: 'https://activesg.gov.sg/venues/nqBpgnMrPN8u5LLfvyN2T/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
+      { id: 'bishanclub', name: 'Bishan Clubhouse', area: 'Bishan', region: 'North-East', type: 'activesg', addr: '3 Bishan Street 14, S579780', book: 'https://activesg.gov.sg/venues/GdiZXcMkIKELrCkd90qBP/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
+      { id: 'bishan', name: 'Bishan Sport Hall', area: 'Bishan', region: 'North-East', type: 'activesg', addr: '5 Bishan Street 14, S579783', book: 'https://activesg.gov.sg/venues/LpiaS3dnMUXa39CrtTm9w/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
+      { id: 'canberra', name: 'Bukit Canberra Sport Hall', area: 'Sembawang', region: 'North', type: 'activesg', addr: '21 Canberra Link, S756973', book: 'https://activesg.gov.sg/venues/wpSdUk0uledoInNjK3Kaw/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
+      { id: 'gombak', name: 'Bukit Gombak Sport Hall', area: 'Bukit Batok', region: 'West', type: 'activesg', addr: '810 Bukit Batok West Avenue 5, S659088', book: 'https://activesg.gov.sg/venues/WYfbYK8b8mvlTx7iiCIJp/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
+      { id: 'cck', name: 'Choa Chu Kang Sport Hall', area: 'Choa Chu Kang', region: 'West', type: 'activesg', addr: '1 Choa Chu Kang Street 53, S689236', book: 'https://activesg.gov.sg/venues/jP33ehBA3lDjp34Lq7dEd/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
+      { id: 'clementi', name: 'Clementi Sport Hall', area: 'Clementi', region: 'Central', type: 'activesg', addr: '518 Clementi Avenue 3, S129907', book: 'https://activesg.gov.sg/venues/fU1NDT1wfMMSGcB2GUPst/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
+      { id: 'delta', name: 'Delta Sport Hall', area: 'Tiong Bahru', region: 'Central', type: 'activesg', addr: '900 Tiong Bahru Road, S158790', book: 'https://activesg.gov.sg/venues/a3jznoZlsfyJrl43Tbnog/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
+      { id: 'heartbeat', name: 'Heartbeat @ Bedok ActiveSG Sport Hall', area: 'Bedok', region: 'East', type: 'activesg', addr: 'Level 4 Heartbeat@Bedok, 11 Bedok North Street 1, S469662', book: 'https://activesg.gov.sg/venues/2vQVXKogKPojlagjzNxeX/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
+      { id: 'hougang', name: 'Hougang Sport Hall', area: 'Hougang', region: 'North-East', type: 'activesg', addr: '93 Hougang Avenue 4, S538832', book: 'https://activesg.gov.sg/venues/Z6A8EpcHcfy39qe2qse72/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
+      { id: 'jurongeast', name: 'Jurong East Sport Hall', area: 'Jurong East', region: 'West', type: 'activesg', addr: '21 Jurong East Street 31, S609517', book: 'https://activesg.gov.sg/venues/vrkrAMmmGiSIaj7FEMcjx/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
+      { id: 'jurongwest', name: 'Jurong West Sport Hall', area: 'Jurong West', region: 'West', type: 'activesg', addr: '20 Jurong West Street 93, S648965', book: 'https://activesg.gov.sg/venues/iQYIzofibpiGOEHMDZTXr/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
+      { id: 'pasirris', name: 'Pasir Ris Sport Hall', area: 'Pasir Ris', region: 'East', type: 'activesg', addr: '120 Pasir Ris Central, S519640', book: 'https://activesg.gov.sg/venues/TbIGpVpUxV6SZrxp9tPkB/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
+      { id: 'sengkang', name: 'Sengkang Sport Hall', area: 'Sengkang', region: 'North-East', type: 'activesg', addr: '57 Anchorvale Road, S544964', book: 'https://activesg.gov.sg/venues/cRyHuTcU77VZY7Er3jVf5/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
+      { id: 'senja', name: 'Senja-Cashew Sport Hall', area: 'Bukit Panjang', region: 'West', type: 'activesg', addr: '101 Bukit Panjang Road, S679910', book: 'https://activesg.gov.sg/venues/JEBGvnHbjLScZCVrgAorv/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
+      { id: 'woodlands', name: 'Woodlands Sport Hall', area: 'Woodlands', region: 'North', type: 'activesg', addr: '2 Woodlands Street 12, S738620', book: 'https://activesg.gov.sg/venues/OzrxvbMIJ0qQEw9h0suQT/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
+      { id: 'yck', name: 'Yio Chu Kang Sport Hall', area: 'Ang Mo Kio', region: 'North', type: 'activesg', addr: '214 Ang Mo Kio Avenue 9, S569780', book: 'https://activesg.gov.sg/venues/pYMh2B4kDjs6JEE5SoxbJ/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
+      { id: 'yishun', name: 'Yishun Sport Hall', area: 'Yishun', region: 'North', type: 'activesg', addr: '101 Yishun Avenue 1, S769130', book: 'https://activesg.gov.sg/venues/gwkeAKobIqSCOXA6OgULY/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
+      { id: 'evans', name: 'MOE (Evans) Sport Hall', area: 'Bukit Timah', region: 'Central', type: 'activesg', addr: '21 Evans Road, S259366', book: 'https://activesg.gov.sg/venues/kEBJKrx1USi4BvQxwMMHs/activities/YLONatwvqJfikKOmB5N9U/timeslots', bookLabel: 'Book on ActiveSG' },
 
       // ---------- ÉLEVER REGULAR CLASS VENUES (schools & community clubs) ----------
       // These are not public court-hire venues: school halls are used under a
@@ -560,8 +510,8 @@
       // a visitor can actually do — book an Élever class at that venue.
       { id: 'acsbarker', name: 'Anglo-Chinese School (Barker Road)', area: 'Newton', region: 'Central', type: 'elever', addr: '60 Barker Road, S309919', meta: '\u00c9lever class venue \u00b7 school hall', book: 'https://wa.me/6589214221', bookLabel: 'Book an \u00c9lever class', bookNote: 'School hall \u2014 not open for public court hire. Élever classes run here.', elever: true },
       { id: 'bidadari', name: 'Bidadari Community Club', area: 'Bidadari', region: 'Central', type: 'cc', addr: '11 Bidadari Park Drive, S367905', meta: '\u00c9lever class venue \u00b7 community club', book: 'https://wa.me/6589214221', bookLabel: 'Book an \u00c9lever class', bookNote: 'CC courts are balloted on OnePA; Élever classes are booked with us.', altBook: 'https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS', altBookLabel: 'Public courts on OnePA', elever: true },
-      { id: 'cantonment', name: 'Cantonment Primary School', area: 'Tanjong Pagar', region: 'Central', type: 'elever', addr: '1 Cantonment Close, S088256', meta: '\u00c9lever class venue \u00b7 school hall', book: 'https://wa.me/6589214221', bookLabel: 'Book an \u00c9lever class', bookNote: 'School hall \u2014 not open for public court hire. Élever classes run here.', elever: true },
-      { id: 'northvista', name: 'North Vista Primary School', area: 'Sengkang', region: 'North-East', type: 'elever', addr: '31 Rivervale Drive, S545132', meta: '\u00c9lever class venue \u00b7 school hall', book: 'https://wa.me/6589214221', bookLabel: 'Book an \u00c9lever class', bookNote: 'School hall \u2014 not open for public court hire. Élever classes run here.', elever: true },
+      { id: 'cantonment', name: 'Cantonment Primary School', area: 'Tanjong Pagar', region: 'Central', type: 'dus', addr: '1 Cantonment Close, S088256', meta: '\u00c9lever class venue \u00b7 ActiveSG DUS', book: 'https://wa.me/6589214221', bookLabel: 'Book an \u00c9lever class', bookNote: 'Public badminton slots are offered through ActiveSG DUS; Élever classes are booked with us.', altBook: 'https://activesg.gov.sg/venues/hy4Hsg4gHPM3y42YHZyL6/activities/YLONatwvqJfikKOmB5N9U/timeslots', altBookLabel: 'Public courts on ActiveSG', elever: true },
+      { id: 'northvista', name: 'North Vista Primary School', area: 'Sengkang', region: 'North-East', type: 'dus', addr: '20 Compassvale Link, S544974', meta: '\u00c9lever class venue \u00b7 ActiveSG DUS', book: 'https://wa.me/6589214221', bookLabel: 'Book an \u00c9lever class', bookNote: 'Public badminton slots are offered through ActiveSG DUS; Élever classes are booked with us.', altBook: 'https://activesg.gov.sg/venues/1sPQYX9V5NpYIfQSIvv6r/activities/YLONatwvqJfikKOmB5N9U/timeslots', altBookLabel: 'Public courts on ActiveSG', elever: true },
       { id: 'scgs', name: "Singapore Chinese Girls' School", area: 'Novena', region: 'Central', type: 'elever', addr: '190 Dunearn Road, S309437', meta: '\u00c9lever class venue \u00b7 school hall', book: 'https://wa.me/6589214221', bookLabel: 'Book an \u00c9lever class', bookNote: 'School hall \u2014 not open for public court hire. Élever classes run here.', elever: true }
     ];
 
@@ -580,12 +530,6 @@
         date: '28 Nov – 4 Dec 2026', where: 'Fernvale Village',
         ages: 'See organiser notice',
         register: 'https://singaporebadminton.org.sg/events/'
-      },
-      {
-        tag: 'Upcoming · Junior', name: 'Singapore Junior International Series 2026',
-        date: '7 – 13 Dec 2026', where: 'Wyse Active Hub',
-        ages: 'U13 · U15 · U17 · U19',
-        register: 'https://badmintonasia.org/calendar/singapore-junior-international-series-2026/'
       },
       {
         tag: 'Upcoming · Tier 2', name: 'Papago Badminton Carnival',
@@ -628,6 +572,8 @@
        venue list rather than hardcoding it in the markup. */
     var statVenues = document.getElementById('statVenues');
     if (statVenues) statVenues.textContent = VENUES.length;
+    var statVenuesInline = document.getElementById('statVenuesInline');
+    if (statVenuesInline) statVenuesInline.textContent = VENUES.length;
 
     function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
     function attr(s) { return esc(s); }
@@ -651,6 +597,7 @@
 
       if (countEl) countEl.textContent = list.length + (list.length === 1 ? ' venue' : ' venues');
 
+      if (!grid) return;
       if (!list.length) {
         grid.innerHTML = '<p class="hub__empty">No venues match that search. Try a different area or clear the filters.</p>';
         return;
@@ -658,7 +605,7 @@
 
       grid.innerHTML = list.map(function (v) {
         var l = loc(v);
-        var book = v.book || (v.type === 'activesg' ? ACTIVESG_BOOK : '');
+        var book = v.book || (v.type === 'activesg' || v.type === 'dus' ? ACTIVESG_BOOK : '');
 
         // Address doubles as the map link, so a separate "Map" button is dropped.
         var actions = '';
@@ -667,11 +614,15 @@
           // No working public booking page — say so instead of linking nowhere.
           if (v.phone) {
             actions += '<a class="hcard__link hcard__link--book" href="tel:' + attr(v.phone) + '" aria-label="' +
-              attr('Call ' + l.name + ' to check availability') + '">Check Availability</a>';
+              attr('Call ' + l.name + ' to check availability') + '">' + esc(v.bookLabel || 'Call venue') + '</a>';
           }
         } else if (book) {
           actions += '<a class="hcard__link hcard__link--book" href="' + attr(book) + '" target="_blank" rel="noopener" aria-label="' +
-            attr('Check availability at ' + l.name) + '">Check Availability</a>';
+            attr((v.bookLabel || 'Check availability') + ' at ' + l.name) + '">' + esc(v.bookLabel || 'Check availability') + '</a>';
+        }
+        if (v.altBook) {
+          actions += '<a class="hcard__link hcard__link--alt" href="' + attr(v.altBook) + '" target="_blank" rel="noopener">' +
+            esc(v.altBookLabel || 'Alternative booking') + '</a>';
         }
         // "Élever venue" and "Élever classes" are merged into one link.
         if (v.elever) {
@@ -686,8 +637,9 @@
             '</div>' +
           '</div>' +
           '<a class="hcard__addr" href="' + mapsUrl(v) + '" target="_blank" rel="noopener" aria-label="' +
-            attr('Open ' + l.name + ' in Google Maps') + '">' + esc(v.addr) + ' \u2197</a>' +
+            attr('Open ' + l.name + ' in Google Maps') + '">' + esc(v.addr) + '</a>' +
           '<div class="hcard__actions">' + actions + '</div>' +
+          (v.bookNote ? '<p class="hcard__note">' + esc(v.bookNote) + '</p>' : '') +
         '</article>';
       }).join('');
     }
@@ -784,9 +736,6 @@
         p.classList.toggle('is-active', on);
         if (on) p.removeAttribute('hidden'); else p.setAttribute('hidden', '');
       });
-      // A sub-nav thumb cannot be measured while its panel is hidden (zero
-      // width), so re-lay the newly shown panel's thumb after it is visible.
-      layoutSubThumbs();
     }
     if (tabsEl) {
       tabsEl.addEventListener('click', function (e) {
@@ -808,135 +757,11 @@
         if (history.replaceState) history.replaceState(null, '', '#' + order[next]);
       });
     }
-    /* =============================================================
-       SECTION SUB-TABS (segmented control inside each main panel)
-       One panel held too many sections, so each panel's sections are
-       wrapped in sub-panels and switched by a segmented control
-       (client, Sep 2026). Each .hub__subnav is an independent ARIA
-       tablist; a single .hub__subnav-thumb slides to the active button
-       via CSS custom properties measured here.
-       ============================================================= */
-    var subnavs = Array.prototype.slice.call(hub.querySelectorAll('.hub__subnav'));
-
-    // Older deep-links point at section ids that now live inside a sub-panel,
-    // so map each section id to the sub-tab that reveals it. Sections inside
-    // the nested "Play" group resolve to their nested sub-tab; the parent
-    // "Play" tab is opened separately (see activateSubForSection).
-    var SECTION_TO_SUBTAB = {
-      team: 'intl-players', news: 'intl-tour', official: 'intl-tour', hubnews: 'intl-news',
-      tournaments: 'local-compete', shops: 'local-shop',
-      halls: 'play-courts', book: 'play-courts', groups: 'play-groups'
-    };
-    // Nested sub-tabs live under a parent sub-tab that must be opened too.
-    var SUBTAB_PARENT = { 'play-courts': 'local-play', 'play-groups': 'local-play' };
-
-    function subPanelsFor(nav) {
-      // Sub-panels are the nav's sibling elements, so scope to the nav's
-      // parent and take only its direct .hub__subpanel children. This keeps a
-      // nested nav (inside a sub-panel) from claiming its parent's panels.
-      var scope = nav.parentElement || hub;
-      return Array.prototype.filter.call(scope.children, function (el) {
-        return el.classList && el.classList.contains('hub__subpanel');
-      });
-    }
-
-    // Position a nav's thumb behind its active button. Skips when the nav is
-    // not laid out yet (hidden panel) so we never freeze the thumb at 0.
-    function layoutThumb(nav) {
-      var inner = nav.querySelector('.hub__subnav-inner');
-      var thumb = nav.querySelector('.hub__subnav-thumb');
-      var active = nav.querySelector('.hub__subtab.is-active');
-      if (!inner || !thumb || !active || !active.offsetWidth) return;
-      thumb.style.setProperty('--thumb-x', (active.offsetLeft - inner.scrollLeft) + 'px');
-      thumb.style.setProperty('--thumb-w', active.offsetWidth + 'px');
-      thumb.classList.add('is-ready');
-    }
-    function layoutSubThumbs() {
-      subnavs.forEach(layoutThumb);
-    }
-
-    function activateSubtab(nav, name, focusIt) {
-      var buttons = Array.prototype.slice.call(nav.querySelectorAll('.hub__subtab'));
-      buttons.forEach(function (b) {
-        var on = b.dataset.subtab === name;
-        b.classList.toggle('is-active', on);
-        b.setAttribute('aria-selected', String(on));
-        b.setAttribute('tabindex', on ? '0' : '-1');
-        if (on && focusIt) b.focus();
-      });
-      subPanelsFor(nav).forEach(function (p) {
-        var on = p.dataset.subpanel === name;
-        p.classList.toggle('is-active', on);
-        if (on) p.removeAttribute('hidden'); else p.setAttribute('hidden', '');
-      });
-      // Revealing a sub-panel may expose a nested sub-nav that could not be
-      // measured while hidden, so re-lay every thumb, not just this nav's.
-      layoutSubThumbs();
-    }
-
-    subnavs.forEach(function (nav) {
-      var buttons = Array.prototype.slice.call(nav.querySelectorAll('.hub__subtab'));
-      nav.addEventListener('click', function (e) {
-        var btn = e.target.closest('.hub__subtab');
-        if (btn) activateSubtab(nav, btn.dataset.subtab);
-      });
-      // ARIA tablist keyboard support: arrows / Home / End move focus and
-      // activate, matching the primary tabs' behaviour.
-      nav.addEventListener('keydown', function (e) {
-        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft' && e.key !== 'Home' && e.key !== 'End') return;
-        var order = buttons.map(function (b) { return b.dataset.subtab; });
-        var cur = order.indexOf(document.activeElement.dataset ? document.activeElement.dataset.subtab : order[0]);
-        if (cur < 0) cur = 0;
-        var next = cur;
-        if (e.key === 'ArrowRight') next = (cur + 1) % order.length;
-        else if (e.key === 'ArrowLeft') next = (cur - 1 + order.length) % order.length;
-        else if (e.key === 'Home') next = 0;
-        else if (e.key === 'End') next = order.length - 1;
-        e.preventDefault();
-        activateSubtab(nav, order[next], true);
-      });
-    });
-
-    // Reveal the sub-panel that contains a deep-linked section (e.g. #halls),
-    // returning true when a matching sub-tab was activated. Nested sections
-    // also need their parent sub-tab opened first.
-    function activateSubForSection(sectionId) {
-      var subName = SECTION_TO_SUBTAB[sectionId];
-      if (!subName) return false;
-      var names = SUBTAB_PARENT[subName] ? [SUBTAB_PARENT[subName], subName] : [subName];
-      names.forEach(function (name) {
-        subnavs.forEach(function (nav) {
-          if (nav.querySelector('.hub__subtab[data-subtab="' + name + '"]')) {
-            activateSubtab(nav, name);
-          }
-        });
-      });
-      return true;
-    }
-
-    window.addEventListener('resize', layoutSubThumbs);
-    /* A thumb measured before the segmented control has taken its final width
-       (web fonts still loading, a panel revealed a moment ago) sits at the
-       button's content width rather than its flexed width. Watching each track
-       re-lays the thumb whenever that width actually settles, instead of
-       relying on load / fonts.ready having fired at the right moment. */
-    if (typeof ResizeObserver === 'function') {
-      var thumbRO = new ResizeObserver(function () { layoutSubThumbs(); });
-      subnavs.forEach(function (nav) {
-        var inner = nav.querySelector('.hub__subnav-inner');
-        if (inner) thumbRO.observe(inner);
-        nav.querySelectorAll('.hub__subtab').forEach(function (b) { thumbRO.observe(b); });
-      });
-    }
-
-
-    /* Deep-link both main tabs and the preserved section aliases so older
-       #book / #groups / #halls / #team links continue to land correctly. Each
-       section alias now also reveals the sub-tab that contains it. */
+    /* Deep-link the two main tabs and each stacked section. */
     var TAB_NAMES = Array.prototype.map.call(tabs, function (b) { return b.dataset.tab; });
     var TAB_ALIASES = {
-      team: 'international', news: 'international', official: 'international', hubnews: 'international',
-      tournaments: 'local', halls: 'local', book: 'local', groups: 'local', shops: 'local'
+      team: 'international', news: 'international',
+      tournaments: 'local', halls: 'local', groups: 'local', shops: 'local'
     };
     function tabFromHash() {
       var name = (location.hash || '').replace('#', '');
@@ -946,8 +771,6 @@
     function scrollToHashTarget() {
       var name = (location.hash || '').replace('#', '');
       if (!TAB_ALIASES[name]) return;
-      // Reveal the sub-panel first, then scroll to the section inside it.
-      activateSubForSection(name);
       var target = document.getElementById(name);
       if (target) target.scrollIntoView({ block: 'start' });
     }
@@ -972,12 +795,6 @@
       window.requestAnimationFrame(scrollToHashTarget);
     }
 
-    // Lay out the visible panel's thumb on load. Run again after fonts settle
-    // and on the next frame so the measured button widths are final.
-    window.requestAnimationFrame(layoutSubThumbs);
-    window.addEventListener('load', layoutSubThumbs);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutSubThumbs);
-
     var localEventsMount = document.getElementById('localEvents');
     if (localEventsMount) {
       localEventsMount.innerHTML = LOCAL_EVENTS.length
@@ -1001,7 +818,7 @@
           'Check the SBA calendar \u2197</a></p>';
     }
 
-    render();
+    if (grid) render();
     // Re-render the venue list when the language changes (static text in the
     // book/groups panels is static markup).
   })();

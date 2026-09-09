@@ -8,16 +8,17 @@ rather than one long scrolling page.
 
 | Page | File | What's on it |
 |---|---|---|
-| Home | `index.html` | Hero slideshow, the Élever definition + tagline, the What We Do tiles |
-| Classes | `classes.html` | Development pathways, group vs private, trial & placement, class locations (list **or** map) |
+| Home | `index.html` | Static brand cover, Classes / Events routes, and the Élever promise |
+| Classes | `classes.html` | Development pathways, group vs private, trial & placement, and class locations |
 | Camps | `camps.html` | What happens at an Exploration camp, a day's timetable, the next camp, waitlist |
-| Events | `events.html` | Carnivals / clinics / competitions offered as a service, the all-in-one suite, our work, Trusted by, proposal form |
+| Events | `events.html` | Carnivals / clinics / competitions offered as a service, the all-in-one suite, our work, Trusted by, event enquiry |
 | Performance Lab | `lab.html` | Black "OPENING SOON" holding page with the Upper Serangoon address |
-| About | `about.html` | Definition + tagline, founder write-up, the coaching team, the 5 pillars, contact |
-| Coaches | `coaches/<slug>.html` | One generated page per coach — photo, profile, stages coached, languages |
+| About | `about.html` | Definition + tagline, founder write-up, coaching team, press features, and the 5 pillars |
+| Coaches | `coaches/<slug>.html` | One generated page per coach — photo, role, linked certifications, biography, achievements |
 | News | `news.html` | Articles, filterable by category, newsletter signup |
-| SG Badminton Hub | `hub.html` | Venue directory with filters, how to book, Racket Ratings + play groups, world tour calendar |
-| Contact | `contact.html` | Enquiry form, WhatsApp / email routing, FAQ |
+| SG Badminton Hub | `hub.html` | International World Tour/news and local Play, Shop, and Compete guides |
+| Courts | `courts.html` | Dedicated Singapore badminton-court directory with operator-specific booking guidance |
+| Contact | `contact.html` | Enquiry form plus WhatsApp and email routes |
 | Privacy | `privacy.html` | PDPA privacy notice draft (needs completion — see below) |
 
 ## Editing content — start here
@@ -27,8 +28,9 @@ camps, event types, upcoming/past events, partners, articles, the Racket Ratings
 recreational play groups all live there. Nothing is baked into the markup, so changing a class
 time does not require touching HTML.
 
-Entries flagged `placeholder: true` are structural samples so pages can be seen working. They
-render with a small **sample** tag on the page. Replace the content and delete the flag.
+Entries flagged `placeholder: true` are explicitly unfinished records. They render with a small
+**sample** tag on the page; currently this applies only to the two coaches whose copy/profile has
+not been supplied. Replace the content and delete the flag when approved copy arrives.
 
 After editing the coach list, regenerate their pages:
 
@@ -38,11 +40,9 @@ node tools/build-coaches.js
 
 ## Photos
 
-**The Home hero** is a four-photo crossfading slideshow, written straight into
-`index.html` as four `.hero__slide` divs — swap the `background-image` URLs to change
-the photos. Add or remove a slide and the `nth-child` animation delays in
-`.hero__slide` (`assets/css/style.css`) have to match. The brand blue wash over
-them is `.hero__tint`; delete that one div if photos arrive already tinted.
+**The Home hero** is intentionally a static dark brand cover. The earlier photo slideshow was
+retired in a later client-directed Home redesign; its content routes are the equal-width
+Classes and Events buttons.
 
 **The What We Do tiles** (Home + About) take their photo, crop focus and hover
 line from `PILLARS` in `assets/js/pages.js` — one line per pillar.
@@ -80,8 +80,6 @@ info@eleverbadminton.com · WhatsApp +65 8921 4221
 
 ## Still needed from Élever
 
-- Home hero photos (the Google Drive set) — the current four are interim
-- Real class days, times, levels and venues (currently sample data in `CLASSES`)
 - Age ranges, ability levels and grading checkpoints for the four pathways (deliberately
   omitted rather than guessed)
 - Logos for the partners still shown as name-only chips in `PARTNERS`
@@ -90,16 +88,16 @@ info@eleverbadminton.com · WhatsApp +65 8921 4221
 - Write-ups for the previous events listed on the Events page
 - Completion of the bracketed fields in `privacy.html` (DPO, retention period) and the
   Terms & Conditions page the footer links to
-- The make-up/cancellation policy and insurance wording in the Contact FAQ
-- A form endpoint — forms currently open a pre-filled email; point them at Formspree, Netlify
-  Forms or the CRM to capture leads properly
-- Real coach bios (all are currently flagged `placeholder`)
+- Production configuration for the contact endpoint: set `RESEND_API_KEY` and, if needed,
+  `FROM_EMAIL` to a verified sender in the deployment environment
+- Approved popup-length bios for coaches (the current safe fallback is each full bio's first paragraph)
+- Full biographies/profile approval for the two coaches still flagged `placeholder`
 
 ## Structure
 
 ```
-index.html  classes.html  camps.html  events.html  lab.html
-about.html  news.html     hub.html    contact.html privacy.html
+index.html  classes.html  camps.html   events.html  lab.html
+about.html  news.html     hub.html     courts.html  contact.html privacy.html
 sitemap.xml robots.txt
 coaches/          generated — one page per coach
 tools/            build-coaches.js, build-news.js, build-*-photos.sh
@@ -109,8 +107,8 @@ assets/
   js/data.js      >>> site content lives here
   js/site.js      shared nav + footer injection
   js/pages.js     renders the data-driven blocks on each page
-  js/main.js      intro, hero canvas, nav, reveals, hub directory
-  img/            hero, tiles, press covers and player portraits
+  js/main.js      navigation, reveals, carousel controls, and Hub directory
+  img/            social-preview art, tiles, press covers and player portraits
     Photos/       untouched originals — coaches, camps, events, logos
     coaches/      square headshots      (build-coach-photos.sh)
     camps/        camp gallery + thumbs (build-camp-photos.sh)
@@ -131,7 +129,8 @@ python3 -m http.server 8080
 
 ## Deploy
 
-GitHub Pages from the `main` branch.
+Vercel from the `main` branch. The project uses Vercel clean URLs, redirects, and
+the `/api/contact` serverless function configured in `vercel.json`.
 
 ---
 Photography © Élever Badminton.

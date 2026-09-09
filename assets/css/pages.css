@@ -95,7 +95,10 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
    and faint line similar to elevenlabs.io ... instead of the current one
    where different sections have different grey shades"). No vertical rules:
    the client asked for the horizontal treatment only. */
-.psec--alt{background:transparent;max-width:none;border-block:1px solid var(--rule)}
+.psec--alt{position:relative;background:transparent;max-width:none;border:0}
+.psec--alt::before,.psec--alt::after{content:'';position:absolute;left:50%;width:min(var(--maxw),calc(100% - 2 * var(--gutter)));height:1px;background:var(--rule);transform:translateX(-50%)}
+.psec--alt::before{top:0}
+.psec--alt::after{bottom:0}
 /* The band runs edge to edge; its inner column sits on the same line as
    everything else because .psec--alt already carries the gutter as padding. */
 .psec--alt > .psec__inner{max-width:var(--maxw);margin:0 auto;padding:0}
@@ -151,6 +154,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .tagline--cards{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;max-width:none;font-size:.9rem;line-height:1.45}
 .tagline--cards span{background:var(--ink);color:#fff;border-radius:var(--r-md);padding:1rem 1.05rem}
 .tagline--cards span:last-child{background:var(--accent)}
+.pillar h3,.camp__head h3,.lead--dark h2,.lead--dark h3,.lab h1{color:#fff}
 @media(max-width:640px){.tagline--cards{grid-template-columns:1fr;gap:.6rem}}
 
 /* ---------- sample-content tag ---------- */
@@ -424,6 +428,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 /* ---------- CLASS LOCATIONS ---------- */
 .showcase__locations .sched__controls{margin-top:0}
 .sched__controls{display:flex;flex-wrap:wrap;gap:.45rem .8rem;align-items:center;margin-bottom:1.2rem}
+#articleFilters{display:flex;flex-wrap:wrap;gap:.55rem .8rem}
 .hub__count{padding-left:0;margin-left:auto;font-size:.82rem;color:var(--faint);font-weight:600}
 .sched__filter{background:#fff;border:1px solid var(--line);color:var(--muted);font-family:inherit;
   font-size:.82rem;font-weight:600;padding:.5rem .9rem;min-height:40px;border-radius:99px;cursor:pointer;transition:.2s}
@@ -689,9 +694,9 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
    same height, and .ecov__title reserves two lines so a one-line title does
    not leave a short card beside a two-line one (client, Sep 2026). */
 .eshowcase{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;align-items:stretch}
-.ecov{border-radius:var(--r-lg);height:100%}
+.ecov{border-radius:var(--r-sm);height:100%}
 .ecov__open{display:flex;flex-direction:column;width:100%;height:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;
-  border:1px solid var(--line);background:var(--panel);border-radius:var(--r-lg);overflow:hidden;padding:0;
+  border:1px solid var(--line);background:var(--panel);border-radius:var(--r-sm);overflow:hidden;padding:0;
   transition:transform .3s var(--ease),box-shadow .3s,border-color .3s}
 .ecov__open:hover{transform:translateY(-4px);box-shadow:var(--shadow-md,0 18px 44px -20px rgba(8,10,16,.4));border-color:var(--line-2)}
 .ecov__open:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -761,20 +766,20 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 /* The logo sits on the page on its own — no card, border or shadow around it
    (client, Sep 2026: "the logo can don't box?"). */
 .edetail__partnerlist{display:flex;width:100%;flex-wrap:wrap;align-items:center;gap:1.4rem}
-.edetail__partner{display:flex;align-items:center}
+.edetail__partner{position:relative;display:grid;place-items:center;width:clamp(8rem,18vw,11.25rem);height:4.5rem;overflow:hidden}
 /* Dialled back from 320px / 5rem — the mark was outsizing the copy beside it
    (client, Sep 2026: "reduce partner logo size a bit").
    Marks arrive in every proportion — wide wordmarks, square lockups, the odd
    portrait one — so they are set to a common height rather than a common
    width, which is what puts them on one optical baseline; max-width then
    reins in the very wide ones. */
-.edetail__partner img{height:3.4rem;width:auto;max-width:210px;object-fit:contain;object-position:left center}
+.edetail__partner img{position:absolute;inset:0;display:block;width:100%;height:100%;max-width:none;object-fit:contain;object-position:center}
 .edetail__partner span{font-size:.92rem;font-weight:700}
 /* A carnival's sponsor wall runs past a dozen marks, so it is set smaller and
    tighter than the headline partner row above it — one quiet band rather than
    a second row of equally weighted logos. */
 .edetail__partnerlist--dense{gap:1.15rem 1.7rem}
-.edetail__partnerlist--dense .edetail__partner img{height:2.3rem;max-width:142px}
+.edetail__partnerlist--dense .edetail__partner{width:clamp(6.5rem,14vw,8rem);height:3.2rem}
 
 .edetail__gallery{padding:1.6rem clamp(1.3rem,3.4vw,2.4rem) 2rem}
 .edetail__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}
@@ -803,7 +808,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 
 /* ---------- FULL-SCREEN GALLERY VIEWER ---------- */
 .lightbox{position:fixed;inset:0;z-index:1200;background:rgba(8,10,16,.985);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
-  display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:.5rem;
+  display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;gap:.5rem;
   padding:clamp(.6rem,2vw,1.1rem);
   /* Keep the top bar (and its close ×) clear of the notch / status bar / browser
      toolbar on phones, otherwise the × lands behind the chrome and is unreachable
@@ -830,14 +835,14 @@ body.has-lightbox{overflow:hidden}
    of other photos below"). Pinning the row to minmax(0,1fr) of the stage's own
    definite height makes the photo fit the space above the strip. */
 .lightbox__stage{display:grid;grid-template-columns:auto minmax(0,1fr) auto;
-  grid-template-rows:minmax(0,1fr);
+  grid-template-rows:minmax(0,1fr);min-width:0;width:100%;
   align-items:center;gap:clamp(.4rem,1.5vw,1rem);min-height:0}
 /* Flex, not grid: a grid item's percentage max-height resolves against its
    grid AREA, and an auto-sized row is indefinite — so `max-height:100%` on the
    photo was being dropped and a tall image overflowed. As a flex item it
    resolves against the figure's own definite height and the photo always
    finishes above the thumbnail strip. */
-.lightbox__figure{margin:0;height:100%;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.lightbox__figure{margin:0;width:100%;height:100%;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .lightbox__img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;
   border-radius:var(--r-md);box-shadow:0 24px 80px rgba(0,0,0,.5);background:rgba(255,255,255,.04)}
 
@@ -851,7 +856,7 @@ body.has-lightbox{overflow:hidden}
 .lightbox--single .lightbox__nav{visibility:hidden}
 
 /* Thumbnail strip — jump straight to any photo in the set. */
-.lightbox__strip{display:flex;gap:.35rem;overflow-x:auto;padding:.3rem .1rem;
+.lightbox__strip{display:flex;gap:.35rem;min-width:0;width:100%;overflow-x:auto;padding:.3rem .1rem;
   scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.3) transparent}
 .lightbox__strip::-webkit-scrollbar{height:6px}
 .lightbox__strip::-webkit-scrollbar-thumb{background:rgba(255,255,255,.28);border-radius:99px}
@@ -866,6 +871,9 @@ body.has-lightbox{overflow:hidden}
   outline:2px solid #fff;outline-offset:2px}
 
 @media(max-width:700px){
+  .lightbox{padding-top:calc(3.6rem + env(safe-area-inset-top,0px))}
+  .lightbox__bar{min-height:0;padding:0 3rem 0 .15rem}
+  .lightbox__close{position:fixed;top:calc(.65rem + env(safe-area-inset-top,0px));right:calc(.65rem + env(safe-area-inset-right,0px));z-index:3}
   .lightbox__stage{grid-template-columns:1fr}
   .lightbox__nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;
     width:2.4rem;height:2.4rem;font-size:1.6rem}
@@ -877,7 +885,7 @@ body.has-lightbox{overflow:hidden}
   .lightbox__bar{gap:.6rem}
   .lightbox__meta{flex:1 1 auto;min-width:0}
   .lightbox__title{min-width:0}
-  .lightbox__close{flex:none;position:relative;z-index:3}
+  .lightbox__close{flex:none}
 }
 @media(prefers-reduced-motion:reduce){
   .lightbox__close,.lightbox__nav,.lightbox__stripitem{transition:none}
@@ -910,6 +918,8 @@ body.has-lightbox{overflow:hidden}
 .logorail__item{flex:none;display:grid;place-items:center;height:64px}
 .logorail__item img{max-height:50px;max-width:160px;width:auto;object-fit:contain}
 .logorail__item--name{font-size:.85rem;font-weight:700;color:var(--faint);white-space:nowrap}
+.trusted-inline{margin-top:3.4rem;padding-top:3rem;border-top:1px solid var(--rule)}
+.trusted-inline .psec__head{margin-bottom:1.25rem}
 
 /* ---------- FEATURED ON (press) ---------- */
 .featured{margin-top:2rem;padding-top:1.6rem;border-top:1px solid var(--line)}
@@ -1011,7 +1021,7 @@ body.has-lightbox{overflow:hidden}
   .rail--end::after{opacity:0}
 }
 @media(prefers-reduced-motion:reduce){.coachgrid--rail{scroll-behavior:auto}}
-.coach{display:block;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;
+.coach{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;
   transition:transform .25s var(--ease),box-shadow .25s,border-color .25s}
 .coach:hover{transform:translateY(-3px);box-shadow:var(--shadow-sm);border-color:var(--line-2)}
 .coach--static:hover{transform:none;box-shadow:none;border-color:var(--line)}
@@ -1021,25 +1031,17 @@ body.has-lightbox{overflow:hidden}
 .coach__img img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .5s var(--ease)}
 .coach:hover .coach__img img{transform:scale(1.04)}
 .coach__initials{display:grid;place-items:center;width:100%;height:100%;font-size:2rem;font-weight:800;letter-spacing:.04em;color:var(--accent);background:var(--accent-soft)}
-.coach__body{padding:.85rem .95rem 1rem}
+.coach__body{display:flex;flex:1;flex-direction:column;padding:.85rem .95rem 1rem}
 .coach__body h3{font-size:.92rem;font-weight:700;margin-bottom:.15rem;letter-spacing:-.015em}
 .coach__role{font-size:.74rem;color:var(--muted);line-height:1.4}
-.coach__cert{display:inline-block;margin-top:.45rem;font-size:.6rem;font-weight:700;letter-spacing:.07em;
-  text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:.16rem .4rem;border-radius:4px}
-/* "View profile" only appears on hover / keyboard focus, exactly like the
-   Past Events cover cards (client, Sep 2026). It grows into place so the
-   resting card stays clean and nothing below it jumps. */
-.coach__more{display:inline-flex;align-items:center;gap:.3rem;margin-top:0;
-  font-size:.72rem;font-weight:600;color:var(--accent);
-  max-height:0;opacity:0;overflow:hidden;transform:translateY(-4px);
-  transition:max-height .28s var(--ease),opacity .28s,transform .28s var(--ease),margin-top .28s var(--ease)}
-.coach:hover .coach__more,.coach:focus-visible .coach__more,
-.coach:focus-within .coach__more{max-height:1.6rem;opacity:1;transform:none;margin-top:.6rem}
-/* Touch devices have no hover, so the cue stays visible there. */
-@media(hover:none){
-  .coach__more{max-height:1.6rem;opacity:1;transform:none;margin-top:.6rem}
-}
-@media(prefers-reduced-motion:reduce){.coach__more{transition:none}}
+.coach__cert{display:block;margin-top:.45rem;font-size:.6rem;font-weight:700;letter-spacing:.055em;
+  text-transform:uppercase;color:var(--accent);line-height:1.45}
+/* The action is a permanent, touch-friendly cue and follows the certification
+   line on every card. Auto margin keeps it aligned when role text wraps. */
+.coach__more{display:inline-flex;align-items:center;gap:.3rem;align-self:flex-start;margin-top:auto;padding-top:.65rem;
+  min-height:2rem;font-size:.72rem;font-weight:700;color:var(--accent)}
+.coach:hover .coach__more span{transform:translateX(2px)}
+.coach__more span{transition:transform .2s var(--ease)}
 
 /* ---------- COACH DETAIL OVERLAY ----------
    Coaches open in the same press-in overlay the Past Events cards use
@@ -1054,13 +1056,16 @@ body.has-lightbox{overflow:hidden}
 .cdetail__photo img{width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;display:block}
 .cdetail__initials{display:grid;place-items:center;width:100%;aspect-ratio:1/1;font-size:2.4rem;font-weight:800;
   letter-spacing:.04em;color:var(--accent);background:var(--accent-soft)}
-.cdetail__facts{list-style:none;display:flex;flex-direction:column;gap:.5rem;margin:1rem 0 0;
-  border-top:1px solid var(--line);padding-top:.9rem}
-.cdetail__facts li{display:flex;gap:1rem;justify-content:space-between;font-size:.8rem;line-height:1.45}
-.cdetail__facts span{color:var(--faint);font-weight:600;flex:none}
-.cdetail__facts b{font-weight:700;text-align:right}
+.cdetail__certifications{margin-top:1rem}
+.cdetail__label,.profile__label{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:.55rem}
+.cdetail__certs,.profile__certs{display:flex;flex-wrap:wrap;gap:.45rem}
+.cdetail__cert,.profile__cert{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:.5rem .75rem;
+  border:1px solid rgba(33,81,209,.26);border-radius:var(--r-sm);background:var(--accent-soft);
+  color:var(--accent);font-size:.72rem;font-weight:700;line-height:1.25;transition:background .2s,border-color .2s,color .2s}
+.cdetail__cert:hover,.profile__cert:hover{background:var(--accent);border-color:var(--accent);color:#fff}
 .cdetail__body > * + *{margin-top:1rem}
 .cdetail__body .edetail__desc + .edetail__desc{margin-top:.9rem}
+.edetail--coach .edetail__desc{text-align:justify;hyphens:auto}
 .cdetail__actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.6rem}
 @media(max-width:700px){
   .cdetail{grid-template-columns:1fr;gap:1.2rem}
@@ -1083,6 +1088,17 @@ body.has-lightbox{overflow:hidden}
 .profile__bio{font-size:.98rem;color:var(--muted);line-height:1.75;max-width:60ch}
 .profile__bio+.profile__bio{margin-top:1rem}
 .profile__achievements{display:grid;gap:.55rem;margin:0;max-width:60ch;padding-left:1.1rem;color:var(--muted);line-height:1.6}
+.phead--coach .phead__inner{text-align:center}
+.phead--coach h1{margin-inline:auto}
+.phead--coach .phead__lead{margin-inline:auto}
+.profile--single{display:flex;flex-direction:column;align-items:center;gap:1.45rem;max-width:760px;margin-inline:auto;text-align:center}
+.profile--single .profile__photo{position:static;width:min(100%,340px)}
+.profile--single .profile__certifications{width:100%}
+.profile--single .profile__certs{justify-content:center}
+.profile--single .profile__content{width:100%}
+.profile--single .profile__bio{max-width:66ch;margin-inline:auto;text-align:justify;hyphens:auto}
+.profile--single .profile__achievements{max-width:66ch;margin-inline:auto;text-align:left}
+.profile__actions{display:flex;justify-content:center;margin-top:2rem}
 
 /* ---------- NEWS ARTICLES ---------- */
 .articles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:.8rem}
