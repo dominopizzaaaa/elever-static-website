@@ -1371,8 +1371,8 @@
               return '<li>' + esc(h) + '</li>'; }).join('') + '</ul>'
           : '') +
         '<div class="tcard__links">' +
-          '<a href="' + esc(T.rankingUrl) + '" target="_blank" rel="noopener">Live ranking &#8599;</a>' +
-          '<a href="' + esc(p.bwf || newsUrl(p.news)) + '" target="_blank" rel="noopener">Last matches &#8599;</a>' +
+          '<a href="' + esc(T.rankingUrl) + '" target="_blank" rel="noopener">Live ranking &rsaquo;</a>' +
+          '<a href="' + esc(p.bwf || newsUrl(p.news)) + '" target="_blank" rel="noopener">Last matches &rsaquo;</a>' +
         '</div>' +
       '</article>';
     }).join('');
@@ -1385,7 +1385,7 @@
     if (resultsMount) {
       resultsMount.innerHTML = T.players.map(function (p) {
         return '<a class="tnews__chip" href="' + esc(p.bwf || newsUrl(p.news)) + '"' +
-          ' target="_blank" rel="noopener">' + esc(p.name) + ' &#8599;</a>';
+          ' target="_blank" rel="noopener">' + esc(p.name) + ' &rsaquo;</a>';
       }).join('');
     }
 
@@ -1411,7 +1411,7 @@
 
       if (!upcoming.length) {
         nextMount.innerHTML = '<li class="tnext__empty">The 2026 season is complete. ' +
-          '<a href="' + esc(T.calendarUrl) + '" target="_blank" rel="noopener">See the next calendar &#8599;</a></li>';
+          '<a href="' + esc(T.calendarUrl) + '" target="_blank" rel="noopener">See the next calendar &rsaquo;</a></li>';
       } else {
         nextMount.innerHTML = upcoming.map(function (e) {
           var live = stamp(e.start) <= today;
@@ -1448,7 +1448,7 @@
 
       newsMount.innerHTML = feeds.map(function (f) {
         return '<a class="tnews__chip" href="' + esc(newsUrl(f.q)) + '" target="_blank" rel="noopener">' +
-          esc(f.label) + ' &#8599;</a>';
+          esc(f.label) + ' &rsaquo;</a>';
       }).join('');
     }
   })();
@@ -1547,7 +1547,7 @@
       return '<a class="article article--external" href="' + esc(item.url) + '" target="_blank" rel="noopener">' +
         '<span class="article__cat">' + esc(item.topic || 'Singapore badminton') + '</span>' +
         '<h3>' + esc(item.title) + '</h3>' +
-        '<div class="article__foot"><span>' + esc(item.publisher) + '</span><span>' + fmt(item.date) + ' &#8599;</span></div>' +
+        '<div class="article__foot"><span>' + esc(item.publisher) + '</span><span>' + fmt(item.date) + ' &rsaquo;</span></div>' +
       '</a>';
     }).join('');
   })();
@@ -1640,7 +1640,7 @@
           '<p>' + esc(sh.address || sh.desc) + '</p>' +
           '<a class="hub-text-button" href="' + esc(sh.href) + '" target="_blank" rel="noopener" aria-label="' +
             esc((sh.area === 'Directory' ? 'Find a dealer' : 'View') + ' — ' + sh.name) + '">' +
-            (sh.area === 'Directory' ? 'Find a dealer' : 'View') + ' <span aria-hidden="true">↗</span></a>' +
+            (sh.area === 'Directory' ? 'Find a dealer' : 'View') + ' <span class="arrowhead" aria-hidden="true">›</span></a>' +
         '</article>';
       }).join('');
     }

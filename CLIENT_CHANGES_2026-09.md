@@ -8,6 +8,30 @@ visible so they cannot be mistaken for forgotten work.
 Legend: `[ ]` queued · `[x]` implemented and verified · `[~]` implemented with
 a documented editorial fallback · `[?]` waiting for client input
 
+## 0. Current request addendum
+
+- [x] Add a dedicated Terms and Conditions page using the supplied copy, dated
+  1 January 2026, and point the global footer to it.
+- [x] Preserve the four approved Trusted by marks and keep the heading visually
+  attached to the Events services section.
+- [x] Increase the smallest Hub card/list type and standardise navigational
+  arrow indicators to arrowheads.
+- [x] Pull the complete official ActiveSG badminton directory into a generated
+  static dataset, including all listed DUS school halls, direct venue links
+  where ActiveSG publishes them, and the official booking-directory fallback.
+- [x] Standardise every court-directory time to 24-hour `HH:MM` formatting.
+- [~] Keep the existing social-groups fallback because the requested UI remains
+  undecided and no verified group schedules or contacts were supplied.
+- [x] Change the Contact page header to `Get in touch`, the form heading to
+  `Enquiry Form`, expand country codes, capitalise `Group Classes`, and apply
+  the supplied blue-outline/transparent send-button treatment.
+- [x] Preserve the supplied social URLs and associate the supplied Google
+  Business Profile URL with Élever Performance Lab.
+- [x] Re-audit the live ActiveSG source page by page: derive all 15 pages from
+  its declared count, parse all 147 unique cards, visit all 147 facility detail
+  pages, and publish an `All ActiveSG facilities (147)` route alongside the 19
+  sport venues and 128 DUS school halls.
+
 ## 1. Global design and behaviour
 
 - [x] Keep the approved colour system consistent: primary `#2151d1`, hover
@@ -123,7 +147,7 @@ a documented editorial fallback · `[?]` waiting for client input
 - [x] Courts: preserve operator-specific booking labels, notes, and alternate
   OnePA links instead of rendering every action as `Check Availability`.
 - [x] Courts follow-up: add linked, source-checked operating or bookable hours
-  to all 34 hall cards; clearly distinguish public hours, DUS/CC booking
+  to the complete directory; clearly distinguish public hours, DUS/CC booking
   bands, venue-only hours, and school class-only access.
 - [?] Social groups: retain an honest Racket Ratings fallback until the client
   supplies the preferred UI and verified group schedules/contacts.
@@ -174,7 +198,10 @@ a documented editorial fallback · `[?]` waiting for client input
 
 ## 11. Follow-up — venue hours and Trusted by logo balance
 
-- [x] Add an hours row and a source link to every court-directory card.
+- [x] Add an hours row and a source link to every court-directory card. The
+  refreshed directory now includes 160 entries: 10 private halls, one CC, two
+  school class venues, plus all 147 badminton facilities currently returned by
+  ActiveSG (19 public halls and 128 DUS halls).
 - [x] Use official ActiveSG facility pages for all public SportSG/DUS hours,
   including the published MOE Evans and weekend DUS schedules.
 - [x] Use each private operator's published page where available; label City

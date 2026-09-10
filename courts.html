@@ -16,9 +16,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=59" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=59" />
-  <link rel="stylesheet" href="assets/css/hub.css?v=60" />
+  <link rel="stylesheet" href="assets/css/style.css?v=63" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=63" />
+  <link rel="stylesheet" href="assets/css/hub.css?v=63" />
 </head>
 <body data-page="hub" data-nav="solid" data-base="" class="courts-page">
 
@@ -33,15 +33,16 @@
         <p class="hub-hero__by">BY ÉLEVER BADMINTON</p>
         <p class="phead__lead">Search Singapore venues by area or type, then follow the venue’s actual booking route. Availability and booking rules remain with each operator.</p>
         <div class="hub-hero__proof" aria-label="Directory highlights">
-          <span><b id="statVenues">34</b> venues</span>
-          <span><b>5</b> regions</span>
-          <span><b>Direct</b> booking routes</span>
+          <span><b id="statVenues">160</b> venues</span>
+          <span><b id="statOfficial">147</b> official ActiveSG facilities</span>
+          <span><b id="statActiveSg">19</b> sport venues</span>
+          <span><b id="statDus">128</b> DUS school halls</span>
         </div>
       </div>
     </section>
 
     <section class="hub hub--courts" id="hub" aria-labelledby="court-directory-title">
-      <div class="courts-back"><a href="hub.html#halls">← Back to Singapore Shuttlers Hub</a></div>
+      <div class="courts-back"><a href="hub.html#halls"><span class="arrowhead" aria-hidden="true">‹</span> Back to Singapore Shuttlers Hub</a></div>
       <section class="hub-block hub-venues" id="halls" aria-labelledby="court-directory-title">
         <div class="hub-section-head">
           <div><span class="hub-kicker">Island-wide directory</span><h2 id="court-directory-title">Find a court near you</h2></div>
@@ -50,7 +51,7 @@
 
         <div class="hub__book hub__book--compact" id="book">
           <article class="bcard"><span class="bcard__num" aria-hidden="true">01</span><h3>Private halls</h3><p>Open the venue’s own site or booking partner, then confirm the date, court and rate with the operator.</p></article>
-          <article class="bcard"><span class="bcard__num" aria-hidden="true">02</span><h3>ActiveSG halls</h3><p>Public SportSG halls and DUS school halls are booked through <a href="https://activesg.gov.sg/facility-bookings/activities/YLONatwvqJfikKOmB5N9U/venues" target="_blank" rel="noopener">ActiveSG</a> with a registered account. Peak slots may be balloted.</p></article>
+          <article class="bcard"><span class="bcard__num" aria-hidden="true">02</span><h3>ActiveSG facilities</h3><p>All 147 badminton facilities currently listed by ActiveSG are included: 19 sport venues and 128 DUS school halls. Book through <a href="https://activesg.gov.sg/facility-bookings/activities/YLONatwvqJfikKOmB5N9U/venues" target="_blank" rel="noopener">ActiveSG</a> with a registered account.</p></article>
           <article class="bcard"><span class="bcard__num" aria-hidden="true">03</span><h3>Community clubs</h3><p>People’s Association facilities are listed and booked on <a href="https://www.onepa.gov.sg/facilities/search?facility=BADMINTON%20COURTS" target="_blank" rel="noopener">OnePA</a>. Sign in and follow each venue’s conditions.</p></article>
         </div>
 
@@ -72,8 +73,8 @@
                 <summary class="fdrop__btn">Type<span class="fdrop__count" aria-hidden="true"></span><svg class="fdrop__chev" viewBox="0 0 12 8" width="11" height="7" aria-hidden="true"><path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
                 <div class="fdrop__menu" role="group" aria-label="Filter venues by type">
                   <label class="fdrop__opt"><input type="checkbox" value="private"><span>Private</span></label>
-                  <label class="fdrop__opt"><input type="checkbox" value="activesg"><span>ActiveSG</span></label>
-                  <label class="fdrop__opt"><input type="checkbox" value="dus"><span>ActiveSG DUS</span></label>
+                  <label class="fdrop__opt"><input type="checkbox" value="activesg"><span>ActiveSG sport venues</span></label>
+                  <label class="fdrop__opt"><input type="checkbox" value="dus"><span>ActiveSG DUS school halls</span></label>
                   <label class="fdrop__opt"><input type="checkbox" value="cc"><span>Community Clubs</span></label>
                 </div>
               </details>
@@ -84,16 +85,17 @@
         </div>
         <div class="hub-venue-resultbar"><p class="hub__count" id="hallCount" aria-live="polite"></p><p>Élever-tagged venues also link to our <a href="classes.html">class schedule</a>.</p></div>
         <div class="hub__grid" id="hallGrid"></div>
-        <p class="hub-source-note">Hours link to the source used for each venue and describe public/bookable access where it is published. School halls without public hire are labelled as class-only access. ActiveSG venue names and hours were checked against official ActiveSG facility pages in September 2026; private venue details can change, so confirm availability with the operator. Spotted an error? <a href="mailto:info@eleverbadminton.com?subject=Singapore%20Shuttlers%20Hub%20venue%20update">Tell us</a>.</p>
+        <p class="hub-source-note">All 15 pages and all 147 facility detail pages from the official <a href="https://www.activesgcircle.gov.sg/facilities/badminton" target="_blank" rel="noopener">ActiveSG badminton facilities list</a> were checked. Hours link to each venue’s official source and use 24-hour HH:MM formatting. Private venue details can change, so confirm availability with the operator. Spotted an error? <a href="mailto:info@eleverbadminton.com?subject=Singapore%20Shuttlers%20Hub%20venue%20update">Tell us</a>.</p>
       </section>
     </section>
   </main>
 
   <footer id="siteFooter"></footer>
 
-  <script src="assets/js/data.js?v=59"></script>
-  <script src="assets/js/site.js?v=59"></script>
-  <script src="assets/js/pages.js?v=59"></script>
-  <script src="assets/js/main.js?v=60"></script>
+  <script src="assets/js/data.js?v=63"></script>
+  <script src="assets/js/activesg-venues.js?v=63"></script>
+  <script src="assets/js/site.js?v=63"></script>
+  <script src="assets/js/pages.js?v=63"></script>
+  <script src="assets/js/main.js?v=63"></script>
 </body>
 </html>

@@ -59,7 +59,8 @@ async function checkContact(page, viewport, name) {
   const form = page.locator('#contact-form');
   const topic = form.locator('[name="Topic"]');
 
-  assert.equal(await form.getByRole('heading', { name: 'Get in touch' }).count(), 1);
+  assert.equal(await page.locator('.phead h1').getByText('Get in touch', { exact: true }).count(), 1);
+  assert.equal(await form.getByRole('heading', { name: 'Enquiry Form' }).count(), 1);
   assert.equal(await page.getByText('Tell us what you need', { exact: true }).count(), 0);
   assert.equal(await page.getByText(/Usually replies within one working day/i).count(), 0);
   assert.equal(await page.getByText('Player details, if relevant', { exact: true }).count(), 0);
@@ -70,8 +71,14 @@ async function checkContact(page, viewport, name) {
   assert.equal(await form.locator('[name="Country code"]').inputValue(), '+65');
   assert.equal(await form.locator('[name="Mobile"]').getAttribute('required'), null);
   assert.equal(await form.locator('[data-contact-panel]:visible').count(), 0);
-  assert.equal(await form.getByRole('button', { name: 'Send message' })
-    .evaluate(node => getComputedStyle(node).backgroundColor), 'rgb(224, 228, 236)');
+  const sendButtonStyle = await form.getByRole('button', { name: 'Send message' }).evaluate(node => ({
+    background: getComputedStyle(node).backgroundColor,
+    border: getComputedStyle(node).borderTopColor,
+    color: getComputedStyle(node).color
+  }));
+  assert.deepEqual(sendButtonStyle, {
+    background: 'rgba(0, 0, 0, 0)', border: 'rgb(33, 81, 209)', color: 'rgb(33, 81, 209)'
+  });
 
   const expectations = {
     Classes: {
@@ -79,7 +86,7 @@ async function checkContact(page, viewport, name) {
       names: ['Name of student', 'Age of student', 'Preferred class type', 'Preferred area'],
       optional: ['Message'],
       values: { 'Name of student': 'Alex Tan', 'Age of student': '12',
-        'Preferred class type': 'Group classes', 'Preferred area': 'East', Message: 'Weekend mornings.' }
+        'Preferred class type': 'Group Classes', 'Preferred area': 'East', Message: 'Weekend mornings.' }
     },
     Events: {
       panel: '#contact-fields-events',
@@ -140,7 +147,7 @@ async function checkContact(page, viewport, name) {
   assert.deepEqual(payload, {
     subject: 'Website enquiry', Name: 'Jamie Lim', Email: 'jamie@example.com',
     'Country code': '+65', Mobile: '81234567', Topic: 'Classes',
-    'Name of student': 'Alex Tan', 'Age of student': '12', 'Preferred class type': 'Group classes',
+    'Name of student': 'Alex Tan', 'Age of student': '12', 'Preferred class type': 'Group Classes',
     'Preferred area': 'East', Message: 'Weekend mornings.'
   });
   assert.equal(await form.locator('[data-contact-panel]:visible').count(), 0,
@@ -390,7 +397,7 @@ async function runViewport(browser, viewport, name) {
   assert.ok(localOrder.every((item, index) => !index || item.y > localOrder[index - 1].y),
     name + ' Local Hub sections are out of order');
   assert.equal(await page.locator('#groupPreview li').count(), 3);
-  assert.equal(await page.locator('.hub-court-types a').count(), 3);
+  assert.equal(await page.locator('.hub-court-types a').count(), 5);
   if (viewport.width > 1050) {
     const groups = await page.locator('#groups').boundingBox();
     const halls = await page.locator('#halls').boundingBox();
@@ -435,13 +442,18 @@ async function runViewport(browser, viewport, name) {
     await page.locator('#play').evaluate(node => node.scrollIntoView({ block: 'start', behavior: 'instant' }));
     await page.screenshot({ path: path.join(outDir, name + '-hub-layout.png'), fullPage: false });
   }
-  for (const [type, expected] of [['private', 10], ['activesg', 19], ['cc', 1]]) {
+  for (const [type, expected] of [['private', 10], ['official', 147], ['activesg', 19], ['dus', 128], ['cc', 1]]) {
     await page.locator('.hub-court-types a[href*="type=' + type + '"]').click();
     await page.waitForURL('**/courts.html?type=' + type + '#halls');
     assert.equal(await page.locator('#hallGrid .hcard').count(), expected);
-    assert.equal(await page.locator('#hallFilters input[value="' + type + '"]').isChecked(), true);
+    if (type === 'official') {
+      assert.deepEqual(await page.locator('#hallFilters input:checked').evaluateAll(nodes => nodes.map(node => node.value)),
+        ['activesg', 'dus']);
+    } else {
+      assert.equal(await page.locator('#hallFilters input[value="' + type + '"]').isChecked(), true);
+    }
     await page.locator('#hallClear').click();
-    assert.equal(await page.locator('#hallGrid .hcard').count(), 34);
+    assert.equal(await page.locator('#hallGrid .hcard').count(), 160);
     await open(page, '/hub.html#local', name + ' return to Local Hub');
   }
   await page.goto(base + '/hub.html#shops');
@@ -456,14 +468,19 @@ async function runViewport(browser, viewport, name) {
   assert.equal(await page.locator('#tab-international').getAttribute('aria-selected'), 'true');
 
   await open(page, '/courts.html', name + ' Courts');
+  assert.deepEqual(await page.evaluate(() => window.ACTIVESG_BADMINTON_AUDIT), {
+    listPages: 15, listedFacilities: 147, detailPagesChecked: 147, activesg: 19, dus: 128,
+    directBookingLinks: 127, directoryFallbacks: 20
+  });
+  assert.equal(await page.locator('#statOfficial').textContent(), '147');
   assert.equal(await page.getByText('Cereza Sports Hall', { exact: true }).count(), 0);
   assert.equal(await page.getByText('Kovan Sports Centre', { exact: true }).count(), 0);
   assert.ok(await page.getByText('Bishan Clubhouse', { exact: true }).count());
   assert.ok(await page.locator('.hcard__addr').first().evaluate(node =>
     getComputedStyle(node).textDecorationLine.includes('underline')));
-  assert.equal(await page.locator('#hallGrid .hcard').count(), 34);
-  assert.equal(await page.locator('#hallGrid .hcard__hours').count(), 34);
-  assert.equal(await page.locator('#hallGrid .hcard__hours > a').count(), 34);
+  assert.equal(await page.locator('#hallGrid .hcard').count(), 160);
+  assert.equal(await page.locator('#hallGrid .hcard__hours').count(), 160);
+  assert.equal(await page.locator('#hallGrid .hcard__hours > a').count(), 160);
   const courtHours = await page.locator('#hallGrid .hcard').evaluateAll(cards => cards.map(card => {
     const venue = card.querySelector('.hcard__name').textContent.trim();
     const row = card.querySelector('.hcard__hours');
@@ -477,8 +494,10 @@ async function runViewport(browser, viewport, name) {
     assert.ok(item.source && /^(https?:|file:)/.test(item.source),
       name + ' hours source missing for ' + item.venue);
   });
-  assert.ok(courtHours.some(item => item.hours.includes('Public DUS')),
-    name + ' DUS hours are not distinguished');
+  assert.ok(await page.locator('#hallGrid .hcard__tag--dus').count() >= 128,
+    name + ' DUS halls are not distinguished');
+  assert.ok(courtHours.every(item => !/\b(?:[0-9]{1,2}(?::[0-9]{2})?\s*(?:am|pm)|midnight|noon)\b/i.test(item.hours)),
+    name + ' a court time is not in 24-hour HH:MM format');
   assert.ok(courtHours.some(item => item.hours.includes('no public court hire')),
     name + ' school access is not distinguished from public hours');
   await page.locator('#hallGrid .hcard').first().screenshot({
@@ -490,17 +509,27 @@ async function runViewport(browser, viewport, name) {
     counts[type] = (counts[type] || 0) + 1;
     return counts;
   }, {}));
-  assert.deepEqual(courtTypes, { private: 10, activesg: 19, elever: 2, cc: 1, dus: 2 });
+  assert.deepEqual(courtTypes, { private: 10, elever: 2, cc: 1, dus: 128, activesg: 19 });
   const activeSgRoutes = await page.locator('#hallGrid .hcard').evaluateAll(cards => cards
     .filter(card => card.querySelector('.hcard__tag--activesg, .hcard__tag--dus'))
     .map(card => Array.from(card.querySelectorAll('a')).map(link => link.href)));
-  assert.ok(activeSgRoutes.every(routes => routes.some(url => url.includes('activesg.gov.sg/venues/'))),
-    name + ' an ActiveSG venue lacks its direct official booking route');
+  const directActiveSgRoutes = activeSgRoutes.filter(routes =>
+    routes.some(url => url.includes('activesg.gov.sg/venues/')));
+  const directoryFallbackRoutes = activeSgRoutes.filter(routes =>
+    routes.some(url => url.includes('activesg.gov.sg/facility-bookings/activities/')));
+  assert.equal(directActiveSgRoutes.length, 127,
+    name + ' direct ActiveSG booking route count changed');
+  assert.equal(directoryFallbackRoutes.length, 20,
+    name + ' ActiveSG directory fallback count changed');
+  assert.ok(activeSgRoutes.every(routes => routes.some(url => /^https:\/\/activesg\.gov\.sg\//.test(url))),
+    name + ' an ActiveSG venue lacks an official booking route');
   const courtActions = await page.locator('#hallGrid .hcard__actions a').allTextContents();
   ['Book on ActiveSG', 'Book on Rezerv', 'Book on Playtomic', 'Public courts on OnePA']
     .forEach(label => assert.ok(courtActions.includes(label), name + ' court action is missing: ' + label));
   await page.locator('#hallSearch').fill('Bishan');
-  assert.equal(await page.locator('#hallGrid .hcard').count(), 2);
+  assert.deepEqual(await page.locator('#hallGrid .hcard__name').allTextContents(),
+    ['Bishan Clubhouse', 'Bishan Sport Hall', 'Kuo Chuan Presbyterian Primary School Hall',
+      'Whitley Secondary School Hall']);
   await page.locator('#hallSearch').fill('');
 
   await checkContact(page, viewport, name);

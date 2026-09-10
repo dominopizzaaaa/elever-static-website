@@ -190,7 +190,7 @@
 
       '<div class="footer__base">' +
         '<p>Elever Sports Pte. Ltd. · UEN 202501591C</p>' +
-        '<p><a href="' + url('privacy.html') + '">Privacy notice</a> · <a href="' + url('privacy.html') + '#terms">Terms &amp; conditions</a></p>' +
+        '<p><a href="' + url('privacy.html') + '">Privacy notice</a> · <a href="' + url('terms.html') + '">Terms &amp; conditions</a></p>' +
         '<p>© ' + new Date().getFullYear() + ' Élever Badminton. Photography © Élever Badminton.</p>' +
       '</div>';
   }

@@ -20,6 +20,7 @@ rather than one long scrolling page.
 | Courts | `courts.html` | Dedicated Singapore badminton-court directory with operator-specific booking guidance |
 | Contact | `contact.html` | Conditional Classes / Events / Careers / Others enquiry form plus WhatsApp and email routes |
 | Privacy | `privacy.html` | PDPA privacy notice draft (needs completion — see below) |
+| Terms | `terms.html` | Terms and Conditions for all classes, updated 1 January 2026 |
 
 ## Editing content — start here
 
@@ -63,6 +64,14 @@ check the filenames listed in `data.js` still line up:
 | `Photos/Regular Classes/<Stage>.png` | `bash tools/build-class-photos.sh` | `assets/img/classes/<stage>.jpg` — 900px pathway card image |
 | `Photos/Partners/<Partner>.png` | `bash tools/build-partner-logos.sh` | `assets/img/partners/<slug>.png` — 480px, transparency kept |
 
+The courts directory also has a generated official ActiveSG/DUS snapshot. Run
+`node tools/build-activesg-venues.js` to rebuild `assets/js/activesg-venues.js`
+from ActiveSG's badminton facilities listing and venue detail pages. The build
+discovers the live result and page counts, verifies every page range, visits
+every listed facility page, and aborts if any card, address, name or operating
+hours field is missing. The generated audit metadata records the checked page
+and facility totals.
+
 The scripts use macOS `sips`, so they run on a Mac as-is.
 
 ## Brand
@@ -86,8 +95,7 @@ info@eleverbadminton.com · WhatsApp +65 8921 4221
   (Northbrooks Secondary School and the five CCs). The supplied SingHealth
   Community Hospitals mark is used in its event detail.
 - Write-ups for the previous events listed on the Events page
-- Completion of the bracketed fields in `privacy.html` (DPO, retention period) and the
-  Terms & Conditions page the footer links to
+- Completion of the bracketed fields in `privacy.html` (DPO, retention period)
 - Production configuration for the contact endpoint: set `RESEND_API_KEY` and, if needed,
   `FROM_EMAIL` to a verified sender in the deployment environment
 - Approved popup-length bios for coaches (the current safe fallback is each full bio's first paragraph)
@@ -96,7 +104,7 @@ info@eleverbadminton.com · WhatsApp +65 8921 4221
 ## Structure
 
 ```
-index.html  classes.html  camps.html   events.html  lab.html
+index.html  classes.html  camps.html   events.html  lab.html    terms.html
 about.html  news.html     hub.html     courts.html  contact.html privacy.html
 sitemap.xml robots.txt
 coaches/          generated — one page per coach

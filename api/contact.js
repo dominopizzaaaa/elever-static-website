@@ -22,6 +22,13 @@ const REQUIRED_BY_TOPIC = {
   Careers: ['Age', 'Role of interest', 'Experience and qualifications', 'Availability'],
   Others: ['Message'],
 };
+const COUNTRY_CODES = new Set([
+  '+65', '+60', '+62', '+66', '+63', '+84', '+673', '+855', '+856', '+95',
+  '+86', '+852', '+853', '+886', '+81', '+82', '+91', '+880', '+94', '+977',
+  '+92', '+971', '+966', '+974', '+64', '+61', '+1', '+52', '+55', '+44',
+  '+353', '+33', '+49', '+39', '+34', '+31', '+41', '+46', '+47', '+45',
+  '+358', '+27'
+]);
 
 function escapeHtml(s) {
   return String(s)
@@ -66,6 +73,9 @@ module.exports = async function handler(req, res) {
     }
     if (mobile && !countryCode) {
       return res.status(400).json({ error: 'A country code is required with a mobile number.' });
+    }
+    if (countryCode && !COUNTRY_CODES.has(countryCode)) {
+      return res.status(400).json({ error: 'Please select a valid country code.' });
     }
     const missingTopicField = REQUIRED_BY_TOPIC[topic].find(function (field) {
       return !String(body[field] || '').trim();

@@ -1233,6 +1233,12 @@ body.has-lightbox{overflow:hidden}
 .contact-form-card .lead__actions{display:grid;grid-template-columns:auto;justify-items:start}
 .contact-form-card .lead__status{max-width:60ch}
 .contact-form-card button:disabled{cursor:wait;opacity:.58}
+.btn--contact-send{gap:clamp(1.5rem,5vw,3rem);min-width:220px;justify-content:space-between;border:2px solid var(--accent);border-radius:18px;background:transparent;color:var(--accent);font-weight:750}
+.btn--contact-send > span:last-child{font-size:1.35rem;line-height:1;transition:transform .2s var(--ease)}
+.btn--contact-send:hover{background:var(--accent-soft);color:var(--accent)}
+.btn--contact-send:hover > span:last-child{transform:translateX(3px)}
+.btn--contact-send:active{background:rgba(33,81,209,.16);border-color:var(--accent-press)}
+.btn--contact-send:disabled{background:var(--secondary);border-color:var(--line-2);color:var(--muted)}
 .contact-aside{display:flex;flex-direction:column;gap:.75rem}
 .contact-aside__intro{padding:.2rem 0 1rem}
 .contact-channel{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:.8rem;align-items:center;
@@ -1263,7 +1269,7 @@ body.has-lightbox{overflow:hidden}
 }
 @media(max-width:640px){
   .phead--contact{padding-top:8.1rem;padding-bottom:3.8rem}
-  .contact-form-card{scroll-margin-top:96px}
+  .contact-form-card{scroll-margin-top:112px}
   .contact-hero__actions{flex-direction:column;align-items:stretch}
   .contact-hero__actions .btn{width:100%}
   .contact-fields{grid-template-columns:1fr}
@@ -1273,6 +1279,15 @@ body.has-lightbox{overflow:hidden}
   .contact-aside{grid-template-columns:1fr}
   .contact-aside__intro,.contact-event-card{grid-column:auto}
 }
+
+/* ---------- LEGAL PAGES ---------- */
+.legal-page{padding-top:clamp(2.8rem,6vw,5.2rem)}
+.legal-prose{max-width:78ch}
+.legal-prose section + section{margin-top:clamp(2rem,4vw,3rem);padding-top:clamp(1.6rem,3vw,2.2rem);border-top:1px solid var(--rule)}
+.legal-prose h2{margin:0 0 .8rem;font-size:clamp(1.15rem,2.2vw,1.5rem);font-weight:800;letter-spacing:-.025em}
+.legal-prose ul{display:grid;gap:.7rem;padding-left:1.25rem;color:var(--muted)}
+.legal-prose li{padding-left:.2rem;line-height:1.75}
+.legal-prose__notice{margin-top:clamp(2.4rem,5vw,4rem);padding:1.2rem 1.3rem;border-left:3px solid var(--accent);background:var(--accent-soft);color:var(--ink-soft);font-weight:600;line-height:1.7}
 
 /* ---------- FAQ ---------- */
 .faq{display:flex;flex-direction:column;gap:.45rem;max-width:74ch}
