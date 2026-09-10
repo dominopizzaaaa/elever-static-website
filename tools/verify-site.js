@@ -584,16 +584,20 @@ async function crawlAllPages(browser) {
   const page = await context.newPage();
   attachDiagnostics(page, 'full-crawl');
   const checked = new Set();
+  const headingSizes = new Map();
 
   for (const route of allHtmlRoutes()) {
     await open(page, route, 'full-crawl ' + route);
     const icons = await page.locator('link[rel~="icon"]').count();
     assert.ok(icons >= 2, route + ' does not expose both primary and fallback favicons');
     const iconHrefs = await page.locator('link[rel~="icon"]').evaluateAll(nodes => nodes.map(node => node.href));
-    assert.ok(iconHrefs.some(href => href.includes('/assets/img/brand/eb-icon-blue.png?v=61')),
+    assert.ok(iconHrefs.some(href => href.includes('/assets/img/brand/eb-icon-blue.png?v=62')),
       route + ' is missing the requested blue-background PNG favicon');
-    assert.ok(iconHrefs.some(href => href.includes('/favicon.ico?v=61')),
+    assert.ok(iconHrefs.some(href => href.includes('/favicon.ico?v=62')),
       route + ' is missing the versioned ICO fallback');
+    if (route === '/about.html' || route === '/contact.html') {
+      headingSizes.set(route, await page.locator('.phead h1').evaluate(node => getComputedStyle(node).fontSize));
+    }
 
     if (route.startsWith('/coaches/')) {
       assert.equal(await page.locator('.phead__crumbs').count(), 0, route + ' still has breadcrumbs');
@@ -644,6 +648,8 @@ async function crawlAllPages(browser) {
         route + ' references missing local resource ' + target.pathname + ' (' + response.status() + ')');
     }
   }
+  assert.equal(headingSizes.get('/contact.html'), headingSizes.get('/about.html'),
+    'Contact and About page headings should use the same font size');
   await context.close();
 }
 

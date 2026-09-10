@@ -14,7 +14,7 @@ require(path.join(root, 'assets/js/data.js'));
 const COACHES = global.window.ELEVER_DATA.coaches;
 
 const V = '63'; // must match the shared asset cache key used across the site
-const FAVICON_V = '61';
+const FAVICON_V = '62';
 
 const esc = s => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
