@@ -1092,7 +1092,7 @@ body.has-lightbox{overflow:hidden}
 .cdetail__actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.6rem}
 @media(max-width:700px){
   .cdetail{grid-template-columns:1fr;gap:1.2rem}
-  .cdetail__photo{max-width:220px}
+  .cdetail__photo{max-width:220px;margin-inline:auto}
 }
 
 .profile{display:grid;grid-template-columns:300px 1fr;gap:2.4rem;align-items:start}
@@ -1127,6 +1127,11 @@ body.has-lightbox{overflow:hidden}
 @media(max-width:860px){
   .profile--coach{grid-template-columns:1fr;gap:1.8rem}
   .profile--coach .profile__aside{position:static;width:min(100%,340px)}
+}
+@media(max-width:620px){
+  .profile--coach .profile__aside{margin-inline:auto}
+  .profile--coach .profile__bio{text-align:left;hyphens:none}
+  .profile--coach .profile__actions{justify-content:center}
 }
 
 /* ---------- NEWS ARTICLES ---------- */

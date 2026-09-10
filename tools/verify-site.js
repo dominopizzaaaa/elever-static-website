@@ -383,6 +383,13 @@ async function runViewport(browser, viewport, name) {
   assert.equal(await coachDialog.getByRole('link', { name: 'See classes' }).count(), 0);
   assert.equal(await coachDialog.getByRole('heading', { name: 'About Kean Hean' }).count(), 1);
   assert.equal(await coachDialog.getByRole('link', { name: /View full profile/ }).count(), 1);
+  if (viewport.width <= 620) {
+    const dialogBody = await coachDialog.locator('.cdetail').boundingBox();
+    const dialogPhoto = await coachDialog.locator('.cdetail__photo').boundingBox();
+    assert.ok(dialogBody && dialogPhoto &&
+      Math.abs((dialogPhoto.x + dialogPhoto.width / 2) - (dialogBody.x + dialogBody.width / 2)) < 2,
+    name + ' coach popup photo is not centred on phone');
+  }
   await page.keyboard.press('Escape');
   assert.ok(await coachTrigger.evaluate(node => node === document.activeElement), name + ' coach focus did not return');
 
@@ -392,11 +399,33 @@ async function runViewport(browser, viewport, name) {
   assert.equal(await page.getByRole('link', { name: 'View the team' }).count(), 1);
   assert.equal(await page.getByRole('link', { name: 'ASCA Level 1' }).count(), 1);
   assert.equal(await page.getByRole('link', { name: 'Level 1 Sports Trainer' }).count(), 1);
-  assert.equal(await page.locator('.profile__bio').first().evaluate(node => getComputedStyle(node).textAlign), 'justify');
+  assert.equal(
+    await page.locator('.profile__bio').first().evaluate(node => getComputedStyle(node).textAlign),
+    viewport.width <= 620 ? 'left' : 'justify'
+  );
   const coachHeader = await page.locator('.phead--coach-profile .phead__inner').boundingBox();
   const coachHeading = await page.locator('.phead--coach-profile h1').boundingBox();
   assert.ok(coachHeader && coachHeading && Math.abs(coachHeading.x - coachHeader.x) < 2,
     name + ' coach heading is not left aligned');
+  if (viewport.width <= 620) {
+    const coachRole = await page.locator('.phead--coach-profile .phead__lead').boundingBox();
+    const coachProfile = await page.locator('.profile--coach').boundingBox();
+    const coachPhoto = await page.locator('.profile--coach .profile__photo').boundingBox();
+    const teamAction = await page.locator('.profile--coach .profile__actions').boundingBox();
+    const teamButton = await page.getByRole('link', { name: 'View the team' }).boundingBox();
+    assert.ok(coachRole && Math.abs(coachRole.x - coachHeader.x) < 2,
+      name + ' coach role is not left aligned on phone');
+    assert.equal(await page.locator('.profile--coach .profile__content').evaluate(node => getComputedStyle(node).textAlign),
+      'left', name + ' coach content is not left aligned on phone');
+    assert.equal(await page.locator('.profile--coach .profile__bio').first().evaluate(node => getComputedStyle(node).textAlign),
+      'left', name + ' coach biography is not left aligned on phone');
+    assert.ok(coachProfile && coachPhoto &&
+      Math.abs((coachPhoto.x + coachPhoto.width / 2) - (coachProfile.x + coachProfile.width / 2)) < 2,
+    name + ' coach profile photo is not centred on phone');
+    assert.ok(teamAction && teamButton &&
+      Math.abs((teamButton.x + teamButton.width / 2) - (teamAction.x + teamAction.width / 2)) < 2,
+    name + ' View the team button is not centred on phone');
+  }
   await page.screenshot({ path: path.join(outDir, name + '-coach-profile.png'), fullPage: true });
 
   await open(page, '/hub.html', name + ' Hub');

@@ -14,6 +14,7 @@ require(path.join(root, 'assets/js/data.js'));
 const COACHES = global.window.ELEVER_DATA.coaches;
 
 const V = '64'; // must match the shared asset cache key used across the site
+const PAGES_V = '66'; // cache key for the coach-layout stylesheet
 const FAVICON_V = '64';
 
 const esc = s => String(s == null ? '' : s)
@@ -84,7 +85,7 @@ function page(c) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../assets/css/style.css?v=${V}" />
-  <link rel="stylesheet" href="../assets/css/pages.css?v=${V}" />
+  <link rel="stylesheet" href="../assets/css/pages.css?v=${PAGES_V}" />
   <script type="application/ld+json">${jsonld}</script>
 </head>
 <body data-page="about" data-nav="solid" data-base="../">
