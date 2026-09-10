@@ -449,10 +449,10 @@
       services: [
         'Tournament Format & Scheduling',
         'Venue & Court Setup',
-        'Match Operations & Results Management',
+        'Match Operations & Participant Management',
         'Certified Badminton & Pickleball Umpires',
+        'Clinics Programme Planning & Execution',
         'Professional Badminton and Pickleball Coaches',
-        'Clinics Programme Planning and Execution',
         'Event Emcee',
         'Backdrop Production & Setup'
       ],
@@ -489,8 +489,8 @@
       slug: 'asics-summit-2026',
       description: 'In celebration of World Badminton Day, we partnered with ASICS to create a one-of-a-kind Badminton Summit, bringing their Speed and Control shoes to life on court. From curating participants to designing targeted badminton drills for each style of play, followed by a yoga session inspired by ASICS’ “Sound Mind, Sound Body” philosophy, we delivered an immersive experience connecting product, performance, community and brand.',
       services: [
-        'Event Concept & Experience Design',
-        'Product-Focused Drill Design',
+        'Event Conceptualisation & Experience Design',
+        'Product-Focused Programme Planning and Drill Design',
         'Professional Badminton Coaches & On-Court Facilitation',
         'Participant Curation & Management',
         'Brand & Product Integration',
@@ -520,6 +520,17 @@
       when: '23 May 2026',
       where: 'St. Patrick’s School',
       slug: 'joo-chiat-carnival-2026',
+      description: 'Our largest scale event to date, the Joo Chiat Badminton Carnival 2026 was strategically held ahead of the Singapore Badminton Open to build on the excitement surrounding badminton in Singapore. We brought together Guest of Honour Mr Edwin Tong and top national shuttlers Loh Kean Yew, Yeo Jia Min, Wesley Koh and Kubo Junsuke for exhibition matches and autograph sessions. With clinics for all ages, branded game booths supported by our sponsors, and a unique 3v3 tournament to close the day, the carnival offered something for everyone while bringing the community closer to the sport and its biggest names.',
+      services: [
+        'Event Conceptualisation, Planning & Execution',
+        'National Athlete & Guest-of-Honour Engagement',
+        'Sponsor Sourcing & Partnership Management',
+        'Programme Planning & Participant Experience Design',
+        'Exhibition Matches & Autograph Session Management',
+        'Branded Activations & Participant Engagement',
+        'Tournament Format, Registration & Operations',
+        'Crowd Management & On-Ground Event Operations'
+      ],
       partners: [
         { name: 'People\u2019s Association', logo: 'assets/img/partners/peoples-association.png' },
         { name: 'Joo Chiat Community Sports Network', logo: 'assets/img/partners/joo-chiat-csn.png' },
@@ -567,6 +578,13 @@
       when: '4 Apr 2026',
       where: 'Paya Lebar Kovan Community Club',
       slug: 'serangoon-paya-lebar-clinic-2026',
+      description: 'We delivered three consecutive sessions for youths aged 15 to 35 at the Serangoon-Paya Lebar Badminton Clinic 2026, with tailored programmes for different playing levels. Beginners focused on building strong foundations and confidence on court, while experienced players sharpened their doubles skills, positioning and gameplay. Each session was structured to provide purposeful coaching while keeping the experience engaging and enjoyable for all participants.',
+      services: [
+        'Clinic Programme Planning & Execution',
+        'Skill-Level Based Programme Design',
+        'Professional Badminton Coaches',
+        'Participant Management & On-Ground Event Operations'
+      ],
       photos: [
         'serangoon-paya-lebar-clinic-2026-1.jpg',
         'serangoon-paya-lebar-clinic-2026-2.jpg',
@@ -585,6 +603,13 @@
       when: '8 Feb 2026',
       where: 'Hillview Community Club',
       slug: 'bukit-gombak-clinic-2026',
+      description: 'Following the strong response to our first edition, we returned to Bukit Gombak for a second year with our multi-sport clinic for young participants. Kids rotated through dedicated badminton and table tennis stations, followed by agility exercises designed to support both sports. The programme gave participants a fun and engaging way to experience both sports, learn their fundamentals and discover new interests through structured coaching and play.',
+      services: [
+        'Multi-Sport Clinic Programme Planning & Execution',
+        'Professional Badminton & Table Tennis Coaches',
+        'Kids Sports Programme Design',
+        'Participant & On-Ground Management'
+      ],
       photos: [
         'bukit-gombak-clinic-2026-1.jpg',
         'bukit-gombak-clinic-2026-2.jpg',
@@ -603,6 +628,11 @@
       when: '23 Oct 2025',
       where: 'Northbrooks Secondary School',
       slug: 'northbrooks-school-2025',
+      description: 'We partnered with Northbrooks Secondary School to deliver an engaging badminton experience combining inspiration with on-court action. Our Co-Founder and Technical Director, Loh Kean Hean, shared his journey and experiences as a professional badminton player, followed by group training drills where students put their skills into practice. The session concluded with exhibition matches alongside the students, giving them the opportunity to interact, learn and experience badminton up close with a professional athlete.',
+      services: [
+        'Athlete Sharing & Student Engagement',
+        'Badminton Training & Group Drills'
+      ],
       photos: [
         'northbrooks-school-2025-1.jpg',
         'northbrooks-school-2025-2.jpg',

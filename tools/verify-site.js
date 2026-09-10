@@ -278,9 +278,66 @@ async function runViewport(browser, viewport, name) {
     name + ' SBA logo is still visually too narrow beside ASICS: ' + JSON.stringify(partnerBoxes));
   await page.locator('.trusted-inline').screenshot({ path: path.join(outDir, name + '-trusted-by.png') });
   assert.equal(await page.locator('.ecov').first().evaluate(node => getComputedStyle(node).borderRadius), '8px');
+  const eventStories = {
+    'SingHealth President’s Challenge Sports Day 2026': {
+      description: 'We partnered with SingHealth Community Hospitals to plan and deliver their Badminton & Pickleball corporate competition from concept to event-day execution. From tournament management and certified officials to coaching clinics, our team managed every aspect of the event to create a complete corporate racket sports experience that brought together competitive play, skills development and meaningful team bonding.',
+      services: ['Tournament Format & Scheduling', 'Venue & Court Setup',
+        'Match Operations & Participant Management', 'Certified Badminton & Pickleball Umpires',
+        'Clinics Programme Planning & Execution', 'Professional Badminton and Pickleball Coaches',
+        'Event Emcee', 'Backdrop Production & Setup']
+    },
+    'ASICS Badminton Summit 2026': {
+      description: 'In celebration of World Badminton Day, we partnered with ASICS to create a one-of-a-kind Badminton Summit, bringing their Speed and Control shoes to life on court. From curating participants to designing targeted badminton drills for each style of play, followed by a yoga session inspired by ASICS’ “Sound Mind, Sound Body” philosophy, we delivered an immersive experience connecting product, performance, community and brand.',
+      services: ['Event Conceptualisation & Experience Design',
+        'Product-Focused Programme Planning and Drill Design',
+        'Professional Badminton Coaches & On-Court Facilitation', 'Participant Curation & Management',
+        'Brand & Product Integration', 'Yoga Programme Coordination']
+    },
+    'Joo Chiat Badminton Carnival 2026': {
+      description: 'Our largest scale event to date, the Joo Chiat Badminton Carnival 2026 was strategically held ahead of the Singapore Badminton Open to build on the excitement surrounding badminton in Singapore. We brought together Guest of Honour Mr Edwin Tong and top national shuttlers Loh Kean Yew, Yeo Jia Min, Wesley Koh and Kubo Junsuke for exhibition matches and autograph sessions. With clinics for all ages, branded game booths supported by our sponsors, and a unique 3v3 tournament to close the day, the carnival offered something for everyone while bringing the community closer to the sport and its biggest names.',
+      services: ['Event Conceptualisation, Planning & Execution',
+        'National Athlete & Guest-of-Honour Engagement', 'Sponsor Sourcing & Partnership Management',
+        'Programme Planning & Participant Experience Design',
+        'Exhibition Matches & Autograph Session Management',
+        'Branded Activations & Participant Engagement', 'Tournament Format, Registration & Operations',
+        'Crowd Management & On-Ground Event Operations']
+    },
+    'Serangoon-Paya Lebar Badminton Clinic 2026': {
+      description: 'We delivered three consecutive sessions for youths aged 15 to 35 at the Serangoon-Paya Lebar Badminton Clinic 2026, with tailored programmes for different playing levels. Beginners focused on building strong foundations and confidence on court, while experienced players sharpened their doubles skills, positioning and gameplay. Each session was structured to provide purposeful coaching while keeping the experience engaging and enjoyable for all participants.',
+      services: ['Clinic Programme Planning & Execution', 'Skill-Level Based Programme Design',
+        'Professional Badminton Coaches', 'Participant Management & On-Ground Event Operations']
+    },
+    'Bukit Gombak Sports Clinic 2026': {
+      description: 'Following the strong response to our first edition, we returned to Bukit Gombak for a second year with our multi-sport clinic for young participants. Kids rotated through dedicated badminton and table tennis stations, followed by agility exercises designed to support both sports. The programme gave participants a fun and engaging way to experience both sports, learn their fundamentals and discover new interests through structured coaching and play.',
+      services: ['Multi-Sport Clinic Programme Planning & Execution',
+        'Professional Badminton & Table Tennis Coaches', 'Kids Sports Programme Design',
+        'Participant & On-Ground Management']
+    },
+    'ÉB @ Northbrooks Secondary School': {
+      description: 'We partnered with Northbrooks Secondary School to deliver an engaging badminton experience combining inspiration with on-court action. Our Co-Founder and Technical Director, Loh Kean Hean, shared his journey and experiences as a professional badminton player, followed by group training drills where students put their skills into practice. The session concluded with exhibition matches alongside the students, giving them the opportunity to interact, learn and experience badminton up close with a professional athlete.',
+      services: ['Athlete Sharing & Student Engagement', 'Badminton Training & Group Drills']
+    }
+  };
+  async function assertEventStory(dialog, title) {
+    const expected = eventStories[title];
+    assert.equal((await dialog.locator('.edetail__desc').textContent()).trim(), expected.description,
+      name + ' event description differs for ' + title);
+    assert.deepEqual(await dialog.locator('.edetail__servicelist li').allTextContents(), expected.services,
+      name + ' services differ for ' + title);
+    assert.equal(await dialog.getByRole('heading', { name: 'Services provided', exact: true }).count(), 1);
+    assert.ok(await dialog.evaluate(node => node.scrollWidth <= node.clientWidth + 1),
+      name + ' event details overflow for ' + title);
+    if (viewport.width <= 620) {
+      assert.equal(await dialog.locator('.edetail__servicelist').evaluate(node =>
+        getComputedStyle(node).gridTemplateColumns.trim().split(/\s+/).length), 1,
+      name + ' event services are not one column on phone for ' + title);
+    }
+  }
   const eventTrigger = page.locator('.ecov__open').first();
   await eventTrigger.click();
-  await page.locator('.edetail:not([hidden])').waitFor();
+  const firstEventDialog = page.locator('.edetail:not([hidden])');
+  await firstEventDialog.waitFor();
+  await assertEventStory(firstEventDialog, 'SingHealth President’s Challenge Sports Day 2026');
   await page.screenshot({ path: path.join(outDir, name + '-events-modal.png'), fullPage: false });
   const galleryItem = page.locator('.edetail:not([hidden]) .edetail__tile').first();
   if (await galleryItem.count()) {
@@ -320,6 +377,7 @@ async function runViewport(browser, viewport, name) {
   await page.locator('.ecov__open', { hasText: 'Joo Chiat Badminton Carnival 2026' }).click();
   const sponsorDialog = page.locator('.edetail:not([hidden])');
   await sponsorDialog.waitFor();
+  await assertEventStory(sponsorDialog, 'Joo Chiat Badminton Carnival 2026');
   await sponsorDialog.locator('img[alt="Cuckoo"], img[alt="noomoo"]').evaluateAll(images =>
     Promise.all(images.map(image => image.decode ? image.decode() : Promise.resolve())));
   const logoSizes = await sponsorDialog.locator('.edetail__partner img').evaluateAll(nodes =>
@@ -343,6 +401,17 @@ async function runViewport(browser, viewport, name) {
   await page.keyboard.press('Escape');
   assert.ok(await page.locator('.ecov__open', { hasText: 'Joo Chiat Badminton Carnival 2026' })
     .evaluate(node => node === document.activeElement), name + ' event focus did not return');
+  for (const title of ['ASICS Badminton Summit 2026', 'Serangoon-Paya Lebar Badminton Clinic 2026',
+    'Bukit Gombak Sports Clinic 2026', 'ÉB @ Northbrooks Secondary School']) {
+    const trigger = page.locator('.ecov__open', { hasText: title });
+    assert.ok((await trigger.getAttribute('aria-label')).includes('and details'),
+      name + ' event card is not marked as having details for ' + title);
+    await trigger.click();
+    const dialog = page.locator('.edetail:not([hidden])');
+    await dialog.waitFor();
+    await assertEventStory(dialog, title);
+    await page.keyboard.press('Escape');
+  }
 
   await open(page, '/news.html', name + ' News');
   const filterBoxes = await page.locator('#articleFilters .sched__filter').evaluateAll(nodes =>
