@@ -539,7 +539,7 @@
        something a visitor can act on. Community club courts, which anyone can
        ballot for on OnePA, stay as their own type. */
     var TYPE_LABEL = {
-      private: 'Private hall', activesg: 'ActiveSG sport venue', dus: 'ActiveSG DUS school hall',
+      private: 'Private hall', activesg: 'ActiveSG sport hall', dus: 'ActiveSG DUS school hall',
       cc: 'Community club', elever: 'Élever venue'
     };
 
@@ -605,6 +605,7 @@
       grid.innerHTML = list.map(function (v) {
         var l = loc(v);
         var book = v.book || (v.type === 'activesg' || v.type === 'dus' ? ACTIVESG_BOOK : '');
+        var classBooking = v.elever && v.bookLabel === 'Book an \u00c9lever class';
 
         // Address doubles as the map link, so a separate "Map" button is dropped.
         var actions = '';
@@ -615,7 +616,7 @@
             actions += '<a class="hcard__link hcard__link--book" href="tel:' + attr(v.phone) + '" aria-label="' +
               attr('Call ' + l.name + ' to check availability') + '">' + esc(v.bookLabel || 'Call venue') + '</a>';
           }
-        } else if (book) {
+        } else if (book && !classBooking) {
           actions += '<a class="hcard__link hcard__link--book" href="' + attr(book) + '" target="_blank" rel="noopener" aria-label="' +
             attr((v.bookLabel || 'Check availability') + ' at ' + l.name) + '">' + esc(v.bookLabel || 'Check availability') + '</a>';
         }
@@ -623,9 +624,12 @@
           actions += '<a class="hcard__link hcard__link--alt" href="' + attr(v.altBook) + '" target="_blank" rel="noopener">' +
             esc(v.altBookLabel || 'Alternative booking') + '</a>';
         }
-        // "Élever venue" and "Élever classes" are merged into one link.
+        // Class booking remains the primary action and is visually distinct
+        // from the outlined public court-booking action.
         if (v.elever) {
-          actions += '<a class="hcard__link hcard__class-link" href="classes.html">Élever classes</a>';
+          actions += '<a class="hcard__link hcard__class-link" href="' +
+            attr(classBooking ? book : 'classes.html') + '"' +
+            (classBooking ? ' target="_blank" rel="noopener"' : '') + '>Book A Class</a>';
         }
 
         return '<article class="hcard">' +
@@ -637,9 +641,8 @@
           '</div>' +
           '<a class="hcard__addr" href="' + mapsUrl(v) + '" target="_blank" rel="noopener" aria-label="' +
             attr('Open ' + l.name + ' in Google Maps') + '">' + esc(v.addr) + '</a>' +
-          '<p class="hcard__hours"><span>Hours</span>' +
-            '<a href="' + attr(v.hoursSource) + '"' + (/^https?:/.test(v.hoursSource) ? ' target="_blank" rel="noopener"' : '') +
-              ' aria-label="View operating-hours source for ' + attr(l.name) + '">' + esc(v.hours) + '</a></p>' +
+          '<p class="hcard__hours"><span class="hcard__hours-label">Hours</span>' +
+            '<span class="hcard__hours-value">' + esc(v.hours) + '</span></p>' +
           '<div class="hcard__actions">' + actions + '</div>' +
           (v.bookNote ? '<p class="hcard__note">' + esc(v.bookNote) + '</p>' : '') +
         '</article>';

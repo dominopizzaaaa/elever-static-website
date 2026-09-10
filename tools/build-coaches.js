@@ -13,8 +13,8 @@ global.window = {};
 require(path.join(root, 'assets/js/data.js'));
 const COACHES = global.window.ELEVER_DATA.coaches;
 
-const V = '63'; // must match the shared asset cache key used across the site
-const FAVICON_V = '62';
+const V = '64'; // must match the shared asset cache key used across the site
+const FAVICON_V = '64';
 
 const esc = s => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -38,10 +38,12 @@ function page(c) {
     .map(p => `<p class="profile__bio">${esc(p)}</p>`)
     .join('\n          ');
   const achievementHtml = achievements.length
-    ? `<h2 style="font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:2.4rem 0 1rem">Achievements</h2>
-          <ul class="profile__achievements">
-            ${achievements.map(a => `<li>${esc(a)}</li>`).join('\n            ')}
-          </ul>`
+    ? `<section class="profile__section profile__section--achievements">
+            <h2 class="edetail__subhead edetail__subhead--plain profile__heading">Achievements</h2>
+            <ul class="profile__achievements">
+              ${achievements.map(a => `<li>${esc(a)}</li>`).join('\n              ')}
+            </ul>
+          </section>`
     : '';
   const certificationHtml = certifications.length
     ? `<div class="profile__certifications">
@@ -51,7 +53,7 @@ function page(c) {
           </div>
         </div>`
     : '';
-  const certificationBlock = certificationHtml ? '\n        ' + certificationHtml : '';
+  const certificationBlock = certificationHtml ? '\n          ' + certificationHtml : '';
 
   const jsonld = JSON.stringify({
     '@context': 'https://schema.org', '@type': 'Person',
@@ -91,7 +93,7 @@ function page(c) {
   <header id="siteHeader"></header>
 
   <main id="main">
-    <section class="phead phead--coach">
+    <section class="phead phead--coach-profile">
       <div class="phead__inner">
         <h1>${esc(c.name)}</h1>
         <p class="phead__lead">${esc(c.role)}</p>
@@ -99,17 +101,19 @@ function page(c) {
     </section>
 
     <section class="psec">
-      <div class="profile profile--single">
-        <figure class="profile__photo">
-          <img src="../${esc(c.photo)}" alt="${esc(c.name)}, ${esc(c.role)} at Élever Badminton" width="640" height="640" loading="lazy" decoding="async" />
-        </figure>${certificationBlock}
+      <div class="profile profile--coach">
+        <aside class="profile__aside">
+          <figure class="profile__photo">
+            <img src="../${esc(c.photo)}" alt="${esc(c.name)}, ${esc(c.role)} at Élever Badminton" width="640" height="640" loading="lazy" decoding="async" />
+          </figure>${certificationBlock}
+        </aside>
         <div class="profile__content">
-          <h2 style="font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.9rem">About ${esc(c.name)}${sample}</h2>
+          <h2 class="edetail__subhead edetail__subhead--plain profile__heading">About ${esc(c.aboutName || c.name)}${sample}</h2>
           ${bioHtml}
           ${achievementHtml}
 
           <div class="profile__actions">
-            <a class="btn btn--ghost" href="../about.html#coaches">View all coaches</a>
+            <a class="btn btn--contact-send profile__team-link" href="../about.html#coaches">View the team</a>
           </div>
         </div>
       </div>

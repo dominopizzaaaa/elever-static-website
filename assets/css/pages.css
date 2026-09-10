@@ -965,16 +965,17 @@ body.has-lightbox{overflow:hidden}
   .press__cover img{aspect-ratio:16/9;height:auto}
   .press__text{padding:1rem 1.1rem}
 }
-.press__arrow{margin-left:.4rem;font-weight:700;transition:transform .25s}
-.press:hover .press__arrow{transform:translate(2px,-2px)}
+.press__arrow{display:inline-block;margin-left:.4rem;font-size:1.25em;font-weight:500;transition:transform .25s}
+.press:hover .press__arrow{transform:translateX(2px)}
 
 /* ---------- COACHES ---------- */
 .coachgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.8rem}
 /* The two founders (and their label) sit in the middle of the page rather
    than pinned to the left edge — client, Sep 2026. */
 .teamlabel{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--faint);margin-bottom:.9rem;text-align:center}
-.coachgrid--centred{display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem;margin-bottom:2.4rem}
+  color:var(--faint);margin-bottom:1.6rem;text-align:center}
+.coachgroup--team{margin-top:3.4rem}
+.coachgrid--centred{display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem;margin-bottom:0}
 .coachgrid--centred > .coach{flex:0 0 200px;max-width:200px}
 
 /* ---------- coach rail: one row that scrolls sideways ----------
@@ -999,7 +1000,9 @@ body.has-lightbox{overflow:hidden}
    rows read as one set (client, Sep 2026). 50% of the rail's own width also
    means two team cards are in view at a time, like the founders. */
 @media(max-width:620px){
-  .coachgrid--centred{gap:.55rem;margin-bottom:2rem}
+  .coachgroup--team{margin-top:2.7rem}
+  .teamlabel{margin-bottom:1.3rem}
+  .coachgrid--centred{gap:.55rem;margin-bottom:0}
   .coachgrid--centred > .coach,
   .coachgrid--rail > .coach{flex:0 0 calc(50% - .28rem);max-width:calc(50% - .28rem)}
   .coach__body{padding:.7rem .75rem .85rem}
@@ -1050,8 +1053,10 @@ body.has-lightbox{overflow:hidden}
 .coach__body{display:flex;flex:1;flex-direction:column;padding:.85rem .95rem 1rem}
 .coach__body h3{font-size:.92rem;font-weight:700;margin-bottom:.15rem;letter-spacing:-.015em}
 .coach__role{font-size:.74rem;color:var(--muted);line-height:1.4}
-.coach__cert{display:block;margin-top:.45rem;font-size:.6rem;font-weight:700;letter-spacing:.055em;
-  text-transform:uppercase;color:var(--accent);line-height:1.45}
+.coach__certs{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.55rem}
+.coach__cert{display:inline-flex;align-items:center;min-height:30px;padding:.32rem .5rem;border:1px solid rgba(33,81,209,.26);
+  border-radius:var(--r-sm);background:var(--accent-soft);font-size:.6rem;font-weight:700;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--accent);line-height:1.35}
 /* The action is a permanent, touch-friendly cue and follows the certification
    line on every card. Auto margin keeps it aligned when role text wraps. */
 .coach__more{display:inline-flex;align-items:center;gap:.3rem;align-self:flex-start;margin-top:auto;padding-top:.65rem;
@@ -1080,6 +1085,7 @@ body.has-lightbox{overflow:hidden}
   color:var(--accent);font-size:.72rem;font-weight:700;line-height:1.25;transition:background .2s,border-color .2s,color .2s}
 .cdetail__cert:hover,.profile__cert:hover{background:var(--accent);border-color:var(--accent);color:#fff}
 .cdetail__body > * + *{margin-top:1rem}
+.cdetail__heading{margin:0 0 .9rem}
 .cdetail__body .edetail__desc + .edetail__desc{margin-top:.9rem}
 .edetail--coach .edetail__desc{text-align:justify;hyphens:auto}
 .cdetail__actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.6rem}
@@ -1104,17 +1110,23 @@ body.has-lightbox{overflow:hidden}
 .profile__bio{font-size:.98rem;color:var(--muted);line-height:1.75;max-width:60ch}
 .profile__bio+.profile__bio{margin-top:1rem}
 .profile__achievements{display:grid;gap:.55rem;margin:0;max-width:60ch;padding-left:1.1rem;color:var(--muted);line-height:1.6}
-.phead--coach .phead__inner{text-align:center}
-.phead--coach h1{margin-inline:auto}
-.phead--coach .phead__lead{margin-inline:auto}
-.profile--single{display:flex;flex-direction:column;align-items:center;gap:1.45rem;max-width:760px;margin-inline:auto;text-align:center}
-.profile--single .profile__photo{position:static;width:min(100%,340px)}
-.profile--single .profile__certifications{width:100%}
-.profile--single .profile__certs{justify-content:center}
-.profile--single .profile__content{width:100%}
-.profile--single .profile__bio{max-width:66ch;margin-inline:auto;text-align:justify;hyphens:auto}
-.profile--single .profile__achievements{max-width:66ch;margin-inline:auto;text-align:left}
+.phead--coach-profile .phead__inner{text-align:left}
+.profile--coach{grid-template-columns:minmax(240px,300px) minmax(0,1fr);max-width:980px;margin-inline:auto;gap:clamp(2rem,5vw,4rem)}
+.profile--coach .profile__aside{position:sticky;top:96px}
+.profile--coach .profile__photo{position:static;width:100%}
+.profile--coach .profile__certifications{margin-top:1rem}
+.profile--coach .profile__content{min-width:0;text-align:left}
+.profile--coach .profile__heading{margin:0 0 .9rem}
+.profile--coach .profile__bio{max-width:66ch;text-align:justify;hyphens:auto}
+.profile--coach .profile__achievements{max-width:66ch;text-align:left}
+.profile__section--achievements{margin-top:2.4rem}
 .profile__actions{display:flex;justify-content:center;margin-top:2rem}
+.profile--coach .profile__actions{justify-content:flex-start}
+.profile__team-link{min-width:0;border-width:1px;border-radius:var(--r-sm);font-weight:600}
+@media(max-width:860px){
+  .profile--coach{grid-template-columns:1fr;gap:1.8rem}
+  .profile--coach .profile__aside{position:static;width:min(100%,340px)}
+}
 
 /* ---------- NEWS ARTICLES ---------- */
 .articles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:.8rem}
@@ -1223,9 +1235,19 @@ body.has-lightbox{overflow:hidden}
   background:#fbfcff;transition:border-color .2s,box-shadow .2s,background .2s}
 .contact-form-card input:hover,.contact-form-card select:hover,.contact-form-card textarea:hover{border-color:rgba(33,81,209,.28)}
 .contact-form-card input:focus,.contact-form-card select:focus,.contact-form-card textarea:focus{background:#fff}
-.contact-phone{display:grid;grid-template-columns:minmax(104px,.27fr) minmax(0,1fr);gap:.55rem;
+.contact-phone{position:relative;display:grid;grid-template-columns:minmax(126px,.44fr) minmax(0,1fr);gap:.55rem;
   color:inherit!important;font-size:inherit!important;letter-spacing:normal;text-transform:none}
 .contact-phone select{min-width:0}
+.contact-phone.is-enhanced > select{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+.country-combobox{position:relative;min-width:0}
+.contact-form-card .country-combobox__input{padding-inline:.7rem;font-size:.8rem;cursor:text}
+.country-combobox__list{position:absolute;z-index:30;top:calc(100% + .35rem);left:0;width:min(340px,calc(100vw - 3.5rem));
+  max-height:270px;overflow-y:auto;padding:.35rem;border:1px solid var(--line-2);border-radius:var(--r-sm);
+  background:#fff;box-shadow:0 20px 44px -22px rgba(7,22,51,.42)}
+.country-combobox__option{display:block;width:100%;padding:.6rem .65rem;border:0;border-radius:6px;background:#fff;color:var(--ink);
+  font:600 .78rem/1.4 'Montserrat',sans-serif;text-align:left;cursor:pointer}
+.country-combobox__option:hover,.country-combobox__option.is-active{background:var(--accent-soft);color:var(--accent)}
+.country-combobox__empty{padding:.75rem;color:var(--muted);font-size:.78rem}
 .contact-fields{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.95rem .85rem;
   min-width:0;margin:.15rem 0 0;padding:1.15rem 0 0;border:0;border-top:1px solid var(--line)}
 .contact-fields[hidden]{display:none}
@@ -1233,7 +1255,7 @@ body.has-lightbox{overflow:hidden}
 .contact-form-card .lead__actions{display:grid;grid-template-columns:auto;justify-items:start}
 .contact-form-card .lead__status{max-width:60ch}
 .contact-form-card button:disabled{cursor:wait;opacity:.58}
-.btn--contact-send{gap:clamp(1.5rem,5vw,3rem);min-width:220px;justify-content:space-between;border:2px solid var(--accent);border-radius:18px;background:transparent;color:var(--accent);font-weight:750}
+.btn--contact-send{gap:.45rem;min-width:180px;justify-content:center;border:1px solid var(--accent);border-radius:var(--r-sm);background:transparent;color:var(--accent);font-weight:600}
 .btn--contact-send > span:last-child{font-size:1.15rem;line-height:1;transition:transform .2s var(--ease)}
 .btn--contact-send:hover{background:var(--accent-soft);color:var(--accent)}
 .btn--contact-send:hover > span:last-child{transform:translateX(3px)}
@@ -1273,11 +1295,15 @@ body.has-lightbox{overflow:hidden}
   .contact-hero__actions{flex-direction:column;align-items:stretch}
   .contact-hero__actions .btn{width:100%}
   .contact-fields{grid-template-columns:1fr}
-  .contact-phone{grid-template-columns:104px minmax(0,1fr)}
+  .contact-phone{grid-template-columns:126px minmax(0,1fr)}
   .contact-form-card .lead__actions{grid-template-columns:1fr}
   .contact-form-card .lead__actions .btn{width:100%}
   .contact-aside{grid-template-columns:1fr}
   .contact-aside__intro,.contact-event-card{grid-column:auto}
+}
+@media(max-width:360px){
+  .contact-phone{grid-template-columns:112px minmax(0,1fr);gap:.45rem}
+  .contact-form-card .country-combobox__input{font-size:.74rem;padding-inline:.55rem}
 }
 
 /* ---------- LEGAL PAGES ---------- */

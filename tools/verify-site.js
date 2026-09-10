@@ -69,17 +69,45 @@ async function checkContact(page, viewport, name) {
   assert.deepEqual(await topic.locator('option').allTextContents(),
     ['Choose an enquiry type', 'Classes', 'Events', 'Careers', 'Others']);
   assert.equal(await form.locator('[name="Country code"]').inputValue(), '+65');
-  assert.equal(await form.locator('[name="Country code"] option').count(), 42);
+  assert.equal(await form.locator('[name="Country code"] option').count(), 43);
+  const countryNames = await form.locator('[name="Country code"] option').evaluateAll(options =>
+    options.map(option => option.dataset.country));
+  assert.equal(countryNames[0], 'Singapore');
+  assert.deepEqual(countryNames.slice(1), countryNames.slice(1).sort((a, b) => a.localeCompare(b, 'en')));
+  const countryCombo = form.locator('.country-combobox__input');
+  assert.equal(await countryCombo.count(), 1);
+  assert.equal(await countryCombo.getAttribute('role'), 'combobox');
+  await countryCombo.fill('malay');
+  assert.deepEqual(await form.locator('.country-combobox__option').allTextContents(), ['🇲🇾 Malaysia (MY) +60']);
+  await page.keyboard.press('Enter');
+  assert.equal(await form.locator('[name="Country code"]').inputValue(), '+60');
+  await countryCombo.fill('+65');
+  await page.keyboard.press('Enter');
+  assert.equal(await form.locator('[name="Country code"]').inputValue(), '+65');
   assert.equal(await form.locator('[name="Mobile"]').getAttribute('required'), null);
   assert.equal(await form.locator('[data-contact-panel]:visible').count(), 0);
   const sendButtonStyle = await form.getByRole('button', { name: 'Send message' }).evaluate(node => ({
     background: getComputedStyle(node).backgroundColor,
     border: getComputedStyle(node).borderTopColor,
+    borderWidth: getComputedStyle(node).borderTopWidth,
+    radius: getComputedStyle(node).borderRadius,
+    weight: getComputedStyle(node).fontWeight,
     color: getComputedStyle(node).color
   }));
   assert.deepEqual(sendButtonStyle, {
-    background: 'rgba(0, 0, 0, 0)', border: 'rgb(33, 81, 209)', color: 'rgb(33, 81, 209)'
+    background: 'rgba(0, 0, 0, 0)', border: 'rgb(33, 81, 209)', borderWidth: '1px',
+    radius: '8px', weight: '600', color: 'rgb(33, 81, 209)'
   });
+  if (viewport.width > 640) {
+    const mobileField = await form.locator('.contact-mobile-field').boundingBox();
+    const topicField = await form.locator('.contact-topic-field').boundingBox();
+    const mobileControl = await form.locator('#contact-mobile').boundingBox();
+    const topicControl = await topic.boundingBox();
+    assert.ok(mobileField && topicField && mobileField.x < topicField.x && Math.abs(mobileField.y - topicField.y) < 2,
+      name + ' Mobile and Enquiry type are not side by side');
+    assert.ok(mobileControl && topicControl && Math.abs(mobileControl.height - topicControl.height) < 1,
+      name + ' Mobile and Enquiry type controls do not have matching heights');
+  }
 
   const expectations = {
     Classes: {
@@ -169,11 +197,11 @@ async function checkContact(page, viewport, name) {
     name + ' contextual Events shortcut did not focus Name');
   await checkNoOverflow(page, name + ' Contact interactions');
   if (viewport.width <= 640) {
-    const phoneParts = await form.locator('.contact-phone > *').evaluateAll(nodes =>
+    const phoneParts = await form.locator('.country-combobox, #contact-mobile').evaluateAll(nodes =>
       nodes.map(node => ({ y: node.getBoundingClientRect().y, width: node.getBoundingClientRect().width })));
     assert.equal(phoneParts.length, 2);
     assert.ok(Math.abs(phoneParts[0].y - phoneParts[1].y) < 1, name + ' country code is not left of Mobile');
-    assert.ok(phoneParts[0].width >= 100 && phoneParts[1].width > phoneParts[0].width,
+    assert.ok(phoneParts[0].width >= 100 && phoneParts[1].width >= phoneParts[0].width,
       name + ' phone fields are not proportioned correctly');
   }
   await page.screenshot({ path: path.join(outDir, name + '-contact-events.png'), fullPage: true });
@@ -345,20 +373,22 @@ async function runViewport(browser, viewport, name) {
   assert.equal(await coachDialog.getByText('Languages', { exact: true }).count(), 0);
   assert.equal(await coachDialog.getByText('Coaches', { exact: true }).count(), 0);
   assert.equal(await coachDialog.getByRole('link', { name: 'See classes' }).count(), 0);
-  assert.equal(await coachDialog.getByRole('link', { name: 'View full profile' }).count(), 1);
+  assert.equal(await coachDialog.getByRole('heading', { name: 'About Kean Hean' }).count(), 1);
+  assert.equal(await coachDialog.getByRole('link', { name: /View full profile/ }).count(), 1);
   await page.keyboard.press('Escape');
   assert.ok(await coachTrigger.evaluate(node => node === document.activeElement), name + ' coach focus did not return');
 
   await open(page, '/coaches/ong-keng-yang.html', name + ' Coach profile');
   assert.equal(await page.getByText('HOME · ABOUT · COACHES', { exact: true }).count(), 0);
   assert.equal(await page.getByRole('link', { name: 'See classes' }).count(), 0);
-  assert.equal(await page.getByRole('link', { name: 'View all coaches' }).count(), 1);
+  assert.equal(await page.getByRole('link', { name: 'View the team' }).count(), 1);
   assert.equal(await page.getByRole('link', { name: 'ASCA Level 1' }).count(), 1);
   assert.equal(await page.getByRole('link', { name: 'Level 1 Sports Trainer' }).count(), 1);
   assert.equal(await page.locator('.profile__bio').first().evaluate(node => getComputedStyle(node).textAlign), 'justify');
-  const coachHeading = await page.locator('.phead--coach h1').boundingBox();
-  assert.ok(coachHeading && Math.abs((coachHeading.x + coachHeading.width / 2) - viewport.width / 2) < 2,
-    name + ' coach heading is not centred');
+  const coachHeader = await page.locator('.phead--coach-profile .phead__inner').boundingBox();
+  const coachHeading = await page.locator('.phead--coach-profile h1').boundingBox();
+  assert.ok(coachHeader && coachHeading && Math.abs(coachHeading.x - coachHeader.x) < 2,
+    name + ' coach heading is not left aligned');
   await page.screenshot({ path: path.join(outDir, name + '-coach-profile.png'), fullPage: true });
 
   await open(page, '/hub.html', name + ' Hub');
@@ -398,7 +428,13 @@ async function runViewport(browser, viewport, name) {
   assert.ok(localOrder.every((item, index) => !index || item.y > localOrder[index - 1].y),
     name + ' Local Hub sections are out of order');
   assert.equal(await page.locator('#groupPreview li').count(), 3);
-  assert.equal(await page.locator('.hub-court-types a').count(), 5);
+  assert.deepEqual(await page.locator('#groupPreview .hub-session__name strong').allTextContents(),
+    ['Racket Ratings', 'Meetup', 'OnePA']);
+  assert.equal(await page.locator('#groupPreview .hub-session__dot').count(), 0);
+  assert.equal(await page.getByText(/Élever ·/).count(), 0);
+  assert.equal(await page.locator('.hub-court-types a').count(), 3);
+  assert.deepEqual(await page.locator('.hub-court-types a > span:first-child').allTextContents(),
+    ['ActiveSG Facilities', 'Community Clubs', 'Private Halls']);
   if (viewport.width > 1050) {
     const groups = await page.locator('#groups').boundingBox();
     const halls = await page.locator('#halls').boundingBox();
@@ -414,10 +450,8 @@ async function runViewport(browser, viewport, name) {
         name + ' ' + id + ' is not a two-column card grid');
     }
   }
-  await page.locator('#groupMore summary').click();
-  assert.equal(await page.getByRole('link', { name: /See all venues, levels and weekly sessions/ }).isVisible(), true);
-  await checkNoOverflow(page, name + ' expanded groups');
-  await page.locator('#groupMore summary').click();
+  assert.equal(await page.getByRole('link', { name: /List your group/ }).count(), 1);
+  await checkNoOverflow(page, name + ' group directory');
   assert.equal(await page.locator('#shopsPhysical article').count(), 3);
   assert.equal(await page.locator('#shopsOnline article').count(), 3);
   await page.locator('#shopFilters').getByRole('button', { name: 'Stringing', exact: true }).click();
@@ -443,7 +477,7 @@ async function runViewport(browser, viewport, name) {
     await page.locator('#play').evaluate(node => node.scrollIntoView({ block: 'start', behavior: 'instant' }));
     await page.screenshot({ path: path.join(outDir, name + '-hub-layout.png'), fullPage: false });
   }
-  for (const [type, expected] of [['private', 10], ['official', 147], ['activesg', 19], ['dus', 128], ['cc', 1]]) {
+  for (const [type, expected] of [['private', 10], ['official', 147], ['cc', 1]]) {
     await page.locator('.hub-court-types a[href*="type=' + type + '"]').click();
     await page.waitForURL('**/courts.html?type=' + type + '#halls');
     assert.equal(await page.locator('#hallGrid .hcard').count(), expected);
@@ -469,6 +503,10 @@ async function runViewport(browser, viewport, name) {
   assert.equal(await page.locator('#tab-international').getAttribute('aria-selected'), 'true');
 
   await open(page, '/courts.html', name + ' Courts');
+  assert.deepEqual(
+    await page.locator('#hallFilters [data-group="type"] .fdrop__opt span').allTextContents(),
+    ['ActiveSG Sport Halls', 'ActiveSG DUS School Halls', 'Community Clubs', 'Private Halls']
+  );
   assert.deepEqual(await page.evaluate(() => window.ACTIVESG_BADMINTON_AUDIT), {
     listPages: 15, listedFacilities: 147, detailPagesChecked: 147, activesg: 19, dus: 128,
     directBookingLinks: 127, directoryFallbacks: 20
@@ -481,19 +519,17 @@ async function runViewport(browser, viewport, name) {
     getComputedStyle(node).textDecorationLine.includes('underline')));
   assert.equal(await page.locator('#hallGrid .hcard').count(), 160);
   assert.equal(await page.locator('#hallGrid .hcard__hours').count(), 160);
-  assert.equal(await page.locator('#hallGrid .hcard__hours > a').count(), 160);
+  assert.equal(await page.locator('#hallGrid .hcard__hours > a').count(), 0);
   const courtHours = await page.locator('#hallGrid .hcard').evaluateAll(cards => cards.map(card => {
     const venue = card.querySelector('.hcard__name').textContent.trim();
     const row = card.querySelector('.hcard__hours');
-    const source = row && row.querySelector('a');
-    return { venue, label: row && row.querySelector('span').textContent.trim(),
-      hours: source && source.textContent.trim(), source: source && source.href };
+    const value = row && row.querySelector('.hcard__hours-value');
+    return { venue, label: row && row.querySelector('.hcard__hours-label').textContent.trim(),
+      hours: value && value.textContent.trim() };
   }));
   courtHours.forEach(item => {
     assert.equal(item.label, 'Hours', name + ' hours label missing for ' + item.venue);
     assert.ok(item.hours && item.hours.length >= 12, name + ' hours missing for ' + item.venue);
-    assert.ok(item.source && /^(https?:|file:)/.test(item.source),
-      name + ' hours source missing for ' + item.venue);
   });
   assert.ok(await page.locator('#hallGrid .hcard__tag--dus').count() >= 128,
     name + ' DUS halls are not distinguished');
@@ -589,11 +625,11 @@ async function crawlAllPages(browser) {
   for (const route of allHtmlRoutes()) {
     await open(page, route, 'full-crawl ' + route);
     const icons = await page.locator('link[rel~="icon"]').count();
-    assert.ok(icons >= 2, route + ' does not expose both primary and fallback favicons');
+    assert.ok(icons >= 1, route + ' does not expose a favicon');
     const iconHrefs = await page.locator('link[rel~="icon"]').evaluateAll(nodes => nodes.map(node => node.href));
-    assert.ok(iconHrefs.some(href => href.includes('/assets/img/brand/eb-icon-blue.png?v=62')),
+    assert.ok(iconHrefs.some(href => href.includes('/assets/img/brand/eb-icon-blue.png?v=64')),
       route + ' is missing the requested blue-background PNG favicon');
-    assert.ok(iconHrefs.some(href => href.includes('/favicon.ico?v=62')),
+    assert.ok(iconHrefs.some(href => href.includes('/favicon.ico?v=64')),
       route + ' is missing the versioned ICO fallback');
     if (route === '/about.html' || route === '/contact.html') {
       headingSizes.set(route, await page.locator('.phead h1').evaluate(node => getComputedStyle(node).fontSize));
@@ -603,9 +639,9 @@ async function crawlAllPages(browser) {
       assert.equal(await page.locator('.phead__crumbs').count(), 0, route + ' still has breadcrumbs');
       assert.equal(await page.locator('.profile__meta').count(), 0, route + ' still has pathway/language metadata');
       assert.equal(await page.getByRole('link', { name: 'See classes' }).count(), 0, route + ' still has See classes');
-      assert.equal(await page.getByRole('link', { name: 'View all coaches' }).count(), 1,
-        route + ' is missing View all coaches');
-      assert.equal(await page.locator('.profile--single').count(), 1, route + ' is not a centred single-column profile');
+      assert.equal(await page.getByRole('link', { name: 'View the team' }).count(), 1,
+        route + ' is missing View the team');
+      assert.equal(await page.locator('.profile--coach').count(), 1, route + ' is not a coach profile grid');
       assert.equal(await page.locator('.profile__bio').first().evaluate(node => getComputedStyle(node).textAlign),
         'justify', route + ' biography is not justified');
       const certificationLinks = await page.locator('.profile__cert').evaluateAll(nodes =>

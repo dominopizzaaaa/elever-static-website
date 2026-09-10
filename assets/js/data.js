@@ -23,7 +23,7 @@
   var COACHES = [
     {
       slug: 'loh-kean-hean', name: 'Loh Kean Hean', photo: 'assets/img/coaches/loh-kean-hean.jpg',
-      role: 'Co-Founder · Technical Director', cert: 'BWF Level 1', group: 'founder',
+      role: 'Co-Founder · Technical Director', aboutName: 'Kean Hean', cert: 'BWF Level 1', group: 'founder',
       certifications: [{ name: 'BWF Level 1', href: 'https://development.bwfbadminton.com/coaches/level-1' }],
       coaching: ['Emergence', 'Elite'], languages: ['English', 'Mandarin'],
       shortBio: "Kean Hean is the Co-Founder and Technical Director of Élever Badminton, where he leads the academy's coaching philosophy and designs its training programmes for players of all ages and abilities.",

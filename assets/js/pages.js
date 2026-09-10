@@ -1109,6 +1109,8 @@
             certificationBlock +
           '</div>' +
           '<div class="cdetail__body">' +
+            '<h3 class="edetail__subhead edetail__subhead--plain cdetail__heading">About ' +
+              esc(c.aboutName || c.name) + '</h3>' +
             (shortBio ? '<p class="edetail__desc">' + esc(shortBio) + '</p>' : '') +
             (c.achievements && c.achievements.length
               ? '<div>' +
@@ -1121,7 +1123,8 @@
             '<div class="cdetail__actions">' +
               (c.profilePage === false
                 ? ''
-                : '<a class="btn btn--primary" href="' + esc(base + 'coaches/' + c.slug + '.html') + '">View full profile</a>') +
+                : '<a class="btn btn--contact-send" href="' + esc(base + 'coaches/' + c.slug + '.html') +
+                  '">View full profile <span aria-hidden="true">&gt;</span></a>') +
             '</div>' +
           '</div>' +
         '</div>';
@@ -1206,9 +1209,9 @@
         '<div class="coach__body"><h3>' + esc(c.name) + '</h3>' +
           '<p class="coach__role">' + esc(c.role) + '</p>' +
           (certifications.length
-            ? '<p class="coach__cert">' + certifications.map(function (certification) {
-                return esc(certification.name);
-              }).join(' · ') + '</p>'
+            ? '<div class="coach__certs" aria-label="Certifications">' + certifications.map(function (certification) {
+                return '<span class="coach__cert">' + esc(certification.name) + '</span>';
+              }).join('') + '</div>'
             : '') +
           (hasProfile ? '<p class="coach__more">View more <span aria-hidden="true">&rsaquo;</span></p>' : '') +
         '</div></' + tag + '>';
@@ -1563,32 +1566,34 @@
     var mount = el('playGroups');
     if (!mount) return;
 
-    var preview = el('groupPreview');
-    if (preview) {
-      preview.innerHTML = D.classes.slice(0, 3).map(function (venue) {
-        var session = venue.sessions[0];
-        return '<li><a class="hub-session" href="classes.html#schedule">' +
-          '<span class="hub-session__dot" aria-hidden="true"></span>' +
-          '<span class="hub-session__name"><strong>Élever · ' + esc(venue.area) + '</strong>' +
-            '<small>' + esc(session.level) + ' group class</small></span>' +
-          '<span class="hub-session__when"><strong>' + esc(session.day) + '</strong>' + esc(session.time) + '</span>' +
-          '</a></li>';
-      }).join('');
-    }
-
     var groups = D.playGroups || [];
     var rrClubs = (D.racketRatings && D.racketRatings.home) || 'https://www.racketratings.net/badminton';
     (D.racketRatings && D.racketRatings.features || []).forEach(function (f) {
       if (f.key === 'clubs') rrClubs = f.href;
     });
+    var preview = el('groupPreview');
+    if (preview) {
+      var directories = [
+        { name: 'Racket Ratings', detail: 'Social clubs and ladders by playing level', href: rrClubs },
+        { name: 'Meetup', detail: 'Recreational badminton groups across Singapore', href: 'https://www.meetup.com/find/?keywords=badminton&location=sg--Singapore' },
+        { name: 'OnePA', detail: 'Neighbourhood badminton activities at community clubs', href: 'https://www.onepa.gov.sg/courses/search?course=badminton' }
+      ];
+      preview.innerHTML = directories.map(function (directory) {
+        return '<li><a class="hub-session hub-session--directory" href="' + esc(directory.href) +
+          '" target="_blank" rel="noopener">' +
+          '<span class="hub-session__name"><strong>' + esc(directory.name) + '</strong>' +
+            '<small>' + esc(directory.detail) + '</small></span>' +
+          '<span class="arrowhead" aria-hidden="true">›</span>' +
+          '</a></li>';
+      }).join('');
+    }
 
     if (!groups.length) {
-      mount.innerHTML = '<div class="grpempty">' +
-        '<p>Social group listings are being compiled. For now, explore the ' +
-        '<a href="' + esc(rrClubs) + '" target="_blank" rel="noopener">Racket Ratings club directory</a> ' +
-        'and confirm session details with the organiser.</p></div>';
+      mount.hidden = true;
+      mount.innerHTML = '';
       return;
     }
+    mount.hidden = false;
 
     mount.innerHTML = groups.map(function (g) {
       var rows = [];
@@ -1691,6 +1696,146 @@
       var contactTopic = contactForm.querySelector('[name="Topic"]');
       var contactName = contactForm.querySelector('[name="Name"]');
       var contactPanels = contactForm.querySelectorAll('[data-contact-panel]');
+      var countrySelect = contactForm.querySelector('[data-country-code-select]');
+
+      /* Keep the native country selector as a no-JavaScript fallback, then
+         progressively enhance it into a searchable, keyboard-operable
+         combobox. The original select retains the submitted field name so
+         the server payload and validation contract do not change. */
+      if (countrySelect) {
+        var phoneGroup = countrySelect.closest('[data-country-code-field]');
+        var countryOptions = Array.prototype.slice.call(countrySelect.options);
+        var combo = document.createElement('div');
+        var comboId = 'contact-country-options';
+        combo.className = 'country-combobox';
+        combo.innerHTML =
+          '<input class="country-combobox__input" type="text" role="combobox" ' +
+            'aria-label="Country code" aria-autocomplete="list" aria-expanded="false" ' +
+            'aria-controls="' + comboId + '" autocomplete="off" spellcheck="false">' +
+          '<div class="country-combobox__list" id="' + comboId + '" role="listbox" hidden></div>';
+        phoneGroup.insertBefore(combo, countrySelect);
+        phoneGroup.classList.add('is-enhanced');
+        countrySelect.tabIndex = -1;
+        countrySelect.setAttribute('aria-hidden', 'true');
+
+        var comboInput = combo.querySelector('.country-combobox__input');
+        var comboList = combo.querySelector('.country-combobox__list');
+        var filteredCountries = countryOptions.slice();
+        var activeCountry = -1;
+
+        function countryFlag(option) {
+          var text = String(option.textContent || '').trim();
+          return text.split(/\s+/)[0] || '';
+        }
+        function compactCountry(option) {
+          return countryFlag(option) + ' ' + (option.dataset.countryCode || '') + ' ' + option.value;
+        }
+        function countrySearchText(option) {
+          return [option.textContent, option.dataset.country, option.dataset.countryCode, option.value]
+            .join(' ').toLowerCase();
+        }
+        function setCountry(option) {
+          if (!option) return;
+          countrySelect.selectedIndex = option.index;
+          comboInput.value = compactCountry(option);
+          comboInput.setCustomValidity('');
+          countrySelect.dispatchEvent(new Event('change', { bubbles: true }));
+          closeCountries();
+        }
+        function renderCountries(query) {
+          var needle = String(query || '').trim().toLowerCase();
+          filteredCountries = countryOptions.filter(function (option) {
+            return !needle || countrySearchText(option).indexOf(needle) !== -1;
+          });
+          activeCountry = filteredCountries.length ? 0 : -1;
+          comboList.innerHTML = filteredCountries.length
+            ? filteredCountries.map(function (option, index) {
+                return '<button type="button" role="option" class="country-combobox__option' +
+                  (index === activeCountry ? ' is-active' : '') + '" id="contact-country-option-' + option.index +
+                  '" data-option-index="' + option.index + '" aria-selected="' +
+                  String(option.index === countrySelect.selectedIndex) + '">' + esc(option.textContent.trim()) + '</button>';
+              }).join('')
+            : '<p class="country-combobox__empty">No country found</p>';
+          syncActiveCountry();
+        }
+        function syncActiveCountry() {
+          var items = comboList.querySelectorAll('[role="option"]');
+          items.forEach(function (item, index) {
+            item.classList.toggle('is-active', index === activeCountry);
+          });
+          if (activeCountry >= 0 && items[activeCountry]) {
+            comboInput.setAttribute('aria-activedescendant', items[activeCountry].id);
+            items[activeCountry].scrollIntoView({ block: 'nearest' });
+          } else {
+            comboInput.removeAttribute('aria-activedescendant');
+          }
+        }
+        function openCountries(query) {
+          renderCountries(query);
+          comboList.hidden = false;
+          comboInput.setAttribute('aria-expanded', 'true');
+        }
+        function closeCountries() {
+          comboList.hidden = true;
+          comboInput.setAttribute('aria-expanded', 'false');
+          comboInput.removeAttribute('aria-activedescendant');
+        }
+
+        comboInput.value = compactCountry(countryOptions[countrySelect.selectedIndex]);
+        comboInput.addEventListener('focus', function () { openCountries(''); });
+        comboInput.addEventListener('input', function () {
+          countrySelect.selectedIndex = -1;
+          comboInput.setCustomValidity('Please choose a country from the list.');
+          openCountries(comboInput.value);
+        });
+        comboInput.addEventListener('keydown', function (event) {
+          if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+            event.preventDefault();
+            if (comboList.hidden) openCountries(comboInput.value);
+            if (!filteredCountries.length) return;
+            activeCountry = event.key === 'ArrowDown'
+              ? (activeCountry + 1) % filteredCountries.length
+              : (activeCountry - 1 + filteredCountries.length) % filteredCountries.length;
+            syncActiveCountry();
+          } else if (event.key === 'Enter' && !comboList.hidden && activeCountry >= 0) {
+            event.preventDefault();
+            setCountry(filteredCountries[activeCountry]);
+          } else if (event.key === 'Escape') {
+            event.preventDefault();
+            closeCountries();
+            var selected = countrySelect.options[countrySelect.selectedIndex];
+            if (selected) { comboInput.value = compactCountry(selected); comboInput.setCustomValidity(''); }
+          }
+        });
+        comboList.addEventListener('mousedown', function (event) {
+          var optionButton = event.target.closest('[data-option-index]');
+          if (!optionButton) return;
+          event.preventDefault();
+          setCountry(countryOptions[Number(optionButton.dataset.optionIndex)]);
+          comboInput.focus();
+        });
+        comboInput.addEventListener('blur', function () {
+          window.setTimeout(function () {
+            var selected = countrySelect.options[countrySelect.selectedIndex];
+            if (!selected && filteredCountries.length === 1) {
+              setCountry(filteredCountries[0]);
+              selected = filteredCountries[0];
+            }
+            if (selected) { comboInput.value = compactCountry(selected); comboInput.setCustomValidity(''); }
+            closeCountries();
+          }, 120);
+        });
+        document.addEventListener('click', function (event) {
+          if (!combo.contains(event.target)) closeCountries();
+        });
+        contactForm.addEventListener('reset', function () {
+          window.setTimeout(function () {
+            comboInput.value = compactCountry(countryOptions[countrySelect.selectedIndex]);
+            comboInput.setCustomValidity('');
+            closeCountries();
+          }, 0);
+        });
+      }
 
       function syncContactFields() {
         var topic = contactTopic ? contactTopic.value : '';

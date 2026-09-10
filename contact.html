@@ -15,13 +15,13 @@
   <meta property="og:image" content="https://www.eleverbadminton.com/assets/img/hero-action.jpg" />
   <meta property="og:url" content="https://www.eleverbadminton.com/contact" />
   <link rel="canonical" href="https://www.eleverbadminton.com/contact" />
-  <link rel="icon" type="image/png" sizes="100x100" href="/assets/img/brand/eb-icon-blue.png?v=62" />
-  <link rel="icon" href="/favicon.ico?v=62" sizes="any" />
+  <link rel="icon" type="image/png" sizes="100x100" href="/assets/img/brand/eb-icon-blue.png?v=64" />
+  <link rel="icon" href="/favicon.ico?v=64" sizes="any" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css?v=63" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=63" />
+  <link rel="stylesheet" href="assets/css/style.css?v=64" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=64" />
 </head>
 <body data-page="contact" data-nav="solid" data-base="">
 
@@ -47,56 +47,57 @@
           <div class="lead__grid">
             <label class="lead__field" for="contact-name"><span>Name <b aria-hidden="true">*</b></span><input id="contact-name" type="text" name="Name" autocomplete="name" required></label>
             <label class="lead__field" for="contact-email"><span>Email <b aria-hidden="true">*</b></span><input id="contact-email" type="email" name="Email" autocomplete="email" required></label>
-            <div class="lead__field lead__field--wide"><span>Mobile</span>
-              <div class="contact-phone">
-                <select id="contact-country-code" name="Country code" autocomplete="tel-country-code" aria-label="Country code">
-                  <option value="+65" selected>SG +65</option>
-                  <option value="+60">MY +60</option>
-                  <option value="+62">ID +62</option>
-                  <option value="+66">TH +66</option>
-                  <option value="+63">PH +63</option>
-                  <option value="+84">VN +84</option>
-                  <option value="+673">BN +673</option>
-                  <option value="+855">KH +855</option>
-                  <option value="+856">LA +856</option>
-                  <option value="+95">MM +95</option>
-                  <option value="+86">CN +86</option>
-                  <option value="+852">HK +852</option>
-                  <option value="+853">MO +853</option>
-                  <option value="+886">TW +886</option>
-                  <option value="+81">JP +81</option>
-                  <option value="+82">KR +82</option>
-                  <option value="+91">IN +91</option>
-                  <option value="+880">BD +880</option>
-                  <option value="+94">LK +94</option>
-                  <option value="+977">NP +977</option>
-                  <option value="+92">PK +92</option>
-                  <option value="+971">AE +971</option>
-                  <option value="+966">SA +966</option>
-                  <option value="+974">QA +974</option>
-                  <option value="+64">NZ +64</option>
-                  <option value="+61">AU +61</option>
-                  <option value="+1">US/CA +1</option>
-                  <option value="+52">MX +52</option>
-                  <option value="+55">BR +55</option>
-                  <option value="+44">GB +44</option>
-                  <option value="+353">IE +353</option>
-                  <option value="+33">FR +33</option>
-                  <option value="+49">DE +49</option>
-                  <option value="+39">IT +39</option>
-                  <option value="+34">ES +34</option>
-                  <option value="+31">NL +31</option>
-                  <option value="+41">CH +41</option>
-                  <option value="+46">SE +46</option>
-                  <option value="+47">NO +47</option>
-                  <option value="+45">DK +45</option>
-                  <option value="+358">FI +358</option>
-                  <option value="+27">ZA +27</option>
+            <div class="lead__field contact-mobile-field"><span>Mobile</span>
+              <div class="contact-phone" data-country-code-field>
+                <select id="contact-country-code" name="Country code" autocomplete="tel-country-code" aria-label="Country code" data-country-code-select data-searchable-select="country-code">
+                  <option value="+65" data-country="Singapore" data-country-code="SG" selected>🇸🇬 Singapore (SG) +65</option>
+                  <option value="+61" data-country="Australia" data-country-code="AU">🇦🇺 Australia (AU) +61</option>
+                  <option value="+880" data-country="Bangladesh" data-country-code="BD">🇧🇩 Bangladesh (BD) +880</option>
+                  <option value="+55" data-country="Brazil" data-country-code="BR">🇧🇷 Brazil (BR) +55</option>
+                  <option value="+673" data-country="Brunei" data-country-code="BN">🇧🇳 Brunei (BN) +673</option>
+                  <option value="+855" data-country="Cambodia" data-country-code="KH">🇰🇭 Cambodia (KH) +855</option>
+                  <option value="+1" data-country="Canada" data-country-code="CA">🇨🇦 Canada (CA) +1</option>
+                  <option value="+86" data-country="China" data-country-code="CN">🇨🇳 China (CN) +86</option>
+                  <option value="+45" data-country="Denmark" data-country-code="DK">🇩🇰 Denmark (DK) +45</option>
+                  <option value="+358" data-country="Finland" data-country-code="FI">🇫🇮 Finland (FI) +358</option>
+                  <option value="+33" data-country="France" data-country-code="FR">🇫🇷 France (FR) +33</option>
+                  <option value="+49" data-country="Germany" data-country-code="DE">🇩🇪 Germany (DE) +49</option>
+                  <option value="+852" data-country="Hong Kong" data-country-code="HK">🇭🇰 Hong Kong (HK) +852</option>
+                  <option value="+91" data-country="India" data-country-code="IN">🇮🇳 India (IN) +91</option>
+                  <option value="+62" data-country="Indonesia" data-country-code="ID">🇮🇩 Indonesia (ID) +62</option>
+                  <option value="+353" data-country="Ireland" data-country-code="IE">🇮🇪 Ireland (IE) +353</option>
+                  <option value="+39" data-country="Italy" data-country-code="IT">🇮🇹 Italy (IT) +39</option>
+                  <option value="+81" data-country="Japan" data-country-code="JP">🇯🇵 Japan (JP) +81</option>
+                  <option value="+856" data-country="Laos" data-country-code="LA">🇱🇦 Laos (LA) +856</option>
+                  <option value="+853" data-country="Macau" data-country-code="MO">🇲🇴 Macau (MO) +853</option>
+                  <option value="+60" data-country="Malaysia" data-country-code="MY">🇲🇾 Malaysia (MY) +60</option>
+                  <option value="+52" data-country="Mexico" data-country-code="MX">🇲🇽 Mexico (MX) +52</option>
+                  <option value="+95" data-country="Myanmar" data-country-code="MM">🇲🇲 Myanmar (MM) +95</option>
+                  <option value="+977" data-country="Nepal" data-country-code="NP">🇳🇵 Nepal (NP) +977</option>
+                  <option value="+31" data-country="Netherlands" data-country-code="NL">🇳🇱 Netherlands (NL) +31</option>
+                  <option value="+64" data-country="New Zealand" data-country-code="NZ">🇳🇿 New Zealand (NZ) +64</option>
+                  <option value="+47" data-country="Norway" data-country-code="NO">🇳🇴 Norway (NO) +47</option>
+                  <option value="+92" data-country="Pakistan" data-country-code="PK">🇵🇰 Pakistan (PK) +92</option>
+                  <option value="+63" data-country="Philippines" data-country-code="PH">🇵🇭 Philippines (PH) +63</option>
+                  <option value="+974" data-country="Qatar" data-country-code="QA">🇶🇦 Qatar (QA) +974</option>
+                  <option value="+966" data-country="Saudi Arabia" data-country-code="SA">🇸🇦 Saudi Arabia (SA) +966</option>
+                  <option value="+27" data-country="South Africa" data-country-code="ZA">🇿🇦 South Africa (ZA) +27</option>
+                  <option value="+82" data-country="South Korea" data-country-code="KR">🇰🇷 South Korea (KR) +82</option>
+                  <option value="+34" data-country="Spain" data-country-code="ES">🇪🇸 Spain (ES) +34</option>
+                  <option value="+94" data-country="Sri Lanka" data-country-code="LK">🇱🇰 Sri Lanka (LK) +94</option>
+                  <option value="+46" data-country="Sweden" data-country-code="SE">🇸🇪 Sweden (SE) +46</option>
+                  <option value="+41" data-country="Switzerland" data-country-code="CH">🇨🇭 Switzerland (CH) +41</option>
+                  <option value="+886" data-country="Taiwan" data-country-code="TW">🇹🇼 Taiwan (TW) +886</option>
+                  <option value="+66" data-country="Thailand" data-country-code="TH">🇹🇭 Thailand (TH) +66</option>
+                  <option value="+971" data-country="United Arab Emirates" data-country-code="AE">🇦🇪 United Arab Emirates (AE) +971</option>
+                  <option value="+44" data-country="United Kingdom" data-country-code="GB">🇬🇧 United Kingdom (GB) +44</option>
+                  <option value="+1" data-country="United States" data-country-code="US">🇺🇸 United States (US) +1</option>
+                  <option value="+84" data-country="Vietnam" data-country-code="VN">🇻🇳 Vietnam (VN) +84</option>
                 </select>
                 <input id="contact-mobile" type="tel" name="Mobile" autocomplete="tel-national" inputmode="tel" aria-label="Mobile number">
               </div>
             </div>
-            <label class="lead__field lead__field--wide" for="contact-topic"><span>What is this about? <b aria-hidden="true">*</b></span>
+            <label class="lead__field contact-topic-field" for="contact-topic"><span>Enquiry type <b aria-hidden="true">*</b></span>
               <select id="contact-topic" name="Topic" required>
                 <option value="" selected disabled>Choose an enquiry type</option>
                 <option>Classes</option>
@@ -147,7 +148,7 @@
             <label class="lead__consent"><input type="checkbox" name="consent" required>
               <span>I agree that Élever Badminton may contact me about this enquiry. See our <a href="privacy.html">privacy notice</a>. <b aria-hidden="true">*</b></span></label>
             <div class="lead__actions">
-              <button class="btn btn--contact-send" type="submit"><span>Send message</span><span aria-hidden="true">&rarr;</span></button>
+              <button class="btn btn--contact-send" type="submit">Send message <span aria-hidden="true">&gt;</span></button>
               <span class="lead__status" role="status" aria-live="polite"></span>
             </div>
           </div>
@@ -163,19 +164,19 @@
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M20 11.6a8 8 0 0 1-11.8 7L4 20l1.4-4.1A8 8 0 1 1 20 11.6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.8 8.3c.3 3 2 4.7 5 5.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             </span>
             <span class="contact-channel__body"><strong>WhatsApp</strong></span>
-            <span class="contact-channel__arrow" aria-hidden="true">&nearr;</span>
+            <span class="contact-channel__arrow" aria-hidden="true">&gt;</span>
           </a>
           <a class="contact-channel" href="mailto:info@eleverbadminton.com">
             <span class="contact-channel__icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m5 7 7 5 7-5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
             </span>
             <span class="contact-channel__body"><strong>info@eleverbadminton.com</strong></span>
-            <span class="contact-channel__arrow" aria-hidden="true">&nearr;</span>
+            <span class="contact-channel__arrow" aria-hidden="true">&gt;</span>
           </a>
           <div class="contact-event-card">
             <span class="contact-event-card__tag">For organisations</span>
             <h3>Planning a corporate or school event?</h3>
-            <a href="#contact-form" data-contact-topic="Events">Start an event brief <span aria-hidden="true">&rarr;</span></a>
+            <a href="#contact-form" data-contact-topic="Events">Start an event brief <span aria-hidden="true">&gt;</span></a>
           </div>
         </aside>
       </div>
@@ -189,9 +190,9 @@
 
   <footer id="siteFooter"></footer>
 
-  <script src="assets/js/data.js?v=63"></script>
-  <script src="assets/js/site.js?v=63"></script>
-  <script src="assets/js/pages.js?v=63"></script>
-  <script src="assets/js/main.js?v=63"></script>
+  <script src="assets/js/data.js?v=64"></script>
+  <script src="assets/js/site.js?v=64"></script>
+  <script src="assets/js/pages.js?v=64"></script>
+  <script src="assets/js/main.js?v=64"></script>
 </body>
 </html>
