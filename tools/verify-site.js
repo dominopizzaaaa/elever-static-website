@@ -363,6 +363,14 @@ async function runViewport(browser, viewport, name) {
     name + ' News filter has no focus indicator');
 
   await open(page, '/about.html', name + ' About');
+  const coachGroupGaps = await page.locator('.coachgroup').evaluateAll(groups => groups.map(group => {
+    const label = group.querySelector('.teamlabel').getBoundingClientRect();
+    const cards = group.querySelector('.coachgrid').getBoundingClientRect();
+    return Math.round(cards.top - label.bottom);
+  }));
+  assert.equal(coachGroupGaps.length, 2, name + ' coach groups are missing');
+  assert.ok(coachGroupGaps.every(gap => gap >= 30),
+    name + ' coach headings need more space before their card panels');
   assert.ok(await page.locator('.coach__more', { hasText: 'View more' }).count() >= 1);
   const coachTrigger = page.locator('[data-coach="loh-kean-hean"]');
   await coachTrigger.click();

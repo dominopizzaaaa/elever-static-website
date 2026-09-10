@@ -972,8 +972,9 @@ body.has-lightbox{overflow:hidden}
 .coachgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.8rem}
 /* The two founders (and their label) sit in the middle of the page rather
    than pinned to the left edge — client, Sep 2026. */
+.coachgroup{display:grid;grid-template-columns:minmax(0,1fr);gap:2.5rem;min-width:0}
 .teamlabel{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--faint);margin-bottom:1.6rem;text-align:center}
+  color:var(--faint);margin-bottom:0;text-align:center}
 .coachgroup--team{margin-top:3.4rem}
 .coachgrid--centred{display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem;margin-bottom:0}
 .coachgrid--centred > .coach{flex:0 0 200px;max-width:200px}
@@ -1001,7 +1002,7 @@ body.has-lightbox{overflow:hidden}
    means two team cards are in view at a time, like the founders. */
 @media(max-width:620px){
   .coachgroup--team{margin-top:2.7rem}
-  .teamlabel{margin-bottom:1.3rem}
+  .coachgroup{gap:2rem}
   .coachgrid--centred{gap:.55rem;margin-bottom:0}
   .coachgrid--centred > .coach,
   .coachgrid--rail > .coach{flex:0 0 calc(50% - .28rem);max-width:calc(50% - .28rem)}
