@@ -1234,7 +1234,7 @@ body.has-lightbox{overflow:hidden}
 .contact-form-card .lead__status{max-width:60ch}
 .contact-form-card button:disabled{cursor:wait;opacity:.58}
 .btn--contact-send{gap:clamp(1.5rem,5vw,3rem);min-width:220px;justify-content:space-between;border:2px solid var(--accent);border-radius:18px;background:transparent;color:var(--accent);font-weight:750}
-.btn--contact-send > span:last-child{font-size:1.35rem;line-height:1;transition:transform .2s var(--ease)}
+.btn--contact-send > span:last-child{font-size:1.15rem;line-height:1;transition:transform .2s var(--ease)}
 .btn--contact-send:hover{background:var(--accent-soft);color:var(--accent)}
 .btn--contact-send:hover > span:last-child{transform:translateX(3px)}
 .btn--contact-send:active{background:rgba(33,81,209,.16);border-color:var(--accent-press)}

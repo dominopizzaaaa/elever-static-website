@@ -69,6 +69,7 @@ async function checkContact(page, viewport, name) {
   assert.deepEqual(await topic.locator('option').allTextContents(),
     ['Choose an enquiry type', 'Classes', 'Events', 'Careers', 'Others']);
   assert.equal(await form.locator('[name="Country code"]').inputValue(), '+65');
+  assert.equal(await form.locator('[name="Country code"] option').count(), 42);
   assert.equal(await form.locator('[name="Mobile"]').getAttribute('required'), null);
   assert.equal(await form.locator('[data-contact-panel]:visible').count(), 0);
   const sendButtonStyle = await form.getByRole('button', { name: 'Send message' }).evaluate(node => ({
