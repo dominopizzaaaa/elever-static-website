@@ -439,10 +439,14 @@ async function runViewport(browser, viewport, name) {
       assert.equal((await dialog.locator('.edetail__title').textContent()).trim(), title);
       assert.deepEqual(await dialog.locator('.edetail__meta > span').allTextContents(),
         ['26 Jan 2025', '|', 'Hillview Community Club']);
-      assert.equal(await dialog.getByRole('heading', { name: 'Highlights', exact: true }).count(), 0,
-        name + ' photo-less event should not render an empty Highlights section');
-      assert.equal(await trigger.locator('.ecov__placeholder').count(), 1,
-        name + ' photo-less event should render its branded placeholder');
+      assert.equal(await dialog.getByRole('heading', { name: 'Highlights', exact: true }).count(), 1,
+        name + ' Bukit Gombak 2025 should now render its Highlights gallery');
+      assert.equal(await dialog.locator('.edetail__tile').count(), 12,
+        name + ' Bukit Gombak 2025 should show its twelve photos');
+      assert.equal(await trigger.locator('.ecov__placeholder').count(), 0,
+        name + ' Bukit Gombak 2025 should no longer use the branded placeholder');
+      assert.equal(await trigger.locator('.ecov__media img').count(), 1,
+        name + ' Bukit Gombak 2025 should show a cover photo');
       await page.screenshot({ path: path.join(outDir, name + '-bukit-gombak-2025.png'), fullPage: false });
     }
     await page.keyboard.press('Escape');

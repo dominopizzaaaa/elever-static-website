@@ -700,6 +700,20 @@
         'Professional Badminton & Table Tennis Coaches',
         'Kids Sports Programme Design',
         'Participant & On-Ground Management'
+      ],
+      photos: [
+        'bukit-gombak-clinic-2025-1.jpg',
+        'bukit-gombak-clinic-2025-2.jpg',
+        'bukit-gombak-clinic-2025-3.jpg',
+        'bukit-gombak-clinic-2025-4.jpg',
+        'bukit-gombak-clinic-2025-5.jpg',
+        'bukit-gombak-clinic-2025-6.jpg',
+        'bukit-gombak-clinic-2025-7.jpg',
+        'bukit-gombak-clinic-2025-8.jpg',
+        'bukit-gombak-clinic-2025-9.jpg',
+        'bukit-gombak-clinic-2025-10.jpg',
+        'bukit-gombak-clinic-2025-11.jpg',
+        'bukit-gombak-clinic-2025-12.jpg'
       ]
     }
   ];

@@ -19,6 +19,7 @@ slug_for() {
     *"KFF Singapore Badminton Open 2025"*)          echo "kff-singapore-open-2025" ;;
     *"Northbrooks Secondary School"*)               echo "northbrooks-school-2025" ;;
     *"Bukit Gombak Sports Clinic 2026"*)            echo "bukit-gombak-clinic-2026" ;;
+    *"Bukit Gombak Sports Clinic 2025"*)            echo "bukit-gombak-clinic-2025" ;;
     *"Serangoon-Paya Lebar Badminton Clinic 2026"*) echo "serangoon-paya-lebar-clinic-2026" ;;
     *"Joo Chiat Badminton Carnival 2026"*)          echo "joo-chiat-carnival-2026" ;;
     *"ASICS Badminton Summit 2026"*)                echo "asics-summit-2026" ;;
