@@ -539,6 +539,9 @@ async function runViewport(browser, viewport, name) {
     const coachRole = await page.locator('.phead--coach-profile .phead__lead').boundingBox();
     const coachProfile = await page.locator('.profile--coach').boundingBox();
     const coachPhoto = await page.locator('.profile--coach .profile__photo').boundingBox();
+    const coachCertifications = await page.locator('.profile--coach .profile__certifications').boundingBox();
+    const coachContent = await page.locator('.profile--coach .profile__content').boundingBox();
+    const coachBiography = await page.locator('.profile--coach .profile__bio').first().boundingBox();
     const teamAction = await page.locator('.profile--coach .profile__actions').boundingBox();
     const teamButton = await page.getByRole('link', { name: 'View the team' }).boundingBox();
     assert.ok(coachRole && Math.abs(coachRole.x - coachHeader.x) < 2,
@@ -547,9 +550,18 @@ async function runViewport(browser, viewport, name) {
       'left', name + ' coach content is not left aligned on phone');
     assert.equal(await page.locator('.profile--coach .profile__bio').first().evaluate(node => getComputedStyle(node).textAlign),
       'left', name + ' coach biography is not left aligned on phone');
-    assert.ok(coachProfile && coachPhoto &&
-      Math.abs((coachPhoto.x + coachPhoto.width / 2) - (coachProfile.x + coachProfile.width / 2)) < 2,
-    name + ' coach profile photo is not centred on phone');
+    assert.ok(coachProfile && coachPhoto && coachCertifications && coachContent && coachBiography,
+      name + ' coach profile alignment blocks are missing on phone');
+    const profileLeft = coachProfile.x;
+    const profileRight = coachProfile.x + coachProfile.width;
+    [coachPhoto, coachCertifications, coachContent, coachBiography].forEach(box => {
+      assert.ok(Math.abs(box.x - profileLeft) < 1,
+        name + ' coach profile blocks do not share the exact left edge on phone');
+      assert.ok(Math.abs(box.x + box.width - profileRight) < 1,
+        name + ' coach profile blocks do not share the exact right edge on phone');
+    });
+    assert.ok(Math.abs(coachPhoto.width - coachBiography.width) < 1,
+      name + ' coach photo and description are not exactly the same width on phone');
     assert.ok(teamAction && teamButton &&
       Math.abs((teamButton.x + teamButton.width / 2) - (teamAction.x + teamAction.width / 2)) < 2,
     name + ' View the team button is not centred on phone');

@@ -1133,7 +1133,9 @@ body.has-lightbox{overflow:hidden}
   .profile--coach .profile__aside{position:static;width:min(100%,340px)}
 }
 @media(max-width:620px){
-  .profile--coach .profile__aside{margin-inline:auto}
+  .profile--coach .profile__aside{width:100%;margin-inline:0}
+  .profile--coach .profile__photo{max-width:none}
+  .profile--coach .profile__certifications{width:100%}
   .profile--coach .profile__bio{text-align:left;hyphens:none}
   .profile__gallery{grid-template-columns:1fr}
   .profile--coach .profile__actions{justify-content:center}
