@@ -1198,22 +1198,27 @@
       return String(name || '').split(/\s+/).filter(Boolean).map(function (part) { return part.charAt(0); }).join('').slice(0, 2).toUpperCase();
     }
 
-    /* A coach with a write-up opens the overlay; the <a href> underneath is
-       the real profile page, kept so the card still works without JS and the
-       page stays indexable (see initCoachDetail). A coach with neither — only
-       "to write soon" — is a plain <div> that goes nowhere, as before. */
+    /* A coach with a profile page uses an indexable <a>; a coach whose write-up
+       is ready but whose page is not uses a popup-only <button>. A coach with
+       neither — only placeholder copy — remains a plain <div>. */
     function card(c, i) {
-      var hasProfile = c.profilePage !== false;
-      var tag = hasProfile ? 'a' : 'div';
-      var href = hasProfile ? ' href="' + base + 'coaches/' + esc(c.slug) + '.html" data-coach="' + esc(c.slug) + '"' : '';
+      var hasProfilePage = c.profilePage !== false;
+      var hasDescription = Array.isArray(c.bio) && c.bio.some(function (paragraph) {
+        return paragraph && !/^(to write soon|to be added)$/i.test(String(paragraph).trim());
+      });
+      var isInteractive = hasProfilePage || hasDescription;
+      var tag = hasProfilePage ? 'a' : (hasDescription ? 'button' : 'div');
+      var attrs = hasProfilePage
+        ? ' href="' + base + 'coaches/' + esc(c.slug) + '.html" data-coach="' + esc(c.slug) + '"'
+        : (hasDescription ? ' type="button" data-coach="' + esc(c.slug) + '"' : '');
       var photo = c.photo
         ? '<img src="' + base + esc(c.photo) + '" alt="' + esc(c.name) + '" width="640" height="640" loading="lazy" decoding="async">'
         : '<span class="coach__initials">' + esc(initials(c.name)) + '</span>';
-      return '<' + tag + ' class="coach coach--' + (hasProfile ? 'linked' : 'static') + '"' + href + '>' +
+      return '<' + tag + ' class="coach coach--' + (isInteractive ? 'linked' : 'static') + '"' + attrs + '>' +
         '<div class="coach__img">' + photo + '</div>' +
         '<div class="coach__body"><h3>' + esc(c.name) + '</h3>' +
           '<p class="coach__role">' + esc(c.role) + '</p>' +
-          (hasProfile ? '<p class="coach__more">View more <span class="cta-chevron" aria-hidden="true">&rsaquo;</span></p>' : '') +
+          (isInteractive ? '<p class="coach__more">View more <span class="cta-chevron" aria-hidden="true">&rsaquo;</span></p>' : '') +
         '</div></' + tag + '>';
     }
 

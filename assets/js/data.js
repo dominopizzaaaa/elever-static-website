@@ -40,8 +40,13 @@
       role: 'Co-Founder', cert: '', group: 'founder',
       certifications: [],
       coaching: ['Essentials', 'Emergence'], languages: ['English', 'Mandarin'],
-      bio: ['To write soon'],
-      placeholder: true,
+      shortBio: 'Chin An is the Co-Founder of Élever Badminton, where he oversees business operations, marketing, and events, while shaping the academy’s efforts to grow the sport and bring communities together.',
+      bio: [
+        'Chin An is the Co-Founder of Élever Badminton, where he oversees business operations, marketing, and events, while shaping the academy’s efforts to grow the sport and bring communities together.',
+        'Having played badminton since the age of seven, Chin An was the key player at Raffles Institution and later captained the NUS Badminton Team, while also representing Singapore at several overseas tournaments. Known for his technical and skilful playing style, he competed at a high level locally in singles before developing strong proficiency in mixed doubles.',
+        'Chin An believes that strong foundations and the right skills are essential to the development of every player. Shaped by his own journey, he hopes to make quality badminton experiences accessible while encouraging players to enjoy learning and progressing through the sport.',
+        'Beyond the court, he drives Élever Badminton’s corporate and community initiatives, creating opportunities for people to connect through sport and building a stronger community around the game.'
+      ],
       profilePage: false
     },
     {

@@ -1046,7 +1046,7 @@ body.has-lightbox{overflow:hidden}
 }
 @media(prefers-reduced-motion:reduce){.coachgrid--rail{scroll-behavior:auto}}
 .coach{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;
-  transition:transform .25s var(--ease),box-shadow .25s,border-color .25s}
+  text-align:left;transition:transform .25s var(--ease),box-shadow .25s,border-color .25s}
 .coach:hover{transform:translateY(-3px);box-shadow:var(--shadow-sm);border-color:var(--line-2)}
 .coach--static:hover{transform:none;box-shadow:none;border-color:var(--line)}
 .coach__img{aspect-ratio:1/1;overflow:hidden;background:var(--panel-2)}

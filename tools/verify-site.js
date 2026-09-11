@@ -496,6 +496,31 @@ async function runViewport(browser, viewport, name) {
   await page.keyboard.press('Escape');
   assert.ok(await coachTrigger.evaluate(node => node === document.activeElement), name + ' coach focus did not return');
 
+  const chinAnTrigger = page.locator('[data-coach="eng-chin-an"]');
+  assert.equal(await chinAnTrigger.evaluate(node => node.tagName), 'BUTTON',
+    name + ' Chin An should open a popup without linking to a profile page');
+  assert.equal(await chinAnTrigger.getAttribute('type'), 'button');
+  await chinAnTrigger.click();
+  await coachDialog.waitFor();
+  assert.equal((await coachDialog.locator('.edetail__title').textContent()).trim(), 'Eng Chin An');
+  assert.deepEqual(await coachDialog.locator('.edetail__desc').allTextContents(), [
+    'Chin An is the Co-Founder of Élever Badminton, where he oversees business operations, marketing, and events, while shaping the academy’s efforts to grow the sport and bring communities together.',
+    'Having played badminton since the age of seven, Chin An was the key player at Raffles Institution and later captained the NUS Badminton Team, while also representing Singapore at several overseas tournaments. Known for his technical and skilful playing style, he competed at a high level locally in singles before developing strong proficiency in mixed doubles.',
+    'Chin An believes that strong foundations and the right skills are essential to the development of every player. Shaped by his own journey, he hopes to make quality badminton experiences accessible while encouraging players to enjoy learning and progressing through the sport.',
+    'Beyond the court, he drives Élever Badminton’s corporate and community initiatives, creating opportunities for people to connect through sport and building a stronger community around the game.'
+  ], name + ' Chin An popup does not show the supplied description');
+  assert.equal(await coachDialog.getByRole('link', { name: /View full profile/ }).count(), 0,
+    name + ' Chin An should not link to a standalone profile page');
+  await page.keyboard.press('Escape');
+  assert.ok(await chinAnTrigger.evaluate(node => node === document.activeElement),
+    name + ' Chin An popup focus did not return');
+
+  const robinCard = page.locator('.coach', { hasText: 'Robin Chio' });
+  assert.equal(await robinCard.evaluate(node => node.tagName), 'DIV',
+    name + ' unfinished Robin coach card should remain static');
+  assert.equal(await robinCard.getAttribute('data-coach'), null);
+  assert.equal(await robinCard.locator('.coach__more').count(), 0);
+
   await open(page, '/coaches/ong-keng-yang.html', name + ' Coach profile');
   assert.equal(await page.getByText('HOME · ABOUT · COACHES', { exact: true }).count(), 0);
   assert.equal(await page.getByRole('link', { name: 'See classes' }).count(), 0);
