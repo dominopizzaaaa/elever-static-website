@@ -656,6 +656,9 @@
         'Athlete Sharing & Student Engagement',
         'Badminton Training & Group Drills'
       ],
+      partners: [
+        { name: 'Northbrooks Secondary School', logo: 'assets/img/partners/northbrooks-secondary-school.png' }
+      ],
       photos: [
         'northbrooks-school-2025-1.jpg',
         'northbrooks-school-2025-2.jpg',

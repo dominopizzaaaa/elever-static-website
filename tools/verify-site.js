@@ -449,6 +449,19 @@ async function runViewport(browser, viewport, name) {
         nodes.every(node => node.naturalWidth > 0)),
         name + ' Bukit Gombak 2026 partner logo failed to load');
     }
+    if (title === 'ÉB @ Northbrooks Secondary School') {
+      assert.equal(await dialog.getByRole('heading', { name: 'Partner', exact: true }).count(), 1,
+        name + ' Northbrooks should list its Partner');
+      const nbPartners = await dialog.locator('.edetail__partner img').evaluateAll(nodes =>
+        nodes.map(node => node.alt));
+      assert.deepEqual(nbPartners, ['Northbrooks Secondary School'],
+        name + ' Northbrooks partner logo is missing');
+      await dialog.locator('.edetail__partner img').evaluateAll(images =>
+        Promise.all(images.map(image => image.decode ? image.decode() : Promise.resolve())));
+      assert.ok(await dialog.locator('.edetail__partner img').evaluateAll(nodes =>
+        nodes.every(node => node.naturalWidth > 0)),
+        name + ' Northbrooks partner logo failed to load');
+    }
     if (title === 'Bukit Gombak Sports Clinic 2025') {
       assert.equal((await dialog.locator('.edetail__title').textContent()).trim(), title);
       assert.deepEqual(await dialog.locator('.edetail__meta > span').allTextContents(),
