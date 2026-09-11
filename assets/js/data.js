@@ -59,7 +59,20 @@
         "This unique experience enables Élever Badminton to bring national-level sports science and training methodologies directly to its players. Aspiring athletes benefit from structured physical development, performance testing and conditioning programmes aligned with the expectations of Singapore's high-performance pathway, providing a distinct advantage for those working towards national selection.",
         'Known for his calm demeanour and analytical, research-driven approach, Keng Yang is passionate about helping players of all ages build strength, resilience and confidence. He is committed to making elite sports science accessible, empowering every athlete to maximise performance, reduce injury risk and reach their full potential.'
       ],
-      achievements: ['Graduate of Nanyang Technological University in Sports Science and Management', "Strength & Conditioning Coach for Singapore's National Team and National Training Squad"]
+      achievements: ['Graduate of Nanyang Technological University in Sports Science and Management', "Strength & Conditioning Coach for Singapore's National Team and National Training Squad"],
+      profileGallery: {
+        heading: 'Building Stronger Players',
+        photos: [
+          {
+            src: 'assets/img/coaches/ong-keng-yang-training-1.jpg', width: 1600, height: 1066,
+            alt: 'Ong Keng Yang guiding two junior players through a movement drill with a training hoop'
+          },
+          {
+            src: 'assets/img/coaches/ong-keng-yang-training-2.jpg', width: 1066, height: 1600,
+            alt: 'Ong Keng Yang guiding a junior player through a training drill'
+          }
+        ]
+      }
     },
     {
       slug: 'shawn-wong', name: 'Shawn Wong', photo: 'assets/img/coaches/shawn-wong.jpg',

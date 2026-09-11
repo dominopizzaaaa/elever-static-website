@@ -59,6 +59,7 @@ check the filenames listed in `data.js` still line up:
 | Source | Script | Output |
 |---|---|---|
 | `Photos/Coaches/Headshot - <Name>.<ext>` | `bash tools/build-coach-photos.sh` | `assets/img/coaches/<slug>.jpg` — 800×800, centre-cropped square |
+| `Photos/Coaches/<Name>/*` | `bash tools/build-coach-training-photos.sh` | `assets/img/coaches/<slug>-training-<n>.jpg` — 1600px, original aspect ratio |
 | `Photos/Camps/*` | `bash tools/build-camp-photos.sh` | `assets/img/camps/` (1600px) + `camps/thumb/` (640px) |
 | `Photos/Events/<occasion>/*` | `bash tools/build-event-photos.sh` | `assets/img/events/` (1600px) + `events/thumb/` (640px) |
 | `Photos/Regular Classes/<Stage>.png` | `bash tools/build-class-photos.sh` | `assets/img/classes/<stage>.jpg` — 900px pathway card image |

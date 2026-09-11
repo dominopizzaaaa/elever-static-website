@@ -500,6 +500,30 @@ async function runViewport(browser, viewport, name) {
   assert.equal(await page.getByRole('link', { name: 'ASCA Level 1' }).count(), 1);
   assert.equal(await page.getByRole('link', { name: 'Level 1 Sports Trainer' }).count(), 1);
   assert.equal(await page.getByRole('heading', { name: 'About', exact: true }).count(), 1);
+  assert.equal(await page.getByRole('heading', { name: 'Building Stronger Players', exact: true }).count(), 1);
+  const trainingPhotos = page.locator('.profile__gallery img');
+  assert.equal(await trainingPhotos.count(), 2, name + ' coach training photos are missing');
+  assert.deepEqual(await trainingPhotos.evaluateAll(images => images.map(image => image.getAttribute('src'))), [
+    '../assets/img/coaches/ong-keng-yang-training-1.jpg',
+    '../assets/img/coaches/ong-keng-yang-training-2.jpg'
+  ]);
+  assert.ok((await trainingPhotos.evaluateAll(images => images.map(image => image.getAttribute('alt'))))
+    .every(Boolean), name + ' coach training photos lack alt text');
+  for (let i = 0; i < await trainingPhotos.count(); i += 1) {
+    const trainingPhoto = trainingPhotos.nth(i);
+    await trainingPhoto.scrollIntoViewIfNeeded();
+    await trainingPhoto.evaluate(image => image.complete && image.naturalWidth > 0
+      ? true
+      : new Promise((resolve, reject) => {
+        image.addEventListener('load', () => resolve(true), { once: true });
+        image.addEventListener('error', () => reject(new Error('Training photo failed to load')), { once: true });
+      }));
+  }
+  assert.equal(
+    await page.locator('.profile__gallery').evaluate(node => getComputedStyle(node).gridTemplateColumns.split(' ').length),
+    viewport.width <= 620 ? 1 : 2,
+    name + ' coach training photo layout has the wrong column count'
+  );
   assert.equal(
     await page.locator('.profile__bio').first().evaluate(node => getComputedStyle(node).textAlign),
     viewport.width <= 620 ? 'left' : 'justify'

@@ -1121,6 +1121,10 @@ body.has-lightbox{overflow:hidden}
 .profile--coach .profile__bio{max-width:66ch;text-align:justify;hyphens:auto}
 .profile--coach .profile__achievements{max-width:66ch;text-align:left}
 .profile__section--achievements{margin-top:2.4rem}
+.profile__section--gallery{margin-top:2.4rem}
+.profile__gallery{display:grid;grid-template-columns:minmax(0,9fr) minmax(0,4fr);gap:.75rem;align-items:start}
+.profile__gallery-item{margin:0;overflow:hidden;border:1px solid var(--line);border-radius:var(--r-md);background:var(--panel-2)}
+.profile__gallery-item img{display:block;width:100%;height:auto}
 .profile__actions{display:flex;justify-content:center;margin-top:2rem}
 .profile--coach .profile__actions{justify-content:flex-start}
 .profile__team-link{min-width:0;border-width:1px;border-radius:var(--r-sm);font-weight:600}
@@ -1131,6 +1135,7 @@ body.has-lightbox{overflow:hidden}
 @media(max-width:620px){
   .profile--coach .profile__aside{margin-inline:auto}
   .profile--coach .profile__bio{text-align:left;hyphens:none}
+  .profile__gallery{grid-template-columns:1fr}
   .profile--coach .profile__actions{justify-content:center}
 }
 

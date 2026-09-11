@@ -14,7 +14,7 @@ require(path.join(root, 'assets/js/data.js'));
 const COACHES = global.window.ELEVER_DATA.coaches;
 
 const V = '64'; // must match the shared asset cache key used across the site
-const PAGES_V = '67'; // cache key for the coach-layout stylesheet
+const PAGES_V = '68'; // cache key for the coach-layout stylesheet
 const FAVICON_V = '64';
 
 const esc = s => String(s == null ? '' : s)
@@ -34,6 +34,8 @@ function page(c) {
   const certifications = Array.isArray(c.certifications)
     ? c.certifications.filter(certification => certification && certification.name && certification.href)
     : [];
+  const profileGallery = c.profileGallery && Array.isArray(c.profileGallery.photos)
+    ? c.profileGallery : null;
   const bioHtml = bioParagraphs
     .filter(Boolean)
     .map(p => `<p class="profile__bio">${esc(p)}</p>`)
@@ -55,6 +57,19 @@ function page(c) {
         </div>`
     : '';
   const certificationBlock = certificationHtml ? '\n          ' + certificationHtml : '';
+  const profileGalleryPhotos = profileGallery
+    ? profileGallery.photos.filter(photo => photo && photo.src && photo.alt && photo.width && photo.height)
+    : [];
+  const profileGalleryHtml = profileGallery && profileGallery.heading && profileGalleryPhotos.length
+    ? `<section class="profile__section profile__section--gallery">
+            <h2 class="edetail__subhead edetail__subhead--plain profile__heading">${esc(profileGallery.heading)}</h2>
+            <div class="profile__gallery">
+              ${profileGalleryPhotos.map(photo => `<figure class="profile__gallery-item">
+                <img src="../${esc(photo.src)}" alt="${esc(photo.alt)}" width="${esc(photo.width)}" height="${esc(photo.height)}" loading="lazy" decoding="async" />
+              </figure>`).join('\n              ')}
+            </div>
+          </section>`
+    : '';
 
   const jsonld = JSON.stringify({
     '@context': 'https://schema.org', '@type': 'Person',
@@ -111,7 +126,7 @@ function page(c) {
         <div class="profile__content">
           <h2 class="edetail__subhead edetail__subhead--plain profile__heading">About${sample}</h2>
           ${bioHtml}
-          ${achievementHtml}
+          ${achievementHtml}${profileGalleryHtml ? `\n          ${profileGalleryHtml}` : ''}
 
           <div class="profile__actions">
             <a class="btn btn--contact-send profile__team-link" href="../about.html#coaches">View the team</a>
