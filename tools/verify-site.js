@@ -474,6 +474,16 @@ async function runViewport(browser, viewport, name) {
         name + ' Bukit Gombak 2025 should no longer use the branded placeholder');
       assert.equal(await trigger.locator('.ecov__media img').count(), 1,
         name + ' Bukit Gombak 2025 should show a cover photo');
+      const bg25Partners = await dialog.locator('.edetail__partner img').evaluateAll(nodes =>
+        nodes.map(node => node.alt));
+      assert.deepEqual(bg25Partners,
+        ['People\u2019s Association', 'Bukit Gombak', 'Community Sports Network @ Bukit Gombak'],
+        name + ' Bukit Gombak 2025 partner logos are missing or out of order');
+      await dialog.locator('.edetail__partner img').evaluateAll(images =>
+        Promise.all(images.map(image => image.decode ? image.decode() : Promise.resolve())));
+      assert.ok(await dialog.locator('.edetail__partner img').evaluateAll(nodes =>
+        nodes.every(node => node.naturalWidth > 0)),
+        name + ' Bukit Gombak 2025 partner logo failed to load');
       await page.screenshot({ path: path.join(outDir, name + '-bukit-gombak-2025.png'), fullPage: false });
     }
     await page.keyboard.press('Escape');
