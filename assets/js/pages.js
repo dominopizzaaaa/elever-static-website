@@ -321,7 +321,10 @@
               (e.services && e.services.length
                 ? '<div class="edetail__services">' +
                     '<h3 class="edetail__subhead edetail__subhead--plain">Services provided</h3>' +
-                    '<ul class="edetail__servicelist">' + e.services.map(function (s) {
+                    /* A short list reads as a stray row across two columns, so
+                       two-or-fewer items stack into one column instead (client,
+                       Sep 2026: Northbrooks). */
+                    '<ul class="edetail__servicelist' + (e.services.length <= 2 ? ' edetail__servicelist--stack' : '') + '">' + e.services.map(function (s) {
                       return '<li>' + esc(s) + '</li>';
                     }).join('') + '</ul>' +
                   '</div>'

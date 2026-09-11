@@ -343,6 +343,14 @@ async function runViewport(browser, viewport, name) {
     assert.equal(await dialog.getByRole('heading', { name: 'Services provided', exact: true }).count(), 1);
     assert.ok(await dialog.evaluate(node => node.scrollWidth <= node.clientWidth + 1),
       name + ' event details overflow for ' + title);
+    /* A short list stacks into one column at every width, not just on phone, so
+       two-or-fewer items never read as a stray row (client, Sep 2026:
+       Northbrooks). */
+    if (expected.services.length <= 2) {
+      assert.equal(await dialog.locator('.edetail__servicelist').evaluate(node =>
+        getComputedStyle(node).gridTemplateColumns.trim().split(/\s+/).length), 1,
+      name + ' short event services should be one column for ' + title);
+    }
     if (viewport.width <= 620) {
       assert.equal(await dialog.locator('.edetail__servicelist').evaluate(node =>
         getComputedStyle(node).gridTemplateColumns.trim().split(/\s+/).length), 1,

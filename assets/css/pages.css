@@ -765,6 +765,9 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 /* Point form (client, Sep 2026: "use point form instead of tick"). */
 .edetail__servicelist{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem 1.4rem;
   font-size:.9rem;color:var(--ink)}
+/* A one- or two-item list looks like a stray row spread across two columns,
+   so it stacks into a single column instead (client, Sep 2026: Northbrooks). */
+.edetail__servicelist--stack{grid-template-columns:1fr}
 .edetail__servicelist li{padding-left:1.1rem;position:relative;line-height:1.5}
 .edetail__servicelist li::before{content:'';position:absolute;left:.1rem;top:.62em;width:.32rem;height:.32rem;
   border-radius:99px;background:var(--ink)}
