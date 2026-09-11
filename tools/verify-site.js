@@ -324,14 +324,21 @@ async function runViewport(browser, viewport, name) {
         'Participant & On-Ground Management']
     },
     'Bukit Gombak Sports Clinic 2025': {
-      description: 'We designed and delivered a multi-sport clinic for young participants to experience both badminton and table tennis in one programme. Kids rotated through dedicated badminton and table tennis stations before completing agility exercises designed to complement both sports. The clinic introduced participants to the fundamentals of each sport in a fun and engaging environment, giving them the opportunity to explore, learn and discover their interest in different racket sports.',
+      description: 'We designed and delivered a multi-sport clinic for young participants to experience both badminton and table tennis in one programme. Kids rotated across sport-specific coaching stations and agility exercises, gaining first-hand exposure to the fundamentals of both sports. The experience concluded with a sharing by current and former national players, giving participants the opportunity to learn on court while drawing inspiration from those who have competed at the highest level.',
       services: ['Multi-Sport Clinic Programme Planning & Execution',
-        'Professional Badminton & Table Tennis Coaches', 'Kids Sports Programme Design',
-        'Participant & On-Ground Management']
+        'Professional Badminton & Table Tennis Coaches', 'Athlete Sharing & Engagement',
+        'Participant & On-Site Management']
     },
     'ÉB @ Northbrooks Secondary School': {
       description: 'We partnered with Northbrooks Secondary School to deliver an engaging badminton experience combining inspiration with on-court action. Our Co-Founder and Technical Director, Loh Kean Hean, shared his journey and experiences as a professional badminton player, followed by group training drills where students put their skills into practice. The session concluded with exhibition matches alongside the students, giving them the opportunity to interact, learn and experience badminton up close with a professional athlete.',
       services: ['Athlete Sharing & Student Engagement', 'Badminton Training & Group Drills']
+    },
+    'ÉB @ KFF Singapore Badminton Open 2025': {
+      description: 'At the KFF Singapore Badminton Open 2025, we took our passion beyond the academy to create a carnival experience that brought the community closer to badminton. From complimentary clinics and masterclass to signed giveaways from Loh Kean Yew and Yeo Jia Min, as well as an autograph session with Alex Lanier, we brought together our expertise and connections to create memorable experiences that reflect our community-first mission of sharing the joy of badminton.',
+      services: ['Event Conceptualisation, Planning & Execution', 'National Athlete Engagement',
+        'Professional Badminton Coaches & On-Court Facilitation',
+        'Games, Giveaways & Participant Engagement', 'Autograph Session Management',
+        'On-Site Event Operations']
     }
   };
   async function assertEventStory(dialog, title) {
@@ -427,6 +434,7 @@ async function runViewport(browser, viewport, name) {
     .evaluate(node => node === document.activeElement), name + ' event focus did not return');
   for (const title of ['ASICS Badminton Summit 2026', 'Serangoon-Paya Lebar Badminton Clinic 2026',
     'Bukit Gombak Sports Clinic 2026', 'ÉB @ Northbrooks Secondary School',
+    'ÉB @ KFF Singapore Badminton Open 2025',
     'Bukit Gombak Sports Clinic 2025']) {
     const trigger = page.locator('.ecov__open', { hasText: title });
     assert.ok((await trigger.getAttribute('aria-label')).includes('and details'),
@@ -461,6 +469,19 @@ async function runViewport(browser, viewport, name) {
       assert.ok(await dialog.locator('.edetail__partner img').evaluateAll(nodes =>
         nodes.every(node => node.naturalWidth > 0)),
         name + ' Northbrooks partner logo failed to load');
+    }
+    if (title === 'ÉB @ KFF Singapore Badminton Open 2025') {
+      assert.equal(await dialog.getByRole('heading', { name: 'Partner', exact: true }).count(), 1,
+        name + ' KFF Singapore Open should list its Partner');
+      const kffPartners = await dialog.locator('.edetail__partner img').evaluateAll(nodes =>
+        nodes.map(node => node.alt));
+      assert.deepEqual(kffPartners, ['Singapore Badminton Association'],
+        name + ' KFF Singapore Open partner logo is missing');
+      await dialog.locator('.edetail__partner img').evaluateAll(images =>
+        Promise.all(images.map(image => image.decode ? image.decode() : Promise.resolve())));
+      assert.ok(await dialog.locator('.edetail__partner img').evaluateAll(nodes =>
+        nodes.every(node => node.naturalWidth > 0)),
+        name + ' KFF Singapore Open partner logo failed to load');
     }
     if (title === 'Bukit Gombak Sports Clinic 2025') {
       assert.equal((await dialog.locator('.edetail__title').textContent()).trim(), title);

@@ -678,6 +678,18 @@
       when: '30 May – 1 Jun 2025',
       where: 'OCBC Square',
       slug: 'kff-singapore-open-2025',
+      description: 'At the KFF Singapore Badminton Open 2025, we took our passion beyond the academy to create a carnival experience that brought the community closer to badminton. From complimentary clinics and masterclass to signed giveaways from Loh Kean Yew and Yeo Jia Min, as well as an autograph session with Alex Lanier, we brought together our expertise and connections to create memorable experiences that reflect our community-first mission of sharing the joy of badminton.',
+      services: [
+        'Event Conceptualisation, Planning & Execution',
+        'National Athlete Engagement',
+        'Professional Badminton Coaches & On-Court Facilitation',
+        'Games, Giveaways & Participant Engagement',
+        'Autograph Session Management',
+        'On-Site Event Operations'
+      ],
+      partners: [
+        { name: 'Singapore Badminton Association', logo: 'assets/img/partners/sba.png' }
+      ],
       photos: [
         'kff-singapore-open-2025-1.jpg',
         'kff-singapore-open-2025-2.jpg',
@@ -703,12 +715,12 @@
       when: '26 Jan 2025',
       where: 'Hillview Community Club',
       slug: 'bukit-gombak-clinic-2025',
-      description: 'We designed and delivered a multi-sport clinic for young participants to experience both badminton and table tennis in one programme. Kids rotated through dedicated badminton and table tennis stations before completing agility exercises designed to complement both sports. The clinic introduced participants to the fundamentals of each sport in a fun and engaging environment, giving them the opportunity to explore, learn and discover their interest in different racket sports.',
+      description: 'We designed and delivered a multi-sport clinic for young participants to experience both badminton and table tennis in one programme. Kids rotated across sport-specific coaching stations and agility exercises, gaining first-hand exposure to the fundamentals of both sports. The experience concluded with a sharing by current and former national players, giving participants the opportunity to learn on court while drawing inspiration from those who have competed at the highest level.',
       services: [
         'Multi-Sport Clinic Programme Planning & Execution',
         'Professional Badminton & Table Tennis Coaches',
-        'Kids Sports Programme Design',
-        'Participant & On-Ground Management'
+        'Athlete Sharing & Engagement',
+        'Participant & On-Site Management'
       ],
       partners: [
         { name: 'People\u2019s Association', logo: 'assets/img/partners/peoples-association.png' },
