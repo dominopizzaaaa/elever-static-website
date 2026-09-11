@@ -669,6 +669,20 @@
         'kff-singapore-open-2025-15.jpg',
         'kff-singapore-open-2025-16.jpg'
       ]
+    },
+    {
+      title: 'Bukit Gombak Sports Clinic 2025',
+      type: 'Clinic',
+      when: '26 Jan 2025',
+      where: 'Hillview Community Club',
+      slug: 'bukit-gombak-clinic-2025',
+      description: 'We designed and delivered a multi-sport clinic for young participants to experience both badminton and table tennis in one programme. Kids rotated through dedicated badminton and table tennis stations before completing agility exercises designed to complement both sports. The clinic introduced participants to the fundamentals of each sport in a fun and engaging environment, giving them the opportunity to explore, learn and discover their interest in different racket sports.',
+      services: [
+        'Multi-Sport Clinic Programme Planning & Execution',
+        'Professional Badminton & Table Tennis Coaches',
+        'Kids Sports Programme Design',
+        'Participant & On-Ground Management'
+      ]
     }
   ];
 

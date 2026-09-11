@@ -330,18 +330,22 @@
               logoBlock(sponsors, sponsors.length > 1 ? 'Sponsors' : 'Sponsor', 'edetail__partnerlist--dense') +
             '</div>'
           : '') +
-        '<div class="edetail__gallery">' +
-          '<h3 class="edetail__subhead edetail__subhead--plain">Highlights</h3>' +
-          '<div class="edetail__grid" data-detail-idx="' + idx + '">' + grid + '</div>' +
-        '</div>';
+        (photos.length
+          ? '<div class="edetail__gallery">' +
+              '<h3 class="edetail__subhead edetail__subhead--plain">Highlights</h3>' +
+              '<div class="edetail__grid" data-detail-idx="' + idx + '">' + grid + '</div>' +
+            '</div>'
+          : '');
 
       // Jump into the shared lightbox from any tile.
       var gridEl = panel.querySelector('.edetail__grid');
-      gridEl.addEventListener('click', function (ev) {
-        var t = ev.target.closest('.edetail__tile');
-        if (!t || !openPhoto) return;
-        openPhoto(idx, Number(t.dataset.photo || 0), t);
-      });
+      if (gridEl) {
+        gridEl.addEventListener('click', function (ev) {
+          var t = ev.target.closest('.edetail__tile');
+          if (!t || !openPhoto) return;
+          openPhoto(idx, Number(t.dataset.photo || 0), t);
+        });
+      }
     }
 
     function open(idx, trigger) {
@@ -890,13 +894,13 @@
 
         return '<article class="ecov" data-type="' + esc(typeKeys(e.type).join(' ')) + '">' +
           '<button class="ecov__open" type="button" data-detail="' + eIndex + '"' +
-            ' aria-label="' + esc('Open ' + e.title + ' — ' + total + ' photos' +
-              (hasStory ? ' and details' : '')) + '">' +
-            '<span class="ecov__media">' +
+            ' aria-label="' + esc('Open ' + e.title +
+              (total ? ' — ' + total + ' photos' : '') + (hasStory ? ' and details' : '')) + '">' +
+            '<span class="ecov__media' + (cover ? '' : ' ecov__media--empty') + '">' +
               (cover
                 ? '<img src="' + esc(thumbSrc(cover)) + '" alt="' + esc(e.title) + '"' +
                     ' loading="lazy" decoding="async">'
-                : '') +
+                : '<span class="ecov__placeholder" aria-hidden="true"><b>ÉB</b><span>Event</span></span>') +
               '<span class="ecov__scrim" aria-hidden="true"></span>' +
             '</span>' +
             '<span class="ecov__body">' +

@@ -323,6 +323,12 @@ async function runViewport(browser, viewport, name) {
         'Professional Badminton & Table Tennis Coaches', 'Kids Sports Programme Design',
         'Participant & On-Ground Management']
     },
+    'Bukit Gombak Sports Clinic 2025': {
+      description: 'We designed and delivered a multi-sport clinic for young participants to experience both badminton and table tennis in one programme. Kids rotated through dedicated badminton and table tennis stations before completing agility exercises designed to complement both sports. The clinic introduced participants to the fundamentals of each sport in a fun and engaging environment, giving them the opportunity to explore, learn and discover their interest in different racket sports.',
+      services: ['Multi-Sport Clinic Programme Planning & Execution',
+        'Professional Badminton & Table Tennis Coaches', 'Kids Sports Programme Design',
+        'Participant & On-Ground Management']
+    },
     'ÉB @ Northbrooks Secondary School': {
       description: 'We partnered with Northbrooks Secondary School to deliver an engaging badminton experience combining inspiration with on-court action. Our Co-Founder and Technical Director, Loh Kean Hean, shared his journey and experiences as a professional badminton player, followed by group training drills where students put their skills into practice. The session concluded with exhibition matches alongside the students, giving them the opportunity to interact, learn and experience badminton up close with a professional athlete.',
       services: ['Athlete Sharing & Student Engagement', 'Badminton Training & Group Drills']
@@ -412,7 +418,8 @@ async function runViewport(browser, viewport, name) {
   assert.ok(await page.locator('.ecov__open', { hasText: 'Joo Chiat Badminton Carnival 2026' })
     .evaluate(node => node === document.activeElement), name + ' event focus did not return');
   for (const title of ['ASICS Badminton Summit 2026', 'Serangoon-Paya Lebar Badminton Clinic 2026',
-    'Bukit Gombak Sports Clinic 2026', 'ÉB @ Northbrooks Secondary School']) {
+    'Bukit Gombak Sports Clinic 2026', 'ÉB @ Northbrooks Secondary School',
+    'Bukit Gombak Sports Clinic 2025']) {
     const trigger = page.locator('.ecov__open', { hasText: title });
     assert.ok((await trigger.getAttribute('aria-label')).includes('and details'),
       name + ' event card is not marked as having details for ' + title);
@@ -420,6 +427,16 @@ async function runViewport(browser, viewport, name) {
     const dialog = page.locator('.edetail:not([hidden])');
     await dialog.waitFor();
     await assertEventStory(dialog, title);
+    if (title === 'Bukit Gombak Sports Clinic 2025') {
+      assert.equal((await dialog.locator('.edetail__title').textContent()).trim(), title);
+      assert.deepEqual(await dialog.locator('.edetail__meta > span').allTextContents(),
+        ['26 Jan 2025', '|', 'Hillview Community Club']);
+      assert.equal(await dialog.getByRole('heading', { name: 'Highlights', exact: true }).count(), 0,
+        name + ' photo-less event should not render an empty Highlights section');
+      assert.equal(await trigger.locator('.ecov__placeholder').count(), 1,
+        name + ' photo-less event should render its branded placeholder');
+      await page.screenshot({ path: path.join(outDir, name + '-bukit-gombak-2025.png'), fullPage: false });
+    }
     await page.keyboard.press('Escape');
   }
 
