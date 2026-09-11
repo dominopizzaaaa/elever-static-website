@@ -597,6 +597,8 @@ async function runViewport(browser, viewport, name) {
   assert.equal(await page.locator('.hub-court-types a').count(), 3);
   assert.deepEqual(await page.locator('.hub-court-types a > span:first-child').allTextContents(),
     ['ActiveSG Facilities', 'Community Clubs', 'Private Halls']);
+  assert.ok(await page.getByRole('link', { name: 'Book a class', exact: true }).count() >= 1);
+  assert.equal(await page.getByRole('link', { name: 'Book A Class', exact: true }).count(), 0);
   if (viewport.width > 1050) {
     const groups = await page.locator('#groups').boundingBox();
     const halls = await page.locator('#halls').boundingBox();

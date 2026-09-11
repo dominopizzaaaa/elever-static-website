@@ -629,7 +629,7 @@
         if (v.elever) {
           actions += '<a class="hcard__link hcard__class-link" href="' +
             attr(classBooking ? book : 'classes.html') + '"' +
-            (classBooking ? ' target="_blank" rel="noopener"' : '') + '>Book A Class</a>';
+            (classBooking ? ' target="_blank" rel="noopener"' : '') + '>Book a class</a>';
         }
 
         return '<article class="hcard">' +
