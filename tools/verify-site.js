@@ -435,6 +435,20 @@ async function runViewport(browser, viewport, name) {
     const dialog = page.locator('.edetail:not([hidden])');
     await dialog.waitFor();
     await assertEventStory(dialog, title);
+    if (title === 'Bukit Gombak Sports Clinic 2026') {
+      assert.equal(await dialog.getByRole('heading', { name: 'Partners', exact: true }).count(), 1,
+        name + ' Bukit Gombak 2026 should list its Partners');
+      const bgPartners = await dialog.locator('.edetail__partner img').evaluateAll(nodes =>
+        nodes.map(node => node.alt));
+      assert.deepEqual(bgPartners,
+        ['People\u2019s Association', 'Bukit Gombak', 'Community Sports Network @ Bukit Gombak'],
+        name + ' Bukit Gombak 2026 partner logos are missing or out of order');
+      await dialog.locator('.edetail__partner img').evaluateAll(images =>
+        Promise.all(images.map(image => image.decode ? image.decode() : Promise.resolve())));
+      assert.ok(await dialog.locator('.edetail__partner img').evaluateAll(nodes =>
+        nodes.every(node => node.naturalWidth > 0)),
+        name + ' Bukit Gombak 2026 partner logo failed to load');
+    }
     if (title === 'Bukit Gombak Sports Clinic 2025') {
       assert.equal((await dialog.locator('.edetail__title').textContent()).trim(), title);
       assert.deepEqual(await dialog.locator('.edetail__meta > span').allTextContents(),

@@ -628,6 +628,11 @@
         'Kids Sports Programme Design',
         'Participant & On-Ground Management'
       ],
+      partners: [
+        { name: 'People\u2019s Association', logo: 'assets/img/partners/peoples-association.png' },
+        { name: 'Bukit Gombak', logo: 'assets/img/partners/bukit-gombak.png' },
+        { name: 'Community Sports Network @ Bukit Gombak', logo: 'assets/img/partners/bukit-gombak-csn.png' }
+      ],
       photos: [
         'bukit-gombak-clinic-2026-1.jpg',
         'bukit-gombak-clinic-2026-2.jpg',
