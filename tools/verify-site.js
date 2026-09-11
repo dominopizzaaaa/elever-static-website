@@ -459,6 +459,13 @@ async function runViewport(browser, viewport, name) {
     name + ' News filter has no focus indicator');
 
   await open(page, '/about.html', name + ' About');
+  assert.deepEqual(await page.locator('.psec__kicker', { hasText: 'Our story' })
+    .locator('xpath=../following-sibling::div[contains(@class, "prose")]//p').allTextContents(), [
+    'Founded in June 2023 by Loh Kean Hean and Eng Chin An, Élever Badminton was created to enrich the badminton experience for all. Driven by a shared love for the sport, we are building a vibrant community where everyone is supported to unlock their potential.',
+    'Our coaching philosophy centres on building strong foundations through a structured development pathway. In a positive and motivating environment, we support players in developing their skills systematically and progressing towards their individual aspirations.',
+    'Beyond coaching, we bring badminton experiences to organisations and communities through corporate and community events. From conceptualisation to on-site execution, we create engaging experiences that promote active living, strengthen connections, and bring people together through badminton.',
+    'Whether you’re a parent building your child’s foundations, an adult refining your game, or an organisation looking to engage your community, we invite you to join us and elevate your badminton experience.'
+  ], name + ' About page does not show the supplied Our Story copy');
   const coachGroupGaps = await page.locator('.coachgroup').evaluateAll(groups => groups.map(group => {
     const label = group.querySelector('.teamlabel').getBoundingClientRect();
     const cards = group.querySelector('.coachgrid').getBoundingClientRect();
