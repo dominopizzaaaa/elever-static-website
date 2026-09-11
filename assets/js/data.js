@@ -642,7 +642,8 @@
         'bukit-gombak-clinic-2026-6.jpg',
         'bukit-gombak-clinic-2026-7.jpg',
         'bukit-gombak-clinic-2026-8.jpg',
-        'bukit-gombak-clinic-2026-9.jpg'
+        'bukit-gombak-clinic-2026-9.jpg',
+        'bukit-gombak-clinic-2026-10.jpg'
       ]
     },
     {
