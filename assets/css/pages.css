@@ -1009,7 +1009,6 @@ body.has-lightbox{overflow:hidden}
   .coach__body{padding:.7rem .75rem .85rem}
   .coach__body h3{font-size:.84rem}
   .coach__role{font-size:.7rem}
-  .coach__cert{font-size:.55rem}
   .coach__more{font-size:.68rem}
 }
 
@@ -1054,16 +1053,12 @@ body.has-lightbox{overflow:hidden}
 .coach__body{display:flex;flex:1;flex-direction:column;padding:.85rem .95rem 1rem}
 .coach__body h3{font-size:.92rem;font-weight:700;margin-bottom:.15rem;letter-spacing:-.015em}
 .coach__role{font-size:.74rem;color:var(--muted);line-height:1.4}
-.coach__certs{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.55rem}
-.coach__cert{display:inline-flex;align-items:center;min-height:30px;padding:.32rem .5rem;border:1px solid rgba(33,81,209,.26);
-  border-radius:var(--r-sm);background:var(--accent-soft);font-size:.6rem;font-weight:700;letter-spacing:.04em;
-  text-transform:uppercase;color:var(--accent);line-height:1.35}
-/* The action is a permanent, touch-friendly cue and follows the certification
-   line on every card. Auto margin keeps it aligned when role text wraps. */
+/* The action is a permanent, touch-friendly cue. Auto margin keeps it aligned
+   when role text wraps, without certification badges lengthening some cards. */
 .coach__more{display:inline-flex;align-items:center;gap:.3rem;align-self:flex-start;margin-top:auto;padding-top:.65rem;
   min-height:2rem;font-size:.72rem;font-weight:700;color:var(--accent)}
-.coach:hover .coach__more span{transform:translateX(2px)}
-.coach__more span{transition:transform .2s var(--ease)}
+.cta-chevron{display:inline-block;font-size:1.25em;line-height:.7;font-weight:400;transition:transform .2s var(--ease)}
+.coach:hover .coach__more .cta-chevron{transform:translateX(2px)}
 
 /* ---------- COACH DETAIL OVERLAY ----------
    Coaches open in the same press-in overlay the Past Events cards use
@@ -1245,8 +1240,11 @@ body.has-lightbox{overflow:hidden}
   color:inherit!important;font-size:inherit!important;letter-spacing:normal;text-transform:none}
 .contact-phone select{min-width:0}
 .contact-phone.is-enhanced > select{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
-.country-combobox{position:relative;min-width:0}
-.contact-form-card .country-combobox__input{padding-inline:.7rem;font-size:.8rem;cursor:text}
+.country-combobox{position:relative;min-width:0;height:44px}
+.country-combobox__flag{position:absolute;z-index:1;left:.7rem;top:50%;transform:translateY(-50%);
+  font-size:1rem;line-height:1;pointer-events:none}
+.contact-form-card .country-combobox__input{height:44px;min-height:44px;padding-left:2rem;padding-right:.7rem;font-size:.8rem;cursor:text}
+.contact-form-card #contact-mobile,.contact-form-card #contact-topic{height:44px;min-height:44px}
 .country-combobox__list{position:absolute;z-index:30;top:calc(100% + .35rem);left:0;width:min(340px,calc(100vw - 3.5rem));
   max-height:270px;overflow-y:auto;padding:.35rem;border:1px solid var(--line-2);border-radius:var(--r-sm);
   background:#fff;box-shadow:0 20px 44px -22px rgba(7,22,51,.42)}
@@ -1262,9 +1260,8 @@ body.has-lightbox{overflow:hidden}
 .contact-form-card .lead__status{max-width:60ch}
 .contact-form-card button:disabled{cursor:wait;opacity:.58}
 .btn--contact-send{gap:.45rem;min-width:180px;justify-content:center;border:1px solid var(--accent);border-radius:var(--r-sm);background:transparent;color:var(--accent);font-weight:600}
-.btn--contact-send > span:last-child{font-size:1.15rem;line-height:1;transition:transform .2s var(--ease)}
 .btn--contact-send:hover{background:var(--accent-soft);color:var(--accent)}
-.btn--contact-send:hover > span:last-child{transform:translateX(3px)}
+.btn--contact-send:hover > .cta-chevron{transform:translateX(3px)}
 .btn--contact-send:active{background:rgba(33,81,209,.16);border-color:var(--accent-press)}
 .btn--contact-send:disabled{background:var(--secondary);border-color:var(--line-2);color:var(--muted)}
 .contact-aside{display:flex;flex-direction:column;gap:.75rem}
@@ -1309,7 +1306,8 @@ body.has-lightbox{overflow:hidden}
 }
 @media(max-width:360px){
   .contact-phone{grid-template-columns:112px minmax(0,1fr);gap:.45rem}
-  .contact-form-card .country-combobox__input{font-size:.74rem;padding-inline:.55rem}
+  .country-combobox__flag{left:.55rem}
+  .contact-form-card .country-combobox__input{font-size:.74rem;padding-left:1.8rem;padding-right:.55rem}
 }
 
 /* ---------- LEGAL PAGES ---------- */

@@ -14,7 +14,7 @@ require(path.join(root, 'assets/js/data.js'));
 const COACHES = global.window.ELEVER_DATA.coaches;
 
 const V = '64'; // must match the shared asset cache key used across the site
-const PAGES_V = '66'; // cache key for the coach-layout stylesheet
+const PAGES_V = '67'; // cache key for the coach-layout stylesheet
 const FAVICON_V = '64';
 
 const esc = s => String(s == null ? '' : s)
@@ -109,7 +109,7 @@ function page(c) {
           </figure>${certificationBlock}
         </aside>
         <div class="profile__content">
-          <h2 class="edetail__subhead edetail__subhead--plain profile__heading">About ${esc(c.aboutName || c.name)}${sample}</h2>
+          <h2 class="edetail__subhead edetail__subhead--plain profile__heading">About${sample}</h2>
           ${bioHtml}
           ${achievementHtml}
 

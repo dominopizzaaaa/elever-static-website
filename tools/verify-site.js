@@ -77,15 +77,25 @@ async function checkContact(page, viewport, name) {
   const countryCombo = form.locator('.country-combobox__input');
   assert.equal(await countryCombo.count(), 1);
   assert.equal(await countryCombo.getAttribute('role'), 'combobox');
+  assert.equal(await countryCombo.inputValue(), 'SG +65');
+  assert.equal(await form.locator('.country-combobox__flag').textContent(), '🇸🇬');
+  await countryCombo.click();
+  assert.deepEqual(await countryCombo.evaluate(node => ({
+    start: node.selectionStart, end: node.selectionEnd, length: node.value.length
+  })), { start: 0, end: 6, length: 6 });
   await countryCombo.fill('malay');
+  assert.equal(await form.locator('.country-combobox__flag').textContent(), '');
   assert.deepEqual(await form.locator('.country-combobox__option').allTextContents(), ['🇲🇾 Malaysia (MY) +60']);
   await page.keyboard.press('Enter');
   assert.equal(await form.locator('[name="Country code"]').inputValue(), '+60');
+  assert.equal(await countryCombo.inputValue(), 'MY +60');
+  assert.equal(await form.locator('.country-combobox__flag').textContent(), '🇲🇾');
   await countryCombo.fill('+65');
   await page.keyboard.press('Enter');
   assert.equal(await form.locator('[name="Country code"]').inputValue(), '+65');
   assert.equal(await form.locator('[name="Mobile"]').getAttribute('required'), null);
   assert.equal(await form.locator('[data-contact-panel]:visible').count(), 0);
+  assert.equal(await form.locator('.cta-chevron').textContent(), '›');
   const sendButtonStyle = await form.getByRole('button', { name: 'Send message' }).evaluate(node => ({
     background: getComputedStyle(node).backgroundColor,
     border: getComputedStyle(node).borderTopColor,
@@ -98,15 +108,15 @@ async function checkContact(page, viewport, name) {
     background: 'rgba(0, 0, 0, 0)', border: 'rgb(33, 81, 209)', borderWidth: '1px',
     radius: '8px', weight: '600', color: 'rgb(33, 81, 209)'
   });
+  const mobileControl = await form.locator('#contact-mobile').boundingBox();
+  const topicControl = await topic.boundingBox();
+  assert.ok(mobileControl && topicControl && Math.abs(mobileControl.height - topicControl.height) < 1,
+    name + ' Mobile and Enquiry type controls do not have matching heights');
   if (viewport.width > 640) {
     const mobileField = await form.locator('.contact-mobile-field').boundingBox();
     const topicField = await form.locator('.contact-topic-field').boundingBox();
-    const mobileControl = await form.locator('#contact-mobile').boundingBox();
-    const topicControl = await topic.boundingBox();
     assert.ok(mobileField && topicField && mobileField.x < topicField.x && Math.abs(mobileField.y - topicField.y) < 2,
       name + ' Mobile and Enquiry type are not side by side');
-    assert.ok(mobileControl && topicControl && Math.abs(mobileControl.height - topicControl.height) < 1,
-      name + ' Mobile and Enquiry type controls do not have matching heights');
   }
 
   const expectations = {
@@ -440,6 +450,8 @@ async function runViewport(browser, viewport, name) {
   assert.equal(coachGroupGaps.length, 2, name + ' coach groups are missing');
   assert.ok(coachGroupGaps.every(gap => gap >= 30),
     name + ' coach headings need more space before their card panels');
+  assert.equal(await page.locator('.coach__certs, .coach__cert').count(), 0,
+    name + ' About coach cards still show certifications');
   assert.ok(await page.locator('.coach__more', { hasText: 'View more' }).count() >= 1);
   const coachTrigger = page.locator('[data-coach="loh-kean-hean"]');
   await coachTrigger.click();
@@ -450,8 +462,10 @@ async function runViewport(browser, viewport, name) {
   assert.equal(await coachDialog.getByText('Languages', { exact: true }).count(), 0);
   assert.equal(await coachDialog.getByText('Coaches', { exact: true }).count(), 0);
   assert.equal(await coachDialog.getByRole('link', { name: 'See classes' }).count(), 0);
-  assert.equal(await coachDialog.getByRole('heading', { name: 'About Kean Hean' }).count(), 1);
-  assert.equal(await coachDialog.getByRole('link', { name: /View full profile/ }).count(), 1);
+  assert.equal(await coachDialog.getByRole('heading', { name: 'About', exact: true }).count(), 1);
+  const profileLink = coachDialog.getByRole('link', { name: /View full profile/ });
+  assert.equal(await profileLink.count(), 1);
+  assert.equal(await profileLink.locator('.cta-chevron').textContent(), '›');
   if (viewport.width <= 620) {
     const dialogBody = await coachDialog.locator('.cdetail').boundingBox();
     const dialogPhoto = await coachDialog.locator('.cdetail__photo').boundingBox();
@@ -468,6 +482,7 @@ async function runViewport(browser, viewport, name) {
   assert.equal(await page.getByRole('link', { name: 'View the team' }).count(), 1);
   assert.equal(await page.getByRole('link', { name: 'ASCA Level 1' }).count(), 1);
   assert.equal(await page.getByRole('link', { name: 'Level 1 Sports Trainer' }).count(), 1);
+  assert.equal(await page.getByRole('heading', { name: 'About', exact: true }).count(), 1);
   assert.equal(
     await page.locator('.profile__bio').first().evaluate(node => getComputedStyle(node).textAlign),
     viewport.width <= 620 ? 'left' : 'justify'
@@ -748,6 +763,8 @@ async function crawlAllPages(browser) {
       assert.equal(await page.getByRole('link', { name: 'View the team' }).count(), 1,
         route + ' is missing View the team');
       assert.equal(await page.locator('.profile--coach').count(), 1, route + ' is not a coach profile grid');
+      assert.equal(await page.getByRole('heading', { name: 'About', exact: true }).count(), 1,
+        route + ' should use the heading About without the coach name');
       assert.equal(await page.locator('.profile__bio').first().evaluate(node => getComputedStyle(node).textAlign),
         'justify', route + ' biography is not justified');
       const certificationLinks = await page.locator('.profile__cert').evaluateAll(nodes =>

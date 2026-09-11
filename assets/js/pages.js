@@ -1109,8 +1109,7 @@
             certificationBlock +
           '</div>' +
           '<div class="cdetail__body">' +
-            '<h3 class="edetail__subhead edetail__subhead--plain cdetail__heading">About ' +
-              esc(c.aboutName || c.name) + '</h3>' +
+            '<h3 class="edetail__subhead edetail__subhead--plain cdetail__heading">About</h3>' +
             (shortBio ? '<p class="edetail__desc">' + esc(shortBio) + '</p>' : '') +
             (c.achievements && c.achievements.length
               ? '<div>' +
@@ -1124,7 +1123,7 @@
               (c.profilePage === false
                 ? ''
                 : '<a class="btn btn--contact-send" href="' + esc(base + 'coaches/' + c.slug + '.html') +
-                  '">View full profile <span aria-hidden="true">&gt;</span></a>') +
+                  '">View full profile <span class="cta-chevron" aria-hidden="true">&rsaquo;</span></a>') +
             '</div>' +
           '</div>' +
         '</div>';
@@ -1201,19 +1200,11 @@
       var photo = c.photo
         ? '<img src="' + base + esc(c.photo) + '" alt="' + esc(c.name) + '" width="640" height="640" loading="lazy" decoding="async">'
         : '<span class="coach__initials">' + esc(initials(c.name)) + '</span>';
-      var certifications = (c.certifications || []).filter(function (certification) {
-        return certification && certification.name;
-      });
       return '<' + tag + ' class="coach coach--' + (hasProfile ? 'linked' : 'static') + '"' + href + '>' +
         '<div class="coach__img">' + photo + '</div>' +
         '<div class="coach__body"><h3>' + esc(c.name) + '</h3>' +
           '<p class="coach__role">' + esc(c.role) + '</p>' +
-          (certifications.length
-            ? '<div class="coach__certs" aria-label="Certifications">' + certifications.map(function (certification) {
-                return '<span class="coach__cert">' + esc(certification.name) + '</span>';
-              }).join('') + '</div>'
-            : '') +
-          (hasProfile ? '<p class="coach__more">View more <span aria-hidden="true">&rsaquo;</span></p>' : '') +
+          (hasProfile ? '<p class="coach__more">View more <span class="cta-chevron" aria-hidden="true">&rsaquo;</span></p>' : '') +
         '</div></' + tag + '>';
     }
 
@@ -1709,6 +1700,7 @@
         var comboId = 'contact-country-options';
         combo.className = 'country-combobox';
         combo.innerHTML =
+          '<span class="country-combobox__flag" aria-hidden="true"></span>' +
           '<input class="country-combobox__input" type="text" role="combobox" ' +
             'aria-label="Country code" aria-autocomplete="list" aria-expanded="false" ' +
             'aria-controls="' + comboId + '" autocomplete="off" spellcheck="false">' +
@@ -1719,6 +1711,7 @@
         countrySelect.setAttribute('aria-hidden', 'true');
 
         var comboInput = combo.querySelector('.country-combobox__input');
+        var comboFlag = combo.querySelector('.country-combobox__flag');
         var comboList = combo.querySelector('.country-combobox__list');
         var filteredCountries = countryOptions.slice();
         var activeCountry = -1;
@@ -1728,7 +1721,7 @@
           return text.split(/\s+/)[0] || '';
         }
         function compactCountry(option) {
-          return countryFlag(option) + ' ' + (option.dataset.countryCode || '') + ' ' + option.value;
+          return (option.dataset.countryCode || '') + ' ' + option.value;
         }
         function countrySearchText(option) {
           return [option.textContent, option.dataset.country, option.dataset.countryCode, option.value]
@@ -1737,6 +1730,7 @@
         function setCountry(option) {
           if (!option) return;
           countrySelect.selectedIndex = option.index;
+          comboFlag.textContent = countryFlag(option);
           comboInput.value = compactCountry(option);
           comboInput.setCustomValidity('');
           countrySelect.dispatchEvent(new Event('change', { bubbles: true }));
@@ -1781,10 +1775,16 @@
           comboInput.removeAttribute('aria-activedescendant');
         }
 
+        comboFlag.textContent = countryFlag(countryOptions[countrySelect.selectedIndex]);
         comboInput.value = compactCountry(countryOptions[countrySelect.selectedIndex]);
-        comboInput.addEventListener('focus', function () { openCountries(''); });
+        comboInput.addEventListener('focus', function () {
+          comboInput.select();
+          openCountries('');
+        });
+        comboInput.addEventListener('click', function () { comboInput.select(); });
         comboInput.addEventListener('input', function () {
           countrySelect.selectedIndex = -1;
+          comboFlag.textContent = '';
           comboInput.setCustomValidity('Please choose a country from the list.');
           openCountries(comboInput.value);
         });
@@ -1804,7 +1804,11 @@
             event.preventDefault();
             closeCountries();
             var selected = countrySelect.options[countrySelect.selectedIndex];
-            if (selected) { comboInput.value = compactCountry(selected); comboInput.setCustomValidity(''); }
+            if (selected) {
+              comboFlag.textContent = countryFlag(selected);
+              comboInput.value = compactCountry(selected);
+              comboInput.setCustomValidity('');
+            }
           }
         });
         comboList.addEventListener('mousedown', function (event) {
@@ -1821,7 +1825,11 @@
               setCountry(filteredCountries[0]);
               selected = filteredCountries[0];
             }
-            if (selected) { comboInput.value = compactCountry(selected); comboInput.setCustomValidity(''); }
+            if (selected) {
+              comboFlag.textContent = countryFlag(selected);
+              comboInput.value = compactCountry(selected);
+              comboInput.setCustomValidity('');
+            }
             closeCountries();
           }, 120);
         });
@@ -1830,6 +1838,7 @@
         });
         contactForm.addEventListener('reset', function () {
           window.setTimeout(function () {
+            comboFlag.textContent = countryFlag(countryOptions[countrySelect.selectedIndex]);
             comboInput.value = compactCountry(countryOptions[countrySelect.selectedIndex]);
             comboInput.setCustomValidity('');
             closeCountries();
