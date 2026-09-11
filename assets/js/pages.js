@@ -1087,7 +1087,12 @@
       var certifications = (c.certifications || []).filter(function (certification) {
         return certification && certification.name && certification.href;
       });
-      var shortBio = c.shortBio || ((c.bio || [])[0] || '');
+      var bioParagraphs = Array.isArray(c.bio)
+        ? c.bio.filter(Boolean)
+        : (c.bio ? [c.bio] : []);
+      var biographyBlock = bioParagraphs.map(function (paragraph) {
+        return '<p class="edetail__desc">' + esc(paragraph) + '</p>';
+      }).join('');
       var certificationBlock = certifications.length
         ? '<div class="cdetail__certifications">' +
             '<p class="cdetail__label">Certifications</p>' +
@@ -1114,7 +1119,7 @@
           '</div>' +
           '<div class="cdetail__body">' +
             '<h3 class="edetail__subhead edetail__subhead--plain cdetail__heading">About</h3>' +
-            (shortBio ? '<p class="edetail__desc">' + esc(shortBio) + '</p>' : '') +
+            biographyBlock +
             (c.achievements && c.achievements.length
               ? '<div>' +
                   '<h3 class="edetail__subhead edetail__subhead--plain">Achievements</h3>' +

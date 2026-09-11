@@ -480,6 +480,9 @@ async function runViewport(browser, viewport, name) {
   assert.equal(await coachDialog.getByText('Coaches', { exact: true }).count(), 0);
   assert.equal(await coachDialog.getByRole('link', { name: 'See classes' }).count(), 0);
   assert.equal(await coachDialog.getByRole('heading', { name: 'About', exact: true }).count(), 1);
+  assert.equal(await coachDialog.locator('.edetail__desc').count(), 4,
+    name + ' coach popup does not show the full supplied description');
+  assert.equal(await coachDialog.getByText(/represented Singapore for over 12 years/).count(), 1);
   const profileLink = coachDialog.getByRole('link', { name: /View full profile/ });
   assert.equal(await profileLink.count(), 1);
   assert.equal(await profileLink.locator('.cta-chevron').textContent(), '›');
