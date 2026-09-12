@@ -244,6 +244,26 @@ async function runViewport(browser, viewport, name) {
   }
   await page.screenshot({ path: path.join(outDir, name + '-home.png'), fullPage: true });
 
+  // The Explore Élever grid must expose a real, crawlable link to every main
+  // page (the Google-sitelinks pattern) — checked here so the set can never
+  // silently drop a destination.
+  const sitelinks = await page.locator('.sitelinks__grid .sitelink').evaluateAll(nodes =>
+    nodes.map(node => ({
+      href: node.getAttribute('href'),
+      title: node.querySelector('.sitelink__title').textContent.trim()
+    })));
+  assert.deepEqual(sitelinks, [
+    { href: 'classes.html', title: 'Classes' },
+    { href: 'camps.html', title: 'Camps' },
+    { href: 'events.html', title: 'Events' },
+    { href: 'lab.html', title: 'Performance Lab' },
+    { href: 'news.html', title: 'News' },
+    { href: 'hub.html', title: 'Singapore Shuttlers Hub' },
+    { href: 'about.html', title: 'About' },
+    { href: 'contact.html', title: 'Contact' }
+  ], name + ' Home Explore Élever links do not match the site tabs');
+  await checkNoOverflow(page, name + ' Home sitelinks');
+
   await open(page, '/classes.html', name + ' Classes');
   const navCta = page.locator('.nav__cta');
   assert.equal(new URL(await navCta.getAttribute('href')).searchParams.get('text'),
@@ -601,6 +621,12 @@ async function runViewport(browser, viewport, name) {
   }
 
   await open(page, '/news.html', name + ' News');
+  // News must carry its own canonical + og:url so it is indexed under the clean
+  // /news URL like every other page.
+  assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'),
+    'https://www.eleverbadminton.com/news', name + ' News is missing its canonical URL');
+  assert.equal(await page.locator('meta[property="og:url"]').getAttribute('content'),
+    'https://www.eleverbadminton.com/news', name + ' News is missing its og:url');
   const filterBoxes = await page.locator('#articleFilters .sched__filter').evaluateAll(nodes =>
     nodes.map(node => ({ x: node.getBoundingClientRect().x, y: node.getBoundingClientRect().y,
       width: node.getBoundingClientRect().width })));

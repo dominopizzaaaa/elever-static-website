@@ -1747,3 +1747,32 @@ body.is-dark .footer{border-top:1px solid rgba(255,255,255,.09)}
   .hub__tabs{position:static;top:auto;padding:1rem clamp(1.25rem,5vw,3rem)}
   .hub__tabs .hub__tab{flex:1 1 auto;justify-content:center;text-align:center}
 }
+
+/* ---------- HOME — Explore Élever sitelinks ----------
+   A crawlable grid of the site's main pages, sitting directly below the dark
+   cover. Each card is a real link with a concise title + one-line description
+   (the Google-sitelinks pattern), styled with the same white card idiom used
+   across the site — quiet border at rest, a soft lift and blue edge on hover
+   or keyboard focus. */
+.sitelinks{padding:4.2rem var(--gutter);max-width:calc(var(--maxw) + 2 * var(--gutter));margin:0 auto}
+.sitelinks__inner{max-width:var(--maxw);margin:0 auto}
+.sitelinks__title{font-size:clamp(1.5rem,3vw,2.15rem);font-weight:800;line-height:1.12;letter-spacing:-.03em}
+.sitelinks__sub{margin-top:.6rem;color:var(--muted);font-size:.95rem;line-height:1.7}
+.sitelinks__grid{margin-top:2rem;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem}
+.sitelink{display:flex;flex-direction:column;gap:.4rem;min-width:0;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:1.15rem 1.2rem;transition:transform .22s var(--ease),border-color .22s,box-shadow .22s}
+.sitelink::after{content:'→';margin-top:.2rem;font-size:.9rem;font-weight:700;color:var(--accent);
+  opacity:0;transform:translateX(-4px);transition:opacity .22s var(--ease),transform .22s var(--ease)}
+.sitelink:hover,.sitelink:focus-visible{transform:translateY(-2px);border-color:var(--line-2);box-shadow:var(--shadow-sm)}
+.sitelink:hover::after,.sitelink:focus-visible::after{opacity:1;transform:none}
+.sitelink:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sitelink__title{font-size:1.02rem;font-weight:800;letter-spacing:-.02em;color:var(--ink-soft)}
+.sitelink__desc{font-size:.83rem;color:var(--muted);line-height:1.55}
+@media(max-width:1000px){.sitelinks__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){
+  .sitelinks{padding-top:3rem;padding-bottom:3rem}
+  .sitelinks__grid{grid-template-columns:1fr}
+  .sitelink::after{display:none}
+}
+@media(prefers-reduced-motion:reduce){.sitelink,.sitelink::after{transition:none}.sitelink:hover,.sitelink:focus-visible{transform:none}}
