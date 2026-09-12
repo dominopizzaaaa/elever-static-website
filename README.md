@@ -13,8 +13,7 @@ rather than one long scrolling page.
 | Camps | `camps.html` | What happens at an Exploration camp, a day's timetable, the next camp, waitlist |
 | Events | `events.html` | Carnivals / clinics / competitions offered as a service, the all-in-one suite, our work, Trusted by, event enquiry |
 | Performance Lab | `lab.html` | Black "OPENING SOON" holding page with the Upper Serangoon address |
-| About | `about.html` | Definition + tagline, founder write-up, coaching team, press features, and the 5 pillars |
-| Coaches | `coaches/<slug>.html` | One generated page per coach — photo, role, linked certifications, biography, achievements |
+| About | `about.html` | Definition + tagline, founder write-up, coaching team (each coach opens a popup profile), press features, and the 5 pillars |
 | News | `news.html` | Articles, filterable by category, newsletter signup |
 | SG Badminton Hub | `hub.html` | International World Tour/news and local Play, Shop, and Compete guides |
 | Courts | `courts.html` | Dedicated Singapore badminton-court directory with operator-specific booking guidance |
@@ -33,7 +32,8 @@ Entries flagged `placeholder: true` are explicitly unfinished records. They rend
 **sample** tag on the page; currently this applies only to the two coaches whose copy/profile has
 not been supplied. Replace the content and delete the flag when approved copy arrives.
 
-After editing the coach list, regenerate their pages:
+After editing the coach list, refresh the popup profiles (this also clears any
+stale standalone pages — coaches are popup-only now):
 
 ```
 node tools/build-coaches.js
@@ -108,7 +108,6 @@ info@eleverbadminton.com · WhatsApp +65 8921 4221
 index.html  classes.html  camps.html   events.html  lab.html    terms.html
 about.html  news.html     hub.html     courts.html  contact.html privacy.html
 sitemap.xml robots.txt
-coaches/          generated — one page per coach
 tools/            build-coaches.js, build-news.js, build-*-photos.sh
 assets/
   css/style.css   design system (white / black / #2151D1, Montserrat)

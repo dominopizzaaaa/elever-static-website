@@ -129,7 +129,7 @@ h1,h2,h3,h4,h5,h6{color:var(--ink-soft)}
 .nav.scrolled .nav__link:hover{color:var(--ink);background:var(--bg-2)}
 .nav__link.is-current{color:#fff}
 .nav.scrolled .nav__link.is-current{color:var(--accent)}
-.nav__cta{background:var(--accent);color:#fff!important;padding:9px 17px;border-radius:var(--r-btn);
+.nav__cta{background:var(--accent);color:#fff!important;padding:9px 17px;border-radius:8px;
   font-weight:600;font-size:14px;margin-left:10px;min-height:38px;display:inline-flex;align-items:center;
   flex:none;white-space:nowrap;transition:background .2s}
 .nav__cta:hover{background:var(--accent-hover)}

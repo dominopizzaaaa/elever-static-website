@@ -106,7 +106,7 @@ async function checkContact(page, viewport, name) {
   }));
   assert.deepEqual(sendButtonStyle, {
     background: 'rgba(0, 0, 0, 0)', border: 'rgb(33, 81, 209)', borderWidth: '1px',
-    radius: '4px', weight: '600', color: 'rgb(33, 81, 209)'
+    radius: '8px', weight: '600', color: 'rgb(33, 81, 209)'
   });
   const mobileControl = await form.locator('#contact-mobile').boundingBox();
   const topicControl = await topic.boundingBox();
@@ -271,7 +271,7 @@ async function runViewport(browser, viewport, name) {
 
   await open(page, '/events.html', name + ' Events');
   const headerPhoto = page.locator('.phead--events .phead__photo img');
-  assert.equal(await headerPhoto.getAttribute('src'), 'assets/img/events/singhealth-sports-day-2026-9.jpg');
+  assert.equal(await headerPhoto.getAttribute('src'), 'assets/img/events/joo-chiat-carnival-2026-5.jpg');
   assert.equal(await headerPhoto.getAttribute('alt'), '');
   assert.equal(await headerPhoto.locator('..').getAttribute('aria-hidden'), 'true');
   await page.waitForFunction(() => {
@@ -650,9 +650,8 @@ async function runViewport(browser, viewport, name) {
   assert.equal(await coachDialog.locator('.edetail__desc').count(), 4,
     name + ' coach popup does not show the full supplied description');
   assert.equal(await coachDialog.getByText(/represented Singapore for over 12 years/).count(), 1);
-  const profileLink = coachDialog.getByRole('link', { name: /View full profile/ });
-  assert.equal(await profileLink.count(), 1);
-  assert.equal(await profileLink.locator('.cta-chevron').textContent(), '›');
+  assert.equal(await coachDialog.getByRole('link', { name: /View full profile/ }).count(), 0,
+    name + ' coach popup should not link to a standalone profile page');
   if (viewport.width <= 620) {
     const dialogBody = await coachDialog.locator('.cdetail').boundingBox();
     const dialogPhoto = await coachDialog.locator('.cdetail__photo').boundingBox();
@@ -688,22 +687,36 @@ async function runViewport(browser, viewport, name) {
   assert.equal(await robinCard.getAttribute('data-coach'), null);
   assert.equal(await robinCard.locator('.coach__more').count(), 0);
 
-  await open(page, '/coaches/ong-keng-yang.html', name + ' Coach profile');
-  assert.equal(await page.getByText('HOME · ABOUT · COACHES', { exact: true }).count(), 0);
-  assert.equal(await page.getByRole('link', { name: 'See classes' }).count(), 0);
-  assert.equal(await page.getByRole('link', { name: 'View the team' }).count(), 1);
-  assert.equal(await page.getByRole('link', { name: 'ASCA Level 1' }).count(), 1);
-  assert.equal(await page.getByRole('link', { name: 'Level 1 Sports Trainer' }).count(), 1);
-  assert.equal(await page.getByRole('heading', { name: 'About', exact: true }).count(), 1);
-  assert.equal(await page.getByRole('heading', { name: 'Building Stronger Players', exact: true }).count(), 1);
-  const trainingPhotos = page.locator('.profile__gallery img');
-  assert.equal(await trainingPhotos.count(), 2, name + ' coach training photos are missing');
+  // Coaches are popup-only now — no standalone coaches/<slug>.html pages. The
+  // supplied Keng Yang training photos appear inside his popup, below the
+  // Achievements list, with NO heading of their own.
+  const kengYangTrigger = page.locator('[data-coach="ong-keng-yang"]');
+  assert.equal(await kengYangTrigger.evaluate(node => node.tagName), 'BUTTON',
+    name + ' Keng Yang card should open a popup, not link to a page');
+  await kengYangTrigger.click();
+  await coachDialog.waitFor();
+  assert.equal(await coachDialog.getByRole('link', { name: 'ASCA Level 1' }).count(), 1);
+  assert.equal(await coachDialog.getByRole('link', { name: 'Level 1 Sports Trainer' }).count(), 1);
+  assert.equal(await coachDialog.getByRole('heading', { name: 'Achievements', exact: true }).count(), 1);
+  // No heading before the photos (client: "without any header first").
+  assert.equal(await coachDialog.getByText('Building Stronger Players', { exact: false }).count(), 0,
+    name + ' Keng Yang popup photos should not have a heading');
+  const trainingPhotos = coachDialog.locator('.cdetail__gallery img');
+  assert.equal(await trainingPhotos.count(), 2, name + ' Keng Yang popup training photos are missing');
   assert.deepEqual(await trainingPhotos.evaluateAll(images => images.map(image => image.getAttribute('src'))), [
-    '../assets/img/coaches/ong-keng-yang-training-1.jpg',
-    '../assets/img/coaches/ong-keng-yang-training-2.jpg'
+    'assets/img/coaches/ong-keng-yang-training-1.jpg',
+    'assets/img/coaches/ong-keng-yang-training-2.jpg'
   ]);
   assert.ok((await trainingPhotos.evaluateAll(images => images.map(image => image.getAttribute('alt'))))
-    .every(Boolean), name + ' coach training photos lack alt text');
+    .every(Boolean), name + ' Keng Yang popup training photos lack alt text');
+  // The gallery sits after the Achievements list in DOM order.
+  const galleryAfterAchievements = await coachDialog.evaluate(node => {
+    const achievements = node.querySelector('.edetail__servicelist');
+    const gallery = node.querySelector('.cdetail__gallery');
+    if (!achievements || !gallery) return false;
+    return !!(achievements.compareDocumentPosition(gallery) & Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+  assert.ok(galleryAfterAchievements, name + ' Keng Yang photos should sit below the Achievements list');
   for (let i = 0; i < await trainingPhotos.count(); i += 1) {
     const trainingPhoto = trainingPhotos.nth(i);
     await trainingPhoto.scrollIntoViewIfNeeded();
@@ -715,50 +728,14 @@ async function runViewport(browser, viewport, name) {
       }));
   }
   assert.equal(
-    await page.locator('.profile__gallery').evaluate(node => getComputedStyle(node).gridTemplateColumns.split(' ').length),
-    viewport.width <= 620 ? 1 : 2,
-    name + ' coach training photo layout has the wrong column count'
+    await coachDialog.locator('.cdetail__gallery').evaluate(node => getComputedStyle(node).gridTemplateColumns.split(' ').length),
+    viewport.width <= 700 ? 1 : 2,
+    name + ' Keng Yang popup photo layout has the wrong column count'
   );
-  assert.equal(
-    await page.locator('.profile__bio').first().evaluate(node => getComputedStyle(node).textAlign),
-    viewport.width <= 620 ? 'left' : 'justify'
-  );
-  const coachHeader = await page.locator('.phead--coach-profile .phead__inner').boundingBox();
-  const coachHeading = await page.locator('.phead--coach-profile h1').boundingBox();
-  assert.ok(coachHeader && coachHeading && Math.abs(coachHeading.x - coachHeader.x) < 2,
-    name + ' coach heading is not left aligned');
-  if (viewport.width <= 620) {
-    const coachRole = await page.locator('.phead--coach-profile .phead__lead').boundingBox();
-    const coachProfile = await page.locator('.profile--coach').boundingBox();
-    const coachPhoto = await page.locator('.profile--coach .profile__photo').boundingBox();
-    const coachCertifications = await page.locator('.profile--coach .profile__certifications').boundingBox();
-    const coachContent = await page.locator('.profile--coach .profile__content').boundingBox();
-    const coachBiography = await page.locator('.profile--coach .profile__bio').first().boundingBox();
-    const teamAction = await page.locator('.profile--coach .profile__actions').boundingBox();
-    const teamButton = await page.getByRole('link', { name: 'View the team' }).boundingBox();
-    assert.ok(coachRole && Math.abs(coachRole.x - coachHeader.x) < 2,
-      name + ' coach role is not left aligned on phone');
-    assert.equal(await page.locator('.profile--coach .profile__content').evaluate(node => getComputedStyle(node).textAlign),
-      'left', name + ' coach content is not left aligned on phone');
-    assert.equal(await page.locator('.profile--coach .profile__bio').first().evaluate(node => getComputedStyle(node).textAlign),
-      'left', name + ' coach biography is not left aligned on phone');
-    assert.ok(coachProfile && coachPhoto && coachCertifications && coachContent && coachBiography,
-      name + ' coach profile alignment blocks are missing on phone');
-    const profileLeft = coachProfile.x;
-    const profileRight = coachProfile.x + coachProfile.width;
-    [coachPhoto, coachCertifications, coachContent, coachBiography].forEach(box => {
-      assert.ok(Math.abs(box.x - profileLeft) < 1,
-        name + ' coach profile blocks do not share the exact left edge on phone');
-      assert.ok(Math.abs(box.x + box.width - profileRight) < 1,
-        name + ' coach profile blocks do not share the exact right edge on phone');
-    });
-    assert.ok(Math.abs(coachPhoto.width - coachBiography.width) < 1,
-      name + ' coach photo and description are not exactly the same width on phone');
-    assert.ok(teamAction && teamButton &&
-      Math.abs((teamButton.x + teamButton.width / 2) - (teamAction.x + teamAction.width / 2)) < 2,
-    name + ' View the team button is not centred on phone');
-  }
-  await page.screenshot({ path: path.join(outDir, name + '-coach-profile.png'), fullPage: true });
+  await page.screenshot({ path: path.join(outDir, name + '-coach-gallery-popup.png'), fullPage: false });
+  await page.keyboard.press('Escape');
+  assert.ok(await kengYangTrigger.evaluate(node => node === document.activeElement),
+    name + ' Keng Yang popup focus did not return');
 
   await open(page, '/hub.html', name + ' Hub');
   assert.equal(await page.locator('#hubTabs .hub__tab').count(), 2);
@@ -985,7 +962,7 @@ async function checkEventLandscape(browser) {
 function allHtmlRoutes() {
   const roots = fs.readdirSync(repoRoot)
     .filter(name => name.endsWith('.html'));
-  const nested = ['coaches', 'news'].flatMap(directory =>
+  const nested = ['news'].flatMap(directory =>
     fs.readdirSync(path.join(repoRoot, directory))
       .filter(name => name.endsWith('.html'))
       .map(name => directory + '/' + name));
@@ -1006,19 +983,22 @@ async function crawlAllPages(browser) {
     const icons = await page.locator('link[rel~="icon"]').count();
     assert.ok(icons >= 2, route + ' does not expose both primary and fallback favicons');
     const iconHrefs = await page.locator('link[rel~="icon"]').evaluateAll(nodes => nodes.map(node => node.href));
-    assert.ok(iconHrefs.some(href => href.includes('/favicon.ico?v=66')),
+    assert.ok(iconHrefs.some(href => href.includes('/favicon.ico?v=67')),
       route + ' is missing the versioned ICO fallback');
-    assert.ok(iconHrefs.some(href => href.includes('/assets/img/brand/favicon-32x32.png?v=66')),
+    assert.ok(await page.locator('link[rel~="icon"][type="image/svg+xml"]').evaluateAll(nodes =>
+      nodes.some(node => node.href.includes('/assets/img/brand/favicon.svg?v=67'))),
+    route + ' is missing the scalable SVG favicon');
+    assert.ok(iconHrefs.some(href => href.includes('/assets/img/brand/favicon-32x32.png?v=67')),
       route + ' is missing the standard 32x32 PNG favicon');
-    assert.ok(iconHrefs.some(href => href.includes('/assets/img/brand/favicon-16x16.png?v=66')),
+    assert.ok(iconHrefs.some(href => href.includes('/assets/img/brand/favicon-16x16.png?v=67')),
       route + ' is missing the standard 16x16 PNG favicon');
     assert.equal(await page.locator('link[type="image/png"][sizes="100x100"]').count(), 0,
       route + ' still uses the non-standard 100x100 PNG favicon link');
     const appleIcon = await page.locator('link[rel="apple-touch-icon"]').evaluateAll(nodes => nodes.map(node => node.href));
-    assert.ok(appleIcon.some(href => href.includes('/assets/img/brand/apple-touch-icon.png?v=66')),
+    assert.ok(appleIcon.some(href => href.includes('/assets/img/brand/apple-touch-icon.png?v=67')),
       route + ' is missing the standardised apple-touch-icon');
     const manifest = await page.locator('link[rel="manifest"]').evaluateAll(nodes => nodes.map(node => node.href));
-    assert.ok(manifest.some(href => href.includes('/site.webmanifest?v=66')),
+    assert.ok(manifest.some(href => href.includes('/site.webmanifest?v=67')),
       route + ' is missing the web app manifest link');
     if (route === '/about.html' || route === '/contact.html' || route === '/events.html') {
       headingSizes.set(route, await page.locator('.phead').evaluate(node => {
@@ -1036,29 +1016,6 @@ async function crawlAllPages(browser) {
           leadMaxWidth: leadStyle ? leadStyle.maxWidth : null
         };
       }));
-    }
-
-    if (route.startsWith('/coaches/')) {
-      assert.equal(await page.locator('.phead__crumbs').count(), 0, route + ' still has breadcrumbs');
-      assert.equal(await page.locator('.profile__meta').count(), 0, route + ' still has pathway/language metadata');
-      assert.equal(await page.getByRole('link', { name: 'See classes' }).count(), 0, route + ' still has See classes');
-      assert.equal(await page.getByRole('link', { name: 'View the team' }).count(), 1,
-        route + ' is missing View the team');
-      assert.equal(await page.locator('.profile--coach').count(), 1, route + ' is not a coach profile grid');
-      assert.equal(await page.getByRole('heading', { name: 'About', exact: true }).count(), 1,
-        route + ' should use the heading About without the coach name');
-      assert.equal(await page.locator('.profile__bio').first().evaluate(node => getComputedStyle(node).textAlign),
-        'justify', route + ' biography is not justified');
-      const certificationLinks = await page.locator('.profile__cert').evaluateAll(nodes =>
-        nodes.map(node => ({ name: node.textContent.trim(), href: node.href })));
-      certificationLinks.forEach(link => {
-        const expected = {
-          'BWF Level 1': 'https://development.bwfbadminton.com/coaches/level-1',
-          'ASCA Level 1': 'https://www.strengthandconditioning.org/courses-accreditation/level-01',
-          'Level 1 Sports Trainer': 'https://sma.org.au/safer-sport-courses/level-1-sports-trainer/'
-        }[link.name];
-        assert.equal(link.href, expected, route + ' has an incorrect certification link for ' + link.name);
-      });
     }
 
     const cappedRules = await page.locator('.psec--alt').evaluateAll(nodes => nodes.map(node => {

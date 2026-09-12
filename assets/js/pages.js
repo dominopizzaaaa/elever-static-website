@@ -482,7 +482,9 @@
           (p.hook ? '<p class="path__hook">' + esc(p.hook) + '</p>' : '') +
           '<p class="path__body">' + esc(p.body) + '</p>' +
           /* nbsp keeps the chevron on the last word rather than orphaning it. */
-          '<a class="path__cta" href="' + esc(p.cta.href) + '">' + esc(p.cta.label) + '&nbsp;&rsaquo;</a>' +
+          '<a class="path__cta" href="' + esc(p.cta.href) + '"' +
+            (/^https?:/.test(p.cta.href) ? ' target="_blank" rel="noopener"' : '') +
+            '>' + esc(p.cta.label) + '&nbsp;&rsaquo;</a>' +
         '</article>' + (i < last ? ARROW : '');
     }).join('');
   })();
@@ -1060,9 +1062,9 @@
      chrome is the same .edetail shell the Past Events cards use, so the two
      read as one interaction; only the body is coach-specific.
 
-     The cards stay real <a href="coaches/<slug>.html"> links: the generated
-     pages remain the canonical, indexable profile and the destination without
-     JavaScript. This only intercepts the click.
+     There are no standalone coach pages — the popup is the whole profile
+     (client, Sep 2026: "Remove coaches pages, just keep to pop up"). The cards
+     are popup-only <button>s.
      ================================================================= */
   function initCoachDetail(scopes, coaches) {
     var live = scopes.filter(Boolean);
@@ -1113,6 +1115,20 @@
             }).join('') + '</div>' +
           '</div>'
         : '';
+      var galleryPhotos = (c.profileGallery && Array.isArray(c.profileGallery.photos)
+        ? c.profileGallery.photos
+        : []).filter(function (photo) {
+        return photo && photo.src && photo.alt && photo.width && photo.height;
+      });
+      var galleryBlock = galleryPhotos.length
+        ? '<div class="cdetail__gallery">' + galleryPhotos.map(function (photo) {
+            return '<figure class="cdetail__gallery-item">' +
+              '<img src="' + esc(base + photo.src) + '" alt="' + esc(photo.alt) +
+              '" width="' + esc(photo.width) + '" height="' + esc(photo.height) +
+              '" loading="lazy" decoding="async">' +
+            '</figure>';
+          }).join('') + '</div>'
+        : '';
 
       panel.innerHTML =
         '<header class="edetail__head">' +
@@ -1139,12 +1155,7 @@
                   }).join('') + '</ul>' +
                 '</div>'
               : '') +
-            '<div class="cdetail__actions">' +
-              (c.profilePage === false
-                ? ''
-                : '<a class="btn btn--contact-send" href="' + esc(base + 'coaches/' + c.slug + '.html') +
-                  '">View full profile <span class="cta-chevron" aria-hidden="true">&rsaquo;</span></a>') +
-            '</div>' +
+            galleryBlock +
           '</div>' +
         '</div>';
     }
@@ -1171,9 +1182,6 @@
       scope.addEventListener('click', function (ev) {
         var trigger = ev.target.closest('[data-coach]');
         if (!trigger) return;
-        /* Let a modified click (new tab / window / download) reach the real
-           profile page rather than swallowing it into the overlay. */
-        if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey || ev.button > 0) return;
         ev.preventDefault();
         open(trigger.getAttribute('data-coach'), trigger);
       });
@@ -1209,19 +1217,15 @@
       return String(name || '').split(/\s+/).filter(Boolean).map(function (part) { return part.charAt(0); }).join('').slice(0, 2).toUpperCase();
     }
 
-    /* A coach with a profile page uses an indexable <a>; a coach whose write-up
-       is ready but whose page is not uses a popup-only <button>. A coach with
-       neither — only placeholder copy — remains a plain <div>. */
+    /* A coach whose write-up is ready opens a popup-only <button>. A coach with
+       only placeholder copy — no real bio — remains a plain <div>. */
     function card(c, i) {
-      var hasProfilePage = c.profilePage !== false;
       var hasDescription = Array.isArray(c.bio) && c.bio.some(function (paragraph) {
         return paragraph && !/^(to write soon|to be added)$/i.test(String(paragraph).trim());
       });
-      var isInteractive = hasProfilePage || hasDescription;
-      var tag = hasProfilePage ? 'a' : (hasDescription ? 'button' : 'div');
-      var attrs = hasProfilePage
-        ? ' href="' + base + 'coaches/' + esc(c.slug) + '.html" data-coach="' + esc(c.slug) + '"'
-        : (hasDescription ? ' type="button" data-coach="' + esc(c.slug) + '"' : '');
+      var isInteractive = hasDescription;
+      var tag = hasDescription ? 'button' : 'div';
+      var attrs = hasDescription ? ' type="button" data-coach="' + esc(c.slug) + '"' : '';
       var photo = c.photo
         ? '<img src="' + base + esc(c.photo) + '" alt="' + esc(c.name) + '" width="640" height="640" loading="lazy" decoding="async">'
         : '<span class="coach__initials">' + esc(initials(c.name)) + '</span>';

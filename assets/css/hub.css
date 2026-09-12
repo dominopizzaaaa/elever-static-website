@@ -6,10 +6,12 @@ body[data-page="hub"]{background:#fff}
 body[data-page="hub"] .footer{margin-top:0}
 body[data-page="hub"] .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 
-/* Standard page header band (no photo hero), same as the other pages.
-   Only the hub-specific eyebrow + proof pills are layered on top. */
+/* The header band, headline and description match the other interior pages
+   exactly (client, Sep 2026: "ensure same as other pages"); only the
+   hub-specific eyebrow + proof pills are layered on top, so the lead inherits
+   the standard .phead__lead width, size and colour. */
 .phead--hub .phead__inner{width:100%}
-.phead--hub .phead__lead{max-width:72ch;color:rgba(255,255,255,.78);font-size:clamp(.94rem,1.35vw,1.08rem)}
+.phead--hub .phead__lead{max-width:58ch}
 /* The headline leads; the uppercase byline is a strong brand signature. */
 .phead--hub h1{max-width:none;white-space:nowrap}
 .hub-hero__by{margin-top:.7rem;color:#8fabf5;font-size:clamp(1.05rem,2vw,1.35rem);font-weight:850;letter-spacing:.09em;text-transform:uppercase}

@@ -269,7 +269,7 @@
       headline: 'DISCOVER THE GAME. EXPERIENCE \u00c9LEVER.',
       hook: 'New to badminton? Start here.',
       body: 'EXPLORATION is our entry programme for new students. It introduces badminton in a safe, engaging, and structured environment, helping players build confidence while experiencing \u00c9lever Badminton\u2019s coaching approach.',
-      cta: { label: 'See our camps', href: 'camps.html' }
+      cta: { label: 'View our camps', href: 'camps.html' }
     },
     {
       key: 'essentials', name: 'Essentials', num: '02',
@@ -296,7 +296,7 @@
       headline: 'PERFORM WITH PURPOSE. COMPETE WITH CONFIDENCE.',
       hook: '',
       body: 'For athletes aiming to reach their highest potential, ELITE focuses on advanced skills, tactical understanding, mental preparation, and competitive performance. Players experience high-intensity training, match simulations, and individualised guidance to maximise growth and readiness for tournaments.',
-      cta: { label: 'Enquire about Elite', href: 'contact.html' }
+      cta: { label: 'Enquire about Elite', href: 'https://wa.me/6589214221?text=Hi%2C%20I%20am%20interested%20in%20the%20Elite%20programme%20with%20%C3%89lever%20Badminton%20and%20would%20like%20to%20enquire%20more.%20Please%20let%20me%20know%20if%20there\'s%20availability.%20Thank%20you!' }
     }
   ];
 
@@ -392,7 +392,7 @@
     },
     {
       key: 'competition', name: 'Competitions', num: '03',
-      tagline: 'You bring the players. We\u2019ll run the competition.',
+      tagline: 'You bring the players. We\u2019ll run the show.',
       what: 'From friendly corporate tournaments to large-scale competitions, we design the format and manage the moving parts required to keep players, matches and courts running smoothly.',
       idealFor: ['Corporate Sports Days', 'Community Tournaments', 'Private Competitions'],
       handle: ['Format & Scheduling', 'Registration', 'Certified Officials', 'Match & Results Management', 'Court & Player Coordination']

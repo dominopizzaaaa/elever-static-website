@@ -13,8 +13,8 @@ global.window = {};
 require(path.join(root, 'assets/js/data.js'));
 const ARTICLES = global.window.ELEVER_DATA.articles;
 
-const V = '75'; // must match the shared asset cache key used across the site
-const FAVICON_V = '66';
+const V = '76'; // must match the shared asset cache key used across the site
+const FAVICON_V = '67';
 
 const esc = s => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -98,6 +98,7 @@ function page(a) {
   <meta name="twitter:description" content="${esc(a.excerpt)}" />
   <meta name="twitter:image" content="${esc(image)}" />
   <link rel="icon" href="/favicon.ico?v=${FAVICON_V}" sizes="any" />
+  <link rel="icon" type="image/svg+xml" href="/assets/img/brand/favicon.svg?v=${FAVICON_V}" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/brand/favicon-32x32.png?v=${FAVICON_V}" />
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/brand/favicon-16x16.png?v=${FAVICON_V}" />
   <link rel="apple-touch-icon" href="/assets/img/brand/apple-touch-icon.png?v=${FAVICON_V}" />
