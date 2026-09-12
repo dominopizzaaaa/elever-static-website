@@ -61,7 +61,7 @@
 .phead .btn--ghost:hover{border-color:#fff;background:rgba(255,255,255,.1)}
 
 .phead--events .phead__photo{
-  position:absolute;top:73px;right:0;bottom:0;z-index:-1;width:43%;
+  position:absolute;top:73px;right:0;bottom:0;z-index:-1;width:50%;
   overflow:hidden;pointer-events:none;background:#396eac;
   -webkit-mask-image:linear-gradient(to right,transparent,#000 38%);
   mask-image:linear-gradient(to right,transparent,#000 38%)
