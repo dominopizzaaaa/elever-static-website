@@ -60,6 +60,24 @@
 .phead .btn--ghost{border-color:rgba(255,255,255,.32);color:#fff;background:transparent}
 .phead .btn--ghost:hover{border-color:#fff;background:rgba(255,255,255,.1)}
 
+.phead--events .phead__photo{
+  position:absolute;top:73px;right:0;bottom:0;z-index:-1;width:43%;
+  overflow:hidden;pointer-events:none;background:#396eac;
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 38%);
+  mask-image:linear-gradient(to right,transparent,#000 38%)
+}
+.phead--events .phead__photo img{
+  width:100%;height:100%;object-fit:cover;object-position:center 55%;
+  filter:grayscale(1);mix-blend-mode:luminosity;opacity:.8
+}
+@media(max-width:900px){
+  .phead--events .phead__photo{top:77px;width:52%}
+}
+@media(max-width:560px){
+  .phead.phead--events{padding-top:8rem;padding-bottom:3rem}
+  .phead--events .phead__photo{width:62%;opacity:.8}
+}
+
 /* nav sits over the dark band until the user scrolls past it */
 body.has-dark-head .nav--solid{background:transparent;border-color:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
 body.has-dark-head .nav__logo{color:#fff}

@@ -265,6 +265,46 @@ async function runViewport(browser, viewport, name) {
     name + ' class type is not right aligned');
 
   await open(page, '/events.html', name + ' Events');
+  const headerPhoto = page.locator('.phead--events .phead__photo img');
+  assert.equal(await headerPhoto.getAttribute('src'), 'assets/img/events/singhealth-sports-day-2026-9.jpg');
+  assert.equal(await headerPhoto.getAttribute('alt'), '');
+  assert.equal(await headerPhoto.locator('..').getAttribute('aria-hidden'), 'true');
+  await page.waitForFunction(() => {
+    const image = document.querySelector('.phead--events .phead__photo img');
+    return image.complete && image.naturalWidth > 0;
+  });
+  const eventHeader = await page.locator('.phead--events').boundingBox();
+  const eventHeading = await page.locator('.phead--events h1').boundingBox();
+  const eventPhoto = await headerPhoto.boundingBox();
+  const eventNav = await page.locator('#nav').boundingBox();
+  assert.ok(eventPhoto && eventPhoto.width > 0 && eventPhoto.height > 0,
+    name + ' Events header photo is not visible');
+  assert.ok(Math.abs(eventPhoto.x + eventPhoto.width - viewport.width) < 1 &&
+    Math.abs(eventPhoto.y + eventPhoto.height - eventHeader.height) <= 1,
+  name + ' Events header photo is not flush with the right and bottom edges');
+  assert.ok(eventPhoto.y >= eventNav.height - 1,
+    name + ' Events header photo overlaps the navigation');
+  assert.ok(eventHeading.y > eventNav.height && eventHeading.x + eventHeading.width <= eventPhoto.x,
+    name + ' Events heading is not clear of the photo and navigation');
+  assert.equal(await page.locator('#nav .nav__link[aria-current="page"]').textContent(), 'Events');
+  await page.screenshot({ path: path.join(outDir, name + '-events-header.png'), fullPage: false });
+  if (viewport.width <= 900) {
+    const menuButton = page.getByRole('button', { name: 'Open menu' });
+    await menuButton.click();
+    assert.equal(await menuButton.getAttribute('aria-expanded'), 'true');
+    await page.locator('.nav__link--parent').click();
+    await page.locator('.nav__menu-item', { hasText: 'Camps' }).waitFor({ state: 'visible' });
+    await menuButton.click();
+    assert.equal(await menuButton.getAttribute('aria-expanded'), 'false');
+  } else {
+    await page.locator('.nav__link--parent').hover();
+    await page.locator('.nav__menu-item', { hasText: 'Camps' }).waitFor({ state: 'visible' });
+    await page.mouse.move(viewport.width - 5, viewport.height - 5);
+  }
+  await page.evaluate(() => window.scrollTo({ top: 350, behavior: 'instant' }));
+  await page.waitForFunction(() => document.querySelector('#nav').classList.contains('scrolled'));
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+  await page.waitForFunction(() => !document.querySelector('#nav').classList.contains('scrolled'));
   const workLink = page.getByRole('link', { name: 'Work with us' }).first();
   assert.equal(new URL(await workLink.getAttribute('href')).searchParams.get('text'),
     'Hi, I am interested in working with Élever Badminton to organise an event. Could you share more about the options available and how we can get started? Thank you!');
@@ -905,6 +945,8 @@ async function crawlAllPages(browser) {
 
   for (const route of allHtmlRoutes()) {
     await open(page, route, 'full-crawl ' + route);
+    assert.equal(await page.locator('.phead--events, .phead__photo').count(), route === '/events.html' ? 2 : 0,
+      route + ' should only show the photo header on Events');
     const icons = await page.locator('link[rel~="icon"]').count();
     assert.ok(icons >= 1, route + ' does not expose a favicon');
     const iconHrefs = await page.locator('link[rel~="icon"]').evaluateAll(nodes => nodes.map(node => node.href));
