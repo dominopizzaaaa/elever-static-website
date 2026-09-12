@@ -378,18 +378,24 @@
   var EVENT_TYPES = [
     {
       key: 'carnival', name: 'Carnivals', num: '01',
-      what: 'Big, energetic play days with stations, games, prizes and coaches keeping everyone moving.',
-      provides: ['Event coaches and marshals', 'Rackets, shuttles and all equipment', 'Court and station setup', 'Scoring, prizes and medals']
+      tagline: 'Bring people together through badminton.',
+      what: 'From community celebrations to brand activations, we create high-energy experiences that give everyone a reason to get involved, whether they play badminton or not.',
+      idealFor: ['Community Events', 'Brand Activations', 'Family Days'],
+      handle: ['Concept & Programming', 'Games & Activations', 'Clinics & Masterclasses', 'Athlete & Partner Engagement', 'Event Operations']
     },
     {
       key: 'clinic', name: 'Clinics', num: '02',
-      what: 'Focused coaching workshops built around one clear skill or theme.',
-      provides: ['BWF-certified coaches', 'Structured session plan for the level', 'Shuttles and training equipment', 'Loan rackets if needed']
+      tagline: 'More than a one-size-fits-all coaching session.',
+      what: 'We design each clinic around your audience and objectives, from first-time players learning the fundamentals to experienced players sharpening specific aspects of their game.',
+      idealFor: ['Corporates', 'Schools', 'Communities', 'Brands'],
+      handle: ['Programme Design', 'Skill-Level Segmentation', 'Professional Coaches', 'Specialised Clinics & Masterclasses', 'Multi-Sport Programmes']
     },
     {
       key: 'competition', name: 'Competitions', num: '03',
-      what: 'Tournament formats, draws, scoring and court flow handled end to end.',
-      provides: ['Format design and seeding', 'Draws, scheduling and results', 'Umpires and court marshals', 'Trophies, medals and prize ceremony']
+      tagline: 'You bring the players. We\u2019ll run the competition.',
+      what: 'From friendly corporate tournaments to large-scale competitions, we design the format and manage the moving parts required to keep players, matches and courts running smoothly.',
+      idealFor: ['Corporate Sports Days', 'Community Tournaments', 'Private Competitions'],
+      handle: ['Format & Scheduling', 'Registration', 'Certified Officials', 'Match & Results Management', 'Court & Player Coordination']
     }
   ];
 
@@ -547,7 +553,7 @@
         'Exhibition Matches & Autograph Session Management',
         'Branded Activations & Participant Engagement',
         'Tournament Format, Registration & Operations',
-        'Crowd Management & On-Ground Event Operations'
+        'Crowd Management & On-Site Event Operations'
       ],
       partners: [
         { name: 'People\u2019s Association', logo: 'assets/img/partners/peoples-association.png' },
@@ -601,7 +607,7 @@
         'Clinic Programme Planning & Execution',
         'Skill-Level Based Programme Design',
         'Professional Badminton Coaches',
-        'Participant Management & On-Ground Event Operations'
+        'Participant Management & On-Site Event Operations'
       ],
       photos: [
         'serangoon-paya-lebar-clinic-2026-1.jpg',
@@ -626,7 +632,7 @@
         'Multi-Sport Clinic Programme Planning & Execution',
         'Professional Badminton & Table Tennis Coaches',
         'Kids Sports Programme Design',
-        'Participant & On-Ground Management'
+        'Participant & On-Site Management'
       ],
       partners: [
         { name: 'People\u2019s Association', logo: 'assets/img/partners/peoples-association.png' },
@@ -704,9 +710,45 @@
         'kff-singapore-open-2025-11.jpg',
         'kff-singapore-open-2025-12.jpg',
         'kff-singapore-open-2025-13.jpg',
-        'kff-singapore-open-2025-14.jpg',
-        'kff-singapore-open-2025-15.jpg',
-        'kff-singapore-open-2025-16.jpg'
+        'kff-singapore-open-2025-14.jpg'
+      ]
+    },
+    {
+      title: 'Joo Chiat Badminton Clinic 2025',
+      type: 'Clinic',
+      when: '11 May 2025',
+      where: 'Joo Chiat Community Club',
+      slug: 'joo-chiat-clinic-2025',
+      photos: [
+        'joo-chiat-clinic-2025-1.jpg',
+        'joo-chiat-clinic-2025-2.jpg',
+        'joo-chiat-clinic-2025-3.jpg',
+        'joo-chiat-clinic-2025-4.jpg',
+        'joo-chiat-clinic-2025-5.jpg',
+        'joo-chiat-clinic-2025-6.jpg',
+        'joo-chiat-clinic-2025-7.jpg',
+        'joo-chiat-clinic-2025-8.jpg',
+        'joo-chiat-clinic-2025-9.jpg',
+        'joo-chiat-clinic-2025-10.jpg',
+        'joo-chiat-clinic-2025-11.jpg',
+        'joo-chiat-clinic-2025-12.jpg'
+      ]
+    },
+    {
+      title: 'Siglap South Badminton Clinic 2025',
+      type: 'Clinic',
+      when: '10 May 2025',
+      where: 'Siglap South Community Centre',
+      slug: 'siglap-south-clinic-2025',
+      photos: [
+        'siglap-south-clinic-2025-1.jpg',
+        'siglap-south-clinic-2025-2.jpg',
+        'siglap-south-clinic-2025-3.jpg',
+        'siglap-south-clinic-2025-4.jpg',
+        'siglap-south-clinic-2025-5.jpg',
+        'siglap-south-clinic-2025-6.jpg',
+        'siglap-south-clinic-2025-7.jpg',
+        'siglap-south-clinic-2025-8.jpg'
       ]
     },
     {
@@ -740,6 +782,42 @@
         'bukit-gombak-clinic-2025-10.jpg',
         'bukit-gombak-clinic-2025-11.jpg',
         'bukit-gombak-clinic-2025-12.jpg'
+      ]
+    },
+    {
+      title: 'Kolam Ayer Badminton Clinic 2024',
+      type: 'Clinic',
+      when: '23 Nov 2024',
+      where: 'Kolam Ayer Community Club',
+      slug: 'kolam-ayer-clinic-2024',
+      photos: [
+        'kolam-ayer-clinic-2024-1.jpg',
+        'kolam-ayer-clinic-2024-2.jpg',
+        'kolam-ayer-clinic-2024-3.jpg',
+        'kolam-ayer-clinic-2024-4.jpg',
+        'kolam-ayer-clinic-2024-5.jpg',
+        'kolam-ayer-clinic-2024-6.jpg',
+        'kolam-ayer-clinic-2024-7.jpg',
+        'kolam-ayer-clinic-2024-8.jpg',
+        'kolam-ayer-clinic-2024-9.jpg',
+        'kolam-ayer-clinic-2024-10.jpg'
+      ]
+    },
+    {
+      title: 'Paya Lebar Badminton Clinic 2024',
+      type: 'Clinic',
+      when: '18 May 2024',
+      where: 'Paya Lebar Kovan Community Club',
+      slug: 'paya-lebar-kovan-clinic-2024',
+      photos: [
+        'paya-lebar-kovan-clinic-2024-1.jpg',
+        'paya-lebar-kovan-clinic-2024-2.jpg',
+        'paya-lebar-kovan-clinic-2024-3.jpg',
+        'paya-lebar-kovan-clinic-2024-4.jpg',
+        'paya-lebar-kovan-clinic-2024-5.jpg',
+        'paya-lebar-kovan-clinic-2024-6.jpg',
+        'paya-lebar-kovan-clinic-2024-7.jpg',
+        'paya-lebar-kovan-clinic-2024-8.jpg'
       ]
     }
   ];

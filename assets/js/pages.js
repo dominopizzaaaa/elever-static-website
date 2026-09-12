@@ -819,12 +819,20 @@
     var types = el('eventTypes');
     if (types) {
       types.innerHTML = D.eventTypes.map(function (t) {
+        function meta(label, items) {
+          return '<div class="etype__meta">' +
+            '<span class="etype__metalabel">' + esc(label) + '</span>' +
+            '<span class="etype__metaval">' + items.map(esc).join(' &middot; ') + '</span>' +
+          '</div>';
+        }
         return '<article class="etype" id="' + t.key + '">' +
           '<span class="etype__num">' + t.num + '</span>' +
           '<h3>' + esc(t.name) + '</h3>' +
+          (t.tagline ? '<p class="etype__tagline">' + esc(t.tagline) + '</p>' : '') +
           '<p class="etype__what">' + esc(t.what) + '</p>' +
-          '<ul class="etype__prov">' + t.provides.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ul>' +
-          '<a class="etype__link" href="' + esc(pastHref(t)) + '">See past ' + esc(t.name) + '&nbsp;&rsaquo;</a>' +
+          (t.idealFor ? meta('Ideal for', t.idealFor) : '') +
+          (t.handle ? meta('We can handle', t.handle) : '') +
+          '<a class="etype__link" href="' + esc(pastHref(t)) + '">View past ' + esc(t.name.toLowerCase()) + '&nbsp;&rsaquo;</a>' +
         '</article>';
       }).join('');
     }

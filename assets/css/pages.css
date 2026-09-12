@@ -125,6 +125,11 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
    still beats the narrow-screen .psec padding override further down. */
 .psec.psec--bleed{max-width:none;padding-left:0;padding-right:0}
 .psec--tight{padding-top:2.4rem;padding-bottom:2.4rem}
+/* One thin, faint rule at the top of a section — same treatment as
+   .psec--alt but on a single edge. Used on Events to break after the Work
+   with us CTA and before Upcoming Events (client, Sep 2026). */
+.psec--ruletop{position:relative}
+.psec--ruletop::before{content:'';position:absolute;top:0;left:50%;width:min(var(--maxw),calc(100% - 2 * var(--gutter)));height:1px;background:var(--rule);transform:translateX(-50%)}
 /* First section on a page with no dark .phead band: clear the fixed nav. */
 .psec--top{padding-top:8rem}
 @media(max-width:900px){.psec--top{padding-top:7rem}}
@@ -553,7 +558,7 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   border-radius:99px;letter-spacing:0;
   background:#fff;color:var(--accent);border:1px solid var(--accent)}
 .vcard__actions{display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;margin-top:1rem}
-.vcard__book{display:inline-flex;align-items:center;min-height:38px;padding:.45rem .9rem;border-radius:8px;
+.vcard__book{display:inline-flex;align-items:center;min-height:38px;padding:.45rem .9rem;border-radius:var(--r-btn);
   font-size:.78rem;font-weight:650;color:#fff;background:var(--accent);border:1px solid var(--accent)}
 .vcard__book:hover{background:var(--accent-hover);border-color:var(--accent-hover);color:#fff;text-decoration:none}
 @media(max-width:620px){
@@ -637,12 +642,13 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
   border:1px solid var(--accent);color:var(--accent);font-size:.62rem;font-weight:800;letter-spacing:.02em}
 /* Carnivals / Clinics / Competitions read larger than the "Our Services"
    label above them (client, Sep 2026). */
-.etype h3{margin:.55rem 0 .7rem;font-size:clamp(1.4rem,2.2vw,1.75rem);font-weight:800;letter-spacing:-.03em}
+.etype h3{margin:.55rem 0 .5rem;font-size:clamp(1.4rem,2.2vw,1.75rem);font-weight:800;letter-spacing:-.03em}
+.etype__tagline{font-size:.94rem;font-weight:700;color:var(--ink-soft);margin-bottom:.55rem;line-height:1.4}
 .etype__what{font-size:.88rem;color:var(--muted);margin-bottom:1rem;line-height:1.7}
-.etype__prov{list-style:none;display:flex;flex-direction:column;gap:.3rem;font-size:.82rem;color:var(--muted);margin-bottom:1.2rem}
-.etype__prov li{padding-left:1.1rem;position:relative;line-height:1.5}
-.etype__prov li::before{content:'✓';position:absolute;left:0;color:var(--accent);font-weight:700}
-.etype__prov:last-child{margin-bottom:0}
+.etype__meta{display:flex;flex-direction:column;gap:.15rem;margin-bottom:.9rem;font-size:.82rem;line-height:1.5}
+.etype__meta:last-of-type{margin-bottom:1.2rem}
+.etype__metalabel{font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.etype__metaval{color:var(--muted)}
 /* Each card links to its own slice of Past Events (client, Sep 2026). */
 .etype__link{margin-top:auto;padding-top:.4rem;font-size:.84rem;font-weight:600;color:var(--accent);
   display:inline-flex;align-items:center;align-self:flex-start}
@@ -651,6 +657,11 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 /* One proposal CTA under all three boxes rather than one per box. */
 .etypes__cta{display:flex;justify-content:center;margin-top:1.4rem}
 @media(max-width:520px){.etypes__cta .btn{width:100%}}
+
+/* Client asked to try the Events section headers unbolded to see how it reads
+   (Sep 2026). Scoped to Events so the rest of the site keeps its 800 weight
+   until the client decides whether to roll it out. */
+body[data-page="events"] .psec__head h2{font-weight:600}
 
 /* service suite */
 /* Header sits on one line beside the CTA rather than in a tall side column. */
@@ -952,8 +963,13 @@ body.has-lightbox{overflow:hidden}
 .logorail__item--sba img{width:108px}
 .logorail__item--singhealth img{width:170px}
 .logorail__item--name{font-size:.85rem;font-weight:700;color:var(--faint);white-space:nowrap}
-.trusted-inline{margin-top:3.4rem;padding-top:3rem;border-top:1px solid var(--rule)}
-.trusted-inline .psec__head{margin-bottom:1.25rem}
+/* Trusted by now sits between the three service cards and the Work with us
+   CTA, centred, using the quiet .psec__head--minor label (client, Sep 2026).
+   No divider rule of its own — the section break moved to above Upcoming
+   Events. */
+.trusted-inline{margin-top:2.8rem;text-align:center}
+.trusted-inline .psec__head{margin:0 auto 1.25rem;max-width:none;text-align:center}
+.trusted-inline .logorail__set{justify-content:center}
 @media(max-width:520px){
   .logorail__set{gap:1rem 1.5rem}
   .logorail__item{height:88px}
@@ -1292,7 +1308,7 @@ body.has-lightbox{overflow:hidden}
 .contact-form-card .lead__actions{display:grid;grid-template-columns:auto;justify-items:start}
 .contact-form-card .lead__status{max-width:60ch}
 .contact-form-card button:disabled{cursor:wait;opacity:.58}
-.btn--contact-send{gap:.45rem;min-width:180px;justify-content:center;border:1px solid var(--accent);border-radius:var(--r-sm);background:transparent;color:var(--accent);font-weight:600}
+.btn--contact-send{gap:.45rem;min-width:180px;justify-content:center;border:1px solid var(--accent);border-radius:var(--r-btn);background:transparent;color:var(--accent);font-weight:600}
 .btn--contact-send:hover{background:var(--accent-soft);color:var(--accent)}
 .btn--contact-send:hover > .cta-chevron{transform:translateX(3px)}
 .btn--contact-send:active{background:rgba(33,81,209,.16);border-color:var(--accent-press)}

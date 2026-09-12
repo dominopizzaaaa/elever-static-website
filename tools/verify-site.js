@@ -106,7 +106,7 @@ async function checkContact(page, viewport, name) {
   }));
   assert.deepEqual(sendButtonStyle, {
     background: 'rgba(0, 0, 0, 0)', border: 'rgb(33, 81, 209)', borderWidth: '1px',
-    radius: '8px', weight: '600', color: 'rgb(33, 81, 209)'
+    radius: '4px', weight: '600', color: 'rgb(33, 81, 209)'
   });
   const mobileControl = await form.locator('#contact-mobile').boundingBox();
   const topicControl = await topic.boundingBox();
@@ -350,18 +350,18 @@ async function runViewport(browser, viewport, name) {
         'Programme Planning & Participant Experience Design',
         'Exhibition Matches & Autograph Session Management',
         'Branded Activations & Participant Engagement', 'Tournament Format, Registration & Operations',
-        'Crowd Management & On-Ground Event Operations']
+        'Crowd Management & On-Site Event Operations']
     },
     'Serangoon-Paya Lebar Badminton Clinic 2026': {
       description: 'We delivered three consecutive sessions for youths aged 15 to 35 at the Serangoon-Paya Lebar Badminton Clinic 2026, with tailored programmes for different playing levels. Beginners focused on building strong foundations and confidence on court, while experienced players sharpened their doubles skills, positioning and gameplay. Each session was structured to provide purposeful coaching while keeping the experience engaging and enjoyable for all participants.',
       services: ['Clinic Programme Planning & Execution', 'Skill-Level Based Programme Design',
-        'Professional Badminton Coaches', 'Participant Management & On-Ground Event Operations']
+        'Professional Badminton Coaches', 'Participant Management & On-Site Event Operations']
     },
     'Bukit Gombak Sports Clinic 2026': {
       description: 'Following the strong response to our first edition, we returned to Bukit Gombak for a second year with our multi-sport clinic for young participants. Kids rotated through dedicated badminton and table tennis stations, followed by agility exercises designed to support both sports. The programme gave participants a fun and engaging way to experience both sports, learn their fundamentals and discover new interests through structured coaching and play.',
       services: ['Multi-Sport Clinic Programme Planning & Execution',
         'Professional Badminton & Table Tennis Coaches', 'Kids Sports Programme Design',
-        'Participant & On-Ground Management']
+        'Participant & On-Site Management']
     },
     'Bukit Gombak Sports Clinic 2025': {
       description: 'We designed and delivered a multi-sport clinic for young participants to experience both badminton and table tennis in one programme. Kids rotated across sport-specific coaching stations and agility exercises, gaining first-hand exposure to the fundamentals of both sports. The experience concluded with a sharing by current and former national players, giving participants the opportunity to learn on court while drawing inspiration from those who have competed at the highest level.',
@@ -547,6 +547,37 @@ async function runViewport(browser, viewport, name) {
         name + ' Bukit Gombak 2025 partner logo failed to load');
       await page.screenshot({ path: path.join(outDir, name + '-bukit-gombak-2025.png'), fullPage: false });
     }
+    await page.keyboard.press('Escape');
+  }
+
+  /* Photo-only clinics carry no write-up — the client supplied images only.
+     They should still open, drop the Services/description block and render
+     their full Highlights gallery from the cover thumbnail. */
+  for (const [title, when, where, count] of [
+    ['Joo Chiat Badminton Clinic 2025', '11 May 2025', 'Joo Chiat Community Club', 12],
+    ['Siglap South Badminton Clinic 2025', '10 May 2025', 'Siglap South Community Centre', 8],
+    ['Kolam Ayer Badminton Clinic 2024', '23 Nov 2024', 'Kolam Ayer Community Club', 10],
+    ['Paya Lebar Badminton Clinic 2024', '18 May 2024', 'Paya Lebar Kovan Community Club', 8]]) {
+    const trigger = page.locator('.ecov__open', { hasText: title });
+    assert.equal(await trigger.count(), 1, name + ' missing showcase card for ' + title);
+    assert.equal(await trigger.locator('.ecov__placeholder').count(), 0,
+      name + ' ' + title + ' should show a cover photo, not the placeholder');
+    assert.equal(await trigger.locator('.ecov__media img').count(), 1,
+      name + ' ' + title + ' is missing its cover photo');
+    await trigger.click();
+    const dialog = page.locator('.edetail:not([hidden])');
+    await dialog.waitFor();
+    assert.equal((await dialog.locator('.edetail__title').textContent()).trim(), title);
+    assert.deepEqual(await dialog.locator('.edetail__meta > span').allTextContents(),
+      [when, '|', where], name + ' ' + title + ' detail lines are wrong');
+    assert.equal(await dialog.locator('.edetail__desc').count(), 0,
+      name + ' ' + title + ' should not render a description');
+    assert.equal(await dialog.getByRole('heading', { name: 'Services provided', exact: true }).count(), 0,
+      name + ' ' + title + ' should not render a Services block');
+    assert.equal(await dialog.getByRole('heading', { name: 'Highlights', exact: true }).count(), 1,
+      name + ' ' + title + ' should render its Highlights gallery');
+    assert.equal(await dialog.locator('.edetail__tile').count(), count,
+      name + ' ' + title + ' should show ' + count + ' photos');
     await page.keyboard.press('Escape');
   }
 
@@ -948,12 +979,15 @@ async function crawlAllPages(browser) {
     assert.equal(await page.locator('.phead--events, .phead__photo').count(), route === '/events.html' ? 2 : 0,
       route + ' should only show the photo header on Events');
     const icons = await page.locator('link[rel~="icon"]').count();
-    assert.ok(icons >= 1, route + ' does not expose a favicon');
+    assert.ok(icons >= 2, route + ' does not expose both primary and fallback favicons');
     const iconHrefs = await page.locator('link[rel~="icon"]').evaluateAll(nodes => nodes.map(node => node.href));
-    assert.ok(iconHrefs.some(href => href.includes('/assets/img/brand/eb-icon-blue.png?v=64')),
+    assert.ok(iconHrefs.some(href => href.includes('/assets/img/brand/eb-icon-blue.png?v=65')),
       route + ' is missing the requested blue-background PNG favicon');
-    assert.ok(iconHrefs.some(href => href.includes('/favicon.ico?v=64')),
+    assert.ok(iconHrefs.some(href => href.includes('/favicon.ico?v=65')),
       route + ' is missing the versioned ICO fallback');
+    const appleIcon = await page.locator('link[rel="apple-touch-icon"]').evaluateAll(nodes => nodes.map(node => node.href));
+    assert.ok(appleIcon.some(href => href.includes('/assets/img/brand/apple-touch-icon.png?v=65')),
+      route + ' is missing the standardised apple-touch-icon');
     if (route === '/about.html' || route === '/contact.html') {
       headingSizes.set(route, await page.locator('.phead h1').evaluate(node => getComputedStyle(node).fontSize));
     }

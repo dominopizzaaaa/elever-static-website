@@ -22,6 +22,10 @@ slug_for() {
     *"Bukit Gombak Sports Clinic 2025"*)            echo "bukit-gombak-clinic-2025" ;;
     *"Serangoon-Paya Lebar Badminton Clinic 2026"*) echo "serangoon-paya-lebar-clinic-2026" ;;
     *"Joo Chiat Badminton Carnival 2026"*)          echo "joo-chiat-carnival-2026" ;;
+    *"Joo Chiat Badminton Clinic 2025"*)            echo "joo-chiat-clinic-2025" ;;
+    *"Siglap South Badminton Clinic 2025"*)         echo "siglap-south-clinic-2025" ;;
+    *"Kolam Ayer Badminton Clinic 2024"*)           echo "kolam-ayer-clinic-2024" ;;
+    *"Paya Lebar Kovan Badminton Clinic 2024"*)     echo "paya-lebar-kovan-clinic-2024" ;;
     *"ASICS Badminton Summit 2026"*)                echo "asics-summit-2026" ;;
     *"SingHealth President"*"Sports Day 2026"*)     echo "singhealth-sports-day-2026" ;;
     *) echo "" ;;

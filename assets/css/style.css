@@ -37,7 +37,8 @@
   --ease:cubic-bezier(.22,1,.36,1);
   --r-lg:18px;               /* card radius — ElevenLabs-ish, not pill-soft */
   --r-md:12px;
-  --r-sm:8px;
+  --r-sm:8px;                /* small card panels (client, Sep 2026) */
+  --r-btn:4px;               /* buttons — squared off, not pill (client, Sep 2026) */
   --maxw:1180px;
   /* One page gutter for the whole site. Every content column is
      min(--maxw, 100vw - 2*--gutter) wide and centred, so the nav logo, the
@@ -80,7 +81,7 @@ h1,h2,h3,h4,h5,h6{color:var(--ink-soft)}
 
 /* ---------- Buttons ---------- */
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;
-  padding:.7rem 1.35rem;border-radius:100px;font-weight:600;font-size:.9rem;letter-spacing:0;
+  padding:.7rem 1.35rem;border-radius:var(--r-btn);font-weight:600;font-size:.9rem;letter-spacing:0;
   transition:background .2s var(--ease),border-color .2s,color .2s,transform .2s var(--ease);text-align:center;white-space:nowrap}
 .btn--primary{background:var(--accent);color:var(--on-accent)}
 .btn--primary:hover{background:var(--accent-hover)}
@@ -128,7 +129,7 @@ h1,h2,h3,h4,h5,h6{color:var(--ink-soft)}
 .nav.scrolled .nav__link:hover{color:var(--ink);background:var(--bg-2)}
 .nav__link.is-current{color:#fff}
 .nav.scrolled .nav__link.is-current{color:var(--accent)}
-.nav__cta{background:var(--accent);color:#fff!important;padding:9px 17px;border-radius:8px;
+.nav__cta{background:var(--accent);color:#fff!important;padding:9px 17px;border-radius:var(--r-btn);
   font-weight:600;font-size:14px;margin-left:10px;min-height:38px;display:inline-flex;align-items:center;
   flex:none;white-space:nowrap;transition:background .2s}
 .nav__cta:hover{background:var(--accent-hover)}
