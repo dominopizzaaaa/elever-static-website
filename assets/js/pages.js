@@ -659,7 +659,7 @@
       var openByDefault = !window.matchMedia('(max-width:900px)').matches;
 
       listMount.innerHTML = areas.map(function (g) {
-        var groupMessage = 'Hi, I am interested in the group classes at ' + g.area +
+        var groupMessage = 'Hi, I am interested in the group classes with Élever Badminton' +
           ' and would like to enquire more. Please let me know if there’s availability. Thank you!';
         var book = whatsapp(groupMessage);
         return '<details class="vcard" id="area-' + esc(g.area.toLowerCase().replace(/[^a-z0-9]+/g, '-')) + '"' +

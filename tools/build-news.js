@@ -13,7 +13,7 @@ global.window = {};
 require(path.join(root, 'assets/js/data.js'));
 const ARTICLES = global.window.ELEVER_DATA.articles;
 
-const V = '73'; // must match the shared asset cache key used across the site
+const V = '74'; // must match the shared asset cache key used across the site
 const FAVICON_V = '65';
 
 const esc = s => String(s == null ? '' : s)

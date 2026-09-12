@@ -13,8 +13,8 @@ global.window = {};
 require(path.join(root, 'assets/js/data.js'));
 const COACHES = global.window.ELEVER_DATA.coaches;
 
-const V = '73'; // must match the shared asset cache key used across the site
-const PAGES_V = '73'; // cache key for the coach-layout stylesheet
+const V = '74'; // must match the shared asset cache key used across the site
+const PAGES_V = '74'; // cache key for the coach-layout stylesheet
 const FAVICON_V = '65';
 
 const esc = s => String(s == null ? '' : s)

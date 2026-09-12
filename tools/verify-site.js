@@ -250,14 +250,15 @@ async function runViewport(browser, viewport, name) {
   assert.equal(new URL(await privateLink.getAttribute('href')).searchParams.get('text'),
     'Hi, I am interested in the private classes and would like to enquire more. Please let me know how I can arrange the sessions. Thank you!');
   const firstArea = (await page.locator('.vcard h3').first().textContent()).trim();
+  assert.ok(firstArea.length > 0, name + ' group class areas did not render');
   assert.equal(new URL(await page.locator('.vcard__book').first().getAttribute('href')).searchParams.get('text'),
-    'Hi, I am interested in the group classes at ' + firstArea + ' and would like to enquire more. Please let me know if there’s availability. Thank you!');
+    'Hi, I am interested in the group classes with Élever Badminton and would like to enquire more. Please let me know if there’s availability. Thank you!');
   const groupMessages = await page.locator('.vcard').evaluateAll(cards => cards.map(card => ({
     location: card.querySelector('h3').textContent.trim(),
     message: new URL(card.querySelector('.vcard__book').href).searchParams.get('text')
   })));
   groupMessages.forEach(item => assert.equal(item.message,
-    'Hi, I am interested in the group classes at ' + item.location +
+    'Hi, I am interested in the group classes with Élever Badminton' +
     ' and would like to enquire more. Please let me know if there’s availability. Thank you!'));
   const rowBox = await page.locator('.vcard__sessions li').first().boundingBox();
   const chipBox = await page.locator('.vcard__sessions li').first().locator('.vcard__lvl').boundingBox();
