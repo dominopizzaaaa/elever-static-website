@@ -647,21 +647,23 @@ body.has-dark-head .nav.open .nav__burger span{background:var(--ink)}
 .etype__what{font-size:.88rem;color:var(--muted);margin-bottom:1rem;line-height:1.7}
 .etype__meta{display:flex;flex-direction:column;gap:.15rem;margin-bottom:.9rem;font-size:.82rem;line-height:1.5}
 .etype__meta:last-of-type{margin-bottom:1.2rem}
-.etype__metalabel{font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.etype__metalabel{font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
 .etype__metaval{color:var(--muted)}
 /* Each card links to its own slice of Past Events (client, Sep 2026). */
 .etype__link{margin-top:auto;padding-top:.4rem;font-size:.84rem;font-weight:600;color:var(--accent);
   display:inline-flex;align-items:center;align-self:flex-start}
 .etype__link:hover{text-decoration:underline}
 
-/* One proposal CTA under all three boxes rather than one per box. */
-.etypes__cta{display:flex;justify-content:center;margin-top:1.4rem}
+/* One proposal CTA under all three boxes rather than one per box. It sits a
+   clear step below the Trusted-by logos so the button does not crowd them
+   (client, Sep 2026), and takes a slightly softer 8px corner than the squared
+   site buttons at the client's request. */
+.etypes__cta{display:flex;justify-content:center;margin-top:2.8rem}
+.etypes__cta .btn{border-radius:8px}
 @media(max-width:520px){.etypes__cta .btn{width:100%}}
 
-/* Client asked to try the Events section headers unbolded to see how it reads
-   (Sep 2026). Scoped to Events so the rest of the site keeps its 800 weight
-   until the client decides whether to roll it out. */
-body[data-page="events"] .psec__head h2{font-weight:600}
+/* Events section headers keep the site's bold 800 weight — the earlier
+   unbolded experiment was dropped (client, Sep 2026). */
 
 /* service suite */
 /* Header sits on one line beside the CTA rather than in a tall side column. */
@@ -1254,17 +1256,14 @@ body.has-lightbox{overflow:hidden}
    A guided enquiry flow: decisive hero, focused form and deliberately
    different direct-contact routes. All rules stay page-scoped so shared lead
    forms elsewhere keep their compact treatment. */
-.phead--contact{padding-bottom:5.2rem}
-.phead--contact::before{background:
-  radial-gradient(70% 160% at 86% 0%,rgba(33,81,209,.72) 0%,rgba(33,81,209,.18) 48%,transparent 75%),
-  radial-gradient(55% 130% at 15% 110%,rgba(83,123,231,.18),transparent 65%),
-  linear-gradient(145deg,#05070d 0%,#000 72%)}
+/* Contact reuses the standard dark .phead treatment (background, padding,
+   heading gradient, lead width and size) so it measures identically to About
+   and Events — the earlier bespoke gradient, taller padding and wider/larger
+   lead were dropped (client, Sep 2026). */
 .contact-hero{max-width:var(--maxw)}
 .contact-hero__eyebrow{display:inline-flex;align-items:center;gap:.65rem;margin-bottom:1rem;color:var(--accent-light);
   font-size:.66rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
 .contact-hero__eyebrow::before{content:'';width:2rem;height:1px;background:currentColor}
-.phead--contact h1{max-width:13ch}
-.phead--contact .phead__lead{max-width:67ch;font-size:clamp(.95rem,1.6vw,1.08rem)}
 .contact-hero__actions{display:flex;flex-wrap:wrap;gap:.65rem;margin-top:1.6rem}
 .contact-section{padding-top:clamp(2.8rem,6vw,5.4rem);padding-bottom:clamp(3.6rem,7vw,6rem)}
 .contact-shell{display:grid;grid-template-columns:minmax(0,1.62fr) minmax(280px,.78fr);
@@ -1342,7 +1341,6 @@ body.has-lightbox{overflow:hidden}
   .contact-aside__intro,.contact-event-card{grid-column:1/-1}
 }
 @media(max-width:640px){
-  .phead--contact{padding-top:8.1rem;padding-bottom:3.8rem}
   .contact-form-card{scroll-margin-top:112px}
   .contact-hero__actions{flex-direction:column;align-items:stretch}
   .contact-hero__actions .btn{width:100%}

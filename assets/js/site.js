@@ -9,6 +9,12 @@
   'use strict';
 
   var BOOK_URL = 'https://wa.me/6589214221';
+  /* The booking CTA opens WhatsApp with a ready-to-send enquiry, mirroring the
+     prefilled group-class message on the Find a Court page so the client hears
+     a consistent opening line whichever button a visitor taps. */
+  var BOOK_MESSAGE = 'Hi, I am interested in booking a class with Élever Badminton' +
+    ' and would like to enquire more. Please let me know if there’s availability. Thank you!';
+  var BOOK_LINK = BOOK_URL + '?text=' + encodeURIComponent(BOOK_MESSAGE);
   var WHATSAPP = 'https://wa.me/6589214221';
   var EMAIL = 'info@eleverbadminton.com';
   var LOGO_BLACK = 'assets/img/brand/eb-logo-black.png';
@@ -138,7 +144,7 @@
            hiding it inside the menu (client, Sep 2026). On desktop
            .nav__links takes the free space, so the button still lands at the
            right-hand end of the row exactly as before. */
-        '<a href="' + BOOK_URL + '" target="_blank" rel="noopener" class="nav__cta">Book a class</a>' +
+        '<a href="' + BOOK_LINK + '" target="_blank" rel="noopener" class="nav__cta">Book a class</a>' +
         '<button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span></span></button>' +
       '</div>';
   }

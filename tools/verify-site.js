@@ -245,6 +245,10 @@ async function runViewport(browser, viewport, name) {
   await page.screenshot({ path: path.join(outDir, name + '-home.png'), fullPage: true });
 
   await open(page, '/classes.html', name + ' Classes');
+  const navCta = page.locator('.nav__cta');
+  assert.equal(new URL(await navCta.getAttribute('href')).searchParams.get('text'),
+    'Hi, I am interested in booking a class with Élever Badminton and would like to enquire more. Please let me know if there’s availability. Thank you!',
+    name + ' nav Book a class button is missing its prefilled WhatsApp message');
   const privateLink = page.locator('a.btn--primary', { hasText: 'Enquire more' });
   assert.equal(await privateLink.count(), 1);
   assert.equal(new URL(await privateLink.getAttribute('href')).searchParams.get('text'),
@@ -309,6 +313,20 @@ async function runViewport(browser, viewport, name) {
   const workLink = page.getByRole('link', { name: 'Work with us' }).first();
   assert.equal(new URL(await workLink.getAttribute('href')).searchParams.get('text'),
     'Hi, I am interested in working with Élever Badminton to organise an event. Could you share more about the options available and how we can get started? Thank you!');
+  const workRadius = await workLink.evaluate(node => getComputedStyle(node).borderRadius);
+  assert.equal(workRadius, '8px', name + ' Work with us button should use an 8px corner radius');
+  const ctaGap = await page.locator('.etypes__cta').evaluate(node => parseFloat(getComputedStyle(node).marginTop));
+  assert.ok(ctaGap >= 40, name + ' Work with us button sits too close to the Trusted by logos (' + ctaGap + 'px)');
+  const eventHeadWeights = await page.locator('.psec .psec__head:not(.psec__head--minor) h2').evaluateAll(nodes =>
+    nodes.map(node => ({ text: node.textContent.trim(), weight: getComputedStyle(node).fontWeight })));
+  ['Our Services', 'Upcoming Events', 'Past Events'].forEach(label => {
+    const head = eventHeadWeights.find(item => item.text === label);
+    assert.ok(head, name + ' Events is missing the ' + label + ' section header');
+    assert.ok(Number(head.weight) >= 700, name + ' Events ' + label + ' header should be bold (got ' + head.weight + ')');
+  });
+  const metaLabelColour = await page.locator('.etype__metalabel').first().evaluate(node => getComputedStyle(node).color);
+  assert.equal(metaLabelColour, 'rgb(26, 26, 26)',
+    name + ' Ideal for / We can handle labels should be black (got ' + metaLabelColour + ')');
   assert.deepEqual(await page.locator('#eventPartners img').evaluateAll(nodes =>
     nodes.slice(0, 4).map(node => node.alt)),
     ['ASICS', 'People’s Association', 'Singapore Badminton Association', 'SingHealth Community Hospitals']);
@@ -926,6 +944,12 @@ async function runViewport(browser, viewport, name) {
 
   for (const route of ['/camps.html', '/lab.html', '/privacy.html']) {
     await open(page, route, name + ' ' + route);
+    if (route === '/camps.html') {
+      assert.equal(await page.getByRole('link', { name: 'View upcoming camp', exact: true }).count(), 1,
+        name + ' Camps header CTA should read "View upcoming camp"');
+      assert.equal(await page.getByRole('link', { name: 'See the next camp', exact: true }).count(), 0,
+        name + ' Camps still shows the old "See the next camp" CTA');
+    }
   }
   await context.close();
 }
@@ -982,15 +1006,36 @@ async function crawlAllPages(browser) {
     const icons = await page.locator('link[rel~="icon"]').count();
     assert.ok(icons >= 2, route + ' does not expose both primary and fallback favicons');
     const iconHrefs = await page.locator('link[rel~="icon"]').evaluateAll(nodes => nodes.map(node => node.href));
-    assert.ok(iconHrefs.some(href => href.includes('/assets/img/brand/eb-icon-blue.png?v=65')),
-      route + ' is missing the requested blue-background PNG favicon');
-    assert.ok(iconHrefs.some(href => href.includes('/favicon.ico?v=65')),
+    assert.ok(iconHrefs.some(href => href.includes('/favicon.ico?v=66')),
       route + ' is missing the versioned ICO fallback');
+    assert.ok(iconHrefs.some(href => href.includes('/assets/img/brand/favicon-32x32.png?v=66')),
+      route + ' is missing the standard 32x32 PNG favicon');
+    assert.ok(iconHrefs.some(href => href.includes('/assets/img/brand/favicon-16x16.png?v=66')),
+      route + ' is missing the standard 16x16 PNG favicon');
+    assert.equal(await page.locator('link[type="image/png"][sizes="100x100"]').count(), 0,
+      route + ' still uses the non-standard 100x100 PNG favicon link');
     const appleIcon = await page.locator('link[rel="apple-touch-icon"]').evaluateAll(nodes => nodes.map(node => node.href));
-    assert.ok(appleIcon.some(href => href.includes('/assets/img/brand/apple-touch-icon.png?v=65')),
+    assert.ok(appleIcon.some(href => href.includes('/assets/img/brand/apple-touch-icon.png?v=66')),
       route + ' is missing the standardised apple-touch-icon');
-    if (route === '/about.html' || route === '/contact.html') {
-      headingSizes.set(route, await page.locator('.phead h1').evaluate(node => getComputedStyle(node).fontSize));
+    const manifest = await page.locator('link[rel="manifest"]').evaluateAll(nodes => nodes.map(node => node.href));
+    assert.ok(manifest.some(href => href.includes('/site.webmanifest?v=66')),
+      route + ' is missing the web app manifest link');
+    if (route === '/about.html' || route === '/contact.html' || route === '/events.html') {
+      headingSizes.set(route, await page.locator('.phead').evaluate(node => {
+        const head = getComputedStyle(node);
+        const h1 = getComputedStyle(node.querySelector('h1'));
+        const lead = node.querySelector('.phead__lead');
+        const leadStyle = lead ? getComputedStyle(lead) : null;
+        return {
+          headingSize: h1.fontSize,
+          background: head.backgroundColor,
+          backgroundImage: head.backgroundImage,
+          paddingTop: head.paddingTop,
+          paddingBottom: head.paddingBottom,
+          leadSize: leadStyle ? leadStyle.fontSize : null,
+          leadMaxWidth: leadStyle ? leadStyle.maxWidth : null
+        };
+      }));
     }
 
     if (route.startsWith('/coaches/')) {
@@ -1044,8 +1089,23 @@ async function crawlAllPages(browser) {
         route + ' references missing local resource ' + target.pathname + ' (' + response.status() + ')');
     }
   }
-  assert.equal(headingSizes.get('/contact.html'), headingSizes.get('/about.html'),
+  const aboutHead = headingSizes.get('/about.html');
+  const contactHead = headingSizes.get('/contact.html');
+  const eventsHead = headingSizes.get('/events.html');
+  assert.equal(contactHead.headingSize, aboutHead.headingSize,
     'Contact and About page headings should use the same font size');
+  assert.equal(contactHead.leadSize, aboutHead.leadSize,
+    'Contact and About header descriptions should use the same font size');
+  assert.equal(contactHead.leadMaxWidth, aboutHead.leadMaxWidth,
+    'Contact header description should share the About/Events max width');
+  assert.equal(contactHead.leadMaxWidth, eventsHead.leadMaxWidth,
+    'Contact header description should share the Events max width');
+  assert.equal(contactHead.paddingTop, aboutHead.paddingTop,
+    'Contact header top padding should match About');
+  assert.equal(contactHead.paddingBottom, aboutHead.paddingBottom,
+    'Contact header bottom padding should match About');
+  assert.equal(contactHead.backgroundImage, aboutHead.backgroundImage,
+    'Contact header background should match the other pages');
   await context.close();
 }
 

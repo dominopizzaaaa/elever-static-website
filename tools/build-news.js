@@ -13,8 +13,8 @@ global.window = {};
 require(path.join(root, 'assets/js/data.js'));
 const ARTICLES = global.window.ELEVER_DATA.articles;
 
-const V = '74'; // must match the shared asset cache key used across the site
-const FAVICON_V = '65';
+const V = '75'; // must match the shared asset cache key used across the site
+const FAVICON_V = '66';
 
 const esc = s => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -98,8 +98,10 @@ function page(a) {
   <meta name="twitter:description" content="${esc(a.excerpt)}" />
   <meta name="twitter:image" content="${esc(image)}" />
   <link rel="icon" href="/favicon.ico?v=${FAVICON_V}" sizes="any" />
-  <link rel="icon" type="image/png" sizes="100x100" href="/assets/img/brand/eb-icon-blue.png?v=${FAVICON_V}" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/brand/favicon-32x32.png?v=${FAVICON_V}" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/brand/favicon-16x16.png?v=${FAVICON_V}" />
   <link rel="apple-touch-icon" href="/assets/img/brand/apple-touch-icon.png?v=${FAVICON_V}" />
+  <link rel="manifest" href="/site.webmanifest?v=${FAVICON_V}" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
