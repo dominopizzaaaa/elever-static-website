@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/style.css?v=76" />
-  <link rel="stylesheet" href="assets/css/pages.css?v=76" />
+  <link rel="stylesheet" href="assets/css/pages.css?v=78" />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -88,9 +88,29 @@
         <div class="ctabs" id="classCarousel" data-active="0">
           <div class="ctabs__rail" role="tablist" aria-label="Choose a class type">
             <button class="ctabs__tab is-active" type="button" role="tab" id="ctab-group"
-              aria-selected="true" aria-controls="detail-group" data-goto="0">Group Classes</button>
+              aria-selected="true" aria-controls="detail-group" data-goto="0">
+              <span class="ctabs__label">Group Classes</span>
+              <!-- These highlights belong to the active Group Classes tab.
+                   CSS hides them as soon as another tab becomes active. -->
+              <span class="group__facts" role="list" aria-label="Group class highlights">
+                <span class="group__fact" role="listitem">
+                  <b>Level-matched</b>
+                  <span>Squads grouped by ability</span>
+                </span>
+                <span class="group__fact" role="listitem">
+                  <b>1 : 6</b>
+                  <span>Max coach-to-player ratio</span>
+                </span>
+                <span class="group__fact" role="listitem">
+                  <b>8 venues</b>
+                  <span>Across Singapore</span>
+                </span>
+              </span>
+            </button>
             <button class="ctabs__tab" type="button" role="tab" id="ctab-private"
-              aria-selected="false" aria-controls="detail-private" data-goto="1" tabindex="-1">Private Classes</button>
+              aria-selected="false" aria-controls="detail-private" data-goto="1" tabindex="-1">
+              <span class="ctabs__label">Private Classes</span>
+            </button>
           </div>
         </div>
 
@@ -104,24 +124,6 @@
             <div class="ctabs__track" id="ctabTrack">
               <div class="ctabs__page">
                 <div class="orbdetail is-active" id="detail-group" role="tabpanel" aria-labelledby="ctab-group" data-panel="0">
-                  <!-- The tab above already says "Group Classes", so the panel
-                       leads straight into the description (client, Sep 2026).
-                       The three facts read as a small stat strip rather than a
-                       run-on sentence (client, Sep 2026: "nicer UI"). -->
-                  <ul class="group__facts">
-                    <li class="group__fact">
-                      <b>Level-matched</b>
-                      <span>Squads grouped by ability</span>
-                    </li>
-                    <li class="group__fact">
-                      <b>1 : 6</b>
-                      <span>Max coach-to-player ratio</span>
-                    </li>
-                    <li class="group__fact">
-                      <b>8 venues</b>
-                      <span>Across Singapore</span>
-                    </li>
-                  </ul>
                   <!-- The All levels / Essentials / Emergence filter was removed
                        at the client's request (Sep 2026) — every class shows,
                        with its level on the chip beside it. Each area is a
