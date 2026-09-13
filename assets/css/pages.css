@@ -1171,7 +1171,7 @@ body.has-lightbox{overflow:hidden}
 .cdetail__body > * + *{margin-top:1rem}
 .cdetail__heading{margin:0 0 .9rem}
 .cdetail__body .edetail__desc + .edetail__desc{margin-top:.9rem}
-.edetail--coach .edetail__desc{text-align:justify;hyphens:auto}
+.edetail--coach .edetail__desc{text-align:justify;-webkit-hyphens:none;hyphens:none;overflow-wrap:normal;word-break:normal}
 .cdetail__actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.6rem}
 /* Optional in-popup photos below Achievements, no heading (client, Sep 2026:
    "Move keng yang photos into the pop up below Achievements, without any header
