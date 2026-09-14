@@ -1064,55 +1064,8 @@ body.has-lightbox{overflow:hidden}
 .teamlabel{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
   color:var(--faint);margin-bottom:0;text-align:center}
 .coachgroup--team{margin-top:3.4rem}
-.coachgrid--centred{position:relative;display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem;margin-bottom:0}
-.coachgrid--centred > .coach{position:relative;flex:0 0 200px;max-width:200px}
-/* Temporary co-founder head-to-head troll. Everything is namespaced here so
-   the score, hats and confetti can be removed together after the joke lands. */
-.founder-party-hat{position:absolute;z-index:3;top:5px;left:50%;width:42px;height:47px;
-  transform:translateX(-50%) rotate(-7deg);clip-path:polygon(50% 0,100% 100%,0 100%);
-  background:repeating-linear-gradient(115deg,#ffdd57 0 9px,#ff4d8d 9px 18px,#28c7fa 18px 27px);
-  filter:drop-shadow(0 2px 1px rgba(0,0,0,.28));pointer-events:none}
-.coachgrid--centred > .coach:last-of-type .founder-party-hat{width:48px;height:54px;top:1px;
-  transform:translateX(-50%) rotate(7deg);background:repeating-linear-gradient(115deg,#ffea70 0 10px,#ff3d81 10px 20px,#7c5cff 20px 30px)}
-.founder-party-hat::before{content:'';position:absolute;z-index:1;top:-1px;left:50%;width:12px;height:12px;
-  transform:translate(-50%,-35%);border-radius:50%;background:#fff;box-shadow:0 0 0 3px #ff4d8d}
-.founder-party-hat::after{content:'';position:absolute;left:0;right:0;bottom:0;height:7px;background:#fff;
-  border-top:3px dotted #7c5cff}
-.founder-h2h{position:absolute;z-index:5;top:clamp(72px,22vw,105px);left:50%;transform:translate(-50%,-50%);
-  display:flex;flex-direction:column;align-items:center;pointer-events:none}
-.founder-h2h__score{display:flex;align-items:center;justify-content:center;gap:.22rem;min-width:4.1rem;height:2.7rem;
-  padding:0 .65rem;border:4px solid #fff;border-radius:999px;background:#15182b;color:#fff;
-  box-shadow:0 5px 16px rgba(20,22,42,.3);font-size:1rem;font-weight:900;line-height:1;letter-spacing:.04em;
-  font-variant-numeric:tabular-nums}
-.founder-h2h__score b{opacity:.58;font:inherit}
-.founder-h2h__score strong{display:grid;place-items:center;width:1.65rem;height:1.65rem;border-radius:50%;
-  background:#ffdd57;color:#15182b;font:inherit;transform:scale(1.12) rotate(7deg)}
-.founder-h2h__verdict{margin-top:.28rem;padding:.38rem .65rem;border:2px solid #15182b;border-radius:.35rem;
-  background:#ffdd57;color:#15182b;box-shadow:3px 3px 0 #15182b;font-size:.57rem;font-weight:900;
-  line-height:1;letter-spacing:.055em;text-transform:uppercase;white-space:nowrap;transform:rotate(-2deg)}
-.founder-confetti{position:absolute;z-index:4;inset:-15px calc(50% - 235px) auto;height:185px;overflow:hidden;pointer-events:none}
-.founder-confetti i{position:absolute;top:-18px;width:8px;height:13px;border-radius:2px;background:#ff4d8d;
-  animation:founder-confetti-fall 2.4s linear infinite}
-.founder-confetti i:nth-child(4n+2){background:#28c7fa;transform:rotate(35deg)}
-.founder-confetti i:nth-child(4n+3){background:#ffdd57;border-radius:50%;transform:rotate(70deg)}
-.founder-confetti i:nth-child(4n){background:#7c5cff;transform:rotate(105deg)}
-.founder-confetti i:nth-child(1){left:2%;animation-delay:-.3s}.founder-confetti i:nth-child(2){left:9%;animation-delay:-1.7s}
-.founder-confetti i:nth-child(3){left:16%;animation-delay:-.8s}.founder-confetti i:nth-child(4){left:23%;animation-delay:-2.1s}
-.founder-confetti i:nth-child(5){left:31%;animation-delay:-1.1s}.founder-confetti i:nth-child(6){left:38%;animation-delay:-.1s}
-.founder-confetti i:nth-child(7){left:44%;animation-delay:-1.8s}.founder-confetti i:nth-child(8){left:49%;animation-delay:-.6s}
-.founder-confetti i:nth-child(9){left:55%;animation-delay:-2.2s}.founder-confetti i:nth-child(10){left:62%;animation-delay:-1.3s}
-.founder-confetti i:nth-child(11){left:69%;animation-delay:-.4s}.founder-confetti i:nth-child(12){left:76%;animation-delay:-1.9s}
-.founder-confetti i:nth-child(13){left:83%;animation-delay:-.9s}.founder-confetti i:nth-child(14){left:89%;animation-delay:-2.3s}
-.founder-confetti i:nth-child(15){left:94%;animation-delay:-1.5s}.founder-confetti i:nth-child(16){left:98%;animation-delay:-.5s}
-@keyframes founder-confetti-fall{to{translate:0 210px;rotate:360deg}}
-@media(max-width:620px){
-  .founder-party-hat{width:34px;height:39px}.coachgrid--centred > .coach:last-of-type .founder-party-hat{width:39px;height:45px}
-  .founder-h2h__score{min-width:3.55rem;height:2.3rem;padding:0 .5rem;font-size:.88rem}
-  .founder-h2h__score strong{width:1.4rem;height:1.4rem}
-  .founder-h2h__verdict{padding:.33rem .45rem;font-size:.49rem}
-  .founder-confetti{inset:-12px 0 auto;height:155px}
-}
-@media(prefers-reduced-motion:reduce){.founder-confetti i{animation:none;top:var(--confetti-rest,12px)}}
+.coachgrid--centred{display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem;margin-bottom:0}
+.coachgrid--centred > .coach{flex:0 0 200px;max-width:200px}
 
 /* ---------- coach rail: one row that scrolls sideways ----------
    The team is long enough that a grid wraps into four thin rows. As a rail

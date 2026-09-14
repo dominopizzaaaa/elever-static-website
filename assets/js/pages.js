@@ -1230,7 +1230,6 @@
         ? '<img src="' + base + esc(c.photo) + '" alt="' + esc(c.name) + '" width="640" height="640" loading="lazy" decoding="async">'
         : '<span class="coach__initials">' + esc(initials(c.name)) + '</span>';
       return '<' + tag + ' class="coach coach--' + (isInteractive ? 'linked' : 'static') + '"' + attrs + '>' +
-        (c.group === 'founder' ? '<span class="founder-party-hat" aria-hidden="true"></span>' : '') +
         '<div class="coach__img">' + photo + '</div>' +
         '<div class="coach__body"><h3>' + esc(c.name) + '</h3>' +
           '<p class="coach__role">' + esc(c.role) + '</p>' +
@@ -1238,17 +1237,7 @@
         '</div></' + tag + '>';
     }
 
-    if (founders) {
-      var founderCards = D.coaches.filter(function (c) { return c.group === 'founder'; }).map(card);
-      /* Temporary, deliberately over-the-top head-to-head troll. */
-      if (founderCards.length === 2) {
-        founderCards.unshift('<span class="founder-confetti" aria-hidden="true">' + Array(17).join('<i></i>') + '</span>');
-        founderCards.splice(2, 0, '<span class="founder-h2h" aria-label="Head-to-head score: Kean Hean zero, Chin An one. Chin An is the best.">' +
-          '<span class="founder-h2h__score"><b>0</b><span>:</span><strong>1</strong></span>' +
-          '<span class="founder-h2h__verdict">🏆 Chin An is the best 🏆</span></span>');
-      }
-      founders.innerHTML = founderCards.join('');
-    }
+    if (founders) founders.innerHTML = D.coaches.filter(function (c) { return c.group === 'founder'; }).map(card).join('');
     if (team) team.innerHTML = D.coaches.filter(function (c) { return c.group !== 'founder'; }).map(card).join('');
 
     initCoachDetail([founders, team], D.coaches);
