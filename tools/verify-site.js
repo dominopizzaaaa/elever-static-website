@@ -662,11 +662,17 @@ async function runViewport(browser, viewport, name) {
     name + ' coach headings need more space before their card panels');
   const founderScore = page.locator('#coachFounders .founder-h2h');
   assert.equal(await founderScore.count(), 1, name + ' founder head-to-head score is missing');
-  assert.equal((await founderScore.textContent()).trim(), '0:1',
+  assert.equal((await founderScore.locator('.founder-h2h__score').textContent()).replace(/\s/g, ''), '0:1',
     name + ' founder head-to-head score is incorrect');
   assert.equal(await founderScore.getAttribute('aria-label'),
-    'Head-to-head score: Kean Hean zero, Chin An one',
+    'Head-to-head score: Kean Hean zero, Chin An one. Chin An is the best.',
     name + ' founder head-to-head score has no accessible context');
+  assert.equal((await founderScore.locator('.founder-h2h__verdict').textContent()).trim(),
+    '🏆 Chin An is the best 🏆', name + ' founder winner message is missing');
+  assert.equal(await page.locator('#coachFounders .founder-party-hat').count(), 2,
+    name + ' founder party hats are missing');
+  assert.equal(await page.locator('#coachFounders .founder-confetti i').count(), 16,
+    name + ' founder confetti is missing');
   assert.equal(await page.locator('.coach__certs, .coach__cert').count(), 0,
     name + ' About coach cards still show certifications');
   assert.ok(await page.locator('.coach__more', { hasText: 'View more' }).count() >= 1);
