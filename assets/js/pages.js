@@ -1237,7 +1237,14 @@
         '</div></' + tag + '>';
     }
 
-    if (founders) founders.innerHTML = D.coaches.filter(function (c) { return c.group === 'founder'; }).map(card).join('');
+    if (founders) {
+      var founderCards = D.coaches.filter(function (c) { return c.group === 'founder'; }).map(card);
+      /* Temporary head-to-head score between the two co-founder cards. */
+      if (founderCards.length === 2) {
+        founderCards.splice(1, 0, '<span class="founder-h2h" aria-label="Head-to-head score: Kean Hean zero, Chin An one">0:1</span>');
+      }
+      founders.innerHTML = founderCards.join('');
+    }
     if (team) team.innerHTML = D.coaches.filter(function (c) { return c.group !== 'founder'; }).map(card).join('');
 
     initCoachDetail([founders, team], D.coaches);
