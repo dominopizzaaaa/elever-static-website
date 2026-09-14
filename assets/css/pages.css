@@ -1178,6 +1178,12 @@ body.has-lightbox{overflow:hidden}
 .cdetail__heading{margin:0 0 .9rem}
 .cdetail__body .edetail__desc + .edetail__desc{margin-top:.9rem}
 .edetail--coach .edetail__desc{text-align:justify;-webkit-hyphens:none;hyphens:none;overflow-wrap:normal;word-break:normal}
+/* Coach achievements can be substantially longer than event service labels.
+   A single, evenly spaced column keeps every bullet on the same left edge and
+   avoids uneven two-column rows when one achievement wraps over several lines. */
+.edetail--coach .edetail__servicelist{grid-template-columns:minmax(0,1fr);gap:.65rem}
+.edetail--coach .edetail__servicelist li{padding-left:1.25rem;line-height:1.55}
+.edetail--coach .edetail__servicelist li::before{left:.15rem;top:.58em;background:var(--accent)}
 .cdetail__actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.6rem}
 /* Optional in-popup photos below Achievements, no heading (client, Sep 2026:
    "Move keng yang photos into the pop up below Achievements, without any header
