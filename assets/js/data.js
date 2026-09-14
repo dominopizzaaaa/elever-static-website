@@ -33,7 +33,12 @@
         "Kean Hean co-founded Élever in 2023 with a vision to make quality badminton coaching more accessible. Having dedicated much of his life to the sport, he is passionate about giving back by sharing the knowledge, values, and opportunities badminton has given him while inspiring more people to enjoy the game.",
         'Known for his patient, approachable, and engaging coaching style, Kean Hean specialises in doubles development. His signature 50/50 philosophy balances game-based learning with sport-specific training, helping players build strong fundamentals, grow with confidence, and develop a lifelong love for badminton.'
       ],
-      achievements: ['Former Singapore National Team athlete', "Career-high world ranking of No. 22 in Men's Doubles", 'Bronze medallist at the 2022 Commonwealth Games', 'Six-time SEA Games medallist']
+      achievements: [
+        'Former Singapore National Team Athlete',
+        'Former World Rank No. 22 in Men’s Doubles',
+        'Bronze Medallist | Birmingham 2022 Commonwealth Games',
+        'Six-time SEA Games Medallist'
+      ]
     },
     {
       slug: 'eng-chin-an', name: 'Eng Chin An', photo: 'assets/img/coaches/eng-chin-an.jpg',
@@ -46,6 +51,13 @@
         'Having played badminton since the age of seven, Chin An was the key player at Raffles Institution and later captained the NUS Badminton Team, while also representing Singapore at several overseas tournaments. Known for his technical and skilful playing style, he competed at a high level locally in singles before developing strong proficiency in mixed doubles.',
         'Chin An believes that strong foundations and the right skills are essential to the development of every player. Shaped by his own journey, he hopes to make quality badminton experiences accessible while encouraging players to enjoy learning and progressing through the sport.',
         'Beyond the court, he drives Élever Badminton’s corporate and community initiatives, creating opportunities for people to connect through sport and building a stronger community around the game.'
+      ],
+      achievements: [
+        'Former Team Captain of NUS Badminton',
+        'Top 8 | National Open Championships 2020 Men’s Singles and Mixed Doubles',
+        'Champion | CSC-Li-Ning Age Group Badminton Tournament 2013 Boys’ Singles and Boys’ Doubles 17 & Under',
+        'Top 8 | Li-Ning Singapore Youth International Series 2013 Boys’ Singles U17',
+        'Multiple Gold in National ‘A’, ‘B’ and ‘C’ Divisions Boys’ Team Event'
       ],
       profilePage: false
     },
