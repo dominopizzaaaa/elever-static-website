@@ -1064,15 +1064,8 @@ body.has-lightbox{overflow:hidden}
 .teamlabel{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
   color:var(--faint);margin-bottom:0;text-align:center}
 .coachgroup--team{margin-top:3.4rem}
-.coachgrid--centred{position:relative;display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem;margin-bottom:0}
+.coachgrid--centred{display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem;margin-bottom:0}
 .coachgrid--centred > .coach{flex:0 0 200px;max-width:200px}
-/* Temporary score marker for the co-founders' head-to-head. It sits over the
-   centre gap so it does not change the two-card layout on smaller screens. */
-.founder-h2h{position:absolute;z-index:2;top:clamp(66px,21vw,100px);left:50%;
-  transform:translate(-50%,-50%);display:grid;place-items:center;min-width:3.2rem;height:2.15rem;
-  padding:0 .65rem;border:3px solid var(--panel);border-radius:999px;background:var(--ink);color:#fff;
-  box-shadow:var(--shadow-sm);font-size:.88rem;font-weight:800;line-height:1;letter-spacing:.08em;
-  font-variant-numeric:tabular-nums;pointer-events:none}
 
 /* ---------- coach rail: one row that scrolls sideways ----------
    The team is long enough that a grid wraps into four thin rows. As a rail

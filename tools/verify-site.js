@@ -660,13 +660,6 @@ async function runViewport(browser, viewport, name) {
   assert.equal(coachGroupGaps.length, 2, name + ' coach groups are missing');
   assert.ok(coachGroupGaps.every(gap => gap >= 30),
     name + ' coach headings need more space before their card panels');
-  const founderScore = page.locator('#coachFounders .founder-h2h');
-  assert.equal(await founderScore.count(), 1, name + ' founder head-to-head score is missing');
-  assert.equal((await founderScore.textContent()).trim(), '0:1',
-    name + ' founder head-to-head score is incorrect');
-  assert.equal(await founderScore.getAttribute('aria-label'),
-    'Head-to-head score: Kean Hean zero, Chin An one',
-    name + ' founder head-to-head score has no accessible context');
   assert.equal(await page.locator('.coach__certs, .coach__cert').count(), 0,
     name + ' About coach cards still show certifications');
   assert.ok(await page.locator('.coach__more', { hasText: 'View more' }).count() >= 1);
