@@ -1703,8 +1703,8 @@
      sends it to info@eleverbadminton.com via Resend and independently stores
      contact enquiries in the configured Google Sheet. If that endpoint is
      not available (e.g. the static GitHub Pages mirror, which has no
-     backend), it falls back to opening a pre-filled email so no enquiry
-     is silently dropped.
+     backend), it keeps the completed form intact and asks the visitor to
+     retry instead of launching an external email application.
      ================================================================= */
   (function leadForms() {
     var forms = document.querySelectorAll('form[data-lead]');
@@ -1962,9 +1962,6 @@
           firstInvalid.focus();
           return;
         }
-        var to = form.getAttribute('data-to') || EMAIL;
-        var subject = form.getAttribute('data-subject') || 'Website enquiry';
-
         var consent = form.querySelector('[name="consent"]');
         /* Keep the ID after an uncertain/failed request so a retry cannot add
            another Sheet row or send another Resend email. A successful reset
@@ -1982,14 +1979,12 @@
           submissionId: submissionId,
           consent: !!(consent && consent.checked)
         };
-        var lines = [];
         var formData = new FormData(form);
         var hasMobile = String(formData.get('Mobile') || '').trim();
         formData.forEach(function (v, k) {
           if (k === 'consent') return;
           if (k === 'Country code' && !hasMobile) return;
           payload[k] = v;
-          if (String(v).trim()) lines.push(k + ': ' + v);
         });
         payloadFingerprint = JSON.stringify(payload);
         var attemptedFingerprint = form.getAttribute('data-submission-fingerprint');
@@ -2003,13 +1998,10 @@
         }
         form.setAttribute('data-submission-fingerprint', payloadFingerprint);
 
-        function fallbackMailto(msg) {
-          window.location.href = 'mailto:' + to +
-            '?subject=' + encodeURIComponent(subject) +
-            '&body=' + encodeURIComponent(lines.join('\n'));
+        function showDeliveryError() {
           if (status) {
-            status.textContent = msg || 'Opening your email app — press send to complete your enquiry.';
-            status.className = 'lead__status lead__status--ok';
+            status.textContent = 'We could not send your message right now. Your details are still here — please try again.';
+            status.className = 'lead__status lead__status--err';
           }
         }
 
@@ -2037,12 +2029,12 @@
               }
             } else {
               // No delivery channel accepted the submission.
-              fallbackMailto('We could not send it automatically — opening your email app so you can send it directly.');
+              showDeliveryError();
             }
           });
         }).catch(function () {
           // No backend available (e.g. the static GitHub Pages mirror).
-          fallbackMailto();
+          showDeliveryError();
         }).then(function () {
           if (submitBtn) submitBtn.disabled = false;
           form.removeAttribute('aria-busy');

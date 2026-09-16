@@ -354,7 +354,7 @@ module.exports = async function handler(req, res) {
 
   if (!delivered) {
     return res.status(502).json({
-      error: 'Could not deliver your message. Please email us directly.',
+      error: 'Could not deliver your message. Please try again.',
       submissionId: submissionId,
       delivery: delivery,
     });

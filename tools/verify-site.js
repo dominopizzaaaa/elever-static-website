@@ -263,7 +263,7 @@ async function checkContactRetry(browser) {
     payloads.push(route.request().postDataJSON());
     attempt += 1;
     return route.fulfill({
-      status: 200,
+      status: attempt === 1 ? 400 : (attempt === 2 ? 502 : 200),
       contentType: 'application/json',
       body: attempt < 3 ? '{"ok":false,"error":"delivery failed"}' : '{"ok":true}'
     });
@@ -277,8 +277,12 @@ async function checkContactRetry(browser) {
   await form.locator('[name="consent"]').check();
   await form.getByRole('button', { name: 'Send message' }).click();
   await page.waitForFunction(() => document.querySelector('.lead__status').textContent.includes('could not send'));
+  assert.ok(page.url().startsWith(base), 'a validation failure should not launch an external email application');
+  assert.equal(await form.locator('[name="Name"]').inputValue(), 'Synthetic Test',
+    'a validation failure should preserve the completed form');
   await form.getByRole('button', { name: 'Send message' }).click();
   await page.waitForFunction(() => document.querySelector('.lead__status').textContent.includes('could not send'));
+  assert.ok(page.url().startsWith(base), 'a delivery failure should not launch an external email application');
   assert.equal(payloads[1].submissionId, payloads[0].submissionId,
     'an unchanged retry should retain its idempotency ID');
   await form.locator('#contact-other-message').fill('Edited message');

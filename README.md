@@ -185,10 +185,10 @@ node --test tests/contact-api.test.js tests/google-sheets-receiver.test.js
 
 The static server used for visual development cannot execute `/api/contact`. To
 exercise the real serverless function locally, use `vercel dev`; otherwise the
-form intentionally falls back to the visitor's email application. Before a
-production release, submit a uniquely named synthetic enquiry on a Vercel Preview
-deployment and confirm that it appears exactly once in both the test inbox and
-the private Sheet.
+form retains its values and displays a retry message without opening an external
+email application. Before a production release, submit a uniquely named
+synthetic enquiry on a Vercel Preview deployment and confirm that it appears
+exactly once in both the test inbox and the private Sheet.
 
 ---
 Photography © Élever Badminton.
