@@ -97,8 +97,8 @@ info@eleverbadminton.com · WhatsApp +65 8921 4221
   Community Hospitals mark is used in its event detail.
 - Write-ups for the previous events listed on the Events page
 - Completion of the bracketed fields in `privacy.html` (DPO, retention period)
-- Production configuration for the contact endpoint: set `RESEND_API_KEY` and, if needed,
-  `FROM_EMAIL` to a verified sender in the deployment environment
+- Production configuration for the contact endpoint and its Google Sheets backup
+  (see **Enquiry delivery** below)
 - Approved popup-length bios for coaches (the current safe fallback is each full bio's first paragraph)
 - Full biographies/profile approval for the two coaches still flagged `placeholder`
 
@@ -139,6 +139,56 @@ python3 -m http.server 8080
 
 Vercel from the `main` branch. The project uses Vercel clean URLs, redirects, and
 the `/api/contact` serverless function configured in `vercel.json`.
+
+## Enquiry delivery
+
+The Contact form posts once to `/api/contact`. The server validates it and then
+attempts two independent deliveries in parallel:
+
+1. an email to `info@eleverbadminton.com` through Resend; and
+2. a row in a private Google Sheet through the Apps Script receiver in
+   `integrations/google-sheets/`.
+
+The request succeeds if either channel accepts the enquiry, so a Resend outage
+does not lose the submission. If both fail, the browser opens a pre-filled email
+as the last-resort path. Each submission carries one ID bound to its form content:
+Google Sheets ignores an unchanged retry and Resend receives the ID as an
+idempotency key, while an edited retry becomes a new submission. Élever must monitor both
+the inbox and the private Sheet because a partial failure is recorded in Vercel
+logs without interrupting the visitor. Camp waitlist and newsletter submissions
+continue to use Resend only and are not written to the enquiry Sheet.
+The endpoint also requires JSON and rejects unexpected browser origins as basic
+abuse protection. Configure rate limiting or bot protection at the Vercel edge
+as a production safeguard; origin checks alone do not stop direct HTTP clients.
+
+Set these server-only environment variables in both the relevant Vercel Preview
+and Production environments, then redeploy:
+
+| Variable | Required | Purpose |
+|---|---|---|
+| `RESEND_API_KEY` | Required for camp/news signups; optional for Contact if Sheets is configured | Resend API authentication |
+| `FROM_EMAIL` | Optional | Verified Resend sender; defaults to `Elever Website <noreply@eleverbadminton.com>` |
+| `ENQUIRY_WEBHOOK_URL` | Optional, but required for Contact backup | Deployed Google Apps Script `/exec` URL |
+| `ENQUIRY_WEBHOOK_SECRET` | Required with webhook URL | Shared server-to-server secret |
+| `ENQUIRY_DELIVERY_TIMEOUT_MS` | Optional | Per-channel timeout, 6000–15000 ms; defaults to 10000; keep it above the receiver's three-second lock window |
+
+Follow `integrations/google-sheets/README.md` to create the private Sheet and
+deploy the receiver. Never expose the webhook URL or secret in page markup or
+browser JavaScript. Rotate a compromised secret in both Apps Script and Vercel,
+then redeploy both integrations as required.
+
+Run the API and Google receiver regression tests with:
+
+```
+node --test tests/contact-api.test.js tests/google-sheets-receiver.test.js
+```
+
+The static server used for visual development cannot execute `/api/contact`. To
+exercise the real serverless function locally, use `vercel dev`; otherwise the
+form intentionally falls back to the visitor's email application. Before a
+production release, submit a uniquely named synthetic enquiry on a Vercel Preview
+deployment and confirm that it appears exactly once in both the test inbox and
+the private Sheet.
 
 ---
 Photography © Élever Badminton.

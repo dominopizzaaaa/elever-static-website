@@ -183,8 +183,10 @@ async function checkContact(page, viewport, name) {
   await page.waitForFunction(() => document.querySelector('#contact-form .lead__status').textContent
     .includes('message has been sent'));
   const payload = request.postDataJSON();
+  assert.match(payload.submissionId, /^(?:[0-9a-f-]{36}|web-[A-Za-z0-9.-]+)$/);
+  delete payload.submissionId;
   assert.deepEqual(payload, {
-    subject: 'Website enquiry', Name: 'Jamie Lim', Email: 'jamie@example.com',
+    formType: 'contact', consent: true, Name: 'Jamie Lim', Email: 'jamie@example.com',
     'Country code': '+65', Mobile: '81234567', Topic: 'Classes',
     'Name of student': 'Alex Tan', 'Age of student': '12', 'Preferred class type': 'Group Classes',
     'Preferred area': 'East', Message: 'Weekend mornings.'
@@ -215,6 +217,78 @@ async function checkContact(page, viewport, name) {
       name + ' phone fields are not proportioned correctly');
   }
   await page.screenshot({ path: path.join(outDir, name + '-contact-events.png'), fullPage: true });
+}
+
+async function checkSecondaryLeadForms(browser) {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const page = await context.newPage();
+  attachDiagnostics(page, 'secondary-lead-forms');
+
+  await open(page, '/news.html', 'Newsletter form');
+  let requestPromise = page.waitForRequest(request => request.url().endsWith('/api/contact'));
+  await page.route('**/api/contact', route => route.fulfill({
+    status: 200, contentType: 'application/json', body: '{"ok":true}'
+  }));
+  const newsletter = page.locator('form[data-form-type="newsletter"]');
+  await newsletter.locator('[name="Email"]').fill('reader@example.com');
+  await newsletter.locator('[name="consent"]').check();
+  await newsletter.getByRole('button', { name: 'Subscribe' }).click();
+  let payload = (await requestPromise).postDataJSON();
+  assert.equal(payload.formType, 'newsletter');
+  assert.equal(payload.consent, true);
+
+  await open(page, '/camps.html', 'Camp waitlist form');
+  await page.evaluate(() => {
+    const waitlist = document.querySelector('#campWaitlist');
+    if (waitlist) waitlist.hidden = false;
+  });
+  requestPromise = page.waitForRequest(request => request.url().endsWith('/api/contact'));
+  const waitlist = page.locator('form[data-form-type="camp-waitlist"]');
+  await waitlist.locator('[name="Email"]').fill('parent@example.com');
+  await waitlist.locator('[name="consent"]').check();
+  await waitlist.getByRole('button', { name: 'Join the waitlist' }).click();
+  payload = (await requestPromise).postDataJSON();
+  assert.equal(payload.formType, 'camp-waitlist');
+  assert.equal(payload.consent, true);
+  await context.close();
+}
+
+async function checkContactRetry(browser) {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const page = await context.newPage();
+  attachDiagnostics(page, 'contact-retry');
+  const payloads = [];
+  let attempt = 0;
+  await page.route('**/api/contact', route => {
+    payloads.push(route.request().postDataJSON());
+    attempt += 1;
+    return route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: attempt < 3 ? '{"ok":false,"error":"delivery failed"}' : '{"ok":true}'
+    });
+  });
+  await open(page, '/contact.html', 'Contact retry');
+  const form = page.locator('#contact-form');
+  await form.locator('[name="Name"]').fill('Synthetic Test');
+  await form.locator('[name="Email"]').fill('synthetic@example.invalid');
+  await form.locator('[name="Topic"]').selectOption('Others');
+  await form.locator('#contact-other-message').fill('Original message');
+  await form.locator('[name="consent"]').check();
+  await form.getByRole('button', { name: 'Send message' }).click();
+  await page.waitForFunction(() => document.querySelector('.lead__status').textContent.includes('could not send'));
+  await form.getByRole('button', { name: 'Send message' }).click();
+  await page.waitForFunction(() => document.querySelector('.lead__status').textContent.includes('could not send'));
+  assert.equal(payloads[1].submissionId, payloads[0].submissionId,
+    'an unchanged retry should retain its idempotency ID');
+  await form.locator('#contact-other-message').fill('Edited message');
+  await form.getByRole('button', { name: 'Send message' }).click();
+  await page.waitForFunction(() => document.querySelector('.lead__status').textContent.includes('message has been sent'));
+  assert.notEqual(payloads[2].submissionId, payloads[0].submissionId,
+    'an edited retry should receive a fresh idempotency ID');
+  assert.equal(await form.locator('[name="Name"]').inputValue(), '',
+    'a successful retry should reset the form');
+  await context.close();
 }
 
 async function runViewport(browser, viewport, name) {
@@ -1103,6 +1177,8 @@ async function crawlAllPages(browser) {
     await runViewport(browser, { width: 390, height: 844 }, 'phone-390');
     await runViewport(browser, { width: 320, height: 568 }, 'phone-320-short');
     await checkEventLandscape(browser);
+    await checkSecondaryLeadForms(browser);
+    await checkContactRetry(browser);
     await crawlAllPages(browser);
   } finally {
     await browser.close();

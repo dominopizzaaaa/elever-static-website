@@ -1700,7 +1700,8 @@
   /* =================================================================
      LEAD FORMS
      Submits the enquiry to the /api/contact serverless function, which
-     sends it to info@eleverbadminton.com via Resend. If that endpoint is
+     sends it to info@eleverbadminton.com via Resend and independently stores
+     contact enquiries in the configured Google Sheet. If that endpoint is
      not available (e.g. the static GitHub Pages mirror, which has no
      backend), it falls back to opening a pre-filled email so no enquiry
      is silently dropped.
@@ -1964,7 +1965,23 @@
         var to = form.getAttribute('data-to') || EMAIL;
         var subject = form.getAttribute('data-subject') || 'Website enquiry';
 
-        var payload = { subject: subject };
+        var consent = form.querySelector('[name="consent"]');
+        /* Keep the ID after an uncertain/failed request so a retry cannot add
+           another Sheet row or send another Resend email. A successful reset
+           clears it for the next genuine submission. */
+        var submissionId = form.getAttribute('data-submission-id');
+        if (!submissionId) {
+          submissionId = window.crypto && typeof window.crypto.randomUUID === 'function'
+            ? window.crypto.randomUUID()
+            : 'web-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+          form.setAttribute('data-submission-id', submissionId);
+        }
+        var payloadFingerprint = '';
+        var payload = {
+          formType: form.getAttribute('data-form-type') || '',
+          submissionId: submissionId,
+          consent: !!(consent && consent.checked)
+        };
         var lines = [];
         var formData = new FormData(form);
         var hasMobile = String(formData.get('Mobile') || '').trim();
@@ -1974,6 +1991,17 @@
           payload[k] = v;
           if (String(v).trim()) lines.push(k + ': ' + v);
         });
+        payloadFingerprint = JSON.stringify(payload);
+        var attemptedFingerprint = form.getAttribute('data-submission-fingerprint');
+        if (attemptedFingerprint && attemptedFingerprint !== payloadFingerprint) {
+          submissionId = window.crypto && typeof window.crypto.randomUUID === 'function'
+            ? window.crypto.randomUUID()
+            : 'web-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+          form.setAttribute('data-submission-id', submissionId);
+          payload.submissionId = submissionId;
+          payloadFingerprint = JSON.stringify(payload);
+        }
+        form.setAttribute('data-submission-fingerprint', payloadFingerprint);
 
         function fallbackMailto(msg) {
           window.location.href = 'mailto:' + to +
@@ -1998,16 +2026,20 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         }).then(function (resp) {
-          if (resp.ok) {
-            form.reset();
-            if (status) {
-              status.textContent = 'Thanks — your message has been sent.';
-              status.className = 'lead__status lead__status--ok';
+          return resp.json().catch(function () { return {}; }).then(function (result) {
+            if (resp.ok && result.ok === true) {
+              form.reset();
+              form.removeAttribute('data-submission-id');
+              form.removeAttribute('data-submission-fingerprint');
+              if (status) {
+                status.textContent = 'Thanks — your message has been sent.';
+                status.className = 'lead__status lead__status--ok';
+              }
+            } else {
+              // No delivery channel accepted the submission.
+              fallbackMailto('We could not send it automatically — opening your email app so you can send it directly.');
             }
-          } else {
-            // Endpoint reached but could not send (e.g. domain not verified yet).
-            fallbackMailto('We could not send it automatically — opening your email app so you can send it directly.');
-          }
+          });
         }).catch(function () {
           // No backend available (e.g. the static GitHub Pages mirror).
           fallbackMailto();
