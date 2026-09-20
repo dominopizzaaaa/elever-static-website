@@ -1,0 +1,27 @@
+# Anything listed here is excluded from the deployment uploaded to Vercel.
+# It stays in the repo — it just stops being shipped and stored per deployment.
+
+# Full-resolution photo originals (~1.1 GB). The site only ever serves the
+# downsized exports in assets/img/{coaches,events,classes,camps,partners,brand},
+# which the tools/build-*-photos.sh scripts generate from these.
+assets/img/Photos/
+
+# Build-time tooling and tests — never requested by a browser.
+tools/
+tests/
+
+# Source data for the generators, not served.
+news.txt
+
+# Apps Script source for the Sheets backup; deployed to Google, not Vercel.
+integrations/
+
+# Internal working notes.
+CHECKLIST.md
+CLIENT_CHANGES_2026-09.md
+README.md
+
+# OS cruft.
+.DS_Store
+**/.DS_Store
+Thumbs.db
