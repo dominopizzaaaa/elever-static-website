@@ -519,10 +519,14 @@
        SBA sanctioned-tournament calendar on 8 Sep 2026. */
     var LOCAL_EVENTS = [
       {
-        tag: 'Upcoming · Tier 2', name: 'KSA Challenge 2026',
+        tag: 'Upcoming · SBA Tier 2', name: 'JKTech-Flypower Age Group Tournament 2026',
         date: '28 Nov – 4 Dec 2026', where: 'Fernvale Village',
-        ages: 'See organiser notice',
-        register: 'https://singaporebadminton.org.sg/events/'
+        ages: 'U9, U11, U13, U15, U17, U19 and Open',
+        links: [
+          { label: 'Prospectus', url: 'https://docs.google.com/document/u/0/d/1GzLTB-HMlbqWTwPgX4vSwhMOf10HFvB-/mobilebasic' },
+          { label: 'Singles entry', url: 'https://docs.google.com/forms/d/e/1FAIpQLSdxaQXPBkXgVg_iFwd9Zxt1EEuNFX-uM2otxb7HziDwjBmbPA/viewform', primary: true },
+          { label: 'Doubles entry', url: 'https://docs.google.com/forms/d/e/1FAIpQLSeIzDkIz33BhtS4BpRDnWN5VsUd0SGU6jY3PdCERqKJ507y5g/viewform' }
+        ]
       },
       {
         tag: 'Upcoming · Tier 2', name: 'Papago Badminton Carnival',
@@ -813,6 +817,7 @@
     if (localEventsMount) {
       localEventsMount.innerHTML = LOCAL_EVENTS.length
         ? LOCAL_EVENTS.map(function (e) {
+            var eventLinks = e.links || (e.register ? [{ label: 'Register', url: e.register, primary: true }] : []);
             return '<article class="hub-discovery hub-discovery--dated">' +
               '<span class="hub-discovery__tag">' + esc(e.tag) + '</span>' +
               '<h3>' + esc(e.name) + '</h3>' +
@@ -821,10 +826,14 @@
                 '<div><dt>Location</dt><dd>' + esc(e.where) + '</dd></div>' +
                 '<div><dt>Age groups</dt><dd>' + esc(e.ages) + '</dd></div>' +
               '</dl>' +
-              '<a class="btn btn--primary hub-discovery__register" href="' + attr(e.register) + '"' +
-                ' target="_blank" rel="noopener">Register ' +
-                '<span class="arrowhead" aria-hidden="true">&rsaquo;</span>' +
-                '<span class="sr-only"> for ' + esc(e.name) + ' on the organiser\u2019s site</span></a>' +
+              '<div class="hub-discovery__actions">' +
+                eventLinks.map(function (link) {
+                  return '<a class="' + (link.primary ? 'btn btn--primary hub-discovery__register' : 'hub-discovery__link') + '"' +
+                    ' href="' + attr(link.url) + '" target="_blank" rel="noopener">' +
+                    esc(link.label) + ' <span class="arrowhead" aria-hidden="true">&rsaquo;</span>' +
+                    '<span class="sr-only"> for ' + esc(e.name) + '</span></a>';
+                }).join('') +
+              '</div>' +
             '</article>';
           }).join('')
         : '<p class="hub__empty">No local tournaments listed right now. ' +
