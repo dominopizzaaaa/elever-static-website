@@ -149,7 +149,7 @@ a documented editorial fallback · `[?]` waiting for client input
 - [x] Courts follow-up: add linked, source-checked operating or bookable hours
   to the complete directory; clearly distinguish public hours, DUS/CC booking
   bands, venue-only hours, and school class-only access.
-- [?] Social groups: retain an honest Racket Ratings fallback until the client
+- [?] Social groups: retain an honest RallyOne fallback until the client
   supplies the preferred UI and verified group schedules/contacts.
 - [x] Shop: retain verified physical and online badminton retailers/stringers.
 - [x] Compete: remove Singapore Junior International Series 2026 from Local.

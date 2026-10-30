@@ -879,7 +879,7 @@ async function runViewport(browser, viewport, name) {
     name + ' Local Hub sections are out of order');
   assert.equal(await page.locator('#groupPreview li').count(), 3);
   assert.deepEqual(await page.locator('#groupPreview .hub-session__name strong').allTextContents(),
-    ['Racket Ratings', 'Meetup', 'OnePA']);
+    ['RallyOne', 'Meetup', 'OnePA']);
   assert.equal(await page.locator('#groupPreview .hub-session__dot').count(), 0);
   assert.equal(await page.getByText(/Élever ·/).count(), 0);
   assert.equal(await page.locator('.hub-court-types a').count(), 3);

@@ -24,7 +24,7 @@ rather than one long scrolling page.
 ## Editing content — start here
 
 **`assets/js/data.js` is the file to edit.** Coaches, development pathways, the class schedule,
-camps, event types, upcoming/past events, partners, articles, the Racket Ratings links and the
+camps, event types, upcoming/past events, partners, articles, the RallyOne links and the
 recreational play groups all live there. Nothing is baked into the markup, so changing a class
 time does not require touching HTML.
 

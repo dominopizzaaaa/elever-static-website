@@ -1343,18 +1343,18 @@
   })();
 
   /* =================================================================
-     RACKET RATINGS + RECREATIONAL PLAY GROUPS  (SG Hub → Groups tab)
+     RALLYONE + RECREATIONAL PLAY GROUPS  (SG Hub → Groups tab)
      ================================================================= */
-  (function racketRatings() {
+  (function rallyOne() {
     var mount = el('rrFeatures');
     if (!mount) return;
-    mount.innerHTML = D.racketRatings.features.map(function (f, i) {
+    mount.innerHTML = D.rallyOne.features.map(function (f, i) {
       return '<a class="rrcard' + (f.primary ? ' rrcard--primary' : '') + '"' +
         ' href="' + esc(f.href) + '" target="_blank" rel="noopener">' +
         '<span class="rrcard__icon" aria-hidden="true">' + f.icon + '</span>' +
         '<h4>' + esc(f.name) + (f.primary ? '<span class="rrcard__flag">Start here for groups</span>' : '') + '</h4>' +
         '<p>' + esc(f.desc) + '</p>' +
-        '<span class="rrcard__go">Open on Racket Ratings &rsaquo;</span>' +
+        '<span class="rrcard__go">Open on RallyOne &rsaquo;</span>' +
       '</a>';
     }).join('');
   })();
@@ -1579,22 +1579,22 @@
      SG HUB -> LOCAL -> PLAY -> SOCIAL GROUPS
      Day, time, venue, level and a contact for each recreational group
      (client, Sep 2026). Reads PLAY_GROUPS from data.js; while that list
-     is empty the panel says so plainly and points at Racket Ratings'
-     live club directory rather than showing an empty grid.
+     is empty the panel says so plainly and points at RallyOne's
+     live community directory rather than showing an empty grid.
      ================================================================= */
   (function playGroups() {
     var mount = el('playGroups');
     if (!mount) return;
 
     var groups = D.playGroups || [];
-    var rrClubs = (D.racketRatings && D.racketRatings.home) || 'https://www.racketratings.net/badminton';
-    (D.racketRatings && D.racketRatings.features || []).forEach(function (f) {
-      if (f.key === 'clubs') rrClubs = f.href;
+    var rrCommunity = (D.rallyOne && D.rallyOne.home) || 'https://www.rallyone.sg';
+    (D.rallyOne && D.rallyOne.features || []).forEach(function (f) {
+      if (f.key === 'community') rrCommunity = f.href;
     });
     var preview = el('groupPreview');
     if (preview) {
       var directories = [
-        { name: 'Racket Ratings', detail: 'Social clubs and ladders by playing level', href: rrClubs },
+        { name: 'RallyOne', detail: 'Social games and recreational groups by playing level', href: rrCommunity },
         { name: 'Meetup', detail: 'Recreational badminton groups across Singapore', href: 'https://www.meetup.com/find/?keywords=badminton&location=sg--Singapore' },
         { name: 'OnePA', detail: 'Neighbourhood badminton activities at community clubs', href: 'https://www.onepa.gov.sg/courses/search?course=badminton' }
       ];
@@ -1633,8 +1633,8 @@
         '<dl class="grpcard__meta">' + rows.map(function (r) {
           return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>';
         }).join('') + '</dl>' +
-        (g.rr ? '<a class="grpcard__rr" href="' + esc(g.rr) + '" target="_blank" rel="noopener">' +
-          'See this club on Racket Ratings &rsaquo;</a>' : '') +
+        (g.rallyone ? '<a class="grpcard__rr" href="' + esc(g.rallyone) + '" target="_blank" rel="noopener">' +
+          'See this group on RallyOne &rsaquo;</a>' : '') +
       '</article>';
     }).join('');
   })();

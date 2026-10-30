@@ -951,23 +951,20 @@
   ];
 
   /* ---------------------------------------------------------------
-     RACKET RATINGS — the free rating platform we point players at
+     RALLYONE — the rating and community platform we point players at
      --------------------------------------------------------------- */
-  var RACKET_RATINGS = {
-    home: 'https://www.racketratings.net/badminton',
+  var RALLY_ONE = {
+    home: 'https://www.rallyone.sg',
     features: [
-      { key: 'leaderboard', icon: '📊', name: 'Leaderboard',
-        desc: 'See where you actually stand. Separate boards for Singles, Doubles and 3v3.',
-        href: 'https://www.racketratings.net/badminton' },
-      { key: 'clubs', icon: '👥', name: 'Clubs',
-        desc: 'Find a recreational club near you, join its ladder and climb its leaderboard. The best place to find a regular group.',
-        href: 'https://www.racketratings.net/badminton/clubs', primary: true },
+      { key: 'rankings', icon: '📊', name: 'Rankings',
+        desc: 'See where you actually stand among badminton players in Singapore.',
+        href: 'https://www.rallyone.sg/badminton/rankings' },
+      { key: 'community', icon: '👥', name: 'Community & social games',
+        desc: 'Find a recreational group or social game near you. The best place to find people to play with regularly.',
+        href: 'https://www.rallyone.sg/badminton/community', primary: true },
       { key: 'tournaments', icon: '🏆', name: 'Tournaments',
-        desc: 'Browse open tournaments and enter — or create one for your own group.',
-        href: 'https://www.racketratings.net/badminton/tournaments' },
-      { key: 'h2h', icon: '⚔️', name: 'Head to head',
-        desc: 'Your match history against any opponent, so you can see whether you are actually improving.',
-        href: 'https://www.racketratings.net/badminton/matches/head-to-head' }
+        desc: 'Browse open badminton tournaments in Singapore and enter.',
+        href: 'https://www.rallyone.sg/badminton/tournaments' }
     ]
   };
 
@@ -1040,12 +1037,12 @@
        venue    Where they play
        level    Who it suits, in the group's own words
        contact  { label, href } — WhatsApp, Telegram, email or a club page
-       rr       Optional Racket Ratings club page
+       rallyone Optional RallyOne community page
 
      THIS LIST IS DELIBERATELY EMPTY until Élever supplies verified
      details. Nothing here is invented: an unverified time or phone number
      sends a player to the wrong court. Until it is filled the panel shows
-     Racket Ratings' live club directory and an invitation to be listed.
+     RallyOne's live community directory and an invitation to be listed.
      --------------------------------------------------------------- */
   var PLAY_GROUPS = [];
 
@@ -1116,7 +1113,7 @@
     partners: PARTNERS,
     articles: ARTICLES,
     externalNews: EXTERNAL_NEWS,
-    racketRatings: RACKET_RATINGS,
+    rallyOne: RALLY_ONE,
     playGroups: PLAY_GROUPS,
     shops: SHOPS,
     teamSg: TEAM_SG
