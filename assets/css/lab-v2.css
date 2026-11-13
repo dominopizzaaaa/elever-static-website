@@ -3,28 +3,11 @@
    Owner-directed page treatment using final brand artwork and photography.
    ===================================================================== */
 
-.lab-page{
-  --lab-blue:#3569e8;
-  --lab-blue-light:#8eaef8;
-  --lab-line:rgba(255,255,255,.16);
-  --lab-muted:rgba(255,255,255,.66);
-  background:#050506;color:#fff
-}
-.lab-page main{overflow:hidden;background:#050506}
+.lab-page{background:var(--dark);color:#fff}
+.lab-page main{overflow:hidden;background:var(--dark)}
 .lab-page main h1,
 .lab-page main h2{color:#fff}
 .plab-shell{width:min(var(--maxw),calc(100% - 2 * var(--gutter)));margin:0 auto}
-.plab-button{
-  min-height:50px;display:inline-flex;align-items:center;justify-content:center;gap:.8rem;
-  padding:.85rem 1.35rem;border:1px solid transparent;border-radius:2px;
-  font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  transition:background .25s var(--ease),transform .25s var(--ease)
-}
-.plab-button svg{flex:none;transition:transform .25s var(--ease)}
-.plab-button:hover{transform:translateY(-2px)}
-.plab-button:hover svg{transform:translate(2px,-2px)}
-.plab-button--primary{background:var(--lab-blue);color:#fff}
-.plab-button--primary:hover{background:#4a79ea}
 
 /* ---------- Facility hero ---------- */
 .plab-hero{
@@ -39,7 +22,7 @@
 }
 .plab-hero::after{
   content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
-  background:linear-gradient(90deg,transparent,var(--lab-blue),transparent);opacity:.7
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.7
 }
 .plab-hero__media{position:absolute;z-index:-2;inset:0;overflow:hidden}
 .plab-hero__media img{
@@ -85,11 +68,11 @@
 }
 .plab-pillar::after{
   content:"";position:absolute;left:0;right:0;bottom:0;height:3px;
-  background:var(--lab-blue);transform:scaleX(0);transform-origin:left;
+  background:var(--accent);transform:scaleX(0);transform-origin:left;
   transition:transform .5s var(--ease)
 }
 .plab-pillar:hover{
-  border-color:rgba(142,174,248,.46);transform:translateY(-5px);
+  border-color:rgba(143,171,245,.46);transform:translateY(-5px);
   box-shadow:0 30px 70px -38px rgba(40,82,210,.58)
 }
 .plab-pillar:hover::after{transform:scaleX(1)}
@@ -99,8 +82,8 @@
 }
 .plab-pillar__body{position:relative;z-index:1;width:100%}
 .plab-pillar__body > span{
-  display:block;margin-bottom:1.05rem;color:var(--lab-blue-light);
-  font-family:Montserrat,sans-serif;font-size:.64rem;font-weight:700;letter-spacing:.14em
+  display:block;margin-bottom:1.05rem;color:var(--accent-light);
+  font:inherit;font-size:.7rem;font-weight:700;letter-spacing:.16em
 }
 .plab-pillar h3{
   margin:0;color:#fff;font-family:"Ethnocentric Rg",Montserrat,sans-serif;
@@ -124,7 +107,7 @@
 .plab-schedule::before{
   content:"";position:absolute;z-index:-1;top:0;left:var(--gutter);right:var(--gutter);
   max-width:var(--maxw);height:1px;margin:auto;
-  background:linear-gradient(90deg,var(--lab-blue),rgba(255,255,255,.12),transparent)
+  background:linear-gradient(90deg,var(--accent),rgba(255,255,255,.12),transparent)
 }
 .plab-schedule h2{
   margin-bottom:clamp(2.6rem,5vw,4.5rem);font-size:clamp(3.2rem,6vw,5.5rem);
@@ -157,7 +140,7 @@
 }
 .plab-schedule__list li::before{
   content:"";position:absolute;left:0;top:50%;width:3px;height:0;
-  background:var(--lab-blue);transform:translateY(-50%);
+  background:var(--accent);transform:translateY(-50%);
   transition:height .3s var(--ease)
 }
 .plab-schedule__list li:hover::before{height:42%}
@@ -194,7 +177,7 @@
   letter-spacing:-.065em;text-transform:uppercase
 }
 .plab-location__address{
-  margin-top:2.2rem;padding-left:1.25rem;border-left:2px solid var(--lab-blue);
+  margin-top:2.2rem;padding-left:1.25rem;border-left:2px solid var(--accent);
   color:rgba(255,255,255,.78);font-size:.94rem;font-style:normal;line-height:1.9
 }
 .plab-location__actions{margin-top:2.4rem}
@@ -261,11 +244,11 @@
   .plab-location__media{top:0;right:0;bottom:auto;width:100%;height:66%}
   .plab-location__media img{object-position:65% center}
   .plab-location__content{width:100%}
-  .plab-location h2{max-width:12ch;margin-top:2.8rem;font-size:clamp(2.8rem,14vw,4.2rem)}
+  .plab-location h2{max-width:12ch;margin-top:0;font-size:clamp(2.8rem,14vw,4.2rem)}
 }
 @media(max-width:420px){
   .plab-hero__brand img{width:360px}
   .plab-schedule__list li > p{font-size:.63rem;padding-left:.45rem}
   .plab-schedule__labels p{padding-left:.45rem}
-  .plab-location__actions .plab-button{width:100%}
+  .plab-location__actions .btn{width:100%}
 }
