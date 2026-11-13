@@ -48,9 +48,9 @@ Classes and Events buttons.
 **The What We Do tiles** (Home + About) take their photo, crop focus and hover
 line from `PILLARS` in `assets/js/pages.js` — one line per pillar.
 
-**The Performance Lab concept images** in `assets/img/lab/` are generated
-placeholders for layout approval. Replace them with the owner's final facility
-and training photography while keeping the same filenames and crops.
+**The Performance Lab images** in `assets/img/lab/` are owner-supplied preview
+artwork and facility photography. The `move.jpg`, `build.jpg`, and `perform.jpg`
+files can be replaced in place when the final text-free exports are available.
 
 **Press covers** in `assets/img/press/` are the publications' own article cover
 images, used on the About page's "Featured on" list. Confirm with the publication

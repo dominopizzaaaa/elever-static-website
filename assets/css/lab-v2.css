@@ -1,0 +1,253 @@
+/* =====================================================================
+   ÉLEVER PERFORMANCE LAB
+   Owner-directed page treatment using final brand artwork and photography.
+   ===================================================================== */
+
+.lab-page{
+  --lab-blue:#3569e8;
+  --lab-blue-light:#8eaef8;
+  --lab-line:rgba(255,255,255,.16);
+  --lab-muted:rgba(255,255,255,.66);
+  background:#050506;color:#fff
+}
+.lab-page main{overflow:hidden;background:#050506}
+.lab-page main h1,
+.lab-page main h2{color:#fff}
+.plab-shell{width:min(var(--maxw),calc(100% - 2 * var(--gutter)));margin:0 auto}
+.plab-section-tag{
+  display:flex;align-items:center;gap:.85rem;color:rgba(255,255,255,.58);
+  font-size:.64rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase
+}
+.plab-section-tag span{
+  display:grid;place-items:center;width:2.1rem;height:2.1rem;border:1px solid var(--lab-line);
+  color:var(--lab-blue-light);font-size:.62rem;letter-spacing:.05em
+}
+.plab-section-tag p{color:inherit}
+.plab-button{
+  min-height:50px;display:inline-flex;align-items:center;justify-content:center;gap:.8rem;
+  padding:.85rem 1.35rem;border:1px solid transparent;border-radius:2px;
+  font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  transition:background .25s var(--ease),transform .25s var(--ease)
+}
+.plab-button svg{flex:none;transition:transform .25s var(--ease)}
+.plab-button:hover{transform:translateY(-2px)}
+.plab-button:hover svg{transform:translate(2px,-2px)}
+.plab-button--primary{background:var(--lab-blue);color:#fff}
+.plab-button--primary:hover{background:#4a79ea}
+
+/* ---------- Facility hero ---------- */
+.plab-hero{
+  position:relative;isolation:isolate;min-height:max(700px,88svh);display:flex;align-items:center;
+  padding:8.8rem 0 5.5rem;background:#050506
+}
+.plab-hero::before{
+  content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(2,4,10,.76) 0%,rgba(2,4,10,.34) 42%,rgba(2,4,10,.73) 100%),
+    linear-gradient(180deg,rgba(1,2,5,.36),transparent 42%,rgba(1,2,5,.76))
+}
+.plab-hero::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--lab-blue),transparent);opacity:.7
+}
+.plab-hero__media{position:absolute;z-index:-2;inset:0;overflow:hidden}
+.plab-hero__media img{
+  width:100%;height:100%;object-fit:cover;object-position:center center;
+  filter:saturate(.82) contrast(1.04) brightness(.78)
+}
+.plab-hero__inner{
+  display:grid;grid-template-columns:minmax(0,1.08fr) minmax(350px,.92fr);
+  gap:clamp(2.5rem,7vw,7rem);align-items:center
+}
+.plab-hero__brand{display:flex;align-items:center;justify-content:flex-start;min-width:0}
+.plab-hero__brand img{
+  width:min(100%,580px);height:auto;margin-left:clamp(-4rem,-5vw,-1rem);
+  filter:drop-shadow(0 14px 30px rgba(18,63,203,.35))
+}
+.plab-hero__copy{
+  max-width:580px;padding:2.3rem 0 2.3rem clamp(1.8rem,4vw,3.4rem);
+  border-left:1px solid rgba(255,255,255,.34);
+  text-shadow:0 2px 28px rgba(0,0,0,.75)
+}
+.plab-hero h1{
+  max-width:17ch;font-size:clamp(2.25rem,4.2vw,4.25rem);font-weight:800;line-height:.98;
+  letter-spacing:-.055em;text-transform:uppercase;text-wrap:balance
+}
+.plab-hero__copy p{
+  max-width:53ch;margin-top:1.65rem;color:rgba(255,255,255,.86);
+  font-size:clamp(.9rem,1.18vw,1.03rem);line-height:1.85
+}
+
+/* ---------- Move / Build / Perform artwork ---------- */
+.plab-pillars{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;
+  width:100%;padding:2px 0;background:#050506
+}
+.plab-pillar{
+  position:relative;min-width:0;overflow:hidden;aspect-ratio:3/4;
+  background:#080b12
+}
+.plab-pillar::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:2px;
+  background:var(--lab-blue);transform:scaleX(0);transform-origin:left;
+  transition:transform .45s var(--ease)
+}
+.plab-pillar:hover::after{transform:scaleX(1)}
+.plab-pillar img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .65s var(--ease),filter .4s var(--ease)
+}
+.plab-pillar:hover img{transform:scale(1.018);filter:brightness(1.06)}
+
+/* ---------- Schedule ---------- */
+.plab-schedule{
+  position:relative;isolation:isolate;padding:8.5rem 0 9.2rem;
+  background:
+    radial-gradient(circle at 88% 10%,rgba(45,94,220,.15),transparent 34%),
+    #07080b
+}
+.plab-schedule::before{
+  content:"";position:absolute;z-index:-1;top:0;left:var(--gutter);right:var(--gutter);
+  max-width:var(--maxw);height:1px;margin:auto;
+  background:linear-gradient(90deg,var(--lab-blue),rgba(255,255,255,.12),transparent)
+}
+.plab-schedule h2{
+  margin-bottom:clamp(2.6rem,5vw,4.5rem);font-size:clamp(3.8rem,8vw,7.5rem);
+  font-weight:800;line-height:.86;letter-spacing:-.075em;text-transform:uppercase
+}
+.plab-schedule__table-wrap{
+  border-top:1px solid rgba(255,255,255,.38);
+  border-bottom:1px solid rgba(255,255,255,.22)
+}
+.plab-schedule__table{
+  width:100%;border-collapse:collapse;table-layout:fixed;color:#fff
+}
+.plab-schedule__table th,
+.plab-schedule__table td{text-align:left}
+.plab-schedule__table thead th{
+  height:104px;padding:1.2rem 2rem;border-bottom:1px solid var(--lab-line);
+  font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase
+}
+.plab-schedule__table thead th:first-child{
+  width:22%;padding-left:0;color:#888
+}
+.plab-schedule__table thead th:not(:first-child){
+  width:39%;border-left:1px solid var(--lab-line)
+}
+.plab-schedule__table thead span{
+  display:block;margin-bottom:.25rem;color:#888;font-size:.62rem;font-weight:600
+}
+.plab-schedule__table thead strong{
+  color:#fff;font-size:clamp(1rem,1.6vw,1.25rem);letter-spacing:.08em
+}
+.plab-schedule__table tbody tr{
+  border-bottom:1px solid rgba(255,255,255,.1);
+  transition:background .2s
+}
+.plab-schedule__table tbody tr:last-child{border-bottom:0}
+.plab-schedule__table tbody tr:hover{background:rgba(53,105,232,.065)}
+.plab-schedule__table tbody th,
+.plab-schedule__table tbody td{
+  height:88px;padding:1.4rem 2rem;font-size:clamp(.82rem,1.25vw,1rem)
+}
+.plab-schedule__table tbody th{padding-left:0;font-weight:650;letter-spacing:.04em}
+.plab-schedule__table tbody th span{display:none}
+.plab-schedule__table tbody td{
+  border-left:1px solid var(--lab-line);font-weight:600;
+  letter-spacing:.055em;font-variant-numeric:tabular-nums
+}
+.plab-schedule__empty{color:rgba(255,255,255,.28)}
+
+/* ---------- Location ---------- */
+.plab-location{
+  position:relative;isolation:isolate;min-height:700px;display:flex;align-items:center;
+  padding:7rem 0;background:#030304
+}
+.plab-location::before{
+  content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;
+  background:
+    linear-gradient(90deg,#030304 0%,#030304 42%,rgba(3,3,4,.83) 52%,rgba(3,3,4,.12) 84%),
+    linear-gradient(180deg,rgba(3,3,4,.32),transparent 55%,#030304)
+}
+.plab-location__media{position:absolute;z-index:-2;top:0;right:0;bottom:0;width:61%;overflow:hidden}
+.plab-location__media img{
+  width:100%;height:100%;object-fit:cover;object-position:69% center;
+  filter:saturate(.72) contrast(1.05) brightness(.65)
+}
+.plab-location__inner{display:flex;align-items:center}
+.plab-location__content{width:min(54%,630px)}
+.plab-location h2{
+  max-width:13ch;margin-top:clamp(3rem,6vw,5rem);
+  font-size:clamp(3rem,6vw,5.7rem);font-weight:800;line-height:.92;
+  letter-spacing:-.065em;text-transform:uppercase
+}
+.plab-location__address{
+  margin-top:2.2rem;padding-left:1.25rem;border-left:2px solid var(--lab-blue);
+  color:rgba(255,255,255,.78);font-size:.94rem;font-style:normal;line-height:1.9
+}
+.plab-location__actions{margin-top:2.4rem}
+
+/* ---------- Dark chrome ---------- */
+.lab-page .footer{background:#030304}
+.lab-page .footer__base{border-color:rgba(255,255,255,.08)}
+
+/* ---------- Responsive ---------- */
+@media(max-width:900px){
+  .plab-hero{min-height:780px;padding:8rem 0 4.5rem}
+  .plab-hero::before{
+    background:
+      linear-gradient(180deg,rgba(1,3,8,.6),rgba(2,4,10,.38) 40%,rgba(2,4,10,.88) 100%),
+      linear-gradient(90deg,rgba(2,4,10,.42),rgba(2,4,10,.42))
+  }
+  .plab-hero__media img{object-position:47% center}
+  .plab-hero__inner{
+    grid-template-columns:1fr;gap:.3rem;justify-items:center;text-align:center
+  }
+  .plab-hero__brand{justify-content:center;width:100%}
+  .plab-hero__brand img{width:min(100%,480px);margin:0}
+  .plab-hero__copy{
+    max-width:620px;padding:2rem 0 0;border-left:0;border-top:1px solid rgba(255,255,255,.34)
+  }
+  .plab-hero h1{max-width:18ch;margin-inline:auto}
+  .plab-hero__copy p{margin-inline:auto}
+  .plab-location__content{width:62%}
+}
+@media(max-width:680px){
+  .plab-hero{min-height:760px;padding-top:7.2rem}
+  .plab-hero__brand img{width:min(112%,430px);margin-inline:-6%}
+  .plab-hero h1{font-size:clamp(2rem,10vw,3rem)}
+  .plab-hero__copy p{font-size:.84rem;line-height:1.72}
+  .plab-pillars{grid-template-columns:1fr;gap:2px}
+  .plab-pillar{aspect-ratio:3/4}
+  .plab-schedule{padding:5.8rem 0 6.4rem}
+  .plab-schedule h2{font-size:clamp(3.6rem,18vw,5.4rem)}
+  .plab-schedule__table thead th{
+    height:86px;padding:1rem .7rem;font-size:.58rem
+  }
+  .plab-schedule__table thead th:first-child{width:20%;padding-left:0}
+  .plab-schedule__table thead th:not(:first-child){width:40%}
+  .plab-schedule__table thead span{font-size:.5rem;letter-spacing:.1em}
+  .plab-schedule__table thead strong{font-size:.78rem}
+  .plab-schedule__table tbody th,
+  .plab-schedule__table tbody td{
+    height:72px;padding:1rem .7rem;font-size:.68rem;white-space:nowrap
+  }
+  .plab-schedule__table tbody th{padding-left:0}
+  .plab-schedule__table tbody th strong{display:none}
+  .plab-schedule__table tbody th span{display:inline}
+  .plab-location{min-height:760px;padding:5.5rem 0;align-items:flex-end}
+  .plab-location::before{
+    background:linear-gradient(180deg,rgba(3,3,4,.16),rgba(3,3,4,.58) 44%,#030304 74%)
+  }
+  .plab-location__media{top:0;right:0;bottom:auto;width:100%;height:66%}
+  .plab-location__media img{object-position:65% center}
+  .plab-location__content{width:100%}
+  .plab-location h2{max-width:12ch;margin-top:2.8rem;font-size:clamp(2.8rem,14vw,4.2rem)}
+}
+@media(max-width:420px){
+  .plab-hero__brand img{width:360px}
+  .plab-schedule__table tbody th,
+  .plab-schedule__table tbody td{font-size:.63rem;padding-inline:.5rem}
+  .plab-schedule__table thead th{padding-inline:.5rem}
+  .plab-location__actions .plab-button{width:100%}
+}
