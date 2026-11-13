@@ -62,7 +62,8 @@
 .plab-pillars__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}
 .plab-pillar{
   position:relative;isolation:isolate;min-width:0;aspect-ratio:3/4;
-  display:flex;align-items:flex-end;overflow:hidden;padding:clamp(1.4rem,2.2vw,2rem);
+  display:flex;align-items:center;overflow:hidden;padding:clamp(1.4rem,2.2vw,2rem);
+  container-type:inline-size;border-radius:var(--r-lg);
   border:1px solid rgba(255,255,255,.16);background:#080a0f;
   transition:border-color .35s,transform .45s var(--ease),box-shadow .45s var(--ease)
 }
@@ -81,20 +82,21 @@
   width:100%;height:100%;object-fit:cover;object-position:center
 }
 .plab-pillar__body{position:relative;z-index:1;width:100%;text-align:center}
-.plab-pillar__body > span{
-  display:block;margin-bottom:1.05rem;color:var(--accent-light);
-  font:inherit;font-size:.7rem;font-weight:700;letter-spacing:.16em
+.plab-pillar__number{
+  display:grid;place-items:center;flex:none;width:1.6rem;height:1.6rem;
+  margin:0 auto 1.05rem;border:1px solid #fff;border-radius:50%;background:transparent;
+  color:#fff;font-size:.62rem;font-weight:800;letter-spacing:.02em
 }
 .plab-pillar h3{
   width:fit-content;margin:0 auto;color:transparent;font-family:"Ethnocentric Rg",Montserrat,sans-serif;
-  font-size:clamp(1.5rem,2.4vw,2.6rem);font-weight:400;line-height:.9;
+  font-size:clamp(1.4rem,12.8cqw,3.6rem);font-weight:400;line-height:.9;
   letter-spacing:.01em;text-transform:uppercase;white-space:nowrap;
   background:linear-gradient(100deg,var(--accent) 0%,var(--accent-light) 50%,#fff 100%);
   -webkit-background-clip:text;background-clip:text;
   filter:drop-shadow(0 4px 14px rgba(0,0,0,.8))
 }
 .plab-pillar p{
-  min-height:4em;margin:1.15rem 0 0;padding-top:1.15rem;border-top:1px solid rgba(255,255,255,.2);
+  margin:1.15rem 0 0;padding-top:1.15rem;border-top:1px solid rgba(255,255,255,.2);
   color:rgba(255,255,255,.78);font-size:.72rem;font-weight:400;line-height:1.55;
   letter-spacing:.075em;text-shadow:0 2px 12px rgba(0,0,0,.9);text-transform:uppercase
 }
@@ -112,8 +114,8 @@
   background:linear-gradient(90deg,var(--accent),rgba(255,255,255,.12),transparent)
 }
 .plab-schedule h2{
-  margin:0;font-size:clamp(2rem,3.4vw,3.2rem);
-  font-weight:800;line-height:.86;letter-spacing:-.075em;text-transform:uppercase
+  margin:0;font-size:clamp(1.5rem,3vw,2.15rem);
+  font-weight:800;line-height:1.12;letter-spacing:-.03em;text-transform:uppercase
 }
 .plab-schedule > .plab-shell{
   display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,2fr);
@@ -135,8 +137,10 @@
   display:block;margin-bottom:.08rem;color:#aaa;font-size:.56rem;font-style:normal;line-height:1;
   font-weight:700;letter-spacing:.14em;text-transform:uppercase
 }
+/* Align the final E with the midpoint of TRACK's A at the shared word size. */
+.plab-schedule__labels p + p em{letter-spacing:.24em}
 .plab-schedule__labels strong{
-  display:block;color:#fff;font-size:clamp(.95rem,1.5vw,1.18rem);line-height:1.1;
+  display:block;color:#fff;font-size:1.55rem;line-height:1.1;
   letter-spacing:.1em;text-transform:uppercase
 }
 .plab-schedule__list{margin:0;padding:0;list-style:none}
@@ -186,7 +190,9 @@
   margin-top:1.1rem;color:#fff;font-size:clamp(1.1rem,2vw,1.65rem);
   font-weight:700;font-style:normal;line-height:1.6
 }
-.plab-location__actions{margin-top:2.4rem}
+.plab-location__actions{
+  display:flex;justify-content:center;flex-wrap:wrap;gap:.65rem;margin-top:2.4rem
+}
 
 /* ---------- Dark chrome ---------- */
 .lab-page .footer{background:#030304}
@@ -210,7 +216,7 @@
     width:100%;max-width:620px;justify-self:center;padding:2rem 0 0;
     border-left:0;border-top:1px solid rgba(255,255,255,.34)
   }
-  .plab-hero h1{font-size:clamp(.65rem,2.5vw,1.15rem);margin-inline:auto}
+  .plab-hero h1{font-size:clamp(.95rem,3.5vw,1.15rem);margin-inline:auto}
   .plab-hero__copy p{margin-inline:auto}
   .plab-schedule > .plab-shell{grid-template-columns:1fr;gap:2rem}
   .plab-schedule h2{padding-top:0}
@@ -230,13 +236,12 @@
     flex:0 0 min(82vw,390px);scroll-snap-align:start
   }
   .plab-schedule{padding:5.8rem 0 6.4rem}
-  .plab-schedule h2{font-size:clamp(2rem,9vw,2.8rem)}
   .plab-schedule__labels,
   .plab-schedule__list li{grid-template-columns:20% 40% 40%}
   .plab-schedule__labels{min-height:78px;padding-inline:.5rem}
   .plab-schedule__labels p{padding-left:.6rem}
   .plab-schedule__labels em{font-size:.49rem;letter-spacing:.1em}
-  .plab-schedule__labels strong{font-size:.76rem}
+  .plab-schedule__labels strong{font-size:1.35rem}
   .plab-schedule__list li{min-height:70px;padding-inline:.5rem}
   .plab-schedule__list li > p{
     padding-left:.6rem
@@ -251,4 +256,6 @@
   .plab-schedule__list li{grid-template-columns:18% 41% 41%;padding-inline:0}
   .plab-schedule__list li > p{padding-left:.3rem}
   .plab-schedule__labels p{padding-left:.45rem}
+  .plab-location__actions{gap:.5rem}
+  .plab-location__actions .btn{padding-inline:.7rem}
 }
