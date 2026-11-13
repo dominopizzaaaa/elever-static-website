@@ -33,7 +33,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/style.css?v=76" />
   <link rel="stylesheet" href="assets/css/pages.css?v=76" />
-  <link rel="stylesheet" href="assets/css/lab-v2.css?v=2" />
+  <link rel="stylesheet" href="assets/css/lab-v2.css?v=3" />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -79,65 +79,86 @@
     </section>
 
     <section class="plab-pillars" aria-labelledby="pillars-title">
-      <h2 id="pillars-title" class="sr-only">Move. Build. Perform.</h2>
-      <figure class="plab-pillar reveal">
-        <img src="assets/img/lab/move.jpg"
-             alt="Move: Master the fundamentals that shape potential"
-             width="1350" height="1800" loading="lazy" decoding="async" />
-      </figure>
-      <figure class="plab-pillar reveal" data-delay="80">
-        <img src="assets/img/lab/build.jpg"
-             alt="Build: Transform movement into strength and power"
-             width="1350" height="1800" loading="lazy" decoding="async" />
-      </figure>
-      <figure class="plab-pillar reveal" data-delay="160">
-        <img src="assets/img/lab/perform.jpg"
-             alt="Perform: Refine every physical edge with precision and purpose"
-             width="1350" height="1800" loading="lazy" decoding="async" />
-      </figure>
+      <div class="plab-shell">
+        <h2 id="pillars-title" class="sr-only">Move. Build. Perform.</h2>
+        <div class="plab-pillars__grid">
+          <article class="plab-pillar reveal">
+            <div class="plab-pillar__media">
+              <img src="assets/img/lab/move.jpg"
+                   alt="Move: Master the fundamentals that shape potential"
+                   width="1350" height="1800" loading="lazy" decoding="async" />
+            </div>
+            <div class="plab-pillar__body">
+              <span>01</span>
+              <h3>Move</h3>
+              <p>Master the fundamentals that shape potential.</p>
+            </div>
+          </article>
+          <article class="plab-pillar reveal" data-delay="80">
+            <div class="plab-pillar__media">
+              <img src="assets/img/lab/build.jpg"
+                   alt="Build: Transform movement into strength and power"
+                   width="1350" height="1800" loading="lazy" decoding="async" />
+            </div>
+            <div class="plab-pillar__body">
+              <span>02</span>
+              <h3>Build</h3>
+              <p>Transform movement into strength and power.</p>
+            </div>
+          </article>
+          <article class="plab-pillar reveal" data-delay="160">
+            <div class="plab-pillar__media">
+              <img src="assets/img/lab/perform.jpg"
+                   alt="Perform: Refine every physical edge with precision and purpose"
+                   width="1350" height="1800" loading="lazy" decoding="async" />
+            </div>
+            <div class="plab-pillar__body">
+              <span>03</span>
+              <h3>Perform</h3>
+              <p>Refine every physical edge with precision and purpose.</p>
+            </div>
+          </article>
+        </div>
+      </div>
     </section>
 
     <section class="plab-schedule" id="schedule" aria-labelledby="schedule-title">
       <div class="plab-shell">
         <h2 id="schedule-title" class="reveal">Schedule</h2>
-        <div class="plab-schedule__table-wrap reveal" data-delay="80">
-          <table class="plab-schedule__table">
-            <caption class="sr-only">Weekly Élever Performance Lab and track schedule</caption>
-            <thead>
-              <tr>
-                <th scope="col">Day</th>
-                <th scope="col"><span>In the</span><strong>Lab</strong></th>
-                <th scope="col"><span>On the</span><strong>Track</strong></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row"><span>Mon</span><strong>Monday</strong></th>
-                <td><time datetime="07:00">07:00</time> - <time datetime="18:30">18:30</time></td>
-                <td><time datetime="19:00">19:00</time> - <time datetime="20:00">20:00</time></td>
-              </tr>
-              <tr>
-                <th scope="row"><span>Wed</span><strong>Wednesday</strong></th>
-                <td><time datetime="07:00">07:00</time> - <time datetime="22:00">22:00</time></td>
-                <td><span class="plab-schedule__empty" aria-label="No track session">&mdash;</span></td>
-              </tr>
-              <tr>
-                <th scope="row"><span>Thu</span><strong>Thursday</strong></th>
-                <td><time datetime="07:00">07:00</time> - <time datetime="18:30">18:30</time></td>
-                <td><time datetime="19:30">19:30</time> - <time datetime="20:30">20:30</time></td>
-              </tr>
-              <tr>
-                <th scope="row"><span>Fri</span><strong>Friday</strong></th>
-                <td><time datetime="07:00">07:00</time> - <time datetime="22:00">22:00</time></td>
-                <td><span class="plab-schedule__empty" aria-label="No track session">&mdash;</span></td>
-              </tr>
-              <tr>
-                <th scope="row"><span>Sun</span><strong>Sunday</strong></th>
-                <td><time datetime="07:00">07:00</time> - <time datetime="22:00">22:00</time></td>
-                <td><span class="plab-schedule__empty" aria-label="No track session">&mdash;</span></td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="plab-schedule__board reveal" data-delay="80"
+             role="group" aria-label="Weekly Élever Performance Lab and track schedule">
+          <div class="plab-schedule__labels" aria-hidden="true">
+            <span>Day</span>
+            <p><em>In the</em><strong>Lab</strong></p>
+            <p><em>On the</em><strong>Track</strong></p>
+          </div>
+          <ul class="plab-schedule__list">
+            <li>
+              <p class="plab-schedule__day"><span>Mon</span><strong>Monday</strong></p>
+              <p><time datetime="07:00">07:00</time> - <time datetime="18:30">18:30</time></p>
+              <p><time datetime="19:00">19:00</time> - <time datetime="20:00">20:00</time></p>
+            </li>
+            <li>
+              <p class="plab-schedule__day"><span>Wed</span><strong>Wednesday</strong></p>
+              <p><time datetime="07:00">07:00</time> - <time datetime="22:00">22:00</time></p>
+              <p><span class="plab-schedule__empty" aria-label="No track session">&mdash;</span></p>
+            </li>
+            <li>
+              <p class="plab-schedule__day"><span>Thu</span><strong>Thursday</strong></p>
+              <p><time datetime="07:00">07:00</time> - <time datetime="18:30">18:30</time></p>
+              <p><time datetime="19:30">19:30</time> - <time datetime="20:30">20:30</time></p>
+            </li>
+            <li>
+              <p class="plab-schedule__day"><span>Fri</span><strong>Friday</strong></p>
+              <p><time datetime="07:00">07:00</time> - <time datetime="22:00">22:00</time></p>
+              <p><span class="plab-schedule__empty" aria-label="No track session">&mdash;</span></p>
+            </li>
+            <li>
+              <p class="plab-schedule__day"><span>Sun</span><strong>Sunday</strong></p>
+              <p><time datetime="07:00">07:00</time> - <time datetime="22:00">22:00</time></p>
+              <p><span class="plab-schedule__empty" aria-label="No track session">&mdash;</span></p>
+            </li>
+          </ul>
         </div>
       </div>
     </section>

@@ -78,26 +78,62 @@
   font-size:clamp(.9rem,1.18vw,1.03rem);line-height:1.85
 }
 
-/* ---------- Move / Build / Perform artwork ---------- */
+/* ---------- Move / Build / Perform ---------- */
 .plab-pillars{
-  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;
-  width:100%;padding:2px 0;background:#050506
+  padding:clamp(2rem,4vw,4.5rem) 0 clamp(3.8rem,7vw,7.5rem);
+  background:
+    radial-gradient(circle at 50% 0,rgba(48,87,188,.1),transparent 38%),
+    #050506
 }
+.plab-pillars__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}
 .plab-pillar{
-  position:relative;min-width:0;overflow:hidden;aspect-ratio:3/4;
-  background:#080b12
+  position:relative;isolation:isolate;min-width:0;min-height:clamp(500px,52vw,690px);
+  display:flex;align-items:flex-end;overflow:hidden;padding:clamp(1.4rem,2.2vw,2rem);
+  border:1px solid rgba(255,255,255,.16);background:#080a0f;
+  transition:border-color .35s,transform .45s var(--ease),box-shadow .45s var(--ease)
+}
+.plab-pillar::before{
+  content:"";position:absolute;z-index:-1;inset:0;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.06) 18%,rgba(0,0,0,.16) 44%,rgba(0,0,0,.95) 92%),
+    linear-gradient(0deg,rgba(21,45,115,.5),transparent 56%)
 }
 .plab-pillar::after{
-  content:"";position:absolute;left:0;right:0;bottom:0;height:2px;
+  content:"";position:absolute;left:0;right:0;bottom:0;height:3px;
   background:var(--lab-blue);transform:scaleX(0);transform-origin:left;
-  transition:transform .45s var(--ease)
+  transition:transform .5s var(--ease)
+}
+.plab-pillar:hover{
+  border-color:rgba(142,174,248,.46);transform:translateY(-5px);
+  box-shadow:0 30px 70px -38px rgba(40,82,210,.58)
 }
 .plab-pillar:hover::after{transform:scaleX(1)}
-.plab-pillar img{
-  width:100%;height:100%;object-fit:cover;
-  transition:transform .65s var(--ease),filter .4s var(--ease)
+.plab-pillar__media{position:absolute;z-index:-2;inset:0;overflow:hidden}
+.plab-pillar__media img{
+  width:100%;height:calc(100% + 18px);object-fit:cover;object-position:center center;
+  filter:saturate(.68) contrast(1.05) brightness(.72);
+  transition:transform .7s var(--ease),filter .45s var(--ease)
 }
-.plab-pillar:hover img{transform:scale(1.018);filter:brightness(1.06)}
+.plab-pillar:nth-child(1) .plab-pillar__media img{object-position:50% 36%}
+.plab-pillar:nth-child(2) .plab-pillar__media img{object-position:48% 32%}
+.plab-pillar:nth-child(3) .plab-pillar__media img{object-position:62% center}
+.plab-pillar:hover .plab-pillar__media img{
+  transform:scale(1.035);filter:saturate(.86) contrast(1.04) brightness(.78)
+}
+.plab-pillar__body{position:relative;z-index:1;width:100%}
+.plab-pillar__body > span{
+  display:block;margin-bottom:1.05rem;color:var(--lab-blue-light);
+  font-size:.64rem;font-weight:700;letter-spacing:.14em
+}
+.plab-pillar h3{
+  margin:0;font-size:clamp(2.7rem,4.5vw,4.8rem);font-weight:800;line-height:.88;
+  letter-spacing:-.065em;text-transform:uppercase
+}
+.plab-pillar p{
+  min-height:4em;margin-top:1.15rem;padding-top:1.15rem;border-top:1px solid rgba(255,255,255,.2);
+  color:rgba(255,255,255,.78);font-size:.72rem;font-weight:650;line-height:1.55;
+  letter-spacing:.075em;text-transform:uppercase
+}
 
 /* ---------- Schedule ---------- */
 .plab-schedule{
@@ -115,47 +151,44 @@
   margin-bottom:clamp(2.6rem,5vw,4.5rem);font-size:clamp(3.2rem,6vw,5.5rem);
   font-weight:800;line-height:.86;letter-spacing:-.075em;text-transform:uppercase
 }
-.plab-schedule__table-wrap{
-  border-top:1px solid rgba(255,255,255,.38);
-  border-bottom:1px solid rgba(255,255,255,.22)
+.plab-schedule__board{position:relative}
+.plab-schedule__labels,
+.plab-schedule__list li{
+  display:grid;grid-template-columns:22% 39% 39%;align-items:center
 }
-.plab-schedule__table{
-  width:100%;border-collapse:collapse;table-layout:fixed;color:#fff
+.plab-schedule__labels{
+  min-height:84px;padding:0 clamp(1rem,2.5vw,2rem);
+  border-bottom:1px solid rgba(255,255,255,.28)
 }
-.plab-schedule__table th,
-.plab-schedule__table td{text-align:left}
-.plab-schedule__table thead th{
-  height:104px;padding:1.2rem 2rem;border-bottom:1px solid var(--lab-line);
-  font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase
+.plab-schedule__labels > span{
+  color:#888;font-size:.63rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase
 }
-.plab-schedule__table thead th:first-child{
-  width:22%;padding-left:0;color:#888
+.plab-schedule__labels p{padding-left:clamp(.7rem,2vw,1.6rem)}
+.plab-schedule__labels em{
+  display:block;margin-bottom:.25rem;color:#888;font-size:.56rem;font-style:normal;
+  font-weight:600;letter-spacing:.14em;text-transform:uppercase
 }
-.plab-schedule__table thead th:not(:first-child){
-  width:39%;border-left:1px solid var(--lab-line)
+.plab-schedule__labels strong{
+  color:#fff;font-size:clamp(.95rem,1.5vw,1.18rem);letter-spacing:.1em;text-transform:uppercase
 }
-.plab-schedule__table thead span{
-  display:block;margin-bottom:.25rem;color:#888;font-size:.62rem;font-weight:600
+.plab-schedule__list{margin:0;padding:0;list-style:none}
+.plab-schedule__list li{
+  position:relative;min-height:88px;padding:0 clamp(1rem,2.5vw,2rem);
+  border-bottom:1px solid rgba(255,255,255,.1);overflow:hidden
 }
-.plab-schedule__table thead strong{
-  color:#fff;font-size:clamp(1rem,1.6vw,1.25rem);letter-spacing:.08em
+.plab-schedule__list li::before{
+  content:"";position:absolute;left:0;top:50%;width:3px;height:0;
+  background:var(--lab-blue);transform:translateY(-50%);
+  transition:height .3s var(--ease)
 }
-.plab-schedule__table tbody tr{
-  border-bottom:1px solid rgba(255,255,255,.1);
-  transition:background .2s
+.plab-schedule__list li:hover::before{height:42%}
+.plab-schedule__list li > p{
+  padding-left:clamp(.7rem,2vw,1.6rem);font-size:clamp(.82rem,1.25vw,1rem);
+  font-weight:600;letter-spacing:.055em;font-variant-numeric:tabular-nums
 }
-.plab-schedule__table tbody tr:last-child{border-bottom:0}
-.plab-schedule__table tbody tr:hover{background:rgba(53,105,232,.065)}
-.plab-schedule__table tbody th,
-.plab-schedule__table tbody td{
-  height:88px;padding:1.4rem 2rem;font-size:clamp(.82rem,1.25vw,1rem)
-}
-.plab-schedule__table tbody th{padding-left:0;font-weight:650;letter-spacing:.04em}
-.plab-schedule__table tbody th span{display:none}
-.plab-schedule__table tbody td{
-  border-left:1px solid var(--lab-line);font-weight:600;
-  letter-spacing:.055em;font-variant-numeric:tabular-nums
-}
+.plab-schedule__list li > p:first-child{padding-left:0}
+.plab-schedule__day{font-weight:650!important;letter-spacing:.04em!important}
+.plab-schedule__day span{display:none}
 .plab-schedule__empty{color:rgba(255,255,255,.28)}
 
 /* ---------- Location ---------- */
@@ -217,24 +250,31 @@
   .plab-hero__brand img{width:min(112%,430px);margin-inline:-6%}
   .plab-hero h1{font-size:clamp(2rem,10vw,3rem)}
   .plab-hero__copy p{font-size:.84rem;line-height:1.72}
-  .plab-pillars{grid-template-columns:1fr;gap:2px}
-  .plab-pillar{aspect-ratio:3/4}
+  .plab-pillars{padding:2.5rem 0 5.5rem}
+  .plab-pillars__grid{
+    display:flex;gap:.7rem;margin-right:calc(var(--gutter) * -1);padding-right:var(--gutter);
+    overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;
+    scrollbar-width:none;-ms-overflow-style:none
+  }
+  .plab-pillars__grid::-webkit-scrollbar{display:none}
+  .plab-pillar{
+    flex:0 0 min(82vw,390px);min-height:540px;scroll-snap-align:start
+  }
   .plab-schedule{padding:5.8rem 0 6.4rem}
   .plab-schedule h2{font-size:clamp(2.8rem,14vw,4.2rem)}
-  .plab-schedule__table thead th{
-    height:86px;padding:1rem .7rem;font-size:.58rem
+  .plab-schedule__labels,
+  .plab-schedule__list li{grid-template-columns:20% 40% 40%}
+  .plab-schedule__labels{min-height:78px;padding-inline:.5rem}
+  .plab-schedule__labels p{padding-left:.6rem}
+  .plab-schedule__labels > span{font-size:.54rem}
+  .plab-schedule__labels em{font-size:.49rem;letter-spacing:.1em}
+  .plab-schedule__labels strong{font-size:.76rem}
+  .plab-schedule__list li{min-height:70px;padding-inline:.5rem}
+  .plab-schedule__list li > p{
+    padding-left:.6rem;font-size:.68rem;white-space:nowrap
   }
-  .plab-schedule__table thead th:first-child{width:20%;padding-left:0}
-  .plab-schedule__table thead th:not(:first-child){width:40%}
-  .plab-schedule__table thead span{font-size:.5rem;letter-spacing:.1em}
-  .plab-schedule__table thead strong{font-size:.78rem}
-  .plab-schedule__table tbody th,
-  .plab-schedule__table tbody td{
-    height:72px;padding:1rem .7rem;font-size:.68rem;white-space:nowrap
-  }
-  .plab-schedule__table tbody th{padding-left:0}
-  .plab-schedule__table tbody th strong{display:none}
-  .plab-schedule__table tbody th span{display:inline}
+  .plab-schedule__day strong{display:none}
+  .plab-schedule__day span{display:inline}
   .plab-location{min-height:760px;padding:5.5rem 0;align-items:flex-end}
   .plab-location::before{
     background:linear-gradient(180deg,rgba(3,3,4,.16),rgba(3,3,4,.58) 44%,#030304 74%)
@@ -246,8 +286,7 @@
 }
 @media(max-width:420px){
   .plab-hero__brand img{width:360px}
-  .plab-schedule__table tbody th,
-  .plab-schedule__table tbody td{font-size:.63rem;padding-inline:.5rem}
-  .plab-schedule__table thead th{padding-inline:.5rem}
+  .plab-schedule__list li > p{font-size:.63rem;padding-left:.45rem}
+  .plab-schedule__labels p{padding-left:.45rem}
   .plab-location__actions .plab-button{width:100%}
 }
