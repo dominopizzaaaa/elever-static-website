@@ -112,7 +112,7 @@
   background:linear-gradient(90deg,var(--lab-blue),rgba(255,255,255,.12),transparent)
 }
 .plab-schedule h2{
-  margin-bottom:clamp(2.6rem,5vw,4.5rem);font-size:clamp(3.8rem,8vw,7.5rem);
+  margin-bottom:clamp(2.6rem,5vw,4.5rem);font-size:clamp(3.2rem,6vw,5.5rem);
   font-weight:800;line-height:.86;letter-spacing:-.075em;text-transform:uppercase
 }
 .plab-schedule__table-wrap{
@@ -220,7 +220,7 @@
   .plab-pillars{grid-template-columns:1fr;gap:2px}
   .plab-pillar{aspect-ratio:3/4}
   .plab-schedule{padding:5.8rem 0 6.4rem}
-  .plab-schedule h2{font-size:clamp(3.6rem,18vw,5.4rem)}
+  .plab-schedule h2{font-size:clamp(2.8rem,14vw,4.2rem)}
   .plab-schedule__table thead th{
     height:86px;padding:1rem .7rem;font-size:.58rem
   }
