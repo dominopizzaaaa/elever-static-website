@@ -12,7 +12,7 @@ rather than one long scrolling page.
 | Classes | `classes.html` | Development pathways, group vs private, trial & placement, and class locations |
 | Camps | `camps.html` | What happens at an Exploration camp, a day's timetable, the next camp, waitlist |
 | Events | `events.html` | Carnivals / clinics / competitions offered as a service, the all-in-one suite, our work, Trusted by, event enquiry |
-| Performance Lab | `lab.html` | Black "OPENING SOON" holding page with the Upper Serangoon address |
+| Performance Lab | `lab.html` | Dark performance-led page covering the Move / Build / Perform method, weekly schedule, and Kovan location |
 | About | `about.html` | Definition + tagline, founder write-up, coaching team (each coach opens a popup profile), press features, and the 5 pillars |
 | News | `news.html` | Articles, filterable by category, newsletter signup |
 | SG Badminton Hub | `hub.html` | International World Tour/news and local Play, Shop, and Compete guides |
@@ -47,6 +47,10 @@ Classes and Events buttons.
 
 **The What We Do tiles** (Home + About) take their photo, crop focus and hover
 line from `PILLARS` in `assets/js/pages.js` — one line per pillar.
+
+**The Performance Lab concept images** in `assets/img/lab/` are generated
+placeholders for layout approval. Replace them with the owner's final facility
+and training photography while keeping the same filenames and crops.
 
 **Press covers** in `assets/img/press/` are the publications' own article cover
 images, used on the About page's "Featured on" list. Confirm with the publication
