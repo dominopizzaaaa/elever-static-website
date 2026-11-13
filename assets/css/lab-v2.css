@@ -92,12 +92,6 @@
   border:1px solid rgba(255,255,255,.16);background:#080a0f;
   transition:border-color .35s,transform .45s var(--ease),box-shadow .45s var(--ease)
 }
-.plab-pillar::before{
-  content:"";position:absolute;z-index:-1;inset:0;
-  background:
-    linear-gradient(180deg,rgba(0,0,0,.06) 18%,rgba(0,0,0,.16) 44%,rgba(0,0,0,.95) 92%),
-    linear-gradient(0deg,rgba(21,45,115,.5),transparent 56%)
-}
 .plab-pillar::after{
   content:"";position:absolute;left:0;right:0;bottom:0;height:3px;
   background:var(--lab-blue);transform:scaleX(0);transform-origin:left;
@@ -110,24 +104,11 @@
 .plab-pillar:hover::after{transform:scaleX(1)}
 .plab-pillar__media{position:absolute;z-index:-2;inset:0;overflow:hidden}
 .plab-pillar__media img{
-  width:100%;height:100%;object-fit:cover;object-position:center;
-  filter:saturate(.68) contrast(1.05) brightness(.72);
-  transition:filter .45s var(--ease)
-}
-.plab-pillar:hover .plab-pillar__media img{
-  filter:saturate(.86) contrast(1.04) brightness(.78)
+  width:100%;height:100%;object-fit:cover;object-position:center
 }
 .plab-pillar__body{position:relative;z-index:1;width:100%}
-.plab-pillar__body > span{
-  display:block;margin-bottom:1.05rem;color:var(--lab-blue-light);
-  font-size:.64rem;font-weight:700;letter-spacing:.14em
-}
-.plab-pillar h3{
-  margin:0;color:#fff;font-size:clamp(2.7rem,4.5vw,4.8rem);font-weight:800;line-height:.88;
-  letter-spacing:-.065em;text-shadow:0 4px 28px rgba(0,0,0,.75);text-transform:uppercase
-}
 .plab-pillar p{
-  min-height:4em;margin-top:1.15rem;padding-top:1.15rem;border-top:1px solid rgba(255,255,255,.2);
+  min-height:4em;margin:0;padding-top:1.15rem;border-top:1px solid rgba(255,255,255,.2);
   color:rgba(255,255,255,.78);font-size:.72rem;font-weight:650;line-height:1.55;
   letter-spacing:.075em;text-transform:uppercase
 }
