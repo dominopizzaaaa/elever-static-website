@@ -89,6 +89,13 @@ If the artwork changes again, update that version across all page heads,
 page-level structured data, `tools/build-news.js` and the preview verifier.
 Author portraits and in-page photography are separate from the share image.
 
+The `/shpc26badmintonprospectus` and `/shpc26pickleballprospectus` short URLs
+serve branded HTML preview pages rather than server redirects. Browsers
+automatically open the same Google Docs through JavaScript; a direct document
+link remains available when JavaScript is disabled. Do not replace these with
+HTTP redirects or meta refresh, which would send preview crawlers to Google
+before they can read the branded image.
+
 Run the metadata and news-generator regression checks:
 
 ```sh
@@ -106,7 +113,7 @@ ELEVER_BASE_URL=https://eleverbadminton.com node tools/verify-social-previews.js
 
 WhatsApp caches page previews independently, so a previously sent preview may
 stay unchanged until it is fetched again. Off-site destinations such as booking
-services and the Google Docs prospectus redirects control their own previews.
+services and direct Google Docs links control their own previews.
 
 ## Brand
 
@@ -170,8 +177,8 @@ python3 -m http.server 8080
 
 ## Deploy
 
-Vercel from the `main` branch. The project uses Vercel clean URLs, redirects, and
-the `/api/contact` serverless function configured in `vercel.json`.
+Vercel from the `main` branch. The project uses Vercel clean URLs, prospectus
+landing pages, and the `/api/contact` serverless function.
 
 ## Enquiry delivery
 

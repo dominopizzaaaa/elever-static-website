@@ -5,6 +5,7 @@ const assert = require('assert/strict');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const { verifyMetadata } = require('./verify-social-previews');
 
 function loadPlaywright() {
   if (process.env.ELEVER_PLAYWRIGHT) return require(process.env.ELEVER_PLAYWRIGHT);
@@ -1081,6 +1082,11 @@ async function crawlAllPages(browser) {
   const headingSizes = new Map();
 
   for (const route of allHtmlRoutes()) {
+    const staticResponse = await context.request.get(base + route);
+    assert.ok(staticResponse.ok(), route + ' did not serve static HTML');
+    verifyMetadata(await staticResponse.text(), route);
+    // Prospectus pages intentionally navigate off-site; their navigation has separate tests.
+    if (/^\/shpc26(?:badminton|pickleball)prospectus\.html$/.test(route)) continue;
     await open(page, route, 'full-crawl ' + route);
     assert.equal(await page.locator('.phead--events, .phead__photo').count(), route === '/events.html' ? 2 : 0,
       route + ' should only show the photo header on Events');

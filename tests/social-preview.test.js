@@ -4,6 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const vm = require('node:vm');
 const { execFileSync } = require('node:child_process');
 const test = require('node:test');
 const { allPageFiles, imageUrl, shareRoutes, verifyMetadata } =
@@ -46,7 +47,8 @@ test('URL audit includes every sitemap page, aliases and shareable filter states
   const routes = shareRoutes(allPageFiles());
   for (const route of ['/', '/index', '/index.html', '/about', '/about.html', '/about/',
     '/privacy', '/lab', '/news?category=Features', '/hub#international',
-    '/courts?type=official#halls', '/contact#contact-form']) {
+    '/courts?type=official#halls', '/contact#contact-form',
+    '/shpc26badmintonprospectus', '/shpc26pickleballprospectus']) {
     assert.ok(routes.includes(route), 'Missing share URL variant: ' + route);
   }
   for (const match of fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8')
@@ -70,5 +72,41 @@ test('regenerated news pages retain the universal share image', t => {
     const generated = fs.readFileSync(path.join(temporary, 'news', file), 'utf8');
     verifyMetadata(generated, 'regenerated news/' + file);
     assert.equal(generated, readPage('news/' + file), 'Committed article differs from its generator');
+  }
+});
+
+test('prospectus short URLs expose our preview and preserve document navigation', async t => {
+  const config = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
+  const destinations = {
+    shpc26badmintonprospectus:
+      'https://docs.google.com/document/d/1dGYKSrpPPSBj7nxp3qd4VhH8-ub1xC9lXx7Xa0wj_b4/edit?usp=share_link',
+    shpc26pickleballprospectus:
+      'https://docs.google.com/document/d/1kjM8TElVF5-ogQ1g91Eh0zozHVCHKmxvkFhiwlYKZmg/edit?usp=sharing'
+  };
+  for (const [slug, destination] of Object.entries(destinations)) {
+    await t.test(slug, () => {
+      assert.ok(!(config.redirects || []).some(redirect => redirect.source === '/' + slug),
+        'Server redirects must not bypass the branded preview page');
+      const html = readPage(slug + '.html');
+      verifyMetadata(html, slug);
+      assert.doesNotMatch(html, /http-equiv=["']refresh["']/i,
+        'Meta refresh could redirect share crawlers away from our preview');
+      const link = html.match(/<a\b[^>]*id="prospectus-link"[^>]*href="([^"]+)"/);
+      assert.ok(link, 'A direct document link must work without JavaScript');
+      assert.equal(link[1], destination);
+      const script = html.match(/<script>([\s\S]*?)<\/script>/);
+      assert.ok(script, 'Browsers must still navigate automatically');
+      let navigated;
+      vm.runInNewContext(script[1], {
+        window: { location: { replace: url => { navigated = url; } } },
+        document: {
+          getElementById: id => {
+            assert.equal(id, 'prospectus-link');
+            return { href: link[1] };
+          }
+        }
+      }, { timeout: 1000 });
+      assert.equal(navigated, destination);
+    });
   }
 });
