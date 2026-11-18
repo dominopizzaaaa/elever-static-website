@@ -79,6 +79,35 @@ and facility totals.
 
 The scripts use macOS `sips`, so they run on a Mac as-is.
 
+## Social previews
+
+Every public HTML page, including the Lab, legal pages and generated news
+articles, uses `assets/img/social/elever-badminton-share.jpg` for Open Graph,
+WhatsApp and Twitter/X previews. Keep its JPEG format and 1200 x 630 dimensions.
+The `?v=20261118` image query identifies this release for crawler image caches.
+If the artwork changes again, update that version across all page heads,
+page-level structured data, `tools/build-news.js` and the preview verifier.
+Author portraits and in-page photography are separate from the share image.
+
+Run the metadata and news-generator regression checks:
+
+```sh
+node --test tests/social-preview.test.js
+node tools/verify-social-previews.js
+```
+
+After Vercel deploys, check all pages, clean URLs, `.html` aliases, trailing
+slashes and representative query/fragment links as a WhatsApp crawler:
+
+```sh
+ELEVER_BASE_URL=https://www.eleverbadminton.com node tools/verify-social-previews.js
+ELEVER_BASE_URL=https://eleverbadminton.com node tools/verify-social-previews.js
+```
+
+WhatsApp caches page previews independently, so a previously sent preview may
+stay unchanged until it is fetched again. Off-site destinations such as booking
+services and the Google Docs prospectus redirects control their own previews.
+
 ## Brand
 
 | | |

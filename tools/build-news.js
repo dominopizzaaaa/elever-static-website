@@ -14,6 +14,7 @@ require(path.join(root, 'assets/js/data.js'));
 const ARTICLES = global.window.ELEVER_DATA.articles;
 
 const V = '76'; // must match the shared asset cache key used across the site
+const PAGES_V = '80';
 const FAVICON_V = '67';
 
 const esc = s => String(s == null ? '' : s)
@@ -60,7 +61,7 @@ function bodyHtml(blocks) {
 function page(a) {
   const title = `${a.title} — Élever Badminton`;
   const canonical = `https://www.eleverbadminton.com/news/${a.slug}`;
-  const image = 'https://www.eleverbadminton.com/assets/img/hero-action.jpg';
+  const image = 'https://www.eleverbadminton.com/assets/img/social/elever-badminton-share.jpg?v=20261118';
   const author = typeof a.author === 'object' ? a.author : (a.author ? { name: a.author } : null);
   const authorId = author ? `author-${author.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}` : '';
   const authorImage = author && author.image ? `../${author.image}` : '';
@@ -70,6 +71,7 @@ function page(a) {
   const jsonld = JSON.stringify({
     '@context': 'https://schema.org', '@type': 'NewsArticle',
     headline: a.title, description: a.excerpt, datePublished: a.date,
+    image,
     author: author ? {
       '@type': 'Person', name: author.name,
       image: author.image ? `https://www.eleverbadminton.com/${author.image}` : undefined,
@@ -93,10 +95,16 @@ function page(a) {
   <link rel="canonical" href="${esc(canonical)}" />
   <meta property="og:url" content="${esc(canonical)}" />
   <meta property="og:image" content="${esc(image)}" />
+  <meta property="og:image:secure_url" content="${esc(image)}" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Élever Badminton" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="${esc(title)}" />
   <meta name="twitter:description" content="${esc(a.excerpt)}" />
   <meta name="twitter:image" content="${esc(image)}" />
+  <meta name="twitter:image:alt" content="Élever Badminton" />
   <link rel="icon" href="/favicon.ico?v=${FAVICON_V}" sizes="any" />
   <link rel="icon" type="image/svg+xml" href="/assets/img/brand/favicon.svg?v=${FAVICON_V}" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/brand/favicon-32x32.png?v=${FAVICON_V}" />
@@ -140,7 +148,7 @@ function page(a) {
 
   <script src="../assets/js/data.js?v=${V}"></script>
   <script src="../assets/js/site.js?v=${V}"></script>
-  <script src="../assets/js/pages.js?v=${V}"></script>
+  <script src="../assets/js/pages.js?v=${PAGES_V}"></script>
   <script src="../assets/js/main.js?v=${V}"></script>
 </body>
 </html>
